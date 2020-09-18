@@ -3,7 +3,8 @@ namespace App\Controllers\Backend\Translate;
 use App\Controllers\BaseController;
 use App\Libraries\Nestedsetbie;
 
-class Translate extends BaseController{
+class Translate extends BaseController
+{
 	protected $data;
 	
 	
@@ -12,7 +13,7 @@ class Translate extends BaseController{
 
 	}
 
-	public function translator($objectid = 0, $module = '', $language = ''){
+	public function translateArticle($objectid = 0, $module = '', $language = ''){
 		$session = session();
 		$objectid = (int)$objectid;
 		$moduleExtract = explode('_', $module);
@@ -82,10 +83,120 @@ class Translate extends BaseController{
 	        }
 		}
 
-		$this->data['template'] = 'backend/translate/translate/translator';
+		$this->data['template'] = 'backend/translate/translate/translateArticle';
 		return view('backend/dashboard/layout/home', $this->data);
 	}
 
+
+	public function translateSlide($objectid = 0, $module = '', $language = '')
+	{
+		$session = session();
+		$objectid = (int)$objectid;
+		 
+		$moduleExtract = explode('_', $module);
+
+
+
+		 $this->data['object'] = $this->AutoloadModel->_get_where([
+		 	'select' => 'tb1.id, tb2.title, tb1.canonical,  tb2.meta_title,tb2.description, tb2.meta_description',
+			'table' => $module.' as tb1',
+			'join' => [
+			[
+		 			$moduleExtract[0].'_translate as tb2','tb1.id = tb2.objectid AND tb2.language = \''.$this->currentLanguage().'\' ','inner'
+				]
+			],
+			'where' => ['tb1.id' => $objectid,'module' => $module]
+		]);
+		 
+		
+		$valueTranslate= [];
+		
+
+		
+		$valueTranslate['title'] = json_decode($this->data['object']['title']);
+		$valueTranslate['description'] = json_decode($this->data['object']['description']);
+		$valueTranslate['meta_title'] = json_decode($this->data['object']['meta_title']);
+		$valueTranslate['meta_description'] = json_decode($this->data['object']['meta_description']);
+		 
+
+		$this->data['valueTranslate'] = $valueTranslate;
+
+		if(!isset($valueTranslate['title']) || is_array($valueTranslate['title']) == false || count($valueTranslate['title']) == 0)
+		{
+			echo 1;die();
+
+		 	$session->setFlashdata('message-danger', 'Bản ghi không tồn tại!');
+		 	return redirect()->to(BASE_URL.'backend/'.$moduleExtract[0].'/'.((count($moduleExtract) == 1) ? $moduleExtract[0] : $moduleExtract[1]).'/index');
+		 }
+		 
+		 
+
+ 		 $this->data['translate'] = $this->AutoloadModel->_get_where([
+ 		 	'select' => 'tb1.id, tb2.title, tb2.description, tb2.meta_title, tb2.meta_description',
+ 			'table' => $module.' as tb1',
+ 			'join' => [
+ 		 		[
+ 		 			$moduleExtract[0].'_translate as tb2','tb1.id = tb2.objectid AND tb2.language = \''.$language.'\' ','inner'
+ 		 		]
+ 			],
+ 		 	'where' => ['tb2.objectid' => $objectid]
+ 		]);
+
+ 		$Translated= [];
+		$Translated['title'] = json_decode($this->data['translate']['title']);
+		$Translated['description'] = json_decode($this->data['translate']['description']);
+		$Translated['meta_title'] = json_decode($this->data['translate']['meta_title']);
+		$Translated['meta_description'] = json_decode($this->data['translate']['meta_description']);
+		 
+
+		$this->data['Translated'] = $Translated;
+
+
+ 
+
+		 if($this->request->getMethod() == 'post')
+		 {
+		 		$store = $this->storeSlide([
+		  			'objectid' => $objectid,
+		  			'module' => $module,
+		  			'language' => $language,
+		 		]);
+		 		$store['title'] = json_encode($store['title']);
+				$store['description'] = json_encode($store['description']);
+				$store['meta_title'] = json_encode($store['meta_title']);
+				$store['meta_description'] = json_encode($store['meta_description']);
+		 		
+
+
+				if(isset($this->data['translate']) && is_array($this->data['translate']) && count($this->data['translate'])){
+					$flag = $this->AutoloadModel->_update([
+		 			'table' => $moduleExtract[0].'_translate',
+		 			'where' => ['objectid' => $objectid,'language' => $language],
+			 			'data' => $store,
+			 		]);
+				}else{
+		 			$flag = $this->AutoloadModel->_insert([
+			 			'table' => $moduleExtract[0].'_translate',
+			 			'data' => $store,
+			 		]);
+					
+				}
+		 		if($flag > 0){
+		 			$session->setFlashdata('message-success', 'Tạo Bản Dịch Thành Công! Hãy tạo danh mục tiếp theo.');
+ 	 				return redirect()->to(BASE_URL.'backend/'.$moduleExtract[0].'/'.((count($moduleExtract) == 1) ? $moduleExtract[0] : $moduleExtract[1]).'/index');
+		  		}
+
+	         }
+		
+
+		$this->data['template'] = 'backend/translate/translate/translateSlide';
+		return view('backend/dashboard/layout/home', $this->data);
+		
+
+
+
+	}
+	
 
 	private function storeLanguage($param = []){
 		helper(['text']);
@@ -97,6 +208,19 @@ class Translate extends BaseController{
 			'content' => base64_encode($this->request->getPost('content')),
 			'meta_title' => validate_input($this->request->getPost('meta_title')),
 			'meta_description' => validate_input($this->request->getPost('meta_description')),
+			'language' => $param['language'],
+			'module' => $param['module'],
+		];
+		return $store;
+	}
+	private function storeSlide($param = []){
+		helper(['text']);
+		$store = [
+			'objectid' => $param['objectid'],
+			'title' => $this->request->getPost('title'),
+			'description' => $this->request->getPost('description'),
+			'meta_title' =>$this->request->getPost('meta_title'),
+			'meta_description' =>$this->request->getPost('meta_description'),
 			'language' => $param['language'],
 			'module' => $param['module'],
 		];

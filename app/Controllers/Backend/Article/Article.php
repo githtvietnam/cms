@@ -17,13 +17,13 @@ class Article extends BaseController{
 
 	public function index($page = 1){
 		$session = session();
-		$flag = $this->authentication->check_permission([
-			'routes' => 'backend/article/article/index'
-		]);
-		if($flag == false){
- 			$this->session->setFlashdata('message-danger', 'Bạn không có quyền truy cập vào chức năng này!');
- 			return redirect()->to(BASE_URL.'backend/dashboard/dashboard/index');
-		}
+		// $flag = $this->authentication->check_permission([
+		// 	'routes' => 'backend/article/article/index'
+		// ]);
+		// if($flag == false){
+ 	// 		$this->session->setFlashdata('message-danger', 'Bạn không có quyền truy cập vào chức năng này!');
+ 	// 		return redirect()->to(BASE_URL.'backend/dashboard/dashboard/index');
+		// }
 
 
 		helper(['mypagination']);

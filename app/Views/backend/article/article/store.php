@@ -1,4 +1,4 @@
-<form method="post" action="" class="form-horizontal box" >
+<form method="post" action="" >
 	<div class="wrapper wrapper-content animated fadeInRight">
 		<div class="row">
 			<div class="box-body">
@@ -81,7 +81,7 @@
 							if(isset($_POST['album'])){
 								$album = $_POST['album'];
 							}else if(isset($article)){
-								$album = json_decode($article['album'], TRUE);
+								$album = json_decode($slide['album'], TRUE);
 							}
 						 ?>
 						<div class="row">

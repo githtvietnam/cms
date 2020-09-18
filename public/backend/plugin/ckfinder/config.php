@@ -29,11 +29,12 @@ require_once '../../../../../../../config.php';
  */
 function CheckAuthentication()
 {
-	$cookie_auth = (isset($_COOKIE[AUTH.'backend'])) ? $_COOKIE[AUTH.'backend'] : '';
-
-	if(!isset($cookie_auth) || empty($cookie_auth)) return false;
-
-
+	
+	// $cookieAuth = (isset($_COOKIE[AUTH.'Backend']) ? $_COOKIE[AUTH.'Backend']:'');
+	
+	//  if ( !isset($_COOKIE[AUTH.'Backend']) || empty($cookieAuth)) return false;
+	
+	
 	// WARNING : DO NOT simply return "true". By doing so, you are allowing
 	// "anyone" to upload and list the files in your server. You must implement
 	// some kind of session validation here. Even something very simple as...
@@ -48,11 +49,12 @@ function CheckAuthentication()
 
 	return true;
 }
+	// $cookieAuth = (isset($_COOKIE[AUTH.'Backend']) ? $_COOKIE[AUTH.'Backend']:'');
+	// $cookieAuth = json_decode($cookieAuth, true);
+	// $permission = json_decode(base64_decode($cookieAuth['permission'],true));
 
 
-$cookie_auth = (isset($_COOKIE[AUTH.'backend'])) ? $_COOKIE[AUTH.'backend'] : '';
-$cookie_auth = json_decode($cookie_auth, TRUE);
-$permission = json_decode(base64_decode($cookie_auth['permission']), TRUE);
+
 
 
 
@@ -167,16 +169,25 @@ $config['AccessControl'][] = Array(
 		'role' => '*',
 		'resourceType' => '*',
 		'folder' => '/',
+		'folderView' => true,
+		'folderCreate' => true,
+		'folderRename' => true,
+		'folderDelete' => true,
+		'fileView' =>  true,
+		'fileUpload' =>  true,
+		'fileRename' =>  true,
+		'fileDelete' =>  true,
 
-		'folderView' => (in_array('folderView', $permission)) ? true : false,
-		'folderCreate' => (in_array('folderCreate', $permission)) ? true : false,
-		'folderRename' => (in_array('folderRename', $permission)) ? true : false,
-		'folderDelete' => (in_array('folderDelete', $permission)) ? true : false,
+		// 'folderView' => (in_array('folderView', $permission))? true : false,
+		// 'folderCreate' => (in_array('folderCreate', $permission))? true : false,
+		// 'folderRename' => (in_array('folderRename', $permission))? true : false,
+		// 'folderDelete' => (in_array('folderDelete', $permission))? true : false,
+		// 'fileView' =>  (in_array('fileView', $permission))?  true : false,
+		// 'fileUpload' =>  (in_array('fileUpload', $permission))? true : false,
+		// 'fileRename' =>  (in_array('fileRename', $permission))? true : false,
+		// 'fileDelete' =>  (in_array('fileDelete', $permission))? true : false,
+	);
 
-		'fileView' => (in_array('fileView', $permission)) ? true : false,
-		'fileUpload' => (in_array('fileUpload', $permission)) ? true : false,
-		'fileRename' => (in_array('fileRename', $permission)) ? true : false,
-		'fileDelete' => (in_array('fileDelete', $permission)) ? true : false);
 
 /*
 For example, if you want to restrict the upload, rename or delete of files in

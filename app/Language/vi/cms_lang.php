@@ -7,5 +7,7 @@
         	'sb_user_catalogue' => 'QL Nhóm Thành Viên',
         	'sb_setting' => 'Cấu hình chung',
         	'sb_language' => 'QL Ngôn Ngữ',
+            'sb_config' => 'Cấu hình chung',
+            'sb_slight' => 'Banner and Slight',
         ],
     ];
