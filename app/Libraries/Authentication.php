@@ -31,7 +31,6 @@ class Authentication{
 		]);
 
 		$permission = json_decode($user['permission'], TRUE);
-
 		if(in_array($param['routes'], $permission) == false){
 			return false;
 		}

@@ -53,13 +53,15 @@
             ASSET_BACKEND.'js/plugins/toastr/toastr.min.js',
             ASSET_BACKEND.'js/plugins/sweetalert/sweetalert.min.js',
             ASSET_BACKEND.'plugin/jquery-ui.js',
+            ASSET_BACKEND.'plugin/toastr.min.js',
             ASSET_BACKEND.'plugin/ckfinder/ckfinder.js',
-            ASSET_BACKEND.'library/ckfinder.js',
             ASSET_BACKEND.'plugin/ckeditor5/build/ckeditor.js',
+            ASSET_BACKEND.'library/ckfinder.js',
             // ASSET_BACKEND.'plugin/ckeditor5/packages/ckeditor5-build-classic/build/ckeditor.js',
             ASSET_BACKEND.'plugin/select2/dist/js/select2.min.js',
             ASSET_BACKEND.'library/library.js',
         ];
+        
         if(isset($module) && !empty($module)){
             if(file_exists(ASSET_BACKEND.'library/module/'.$module.'.js')){
                 $script[count($script)+1] = ASSET_BACKEND.'library/module/'.$module.'.js';

@@ -430,6 +430,7 @@ class CKFinder_Connector_Core_Config
 	 */
     public function &getResourceTypeConfig($resourceTypeName)
     {
+
         $_null = null;
 
         if (isset($this->_resourceTypeConfigCache[$resourceTypeName])) {
@@ -439,9 +440,17 @@ class CKFinder_Connector_Core_Config
         if (!isset($GLOBALS['config']['ResourceType']) || !is_array($GLOBALS['config']['ResourceType'])) {
             return $_null;
         }
+<<<<<<< Updated upstream
         
         reset($GLOBALS['config']['ResourceType']);
         foreach($GLOBALS['config']['ResourceType'] as $_key => $_resourceTypeNode){
+=======
+
+         reset($GLOBALS['config']['ResourceType']);
+
+
+       foreach($GLOBALS['config']['ResourceType'] as $_key => $_resourceTypeNode){
+>>>>>>> Stashed changes
         // while (list($_key,$_resourceTypeNode) = each($GLOBALS['config']['ResourceType'])) {
             if ($_resourceTypeNode['name'] === $resourceTypeName) {
                 $this->_resourceTypeConfigCache[$resourceTypeName] = new CKFinder_Connector_Core_ResourceTypeConfig($_resourceTypeNode);

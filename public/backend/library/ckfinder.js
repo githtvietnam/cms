@@ -46,6 +46,22 @@ function BrowseServerEditor(type, field){
 }
 
 
+function BrowseServerInput  (object, type){
+    if(typeof(type) == 'undefined'){
+        type = 'Images';
+    }
+    var finder = new CKFinder();
+    finder.resourceType = type;
+
+    finder.selectActionFunction = function( fileUrl, data ) {
+        
+        fileUrl =  fileUrl.replace(BASE_URL, "/");
+
+        object.val(fileUrl)
+    }
+    finder.popup();
+}
+
 function BrowseServerAlbum(object, type){
 
     if(typeof(type) == 'undefined'){
