@@ -46,7 +46,6 @@ function CheckAuthentication()
 	// forget to add session_start() at the top of this file.
 
 
-
 	return true;
 }
 	// $cookieAuth = (isset($_COOKIE[AUTH.'Backend']) ? $_COOKIE[AUTH.'Backend']:'');
@@ -88,6 +87,7 @@ Examples:
 ATTENTION: The trailing slash is required.
 */
 $baseUrl = BASE_URL.'upload/';
+
 
 
 
@@ -188,8 +188,13 @@ $config['AccessControl'][] = Array(
 		// 'fileUpload' =>  (in_array('fileUpload', $permission))? true : false,
 		// 'fileRename' =>  (in_array('fileRename', $permission))? true : false,
 		// 'fileDelete' =>  (in_array('fileDelete', $permission))? true : false,
+<<<<<<< HEAD
 	 );
+=======
+	// );
+>>>>>>> 041486a9437a9a0ba3accd89b67329ff184ddf2b
 
+		);
 
 /*
 For example, if you want to restrict the upload, rename or delete of files in

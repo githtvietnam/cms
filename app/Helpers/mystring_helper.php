@@ -138,5 +138,15 @@ if(!function_exists('slug')){
 	}
 }
 
+if(!function_exists('slug_database')){
+	function slug_database($value = NULL){
+		$value = removeutf8($value);
+		$value = str_replace('_', ' ', trim($value));
+		$value = preg_replace('/[^a-z0-9-]+/i', ' ', $value);
+		$value = trim(preg_replace('/\s\s+/', ' ', $value));
+		return strtolower(str_replace(' ', '_', trim($value)));
+	}
+}
+
 ?>
 

@@ -430,6 +430,7 @@ class CKFinder_Connector_Core_Config
 	 */
     public function &getResourceTypeConfig($resourceTypeName)
     {
+
         $_null = null;
 
         if (isset($this->_resourceTypeConfigCache[$resourceTypeName])) {
@@ -442,16 +443,21 @@ class CKFinder_Connector_Core_Config
         
         reset($GLOBALS['config']['ResourceType']);
         foreach($GLOBALS['config']['ResourceType'] as $_key => $_resourceTypeNode){
-        // while (list($_key,$_resourceTypeNode) = each($GLOBALS['config']['ResourceType'])) {
-            if ($_resourceTypeNode['name'] === $resourceTypeName) {
-                $this->_resourceTypeConfigCache[$resourceTypeName] = new CKFinder_Connector_Core_ResourceTypeConfig($_resourceTypeNode);
 
-                return $this->_resourceTypeConfigCache[$resourceTypeName];
+            reset($GLOBALS['config']['ResourceType']);
+
+
+           foreach($GLOBALS['config']['ResourceType'] as $_key => $_resourceTypeNode){
+            // while (list($_key,$_resourceTypeNode) = each($GLOBALS['config']['ResourceType'])) {
+                if ($_resourceTypeNode['name'] === $resourceTypeName) {
+                    $this->_resourceTypeConfigCache[$resourceTypeName] = new CKFinder_Connector_Core_ResourceTypeConfig($_resourceTypeNode);
+
+                    return $this->_resourceTypeConfigCache[$resourceTypeName];
+                }
             }
+            return $_null;
         }
-        return $_null;
     }
-
     /**
      * Get thumbnails config
      *

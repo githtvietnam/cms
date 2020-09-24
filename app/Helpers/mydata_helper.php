@@ -108,5 +108,20 @@ if (! function_exists('get_language')){
 	}
 }
 
+
+if (! function_exists('get_language')){
+	function get_full_language(array $param = []){
+		$model = new AutoloadModel();
+
+		$language = $model->_get_where([
+			'select' => 'id, canonical, image',
+			'table' => 'language',
+			'where' => ['publish' => 1]
+		], TRUE);
+
+		return $language;
+	}
+}
+
 ?>
 

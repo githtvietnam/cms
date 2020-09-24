@@ -30,6 +30,7 @@
 							if($permission == ''){
 								$permission = json_decode($user_catalogue['permission'], TRUE);
 							}
+							// pre($permission);
 
 						?>
 						<?php if(isset($folder) && is_array($folder) && count($folder)){ ?>

@@ -7,6 +7,9 @@ $(document).ready(function(){
 	$(document).on('click','.img-thumbnail', function(){
 		BrowseServerPreview($(this));
 	});
+    $(document).on('click','.va-img-click', function(){
+        BrowseServerInput($(this));
+    });
 	$(document).on('click','.uploadMultiImage', function(){
         let target = $(this).attr('data-target');
 		BrowseServerEditor('Images', target);
@@ -45,6 +48,22 @@ function BrowseServerEditor(type, field){
     finder.popup();
 }
 
+
+function BrowseServerInput  (object, type){
+    if(typeof(type) == 'undefined'){
+        type = 'Images';
+    }
+    var finder = new CKFinder();
+    finder.resourceType = type;
+
+    finder.selectActionFunction = function( fileUrl, data ) {
+        console.log(fileUrl)
+        fileUrl =  fileUrl.replace(BASE_URL, "/");
+
+        object.val(fileUrl)
+    }
+    finder.popup();
+}
 
 function BrowseServerAlbum(object, type){
 
