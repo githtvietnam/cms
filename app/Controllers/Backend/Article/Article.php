@@ -17,13 +17,13 @@ class Article extends BaseController{
 
 	public function index($page = 1){
 		$session = session();
-		// $flag = $this->authentication->check_permission([
-		// 	'routes' => 'backend/article/article/index'
-		// ]);
-		// if($flag == false){
- 	// 		$this->session->setFlashdata('message-danger', 'Bạn không có quyền truy cập vào chức năng này!');
- 	// 		return redirect()->to(BASE_URL.'backend/dashboard/dashboard/index');
-		// }
+		$flag = $this->authentication->check_permission([
+			'routes' => 'backend/article/article/index'
+		]);
+		if($flag == false){
+ 			$session->setFlashdata('message-danger', 'Bạn không có quyền truy cập vào chức năng này!');
+ 			return redirect()->to(BASE_URL.'backend/dashboard/dashboard/index');
+		}
 
 
 		helper(['mypagination']);
@@ -358,7 +358,7 @@ class Article extends BaseController{
 		$i = 3;
 		if(isset($languageList) && is_array($languageList) && count($languageList)){
 			foreach($languageList as $key => $val){
-				$select = $select.'(SELECT COUNT(objectid) FROM article_translate WHERE article_translate.objectid = tb1.id AND article_translate.language = "'.$val['canonical'].'") as '.$val['canonical'].'_detect, ';
+				$select = $select.'(SELECT COUNT(object_id) FROM slide_translate, slide WHERE  slide_translate.language = "'.$val['canonical'].'") as '.$val['canonical'].'_detect, ';
 				$i++;
 			}	
 		}

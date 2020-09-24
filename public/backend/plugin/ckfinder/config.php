@@ -52,6 +52,7 @@ function CheckAuthentication()
 	// $cookieAuth = (isset($_COOKIE[AUTH.'Backend']) ? $_COOKIE[AUTH.'Backend']:'');
 	// $cookieAuth = json_decode($cookieAuth, true);
 	// $permission = json_decode(base64_decode($cookieAuth['permission'],true));
+	
 
 
 
@@ -178,6 +179,7 @@ $config['AccessControl'][] = Array(
 		'fileRename' =>  true,
 		'fileDelete' =>  true,
 
+
 		// 'folderView' => (in_array('folderView', $permission))? true : false,
 		// 'folderCreate' => (in_array('folderCreate', $permission))? true : false,
 		// 'folderRename' => (in_array('folderRename', $permission))? true : false,
@@ -186,7 +188,7 @@ $config['AccessControl'][] = Array(
 		// 'fileUpload' =>  (in_array('fileUpload', $permission))? true : false,
 		// 'fileRename' =>  (in_array('fileRename', $permission))? true : false,
 		// 'fileDelete' =>  (in_array('fileDelete', $permission))? true : false,
-	);
+	 );
 
 
 /*

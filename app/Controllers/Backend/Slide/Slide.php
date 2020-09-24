@@ -5,283 +5,282 @@ use App\Controllers\BaseController;
 
 class Slide extends BaseController{
 	protected $data;
-	
 	public function __construct(){
 		$this->data = [];
 		$this->data['module'] = 'slide';
 	}
-
 	public function index($page = 1){
-		$session = session();
-		//$flag = $this->authentication->check_permission([
-		//	'routes' => 'backend/slide/slide/index'
-		//]);
-		//if($flag == false){
- 		//	$this->session->setFlashdata('message-danger', 'Bạn không có quyền truy cập vào chức năng này!');
- 			//return redirect()->to(BASE_URL.'backend/dashboard/dashboard/index');
-		//}
-
-
 		helper(['mypagination']);
+		$session = session();
+		$flag = $this->authentication->check_permission([
+			'routes' => 'backend/slide/slide/index'
+		]);
+		if($flag == false){
+ 			$session->setFlashdata('message-danger', 'Bạn không có quyền truy cập vào chức năng này!');
+ 			return redirect()->to(BASE_URL.'backend/dashboard/dashboard/index');
+		}
+
 		$page = (int)$page;
 		$perpage = ($this->request->getGet('perpage')) ? $this->request->getGet('perpage') : 20;
 		$where = $this->condition_where();
-
 		$keyword = $this->condition_keyword();
-		
 		$config['total_rows'] = $this->AutoloadModel->_get_where([
-			'select' => 'tb1.id,tb1.name, tb1.canonical',
-			'table' => $this->data['module'].' as tb1',
+			'select' => 'id',
+			'table' => $this->data['module'].'_catalogue',
 			'keyword' => $keyword,
 			'where' => $where,
-			'join' => [
-				[
-					'slide_translate as tb2', 'tb1.id = tb2.objectid AND tb2.module = \''.$this->data['module'].'\' ', 'inner'
-				],
-			],
-			'group_by' => 'tb1.id',
+			'group_by' => 'id',
 			'count' => TRUE
 		]);
-
-		
-
-
 		if($config['total_rows'] > 0){
-			$config = pagination_config_bt(['url' => 'backend/article/article/index','perpage' => $perpage], $config);
-
+			$config = pagination_config_bt(['url' => 'backend/slide/slide/index','perpage' => $perpage], $config);
 			$this->pagination->initialize($config);
 			$this->data['pagination'] = $this->pagination->create_links();
-
-
 			$totalPage = ceil($config['total_rows']/$config['per_page']);
 			$page = ($page <= 0)?1:$page;
 			$page = ($page > $totalPage)?$totalPage:$page;
 			$page = $page - 1;
-
 			$languageDetact = $this->detect_language();
-
 			$this->data['slideList'] = $this->AutoloadModel->_get_where([
-				'select' => 'tb1.id, tb1.name, tb1.canonical, '.((isset($languageDetact['select'])) ? $languageDetact['select'] : ''),
-				'table' => $this->data['module'].' as tb1',
+				'select' => 'id,title, keyword, userid_created, userid_updated, created_at, updated_at,'.((isset($languageDetact['select'])) ? $languageDetact['select'] : ''),
+				'table' => $this->data['module'].'_catalogue',
 				'where' => $where,
-				
 				'keyword' => $keyword,
-				'join' => [
-					[
-					'slide_translate as tb2', 'tb1.id = tb2.objectid AND tb2.module = \''.$this->data['module'].'\' ', 'inner'
-					],
-				],
 				'limit' => $config['per_page'],
 				'start' => $page * $config['per_page'],
-				'order_by'=> 'tb1.id desc',
-				'group_by' => 'tb1.id'
+				'order_by'=> 'id desc',
+				'group_by' => 'id'
 			], TRUE);
 		}
-		
 		$this->data['template'] = 'backend/slide/slide/index';
-		
 		return view('backend/dashboard/layout/home', $this->data);
 	}
-
 	public function create(){
-		
 		$session = session();
+		$flag = $this->authentication->check_permission([
+				'routes' => 'backend/slide/slide/create'
+			]);
+		if($flag == false){
+ 			$session->setFlashdata('message-danger', 'Bạn không có quyền truy cập vào chức năng này!');
+ 			return redirect()->to(BASE_URL.'backend/dashboard/dashboard/index');
+		}
 		if($this->request->getMethod() == 'post'){
-		 		
-			
 			$validate = $this->validation();
+			$language = $this->currentLanguage();
 			if ($this->validate($validate['validate'], $validate['errorValidate'])){
-
-				$data= [];
 		 		$insert = $this->store(['method' => 'create']);
-				$data['name'] = $insert['name'];
-				$data['canonical'] = $insert['canonical'];
-	 			
-		 		$insert = json_decode($insert['album'],TRUE);
-		 		
-		 		foreach ($insert as $key => $val) {
-		 			$data['image'][]= $val['image'];
-		 		}
-		 		
-		 		$data['image']= json_encode($data['image']);
-
-		 		$insert = $this->dataEncode($insert);
-
-		 		
-		 		$resultid = $this->AutoloadModel->_insert([
-		 			'table' => $this->data['module'],
-		 			'data' => $data,
+		 		$insertResultId = $this->AutoloadModel->_insert([
+		 			'table' => $this->data['module'].'_catalogue',
+		 			'data' => $insert,
 		 		]);
-		 		
- 
-		 		if($resultid > 0){
-
-		 			$storeLanguage = $this->storeLanguage($resultid);
-		 			
-		 			$storeLanguage['title'] = $insert['dataTranslate']['title'];
-		 			$storeLanguage['number'] =$insert['dataTranslate']['number'];
-		 			$storeLanguage['description'] = $insert['dataTranslate']['description'];
-		 			$storeLanguage['meta_title'] = $insert['dataTranslate']['meta_title'];
-		 			$storeLanguage['meta_description'] = $insert['dataTranslate']['meta_description'];
-
-		 			$insertTranslate = $this->AutoloadModel->_insert([
-			 			'table' => 'slide_translate',
-			 			'data' => $storeLanguage,
-			 		]);
-			 		
-
-
-	 				
+		 		if($insertResultId > 0){
+		 			$insert['data']= json_decode($insert['data'],true);
+		 			$data1=[];
+		 			$data2=[];
+		 			$data1 = $this->separateArray($insert['data'],['order', 'image']);
+		 			if (isset($insert['data']) && is_array($insert['data']) && count($insert['data'])){
+		 				foreach ($insert['data'] as $key => $val) {
+		 					$data1[$key]['catalogue_id'] = $insertResultId; 
+		 					$data1[$key]['created_at']=$insert['created_at'];
+		 					$data1[$key]['userid_created']=$insert['userid_created'];
+		 				}
+		 			}
+		 			$imageId=[];
+		 			foreach ($data1 as $key => $val){
+		 				$insertid =  $this->AutoloadModel->_insert([
+		 					'table' => $this->data['module'],
+			 		 		'data' => $data1[$key],
+		 				]);
+		 				$imageId[$key] = $insertid;
+		 			}
+		 				if(isset($imageId) && is_array($imageId) && count($imageId)){
+				 			$data2 = $this->separateArray($insert['data'],['title','url', 'content','description']);
+			 				foreach ($insert['data'] as $key => $val) {
+			 					$data2[$key]['object_id'] = $imageId[$key];
+			 					$data2[$key]['language']=$language;
+			 					$data2[$key]['created_at']=$insert['created_at'];
+			 					$data2[$key]['userid_created']=$insert['userid_created'];
+			 				}
+				 			foreach ($data2 as $key => $val){
+					 			$insertResult = $this->AutoloadModel->_insert([
+						 		 	'table' => $this->data['module'].'_translate',
+						 		 	'data' => $data2[$key],
+						 		]);
+				 			}
+			 			}
+					if($insertResult > 0){
 	 					$session->setFlashdata('message-success', 'Tạo Bài Viết Thành Công! Hãy tạo danh mục tiếp theo.');
  						return redirect()->to(BASE_URL.'backend/slide/slide/index');
-	 				
+	 				}else{
+	 					$session->setFlashdata('message-danger', 'Có vấn đề xảy ra, vui lòng thử lại!');
+	 					return redirect()->to(BASE_URL.'backend/slide/slide/index');
+	 				}
 		 		}
-
 	        }else{
 	        	$this->data['validate'] = $this->validator->listErrors();
 	        }
 		}
-		
 		$this->data['method'] = 'create';
 		$this->data['template'] = 'backend/slide/slide/create';
 		return view('backend/dashboard/layout/home', $this->data);
 	}
-
-
-
-	public function update($id = 0)
-	{
+	public function update($id = 0){
 		$id = (int)$id;
-
-		$this->data[$this->data['module']] = $this->AutoloadModel->_get_where([
-			'select' => 'tb1.id,tb2.number, tb2.title, tb1.name, tb1.canonical, tb1.album, tb2.description, tb2.meta_title, tb2.meta_description, tb1.image,',
-			'table' => $this->data['module'].' as tb1',
-			'join' => [
-					[
-					'slide_translate as tb2', 'tb1.id = tb2.objectid AND tb2.module = \''.$this->data['module'].'\' ', 'inner'
-					],
-				],
-			'where' => ['tb1.id' => $id,'tb1.deleted_at' => 0]
+		$this->data[$this->data['module'].'_catalogue'] = $this->AutoloadModel->_get_where([
+			'select' => 'id, title, keyword,data',
+			'table' => $this->data['module'].'_catalogue',
+			'where' => ['id' => $id,'deleted_at' => 0]
 		]);
-
-		$dataDecode =$this->dataDecode($this->data[$this->data['module']]);
-		
-
-
-
-		$this->data['value'] = $dataDecode['value'];
-		$this->data['valueTranslate'] = $dataDecode['valueTranslate'];
-		
 		$session = session();
-		if(!isset($this->data[$this->data['module']]) || is_array($this->data[$this->data['module']]) == false || count($this->data[$this->data['module']]) == 0){
-			$session->setFlashdata('message-danger', 'Bài Viết không tồn tại');
+		if(!isset($this->data[$this->data['module'].'_catalogue']) || is_array($this->data[$this->data['module'].'_catalogue']) == false || count($this->data[$this->data['module'].'_catalogue']) == 0){
+			$session->setFlashdata('message-danger', 'Slide không tồn tại');
  			return redirect()->to(BASE_URL.'backend/slide/slide/index');
 		}
-
-		if($this->request->getMethod() == 'post')
-			{
-				$validate = $this->validation();
-					if ($this->validate($validate['validate'], $validate['errorValidate']))
-					{
-				 		$catchData = $this->store(['method' => 'update']);
-				 		
-				 		
-				 		$update['album'] = json_decode($catchData['album'],true);
-				 		 
-				 		
-				 		$update = $this->dataEncode($update['album']);
-				 		$update['data']['canonical']=$catchData['canonical']; 
-				 		$update['data']['name']=$catchData['name']; 
-			 			
-
-			 			
-			 			
-				 		 $flag = $this->AutoloadModel->_update([
-				 			'table' => $this->data['module'],
-				 			'where' => ['id' => $id],
-				 			'data' => $update['data'],
-				 		]);
-			 		
-				 		
-						$updateTranslate = $this->AutoloadModel->_update([
-							'table'=>'slide_translate',
-							'data'=> $update['dataTranslate'],
-							'where' => ['objectid' =>$id],
-						]);
-
-		 			$session->setFlashdata('message-success', 'Cập Nhật Bài Viết Thành Công!');
+		if($this->request->getMethod() == 'post'){
+			$validate = $this->validation();
+			if ($this->validate($validate['validate'], $validate['errorValidate'])){
+		 		$update = $this->store(['method' => 'update']);
+		 		$updateResultId = $this->AutoloadModel->_update([
+			 			'table' => $this->data['module'].'_catalogue',
+			 			'data' => $update,
+			 		]);
+		 		$update['data']= json_decode($update['data'],true);
+		 		if($updateResultId > 0){
+		 			$data1=[];
+		 			$data1 = $this->separateArray($update['data'],['image','order']); 
+		 			if (isset($update['data']) && is_array($update['data']) && count($update['data'])){
+		 				foreach ($update['data'] as $key => $val) {
+		 					$data1[$key]['catalogue_id'] = $id; 
+		 					$data1[$key]['updated_at']=$update['updated_at'];
+		 					$data1[$key]['userid_updated']=$update['userid_updated'];
+		 				}
+		 				$updateImage = [];
+			 			$updateImage = $this->AutoloadModel->_get_where([
+			 				'table' => 'slide',
+			 				'select' =>'id',
+			 				'where' => ['catalogue_id' => $id],
+			 			],true);
+			 			$object_id = [];
+			 			$object_id = $this->AutoloadModel->_get_where([
+			 				'table' => 'slide',
+			 				'select' => 'id',
+			 				'where' => ['catalogue_id' => $id],
+			 			],true);//cu
+			 			$oldId = $object_id;
+			 			foreach ($updateImage as $key => $val){
+			 				$delete =  $this->AutoloadModel->_delete([
+			 					'table' => $this->data['module'],
+				 		 		'where' => ['id' => $val],
+			 				]);
+			 			}
+			 			foreach ($object_id as $key => $val){
+			 				$delete =  $this->AutoloadModel->_delete([
+			 					'table' => $this->data['module'].'_translate',
+				 		 		'where' => ['object_id' => $val, 'language' => $this->currentLanguage()],
+			 				]);
+			 			}
+			 			foreach ($data1 as $key => $val){
+			 				$delete =  $this->AutoloadModel->_insert([
+			 					'table' => $this->data['module'],
+				 		 		'data' => $data1[$key],
+			 				]);
+			 			}
+			 			$object_id = $this->AutoloadModel->_get_where([
+			 				'table' => 'slide',
+			 				'select' => 'id',
+			 				'where' => ['catalogue_id' => $id],
+			 			],true);//moi
+			 			foreach ($oldId as $key => $val) {
+			 				foreach ($object_id as $keyob => $valob) {
+			 					$deleteCatalogue = $this->AutoloadModel->_update([
+									'table' => $this->data['module'].'_translate',
+									'data' => ['object_id' => $valob['id']],
+									'where' => ['object_id' => $val['id']],
+									]);
+			 				}
+			 			}
+			 			$data2=[];
+			 			$data2 = $this->separateArray($update['data'],['title','url','content','description']);
+		 				foreach ($update['data'] as $key => $val) {
+		 					{
+		 						foreach ($object_id as $keyob => $valob) {
+				 					$data2[$key]['object_id'] = $valob['id'];
+				 					$data2[$key]['updated_at']=$update['updated_at'];
+				 					$data2[$key]['userid_updated']=$update['userid_updated'];
+				 					$data2[$key]['language']=$this->currentLanguage();
+		 						}
+		 					}
+		 					
+		 				}
+			 			foreach ($data2 as $key => $val){
+			 			$insertResult = $this->AutoloadModel->_insert([
+					 		 	'table' => $this->data['module'].'_translate',
+					 		 	'data' => $data2[$key],
+					 		]);
+			 			}
+			 		}
+				$session->setFlashdata('message-success', 'Cập nhật Slide Thành Công! Hãy tạo danh mục tiếp theo.');
+						return redirect()->to(BASE_URL.'backend/slide/slide/index');
+ 				}else{
+ 					$session->setFlashdata('message-danger', 'Có vấn đề xảy ra, vui lòng thử lại!');
  					return redirect()->to(BASE_URL.'backend/slide/slide/index');
-				 		
-			 		}else
-			        {
-			        	$this->data['validate'] = $this->validator->listErrors();
-			        }
-
+ 				}
+	        }else{
+	        	$this->data['validate'] = $this->validator->listErrors();
 	        }
-	        
-	
-		
-		
+		}
 		$this->data['method'] = 'update';
 		$this->data['template'] = 'backend/slide/slide/update';
 		return view('backend/dashboard/layout/home', $this->data);
 	}
-	
 	public function delete($id = 0){
-
-		$id = (int)$id;
-		// $flag = $this->authentication->check_permission([
-		// 	'routes'=>'backend/article/article/delete',
-		// ]);
-		// if ($flag == false){
-		// 	$session = session();
-		// 	$session->setFlashdata('message-danger', 'Bạn không có quyeenff truy cập chức năng này!');
-			
-		// 	return redirect()->to(BASE_URL.'Backend/dashboard/dashboard/index');
-		// }
-			$this->data[$this->data['module']] = $this->AutoloadModel->_get_where([
-				'table' => $this->data['module'].' as tb1',
-				'select' => 'tb1.id, tb2.title',
-				'join' => [
-			 		[
-			 		'slide_translate as tb2',  'tb1.id = tb2.objectid AND tb2.language = \''.$this->currentLanguage().'\'', 'inner']
-			 	],
-			 	'where' =>['tb1.id'=>$id,'tb1.deleted_at' =>0],
-
+		$session = session();
+		$flag = $this->authentication->check_permission([
+				'routes'=>'backend/article/article/delete',
 			]);
-			
+		if ($flag == false){
 			$session = session();
-			if (!isset($this->data[$this->data['module']])|| !is_array($this->data[$this->data['module']]) ||count($this->data[$this->data['module']])==0){
-				$session->setFlashdata('message-danger', 'Cập nhật thất bại! Thành viên không tồn tại');
-					
-				return redirect()->to(BASE_URL.'Backend/slide/article/index');
-
-			}	
-			
-			if ($this->request->getPost('delete'))
-			{
-				$flag = $this->AutoloadModel->_update([
-					'data' =>['deleted_at' => 1],
-					'table'=> $this->data['module'],
-					
-					'where' => ['id' =>$id,'deleted_at' =>0] 
+			$session->setFlashdata('message-danger', 'Bạn không có quyền truy cập chức năng này!');
+			return redirect()->to(BASE_URL.'Backend/dashboard/dashboard/index');
+		}
+		$id = (int)$id;
+		$this->data[$this->data['module']] = $this->AutoloadModel->_get_where([
+			'select' => 'id, title',
+			'table' => $this->data['module'].'_catalogue',
+			'where' => ['id' => $id,'deleted_at' => 0]
+		]);
+		if($this->request->getPost('delete')){
+			$deleteCatalogue = $this->AutoloadModel->_update([
+				'table' => $this->data['module'].'_catalogue',
+				'data' => ['deleted_at' => 1],
+				'where' => ['id' => $id],
 				]);
-				$session = session();
-					if ($flag > 0)
-				{		
-					 $session->setFlashdata('message-success', 'Xóa slide thành công!');
-				}else
-				{
-					 $session->setFlashdata('message-danger', 'Có lỗi xảy ra. Vui lòng thử lại!');
+			if ($deleteCatalogue>0){
+				$deleteSlide = $this->AutoloadModel->_update([
+				'table' => $this->data['module'],
+				'data' => ['deleted_at' => 1],
+				'where' => ['catalogue_id' => $id],
+				]);
+				$DeleteTranslate = $this->AutoloadModel->_get_where([
+					'select' => 'id',
+					'table' => $this->data['module'],
+					'where' => ['catalogue_id' => $id,]
+				],true);//lay ra id cua cac anh da xoa
+				if (isset($DeleteTranslate) && is_array($DeleteTranslate) &&count($DeleteTranslate)){
+					foreach ($DeleteTranslate as $key => $val) {
+						$deleteTranslate = $this->AutoloadModel->_update([
+							'table' => $this->data['module'].'_translate',
+							'data' => ['deleted_at' => 1],
+							'where' => ['object_id' => $val,]
+						]);
+					}
 				}
-
-				return redirect()->to(BASE_URL.'Backend/slide/slide/index');
-			
-
-
+	 		$session->setFlashdata('message-success', 'Xóa bản ghi thành công!');
+			}else{
+				$session->setFlashdata('message-danger', 'Có vấn đề xảy ra, vui lòng thử lại!');
 			}
-		
-
+			return redirect()->to(BASE_URL.'backend/slide/slide/index');
+		}
 		$this->data['template'] = 'backend/slide/slide/delete';
 		return view('backend/dashboard/layout/home', $this->data);
 	}
@@ -291,35 +290,29 @@ class Slide extends BaseController{
 			'table' => 'language',
 			'where' => ['publish' => 1,'deleted_at' => 0,'canonical !=' =>  $this->currentLanguage()]
 		], TRUE);
-
-		
 		$select = '';
 		$i = 3;
 		if(isset($languageList) && is_array($languageList) && count($languageList)){
 			foreach($languageList as $key => $val){
-				$select = $select.'(SELECT COUNT(objectid) FROM slide_translate WHERE slide_translate.objectid = tb1.id AND slide_translate.language = "'.$val['canonical'].'") as '.$val['canonical'].'_detect, ';
+				$select = $select.'(SELECT COUNT(object_id) FROM slide_translate, slide WHERE slide_translate.object_id = slide.id AND slide_translate.language = "'.$val['canonical'].'") as '.$val['canonical'].'_detect, ';
 				$i++;
 			}	
 		}
-		//pre($select);
-
-
 		return [
 			'select' => $select,
 		];
-
 	}
-
 	private function validation(){
-		
 		$validate = [
-			'name' => 'required',
-			
+			'title' => 'required',
+			'keyword' => 'required',
 		];
 		$errorValidate = [
-			
-			'name' => [
+			'title' => [
 				'required' => 'Bạn phải nhập vào tên của slide'
+			],
+			'keyword' => [
+				'required' => 'Bạn phải nhập vào từ khóa của slide'
 			]
 		];
 		return [
@@ -327,24 +320,16 @@ class Slide extends BaseController{
 			'errorValidate' => $errorValidate,
 		];
 	}
-
 	private function condition_where(){
 		$where = [];
-		
-		
-
-		
-		
 		$deleted_at = $this->request->getGet('deleted_at');
 		if(isset($deleted_at)){
-			$where['tb1.deleted_at'] = $deleted_at;
+			$where['deleted_at'] = $deleted_at;
 		}else{
-			$where['tb1.deleted_at'] = 0;
+			$where['deleted_at'] = 0;
 		}
-
 		return $where;
 	}
-
 	private function condition_keyword($keyword = ''): string{
 		if(!empty($this->request->getGet('keyword'))){
 			$keyword = $this->request->getGet('keyword');
@@ -352,86 +337,34 @@ class Slide extends BaseController{
 		}
 		return $keyword;
 	}
-
 	private function store($param = []){
 		helper(['text']);
-		
 		$store = [
- 			'album' => json_encode($this->request->getPost('album')),
- 			'image' => json_encode($this->request->getPost('image')),
- 			'canonical' => $this->request->getPost('canonical'),
- 			'name' => $this->request->getPost('name'),
-
+ 			'title' => $this->request->getPost('title'),
+ 			'keyword' => $this->request->getPost('keyword'),
+ 			'publish' => $this->request->getPost('publish'),
+ 			'data' => json_encode($this->request->getPost('data'), TRUE),
  		];
  		if($param['method'] == 'create' && isset($param['method'])){	
  			$store['created_at'] = $this->currentTime;
  			$store['userid_created'] = $this->auth['id'];
- 			
  		}else{
  			$store['updated_at'] = $this->currentTime;
  			$store['userid_updated'] = $this->auth['id'];
  		}
- 		
- 		
  		return $store;
 	}
-	private function storeLanguage($objectid = 0){
-		helper(['text']);
-		$store = [
-			'objectid' => $objectid,
-			'title' => json_encode($this->request->getPost('title')),
-			'description' => json_encode($this->request->getPost('description')),
-			'meta_title' => json_encode($this->request->getPost('meta_title')),
-			'meta_description' => json_encode($this->request->getPost('meta_description')),
-			'language' => $this->currentLanguage(),
-			'module' => $this->data['module'],
-		];
-
-		return $store;
-	}
-	private function dataDecode($param = []){
-		$value = [];
-		$valueTranslate= [];
-		$value['image'] = json_decode($param['image']);
-		$valueTranslate['title'] = json_decode($param['title']);
-		$valueTranslate['number'] = json_decode($param['number']);
-		$valueTranslate['description'] = json_decode($param['description']);
-		$valueTranslate['meta_title'] = json_decode($param['meta_title']);
-		$valueTranslate['meta_description'] = json_decode($param['meta_description']);
-
-		return [
-			'value' => $value,
-			'valueTranslate' => $valueTranslate
-		];
-	}
-
-	private  function dataEncode($param = []){
-				$data = [];
-		 		$dataTranslate = [];
-		 		if (isset($param) && is_array($param) && count($param))
-		 		{
-
-		 			foreach ($param as $key => $val) {
-		 				$data['image'][] = $val['image'];
-		 				$dataTranslate['title'][] = $val['title'];
-		 				$dataTranslate['number'][] = $val['number'];
-		 				$dataTranslate['description'][] = $val['description'];
-		 				$dataTranslate['meta_title'][] = $val['meta_title'];
-		 				$dataTranslate['meta_description'][] = $val['meta_description'];
-		 			}
-		 			
-		 			$data['image']= json_encode($data['image']);
-		 			$dataTranslate['title']= json_encode($dataTranslate['title']);
-		 			$dataTranslate['number']= json_encode($dataTranslate['number']);
-		 			$dataTranslate['description']= json_encode($dataTranslate['description']);
-		 			$dataTranslate['meta_title']= json_encode($dataTranslate['meta_title']);
-		 			$dataTranslate['meta_description']= json_encode($dataTranslate['meta_description']);
-		 		}
-
-		 			return [
-		 				'data' => $data,
-		 				'dataTranslate' =>$dataTranslate
-		 			];
-	}
-
+	private function separateArray($param= [], $target=[])
+	{
+		$data=[];
+		for ($i=0; $i<count($param);$i++){
+			if (isset($param[$i]))
+				for ($j=0; $j<count($target);$j++){
+					$data[$i][$target[$j]] = $param[$i][$target[$j]]; 
+				}
+			}
+		return $data;
+	} 
+	
+	
 }

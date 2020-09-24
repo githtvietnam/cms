@@ -30,12 +30,7 @@
 									<label class="control-label text-left">
 										<span>Nhóm Slide-Banner </span>
 									</label>
-									<?php
-									$slide = [
-										'title' =>'slide chính'
-									]
-									?>
-									<?php echo form_input('title', set_value('title', $slide['title']), 'class="form-control" disabled placeholder="" autocomplete="off"');?>
+									<?php echo form_input('title', set_value('title', $this->data[$this->data['module']]['title']), 'class="form-control" disabled placeholder="" autocomplete="off"');?>
 									
 								</div>
 							</div>

@@ -43,6 +43,13 @@ $routes->group('backend/user/user', ['filter' => 'auth'] , function($routes){
     $routes->add('update', 'Backend/User/User::update');
     $routes->add('delete', 'Backend/User/User::delete');
 });
+/*Slide*/
+$routes->group('backend/slide/slide', ['filter' => 'auth'] , function($routes){
+    $routes->add('index', 'Backend/Slide/Slide::index');
+    $routes->add('create', 'Backend/Slide/Slide::create');
+    $routes->add('update', 'Backend/Slide/Slide::update');
+    $routes->add('delete', 'Backend/Slide/Slide::delete');
+});
 
 
 

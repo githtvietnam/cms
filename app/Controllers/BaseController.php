@@ -34,7 +34,7 @@ class BaseController extends Controller
 	protected $auth;
 	public $request;
 	protected $pagination;
-	protected $authentication;
+	public $authentication;
 	public $defaulLanguage;
 	public $currentLanguage;
 

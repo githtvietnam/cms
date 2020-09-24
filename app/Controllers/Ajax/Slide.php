@@ -2,7 +2,7 @@
 namespace App\Controllers\Ajax;
 use App\Controllers\BaseController;
 
-class Slight extends BaseController{
+class Slide extends BaseController{
 	
 	public function __construct(){
 	}

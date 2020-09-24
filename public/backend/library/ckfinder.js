@@ -71,11 +71,11 @@ function BrowseServerAlbum(object, type){
                   li=li+   '<div class="col-sm-3">';
                       li=li+  '<div class="thumb tv">';
                         li=li+  '<span class="image img-cover">';
-                          li=li+    '<img src="'+fileUrl+'" alt="" /> <input type="hidden" value="'+fileUrl+'" name="album['+k+'][image]" />';
+                          li=li+    '<img src="'+fileUrl+'" alt="" /> <input type="hidden" value="'+fileUrl+'" name="data['+k+'][image]" />';
                             li=li+  '</span>';
                             li=li+  '<div class="overlay"></div>';
                             li=li+   '<div class="delete-image"><i class="fa fa-trash" aria-hidden="true"></i></div>';
-                            li=li+   '<div class="tv number"><input name="album['+k+'][number]"" value= "0" type="text"  class=" tv-input"></div>';
+                            li=li+   '<div class="tv order"><input name="data['+k+'][order]"" value= "0" type="text"  class=" tv-input"></div>';
                            
                           li=li+ '</div>';
                          
@@ -91,10 +91,10 @@ function BrowseServerAlbum(object, type){
                                 li=li+ '<div  class="tab-0 tab-pane active">';
                                    li=li+  '<div class="panel-body">';
                                     li=li+ '<div class="row mb5">';
-                                          li=li+   '<input  placeholder="Tiêu đề Slide" type="text" name="album['+k+'][title]"  class="form-control m-b">';
+                                          li=li+   '<input  placeholder="Tên slide..." type="text" name="data['+k+'][title]"  class="form-control m-b">';
                                           li=li+ '</div>';
                                           li=li+ '<div class="row ">';
-                                          li=li+   '<textarea  placeholder="Mô tả Slide" name="album['+k+'][description]"  class="form-control m-b"></textarea>';
+                                          li=li+   '<textarea  placeholder="URL..." name="data['+k+'][url]"  class="form-control m-b"></textarea>';
                                           li=li+ '</div>'; 
                                     li=li+ '</div>';
                                 li=li+ '</div>';
@@ -106,7 +106,7 @@ function BrowseServerAlbum(object, type){
                                               
                                                 li=li+     '<div class="form-row">';
                                                     
-                                                      li=li+   '<input  placeholder="Tiêu đề SEO" name="album['+k+'][meta_title]" type="text"  class="form-control m-b">';
+                                                      li=li+   '<input  placeholder="Mô tả..." name="data['+k+'][description]" type="text"  class="form-control m-b">';
                                                    li=li+  '</div>';
                                                
                                            li=li+  '</div>';
@@ -114,7 +114,7 @@ function BrowseServerAlbum(object, type){
                                              
                                                li=li+      '<div class="form-row">';
                                                        
-                                                        li=li+ '<textarea  placeholder="Mô tả SEO" name="album['+k+'][meta_description]"  class="form-control m-b"></textarea>';
+                                                        li=li+ '<textarea  placeholder="Nội dung..." name="data['+k+'][content]"  class="form-control m-b"></textarea>';
                                                     li=li+ '</div>';
                                                 
                                             li=li+ '</div>';
@@ -133,8 +133,6 @@ function BrowseServerAlbum(object, type){
             
 
         }
-
-        console.log(k);
         $('#sortable').append(li);
         $('.click-to-upload').hide();
         $('.upload-list').show();

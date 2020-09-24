@@ -81,8 +81,9 @@
 							if(isset($_POST['album'])){
 								$album = $_POST['album'];
 							}else if(isset($article)){
-								$album = json_decode($slide['album'], TRUE);
+								$album = json_decode($article['album'], TRUE);
 							}
+							
 						 ?>
 						<div class="row">
 							<div class="col-lg-12">

@@ -3,6 +3,7 @@
     $baseController = new App\Controllers\BaseController();
     $language = $baseController->currentLanguage();
     $languageList = get_list_language(['currentLanguage' => $language]);
+   
 ?>
 <div class="row wrapper border-bottom white-bg page-heading">
    <div class="col-lg-8">
@@ -99,9 +100,9 @@
                                     <input type="checkbox" name="checkbox[]" value="<?php echo $val['id']; ?>" class="checkbox-item">
                                     <div for="" class="label-checkboxitem"></div>
                                 </td>
-                                <td class=" td-status" data-module="<?php echo $module; ?>" data-where="id"><?php echo isset($val['name'])? $val['name'] : ''; ?></td>
+                                <td class=" td-status" data-module="<?php echo $module; ?>" data-where="id"><?php echo isset($val['title'])? $val['title'] : ''; ?></td>
                                 <td class=" td-status"  data-module="<?php echo $module; ?>" data-where="id">
-                                    <a href="<?php echo base_url('backend/slide/slide/update/'.$val['id'].'') ?>"><?php echo isset($val['canonical'])? $val['canonical'] : ''; ?></a></td>
+                                    <a href="<?php echo base_url('backend/slide/slide/update/'.$val['id'].'') ?>"><?php echo isset($val['keyword'])? $val['keyword'] : ''; ?></a></td>
                                 
 
                                 <?php if(isset($languageList) && is_array($languageList) && count($languageList)){ ?>

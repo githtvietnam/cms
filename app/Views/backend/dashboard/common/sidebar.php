@@ -46,18 +46,13 @@
                     <li><a href="<?php echo base_url('backend/user/user/index') ?>"><?php echo translate('cms_lang.sidebar.sb_user', $language) ?></a></li>
                 </ul>
             </li>
-            <li class="<?php echo ( $uriModule == 'slide') ? 'active'  : '' ?>">
-                <a href="index.html"><i class="fa fa-th-large"></i> <span class="nav-label"><?php echo translate('cms_lang.sidebar.sb_config', $language) ?></span> <span class="fa arrow"></span></a>
-                <ul class="nav nav-second-level">
-                    <li><a href="<?php echo base_url('backend/slide/slide/index') ?>"><?php echo translate('cms_lang.sidebar.sb_slight', $language) ?></a></li>
-                    
-                </ul>
-            </li>
+            
 
             <li class="<?php echo ( $uriModule == 'language') ? 'active'  : '' ?>">
                 <a href="index.html"><i class="fa fa-cog"></i> <span class="nav-label"><?php echo translate('cms_lang.sidebar.sb_setting', $language) ?></span> <span class="fa arrow"></span></a>
                 <ul class="nav nav-second-level">
                     <li><a href="<?php echo base_url('backend/language/language/index') ?>"><?php echo translate('cms_lang.sidebar.sb_language', $language) ?></a></li>
+                    <li><a href="<?php echo base_url('backend/slide/slide/index') ?>"><?php echo translate('cms_lang.sidebar.sb_slight', $language) ?></a></li>
                 </ul>
             </li>
         </ul>
