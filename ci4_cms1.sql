@@ -2,10 +2,10 @@
 -- version 5.0.2
 -- https://www.phpmyadmin.net/
 --
--- Máy chủ: 127.0.0.1:3306
--- Thời gian đã tạo: Th9 24, 2020 lúc 03:00 PM
--- Phiên bản máy phục vụ: 5.6.47
--- Phiên bản PHP: 7.2.29
+-- Host: 127.0.0.1:3306
+-- Generation Time: Sep 24, 2020 at 03:31 PM
+-- Server version: 5.6.47
+-- PHP Version: 7.2.29
 
 SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
 START TRANSACTION;
@@ -18,173 +18,13 @@ SET time_zone = "+00:00";
 /*!40101 SET NAMES utf8mb4 */;
 
 --
--- Cơ sở dữ liệu: `ci4_cms1`
+-- Database: `ci4_cms1`
 --
 
 -- --------------------------------------------------------
 
 --
--- Cấu trúc bảng cho bảng `article`
---
-
-CREATE TABLE `article` (
-  `id` int(11) NOT NULL,
-  `catalogueid` int(11) NOT NULL,
-  `catalogue` longtext NOT NULL,
-  `album` longtext NOT NULL,
-  `viewed` int(11) NOT NULL,
-  `image` varchar(255) NOT NULL,
-  `order` int(11) NOT NULL,
-  `created_at` datetime NOT NULL,
-  `updated_at` datetime NOT NULL,
-  `deleted_at` tinyint(1) NOT NULL,
-  `publish` tinyint(1) NOT NULL,
-  `userid_created` int(11) NOT NULL,
-  `userid_updated` int(11) NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
-
---
--- Đang đổ dữ liệu cho bảng `article`
---
-
-INSERT INTO `article` (`id`, `catalogueid`, `catalogue`, `album`, `viewed`, `image`, `order`, `created_at`, `updated_at`, `deleted_at`, `publish`, `userid_created`, `userid_updated`) VALUES
-(2, 2, 'null', 'null', 0, '/upload/image/Bong-da/bong-da-trong-nuoc/qh-1598246997-21-width660height492.jpg', 0, '2020-08-24 16:13:47', '0000-00-00 00:00:00', 0, 1, 8, 0);
-
--- --------------------------------------------------------
-
---
--- Cấu trúc bảng cho bảng `article_catalogue`
---
-
-CREATE TABLE `article_catalogue` (
-  `id` int(11) NOT NULL,
-  `parentid` int(11) NOT NULL,
-  `lft` int(11) NOT NULL,
-  `rgt` int(11) NOT NULL,
-  `level` int(11) NOT NULL,
-  `album` longtext NOT NULL,
-  `viewed` int(11) NOT NULL,
-  `image` varchar(255) NOT NULL,
-  `order` int(11) NOT NULL,
-  `created_at` datetime NOT NULL,
-  `updated_at` datetime NOT NULL,
-  `deleted_at` tinyint(1) NOT NULL,
-  `publish` tinyint(1) NOT NULL,
-  `userid_created` int(11) NOT NULL,
-  `userid_updated` int(11) NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
-
---
--- Đang đổ dữ liệu cho bảng `article_catalogue`
---
-
-INSERT INTO `article_catalogue` (`id`, `parentid`, `lft`, `rgt`, `level`, `album`, `viewed`, `image`, `order`, `created_at`, `updated_at`, `deleted_at`, `publish`, `userid_created`, `userid_updated`) VALUES
-(1, 0, 4, 7, 1, '[\"\\/upload\\/image\\/Bong-da\\/bong-da-trong-nuoc\\/hagl_cong_phuong_5_zing.jpg\"]', 0, '/upload/image/Bong-da/cat-1.jpg', 0, '2020-08-24 14:54:12', '0000-00-00 00:00:00', 0, 1, 8, 0),
-(2, 1, 5, 6, 2, 'null', 0, '', 0, '2020-08-24 14:55:18', '0000-00-00 00:00:00', 0, 1, 8, 0),
-(4, 0, 2, 3, 1, 'null', 0, '', 0, '2020-08-24 15:02:51', '0000-00-00 00:00:00', 0, 1, 8, 0);
-
--- --------------------------------------------------------
-
---
--- Cấu trúc bảng cho bảng `article_translate`
---
-
-CREATE TABLE `article_translate` (
-  `id` int(11) NOT NULL,
-  `objectid` int(11) NOT NULL,
-  `language` longtext NOT NULL,
-  `module` varchar(50) NOT NULL,
-  `title` varchar(255) NOT NULL,
-  `canonical` varchar(255) NOT NULL,
-  `meta_title` varchar(255) NOT NULL,
-  `meta_description` longtext NOT NULL,
-  `viewed` int(11) NOT NULL,
-  `description` text NOT NULL,
-  `content` longtext NOT NULL,
-  `created_at` datetime NOT NULL,
-  `updated_at` datetime NOT NULL,
-  `deleted_at` tinyint(1) NOT NULL,
-  `userid_created` int(11) NOT NULL,
-  `userid_updated` int(11) NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
-
---
--- Đang đổ dữ liệu cho bảng `article_translate`
---
-
-INSERT INTO `article_translate` (`id`, `objectid`, `language`, `module`, `title`, `canonical`, `meta_title`, `meta_description`, `viewed`, `description`, `content`, `created_at`, `updated_at`, `deleted_at`, `userid_created`, `userid_updated`) VALUES
-(1, 1, 'vi', 'article_catalogue', 'Bóng Đá', 'bong-da', 'Bóng đá 24h - Tin tức, lịch thi đấu bxh tin bóng đá thể thao', 'Bong da 24H - Trực tiếp bóng đá 24h Hôm Nay. Tin tức bóng đá số 24/7 mới nhất. Tin Nhanh Kết quả, lịch thi đấu, video trực tuyến tin chuyển nhượng.', 0, 'PHA+PHNwYW4gc3R5bGU9ImJhY2tncm91bmQtY29sb3I6cmdiKDI1NSwyNTUsMjU1KTtjb2xvcjpyZ2IoNzcsODEsODYpOyI+Qm9uZyBkYSAyNEggLSBUcuG7sWMgdGnhur9wIDwvc3Bhbj48aT48c3Ryb25nPmLDs25nIMSRw6E8L3N0cm9uZz48L2k+PHNwYW4gc3R5bGU9ImJhY2tncm91bmQtY29sb3I6cmdiKDI1NSwyNTUsMjU1KTtjb2xvcjpyZ2IoNzcsODEsODYpOyI+IDI0aCBIw7RtIE5heS4gVGluIHThu6ljIDwvc3Bhbj48aT48c3Ryb25nPmLDs25nIMSRw6E8L3N0cm9uZz48L2k+PHNwYW4gc3R5bGU9ImJhY2tncm91bmQtY29sb3I6cmdiKDI1NSwyNTUsMjU1KTtjb2xvcjpyZ2IoNzcsODEsODYpOyI+IHPhu5EgMjQvNyBt4bubaSBuaOG6pXQuIFRpbiBOaGFuaCBL4bq/dCBxdeG6oywgbOG7i2NoIHRoaSDEkeG6pXUsIHZpZGVvIHRy4buxYyB0dXnhur9uIHRpbiBjaHV54buDbiBuaMaw4bujbmcuPC9zcGFuPjwvcD4=', 'PHAgc3R5bGU9Im1hcmdpbi1sZWZ0OmF1dG87dGV4dC1hbGlnbjpqdXN0aWZ5OyI+PHN0cm9uZz5WYWkgdHLDsiBt4budIG5o4bqhdDwvc3Ryb25nPjwvcD48cCBzdHlsZT0ibWFyZ2luLWxlZnQ6YXV0bzsiPiZuYnNwOzwvcD48cCBzdHlsZT0ibWFyZ2luLWxlZnQ6YXV0bzt0ZXh0LWFsaWduOmp1c3RpZnk7Ij5TYXUgdGnhur9uZyBjw7JpIG3Do24gY3Xhu5ljIGPhu6dhIHRy4buNbmcgdMOgaSBEYW5pZWxlIE9yc2F0bywgTmV5bWFyIMO0bSBt4bq3dCBraMOzYy4gQW5oIMSRxrDhu6NjIMSR4buTbmcgxJHhu5lpIHbDoCDEkeG7kWkgdGjhu6cgxJHhur9uIGFuIOG7p2kuIFNhdSDEkcOzLCBj4bqndSB0aOG7pyDEkeG6r3QgZ2nDoSBuaOG6pXQgdGjhur8gZ2nhu5tpIHJhIGtodSBr4bu5IHRodeG6rXQsIG5n4buTaSB4deG7kW5nIGdo4bq/IHbDoCDDtG0gbeG6t3Qga2jDs2MgdGnhur9wLiBHacOhbSDEkeG7kWMgVGjhu4MgdGhhbyBj4bunYSBQU0cgTGVvbmFyZG8gcGjhuqNpIHJhIMSR4buZbmcgdmnDqm4gTmV5bWFyIMSR4buDIHRodXnhur90IHBo4bulYyBhbmggdsOgbyBzw6JuIGNodeG6qW4gYuG7iyBjaG8gbOG7hSBuaOG6rW4gaHV5IGNoxrDGoW5nLjwvcD48cCBzdHlsZT0ibWFyZ2luLWxlZnQ6YXV0bzsiPiZuYnNwOzwvcD48ZmlndXJlIGNsYXNzPSJpbWFnZSBpbWFnZV9yZXNpemVkIiBzdHlsZT0id2lkdGg6MTUxOS4ycHg7Ij48aW1nIHNyYz0iaHR0cHM6Ly9jZG4uMjRoLmNvbS52bi91cGxvYWQvMy0yMDIwL2ltYWdlcy8yMDIwLTA4LTI0L3R0dHV1LTE1OTgyNDA3NTktMTgwLXdpZHRoNjQwaGVpZ2h0Nzc2LmpwZyIgYWx0PSImYW1wOyMzNDvEkHXhu5VpJmFtcDsjMzQ7IE5leW1hciB54bq/dSBiw7NuZyB2w61hLCBQU0cgY8OzIHbDtCDEkeG7i2NoIENoYW1waW9ucyBMZWFndWU/IC0gMiI+PC9maWd1cmU+PGZpZ3VyZSBjbGFzcz0iaW1hZ2UgaW1hZ2VfcmVzaXplZCIgc3R5bGU9IndpZHRoOjc1My41MTNweDsiPjxpbWcgc3JjPSJodHRwczovL2Nkbi4yNGguY29tLnZuL3VwbG9hZC8zLTIwMjAvaW1hZ2VzLzIwMjAtMDgtMjQvMjAyMDA4MjMtdC0yMDE1Mzctei0xNTA1MTc4NjgtcmMtMi13amktOS15LTktb2R2cnRybWFkcC0zLXNvY2NlcmNoYW1waW9uc2JheXBzZ3JlcG9ydC0xNTk4MjI0ODg3MzY1LTE1OTgyNDA3NTktNzc5LXdpZHRoNjQwaGVpZ2h0NDIwLmpwZyIgYWx0PSImYW1wOyMzNDvEkHXhu5VpJmFtcDsjMzQ7IE5leW1hciB54bq/dSBiw7NuZyB2w61hLCBQU0cgY8OzIHbDtCDEkeG7i2NoIENoYW1waW9ucyBMZWFndWU/IC0gMyI+PC9maWd1cmU+PGZpZ3VyZSBjbGFzcz0iaW1hZ2UgaW1hZ2VfcmVzaXplZCIgc3R5bGU9IndpZHRoOjc1My41MTNweDsiPjxpbWcgc3JjPSJodHRwczovL2Nkbi4yNGguY29tLnZuL3VwbG9hZC8zLTIwMjAvaW1hZ2VzLzIwMjAtMDgtMjQvdHR0LTE1OTgyNDA3NTktNzYxLXdpZHRoNjQwaGVpZ2h0NDIwLmpwZyIgYWx0PSImYW1wOyMzNDvEkHXhu5VpJmFtcDsjMzQ7IE5leW1hciB54bq/dSBiw7NuZyB2w61hLCBQU0cgY8OzIHbDtCDEkeG7i2NoIENoYW1waW9ucyBMZWFndWU/IC0gNCI+PC9maWd1cmU+PHAgc3R5bGU9Im1hcmdpbi1sZWZ0OmF1dG87Ij4mbmJzcDs8L3A+PHAgc3R5bGU9Im1hcmdpbi1sZWZ0OmF1dG87dGV4dC1hbGlnbjpqdXN0aWZ5OyI+VHLDqm4gxJHGsOG7nW5nIGzDqm4gYuG7pWMgdHJhbyBnaeG6o2ksIE5leW1hciDEkWkga2jDtG5nIHbhu69uZyBy4buTaSBsacOqbiB04bulYyBn4bulYyDEkeG6p3UgdsOgbyB2YWkgdsOgIG5n4buxYyBj4bunYSBMZWFuZHJvIFBhcmVkZXMuIE5nw7RpIHNhbyBuZ8aw4budaSBCcmF6aWwgY8WpbmcgxJHGsOG7o2MgxJHDrWNoIHRow6JuIGNo4bunIHThu4tjaCBQU0cgTmFzc2VyIEFsIEtoZWxhaWZpIMO0bSB2w6AgbsOzaSBjaHV54buHbi4gVHLGsOG7m2Mga2hpIGLGsOG7m2MgcXVhIGNoaeG6v2MgY8O6cCBDaGFtcGlvbnMgTGVhZ3VlLCBOZXltYXIgxJHGsGEgdGF5IGNo4bqhbSB2w6BvIGRhbmggaGnhu4d1IHF1w70gZ2nDoSBtw6AgYW5oIHThu6tuZyBnacOgbmggxJHGsOG7o2MgaOG7k2kgMjAxNS48L3A+PHAgc3R5bGU9Im1hcmdpbi1sZWZ0OmF1dG87dGV4dC1hbGlnbjpqdXN0aWZ5OyI+Tmhp4buBdSBDxJBWIHBow6F0IGJp4buDdSB0csOqbiBUd2l0dGVyIHLhurFuZyBjw7MgduG6uyBuaMawIE5leW1hciBtdeG7kW4g4oCcZGnhu4Vu4oCdIHRyxrDhu5tjIG3DoXkgcXVheSBi4bqxbmcgbmjhu69uZyBtw6BuIHRo4buVbiB0aOG7qWMsIGjGoW4gbMOgIGtow6F0IGtoYW8gZ2nDoG5oIGRhbmggaGnhu4d1LiBUcsOqbiBzw6JuLCBOZXltYXIgxJHGsMahbmcgbmhpw6puIGPFqW5nIGzDoCBj4bqndSB0aOG7pyBjaMSDbSDigJxkaeG7hW7igJ0gbmjhuqV0IGPhu6dhIFBTRy4gTmfDtGkgc2FvIG5nxrDhu51pIEJyYXppbCB0aOG7gyBoaeG7h24gxJHGsOG7o2Mgc+G7sSBuxINuZyBu4buVLCBuaMawbmcgaGnhu4d1IHF14bqjIMSR4bqxbmcgc2F1IMSRw7MgbMOgIHRo4bupIHbDtCBjw7luZyBtw7RuZyBsdW5nLjwvcD48cCBzdHlsZT0ibWFyZ2luLWxlZnQ6YXV0bzsiPiZuYnNwOzwvcD48ZmlndXJlIGNsYXNzPSJpbWFnZSBpbWFnZV9yZXNpemVkIiBzdHlsZT0id2lkdGg6MTUxOS4ycHg7Ij48aW1nIHNyYz0iaHR0cHM6Ly9jZG4uMjRoLmNvbS52bi91cGxvYWQvMy0yMDIwL2ltYWdlcy8yMDIwLTA4LTI0L2RkLTE1OTgyNDE2NTYtOTItd2lkdGgxNjAwaGVpZ2h0MTA2Ny5qcGciIGFsdD0iJmFtcDsjMzQ7xJB14buVaSZhbXA7IzM0OyBOZXltYXIgeeG6v3UgYsOzbmcgdsOtYSwgUFNHIGPDsyB2w7QgxJHhu4tjaCBDaGFtcGlvbnMgTGVhZ3VlPyAtIDUiPjwvZmlndXJlPjxwIHN0eWxlPSJtYXJnaW4tbGVmdDphdXRvO3RleHQtYWxpZ246anVzdGlmeTsiPkFuaCBsw6AgbmfGsOG7nWkgZGkgY2h1eeG7g24gbmhp4buBdSB0aOG7qSBoYWkgY+G7p2EgUFNHIOG7nyB0cuG6rW4gbsOgeSAoOSwxMSBrbSksIGNo4buJIHNhdSBNYXJxdWluaG9zICg5LDcxIGttKSwgdHJvbmcgxJHDsyDEkWEgcGjhuqduIGzDoCBjw6FjIHTDrG5oIGh14buRbmcgcsOqIGThuq90LiBBbmggY8OzIG3hu5l0IHBoYSBixINuZyB4deG7kW5nIG5o4bqtbiDEkcaw4budbmcgY2jhu41jIGtoZSBj4bunYSBLeWxpYW4gTWJhcHBlIG5oxrBuZyBs4bqhaSBraMO0bmcgdGjhuq9uZyDEkcaw4bujYyBNYW51ZWwgTmV1ZXIg4bufIHTDrG5oIGh14buRbmcgxJHhu5FpIG3hurd0LiBOZ2/DoGkgbmjhu69uZyB0aOG7qSDEkcOzIHJhLCBhbmgga2jDtG5nIHR1bmcgxJHGsOG7o2MgxJHGsOG7nW5nIGNodXnhu4FuIG7DoG8gY2hvIMSR4buTbmcgxJHhu5lpIGThu6l0IMSRaeG7g20uIFBoYSB04bqhdCBiw7NuZyBj4bunYSBhbmgg4bufIHBow7p0IMSRw6EgYsO5IGhp4buHcCBoYWkgdGh14bqtbiBs4bujaSwgbmjGsG5nIHRp4buBbiDEkeG6oW8gRXJpYyBDaG91cG8tTW90aW5nIGzhuqFpIHPDunQgaOG7pXQuPC9wPjxwIHN0eWxlPSJtYXJnaW4tbGVmdDphdXRvO3RleHQtYWxpZ246anVzdGlmeTsiPk5leW1hciB04burbmcgdOG7j2Egc8OhbmcgcuG7sWMgcuG7oSB0cm9uZyBjaGnhur9uIHRo4bqvbmcgbmdo4bq5dCB0aOG7nyAyLTEgY+G7p2EgUFNHIHRyxrDhu5tjIEF0YWxhbnRhIOG7nyB04bupIGvhur90IHbhu5tpIG3hu5l0IHBoYSBraeG6v24gdOG6oW8gdsOgIG3hu5l0IHBoYSBwaMOhdCDEkeG7mW5nIHThuqVuIGPDtG5nIHR1eeG7h3QgaOG6o28uIE5o4buvbmcgdMaw4bufbmcgxJHhuqV5IHPhur0gbMOgIHRp4buBbiDEkeG7gSBnacO6cCBOZXltYXIgdsOgIFBTRyBsw6puIMSR4buJbmggdmluaCBxdWFuZyDhu58gQ2hhbXBpb25zIExlYWd1ZSBtw7lhIG7DoHksIG5oxrBuZyBy4buTaSBt4buNaSB0aOG7qSBjxaluZyBjaOG7iSBsw6AgcGjDuSBkdSBraGkgTmV5bWFyIHBo4bqjaSDEkeG7kWkgbeG6t3QgduG7m2kgbeG7mXQgxJHhu5FpIHRo4bunIHF1w6EgZ2nDoCBkxqEuPC9wPjxwIHN0eWxlPSJtYXJnaW4tbGVmdDphdXRvOyI+Jm5ic3A7PC9wPjxmaWd1cmUgY2xhc3M9ImltYWdlIGltYWdlX3Jlc2l6ZWQiIHN0eWxlPSJ3aWR0aDo3NTUuNnB4OyI+PGltZyBzcmM9Imh0dHBzOi8vY2RuLjI0aC5jb20udm4vdXBsb2FkLzMtMjAyMC9pbWFnZXMvMjAyMC0wOC0yNC9kd3ctMTU5ODI0MjUyOC02MTYtd2lkdGg3OTVoZWlnaHQ0NDYuanBnIiBhbHQ9IiZhbXA7IzM0O8SQdeG7lWkmYW1wOyMzNDsgTmV5bWFyIHnhur91IGLDs25nIHbDrWEsIFBTRyBjw7MgdsO0IMSR4buLY2ggQ2hhbXBpb25zIExlYWd1ZT8gLSA2Ij48L2ZpZ3VyZT48ZmlndXJlIGNsYXNzPSJpbWFnZSBpbWFnZV9yZXNpemVkIiBzdHlsZT0id2lkdGg6NzU1LjZweDsiPjxpbWcgc3JjPSJodHRwczovL2Nkbi4yNGguY29tLnZuL3VwbG9hZC8zLTIwMjAvaW1hZ2VzLzIwMjAtMDgtMjQvcnJyLTE1OTgyNDI1MjgtOTgtd2lkdGg3OTVoZWlnaHQ0NDYuanBnIiBhbHQ9IiZhbXA7IzM0O8SQdeG7lWkmYW1wOyMzNDsgTmV5bWFyIHnhur91IGLDs25nIHbDrWEsIFBTRyBjw7MgdsO0IMSR4buLY2ggQ2hhbXBpb25zIExlYWd1ZT8gLSA3Ij48L2ZpZ3VyZT48cCBzdHlsZT0ibWFyZ2luLWxlZnQ6YXV0bzt0ZXh0LWFsaWduOmp1c3RpZnk7Ij48c3Ryb25nPlTDrG0gxJHDonUgc+G7sSBraMOhYyBiaeG7h3Q/PC9zdHJvbmc+PC9wPjxwIHN0eWxlPSJtYXJnaW4tbGVmdDphdXRvOyI+Jm5ic3A7PC9wPjxmaWd1cmUgY2xhc3M9ImltYWdlIGltYWdlX3Jlc2l6ZWQiIHN0eWxlPSJ3aWR0aDo4MDMuMnB4OyI+PGltZyBzcmM9Imh0dHBzOi8vY2RuLjI0aC5jb20udm4vdXBsb2FkLzMtMjAyMC9pbWFnZXMvMjAyMC0wOC0yNC9ycnJ0dC0xNTk4MjQzMTcyLTEzNi13aWR0aDUwMGhlaWdodDgyMi5qcGciIGFsdD0iJmFtcDsjMzQ7xJB14buVaSZhbXA7IzM0OyBOZXltYXIgeeG6v3UgYsOzbmcgdsOtYSwgUFNHIGPDsyB2w7QgxJHhu4tjaCBDaGFtcGlvbnMgTGVhZ3VlPyAtIDgiPjwvZmlndXJlPjxwIHN0eWxlPSJtYXJnaW4tbGVmdDphdXRvO3RleHQtYWxpZ246anVzdGlmeTsiPkzDoCDEkeG6s25nIGPhuqVwIGPhu6dhIE5leW1hciBjaMawYSDEkeG7pyDEkeG7gyBj4bupdSB24bubdCBQU0cgdHLGsOG7m2Mgbmjhu69uZyDEkeG7kWkgdGjhu6cgbeG6oW5oIG5o4bqldCwg4bufIG5o4buvbmcgdMOsbmggdGjhur8ga2jhu5FuIMSR4buRbiBuaOG6pXQsIGhheSBCYXllcm4gcXXDoSBoYXk/IFbhu5tpIDYgdMOsbmggaHXhu5FuZyBi4buLIHBo4bqhbSBs4buXaSB0csaw4bubYyBCYXllcm4sIE5leW1hciDEkcOjIGLhu4sgcGjhuqFtIGzhu5dpIHThu5VuZyBj4buZbmcgMjIgbOG6p24gdMOtbmggYuG6r3QgxJHhuqd1IHThu6sgbG/huqF0IHThu6kga+G6v3QgQ2hhbXBpb25zIExlYWd1ZSAyMDE5LzIwIGfhurdwIEF0YWxhbnRhLCB2w6AgbMOgIGPhuqd1IHRo4bunIGLhu4sgcGjhuqFtIGzhu5dpIG5oaeG7gXUgbmjhuqV0IHThuqFpIGdp4bqjaSB0cm9uZyBj4bqjIG3DuWEgduG7q2Ega+G6v3QgdGjDumMuPC9wPjxwIHN0eWxlPSJtYXJnaW4tbGVmdDphdXRvO3RleHQtYWxpZ246anVzdGlmeTsiPlThuqV0IG5oacOqbiwgY8OzIGzhu61hIHBo4bqjaSBjw7Mga2jDs2kuIE5leW1hciBjw7MgaGFtIMSRaSBiw7NuZywgaGFtIHLDqiBk4bqvdCB2w6AgaGFtIGJp4buDdSBkaeG7hW4gdGjDrCBt4bubaSBraGnhur9uIMSR4buRaSB0aOG7pyB0cnV5IGPhuqNuLiBUaOG6vyBuaMawbmcgbmfDtGkgc2FvIG5nxrDhu51pIEJyYXppbCBs4bqhaSBraMO0bmcgdOG6rW4gZOG7pW5nIMSRxrDhu6NjIG5o4buvbmcgbsOpdCB0aW5oIHJhbmggdHJvbmcgY8OhY2ggY2jGoWkgY+G7p2EgbcOsbmggdsOgbyB0w6JtIGzDvSB0aGkgxJHhuqV1LiDEkOG7kWkgdGjhu6cgY8OgbmcgcGjhuqFtIGzhu5dpLCBOZXltYXIgbOG6oWkgY8OgbmcgxJFpIGLDs25nLCB2w6AgxJFpIGLDs25nIG5nw6B5IG3hu5l0IOKAnHThu5Fp4oCdIGjGoW4uPC9wPjxwIHN0eWxlPSJtYXJnaW4tbGVmdDphdXRvO3RleHQtYWxpZ246anVzdGlmeTsiPkLhuqNuIGzEqW5oIOG7nyBuaOG7r25nIHRy4bqtbiDEkeG6pXUgbOG7m24gbMOgIMSRaeG7gXUgbcOgIE5leW1hciBz4bq9IGPDsm4gcGjhuqNpIGjhu41jIGjhu49pIHLhuqV0IG5oaeG7gXUuIEh1eeG7gW4gdGhv4bqhaSBSdXVkIEd1bGxpdCDEkcOjIGJ1w7RuZyBs4budaSBraGVuIG5n4bujaSBTZXJnZSBHbmFicnkgdsOsIHPhu7Eg4oCcaGnhur91IGNoaeG6v27igJ0gc2F1IHTDrG5oIGh14buRbmcgc8O6dCB2w6BvIGNow6JuIE5leW1hciBraGkgdHJ1eSBj4bqjbiBj4bqndSB0aOG7pyBuw6B5IOG7nyDEkcaw4budbmcgYmnDqm4sIGRp4buFbiByYSB0cm9uZyBoaeG7h3AgMiB0cuG6rW4gxJHhuqV1LiDDlG5nIGNobyBy4bqxbmcgxJHDonkgbMOgIOKAnGtob+G6o25oIGto4bqvYyB0aGVuIGNo4buRdOKAnSBtYW5nIHbhu4EgdGjhuq9uZyBs4bujaSBjaG8gQmF5ZXJuLiBT4buxIGzhuqFuaCBsw7luZywgbOG6p20gbOG7syBj4bunYSBuZ8aw4budaSDEkOG7qWMgxJHDoyBjaGnhur9uIHRo4bqvbmcgbeG7mXQgTmV5bWFyIHF1w6EgbmjhuqF5IGPhuqNtLjwvcD48cCBzdHlsZT0ibWFyZ2luLWxlZnQ6YXV0bzsiPiZuYnNwOzwvcD48ZmlndXJlIGNsYXNzPSJpbWFnZSBpbWFnZV9yZXNpemVkIiBzdHlsZT0id2lkdGg6MTUxOS4ycHg7Ij48aW1nIHNyYz0iaHR0cHM6Ly9jZG4uMjRoLmNvbS52bi91cGxvYWQvMy0yMDIwL2ltYWdlcy8yMDIwLTA4LTI0L3R0Z2ctMTU5ODI0MzM5NC03NTctd2lkdGgxNjAwaGVpZ2h0OTAwLmpwZyIgYWx0PSImYW1wOyMzNDvEkHXhu5VpJmFtcDsjMzQ7IE5leW1hciB54bq/dSBiw7NuZyB2w61hLCBQU0cgY8OzIHbDtCDEkeG7i2NoIENoYW1waW9ucyBMZWFndWU/IC0gOSI+PC9maWd1cmU+PHAgc3R5bGU9Im1hcmdpbi1sZWZ0OmF1dG87dGV4dC1hbGlnbjpqdXN0aWZ5OyI+S2hpIG3DoCBOZXltYXIg4oCcaOG6v3QgcGjDqXDigJ0sIHThuq1wIHRo4buDIFBTRyBjxaluZyBuaMawIGNo4buLdSDigJxoaeG7h3Ug4bupbmcgZG9taW5v4oCdLCBraGkgbmjhu69uZyBuZ8O0aSBzYW8gc8OhbmcgbmjhuqV0IGPhu6dhIGjhu40gbMOgIE1iYXBwZSB2w6AgQW5nZWwgZGkgTWFyaWEgY8Wpbmcga2jDtG5nIHRo4buDIGhp4buHbiDEkcaw4bujYyBz4buxIHPhuq9jIHPhuqNvIG5nb8OgaSBt4buZdCB2w6BpIHTDrG5oIGh14buRbmcgxJHGoW4gbOG6uy4gTWJhcHBlIGfDonkgdGjhuqV0IHbhu41uZyDhu58ga2jhuqMgbsSDbmcgZOG7qXQgxJFp4buDbSwgdHJvbmcga2hpIMSRaeG7g20gc8OhbmcgY+G7p2EgRGkgTWFyaWEgY2jhu4kgbMOgIHTDrG5oIGh14buRbmcg4oCceMOidSBraW3igJ0gQWxwaG9uc28gRGF2aWVzLjwvcD48cCBzdHlsZT0ibWFyZ2luLWxlZnQ6YXV0bzt0ZXh0LWFsaWduOmp1c3RpZnk7Ij5ITFYgVGhvbWFzIFR1Y2hlbCDEkcOjIG5o4bqvYyDEkeG6v24gTGlvbmVsIE1lc3NpIHNhdSB0cuG6rW4gxJHhuqV1IHRyb25nIG3hu5l0IGPDonUgbsOzaSDEkcO5YSB04bq/dSB0w6FvIHbhu4Egdmnhu4djIFBTRyBjw7MgdGjhu4MgbXVhIHNpw6p1IHNhbyBuw6B5LiBOaMawbmcgbmfGsOG7nWkgUFNHIGPhuqduIHBo4bqjaSBuaMOsbiBuaOG6rW4gbeG7mXQgdGjhu7FjIHThur8gcuG6sW5nIHPhur0gcuG6pXQga2jDsyDEkeG7gyBOZXltYXIsIHbhu5tpIGPDoSB0w61uaCB2w6AgdGjDs2kgcXVlbiBj4bunYSBtw6xuaCwgY8OzIHRo4buDIHbGsMahbiB04bqnbSDEkeG7gyB0cuG7nyB0aMOgbmggbeG7mXQgdGjhu6cgbMSpbmggdGjhu7FjIHPhu7EsIGPhuqMgduG7gSBjaHV5w6puIG3DtG4gbOG6q24gdGluaCB0aOG6p24uIEFuaCBjw7MgdGjhu4MgY2jhu4kgxJHhuqF0IMSRxrDhu6NjIHPhu7EgdGjEg25nIGhvYSwga2hpIGNoxqFpIGPDuW5nIG5o4buvbmcgY29uIG5nxrDhu51pIG5oxrAgduG6rXkgbcOgIHRow7RpLjwvcD48cCBzdHlsZT0ibWFyZ2luLWxlZnQ6YXV0bzsiPiZuYnNwOzwvcD4=', '0000-00-00 00:00:00', '0000-00-00 00:00:00', 0, 0, 0),
-(2, 2, 'vi', 'article_catalogue', 'Bóng Đá Trong Nước', 'bong-da-trong-nuoc', '', '', 0, 'PHA+QsOzbmcgxJDDoSBUcm9uZyBOxrDhu5tjPC9wPg==', 'PHA+QsOzbmcgxJDDoSBUcm9uZyBOxrDhu5tjPC9wPg==', '0000-00-00 00:00:00', '0000-00-00 00:00:00', 0, 0, 0),
-(4, 4, 'vi', 'article_catalogue', 'Pháp Luật', 'phap-luat', '', '', 0, '', '', '0000-00-00 00:00:00', '0000-00-00 00:00:00', 0, 0, 0),
-(5, 1, 'en', 'article_catalogue', 'Football 123', 'football-123', 'The more the opponent made the mistake, the more Neymar ', 'Football 24H - Live Football 24h Today. Latest digital football news 24/7. Quick News Results, fixtures, video streaming news transfers.', 0, 'PHA+Rm9vdGJhbGwgMjRIIC0gTGl2ZSBmb290YmFsbCAyNGggdG9kYXkuIExhdGVzdCBkaWdpdGFsIGZvb3RiYWxsIG5ld3MgMjQvNy4gRmFzdCBOZXdzIFJlc3VsdHMsIGZpeHR1cmVzLCBvbmxpbmUgdmlkZW8gdHJhbnNmZXJzLjwvcD4=', 'PHAgc3R5bGU9Im1hcmdpbi1sZWZ0OmF1dG87dGV4dC1hbGlnbjpqdXN0aWZ5OyI+UG9vciByb2xlIEFmdGVyIHRoZSBmaW5hbCB3aGlzdGxlIG9mIHJlZmVyZWUgRGFuaWVsZSBPcnNhdG8sIE5leW1hciBjcmllZC4gSGUgd2FzIGNvbWZvcnRlZCBieSBoaXMgdGVhbW1hdGVzIGFuZCBvcHBvbmVudHMuIEFmdGVyIHRoYXQsIHRoZSBtb3N0IGV4cGVuc2l2ZSBwbGF5ZXIgaW4gdGhlIHdvcmxkIHdlbnQgdG8gdGhlIHRlY2huaWNhbCB6b25lLCBzYXQgZG93biBvbiB0aGUgY2hhaXIgYW5kIGNvbnRpbnVlZCBjcnlpbmcuIFBTRydzIFNwb3J0cyBEaXJlY3RvciBMZW9uYXJkbyBoYWQgdG8gZW5jb3VyYWdlIE5leW1hciB0byBwZXJzdWFkZSBoaW0gdG8gY29tZSBvbiB0aGUgcGl0Y2ggdG8gcHJlcGFyZSBmb3IgdGhlIG1lZGFsIGNlcmVtb255LjwvcD48cCBzdHlsZT0ibWFyZ2luLWxlZnQ6YXV0bzsiPiZuYnNwOzwvcD48ZmlndXJlIGNsYXNzPSJpbWFnZSBpbWFnZV9yZXNpemVkIiBzdHlsZT0id2lkdGg6MTUxOS4ycHg7Ij48aW1nIHNyYz0iaHR0cHM6Ly9jZG4uMjRoLmNvbS52bi91cGxvYWQvMy0yMDIwL2ltYWdlcy8yMDIwLTA4LTI0L3R0dHV1LTE1OTgyNDA3NTktMTgwLXdpZHRoNjQwaGVpZ2h0Nzc2LmpwZyIgYWx0PSIiPjwvZmlndXJlPjxmaWd1cmUgY2xhc3M9ImltYWdlIGltYWdlX3Jlc2l6ZWQiIHN0eWxlPSJ3aWR0aDo3NTMuNTEzcHg7Ij48aW1nIHNyYz0iaHR0cHM6Ly9jZG4uMjRoLmNvbS52bi91cGxvYWQvMy0yMDIwL2ltYWdlcy8yMDIwLTA4LTI0LzIwMjAwODIzLXQtMjAxNTM3LXotMTUwNTE3ODY4LXJjLTItd2ppLTkteS05LW9kdnJ0cm1hZHAtMy1zb2NjZXJjaGFtcGlvbnNiYXlwc2dyZXBvcnQtMTU5ODIyNDg4NzM2NS0xNTk4MjQwNzU5LTc3OS13aWR0aDY0MGhlaWdodDQyMC5qcGciIGFsdD0iIj48L2ZpZ3VyZT48ZmlndXJlIGNsYXNzPSJpbWFnZSBpbWFnZV9yZXNpemVkIiBzdHlsZT0id2lkdGg6NzUzLjUxM3B4OyI+PGltZyBzcmM9Imh0dHBzOi8vY2RuLjI0aC5jb20udm4vdXBsb2FkLzMtMjAyMC9pbWFnZXMvMjAyMC0wOC0yNC90dHQtMTU5ODI0MDc1OS03NjEtd2lkdGg2NDBoZWlnaHQ0MjAuanBnIiBhbHQ9IiI+PC9maWd1cmU+PHAgc3R5bGU9Im1hcmdpbi1sZWZ0OmF1dG87Ij4mbmJzcDs8L3A+PHAgc3R5bGU9Im1hcmdpbi1sZWZ0OmF1dG87dGV4dC1hbGlnbjpqdXN0aWZ5OyI+T24gdGhlIHdheSB1cCB0byB0aGUgcG9kaXVtLCBOZXltYXIgd2FzIHVuc3RlYWR5IGFuZCB0aGVuIHJlcGVhdGVkbHkgZHJvcHBlZCBoaXMgaGVhZCBvbiBMZWFuZHJvIFBhcmVkZXMncyBzaG91bGRlciBhbmQgY2hlc3QuIFRoZSBCcmF6aWxpYW4gc3RhciB3YXMgYWxzbyBodWdnZWQgYW5kIHRhbGtlZCBieSBQU0cgcHJlc2lkZW50IE5hc3NlciBBbCBLaGVsYWlmaSBwZXJzb25hbGx5LiBCZWZvcmUgc3RlcHBpbmcgdGhyb3VnaCB0aGUgQ2hhbXBpb25zIExlYWd1ZSB0cm9waHksIE5leW1hciByZWFjaGVkIHRvIHRvdWNoIHRoZSBwcmVjaW91cyB0aXRsZSBoZSB3b24gaW4gMjAxNS4gTWFueSBmYW5zIHNhaWQgb24gVHdpdHRlciB0aGF0IGl0IHNlZW1zIHRoYXQgTmV5bWFyIHdhbnRzIHRvICJhY3QiIGluIGZyb250IG9mIHRoZSBjYW1lcmEgd2l0aCBzb2JzLCByYXRoZXIgdGhhbiB0aGUgZGVzaXJlIHRvIHdpbiB0aGUgdGl0bGUuIE9uIHRoZSBmaWVsZCwgTmV5bWFyIGlzIG9mIGNvdXJzZSBhbHNvIHRoZSBtb3N0IGhhcmQtd29ya2luZyBwbGF5ZXIgb2YgUFNHLiBUaGUgQnJhemlsaWFuIHN0YXIgc2hvd3MgZHluYW1pc20sIGJ1dCB0aGUgZWZmZWN0IGJlaGluZCBpdCBpcyBleHRyZW1lbHkgdmFndWUuPC9wPjxwIHN0eWxlPSJtYXJnaW4tbGVmdDphdXRvOyI+Jm5ic3A7PC9wPjxmaWd1cmUgY2xhc3M9ImltYWdlIGltYWdlX3Jlc2l6ZWQiIHN0eWxlPSJ3aWR0aDoxNTE5LjJweDsiPjxpbWcgc3JjPSJodHRwczovL2Nkbi4yNGguY29tLnZuL3VwbG9hZC8zLTIwMjAvaW1hZ2VzLzIwMjAtMDgtMjQvZGQtMTU5ODI0MTY1Ni05Mi13aWR0aDE2MDBoZWlnaHQxMDY3LmpwZyIgYWx0PSIiPjwvZmlndXJlPjxwIHN0eWxlPSJtYXJnaW4tbGVmdDphdXRvO3RleHQtYWxpZ246anVzdGlmeTsiPkhlIGlzIHRoZSBzZWNvbmQgbW9zdCBtb2JpbGUgcGxheWVyIG9mIFBTRyBpbiB0aGlzIG1hdGNoICg5LjExIGttKSwgYmVoaW5kIG9ubHkgTWFycXVpbmhvcyAoOS43MSBrbSksIGluIHdoaWNoIG1vc3Qgb2YgaXQgaXMgZHJpYmJsaW5nIHNpdHVhdGlvbnMuIEhlIGhhZCBhIGtpY2sgZG93biB0byByZWNlaXZlIEt5bGlhbiBNYmFwcGUncyBzbGl0IGJ1dCBjb3VsZCBub3Qgd2luIGFnYWluc3QgTWFudWVsIE5ldWVyIGluIGEgZmFjZS10by1mYWNlIHNpdHVhdGlvbi4gT3RoZXIgdGhhbiB0aGF0LCBoZSBjb3VsZCBub3QgZGVsaXZlciBhIHBhc3MgZm9yIGhpcyB0ZWFtbWF0ZXMgdG8gZmluaXNoLiBIaXMgY3Jvc3MgaW4gdGhlIHNlY29uZCBoYWxmIHdhcyBmYXZvcmFibGUsIGJ1dCBzdHJpa2VyIEVyaWMgQ2hvdXBvLU1vdGluZyBtaXNzZWQuIE5leW1hciBzaGluZWQgYnJpZ2h0bHkgaW4gUFNHJ3MgY2hva2luZyAyLTEgdmljdG9yeSBvdmVyIEF0YWxhbnRhIGluIHRoZSBxdWFydGVyLWZpbmFscyB3aXRoIGFuIGV4Y2VsbGVudCBhc3Npc3QgYW5kIGFuIGV4Y2VsbGVudCBsYXVuY2guIFRoZXNlIGlkZWFzIHdpbGwgYmUgdGhlIHByZW1pc2UgZm9yIE5leW1hciBhbmQgUFNHIHRvIHJlYWNoIHRoZSB0b3Agb2YgdGhlIENoYW1waW9ucyBMZWFndWUgZ2xvcnkgdGhpcyBzZWFzb24sIGJ1dCB0aGVuIGV2ZXJ5dGhpbmcgaXMganVzdCBlcGhlbWVyYWwgd2hlbiBOZXltYXIgaGFzIHRvIGZhY2UgYSB0b28gb2xkIG9wcG9uZW50LjwvcD48cCBzdHlsZT0ibWFyZ2luLWxlZnQ6YXV0bzsiPiZuYnNwOzwvcD48ZmlndXJlIGNsYXNzPSJpbWFnZSBpbWFnZV9yZXNpemVkIiBzdHlsZT0id2lkdGg6NzU1LjZweDsiPjxpbWcgc3JjPSJodHRwczovL2Nkbi4yNGguY29tLnZuL3VwbG9hZC8zLTIwMjAvaW1hZ2VzLzIwMjAtMDgtMjQvZHd3LTE1OTgyNDI1MjgtNjE2LXdpZHRoNzk1aGVpZ2h0NDQ2LmpwZyIgYWx0PSIiPjwvZmlndXJlPjxmaWd1cmUgY2xhc3M9ImltYWdlIGltYWdlX3Jlc2l6ZWQiIHN0eWxlPSJ3aWR0aDo3NTUuNnB4OyI+PGltZyBzcmM9Imh0dHBzOi8vY2RuLjI0aC5jb20udm4vdXBsb2FkLzMtMjAyMC9pbWFnZXMvMjAyMC0wOC0yNC9ycnItMTU5ODI0MjUyOC05OC13aWR0aDc5NWhlaWdodDQ0Ni5qcGciIGFsdD0iIj48L2ZpZ3VyZT48cCBzdHlsZT0ibWFyZ2luLWxlZnQ6YXV0bzt0ZXh0LWFsaWduOmp1c3RpZnk7Ij5XaGVyZSB0byBmaW5kIHRoZSBkaWZmZXJlbmNlPzwvcD48cCBzdHlsZT0ibWFyZ2luLWxlZnQ6YXV0bzsiPiZuYnNwOzwvcD48ZmlndXJlIGNsYXNzPSJpbWFnZSBpbWFnZV9yZXNpemVkIiBzdHlsZT0id2lkdGg6ODAzLjJweDsiPjxpbWcgc3JjPSJodHRwczovL2Nkbi4yNGguY29tLnZuL3VwbG9hZC8zLTIwMjAvaW1hZ2VzLzIwMjAtMDgtMjQvcnJydHQtMTU5ODI0MzE3Mi0xMzYtd2lkdGg1MDBoZWlnaHQ4MjIuanBnIiBhbHQ9IiI+PC9maWd1cmU+PHAgc3R5bGU9Im1hcmdpbi1sZWZ0OmF1dG87dGV4dC1hbGlnbjpqdXN0aWZ5OyI+PGJyPjxzcGFuIHN0eWxlPSJiYWNrZ3JvdW5kLWNvbG9yOnJnYigyNDgsMjQ5LDI1MCk7Y29sb3I6cmdiKDM0LDM0LDM0KTsiPklzIE5leW1hcidzIGxldmVsIG5vdCBlbm91Z2ggdG8gc2F2ZSBQU0cgYWdhaW5zdCB0aGUgc3Ryb25nZXN0IG9wcG9uZW50cywgaW4gdGhlIG1vc3QgZGlmZmljdWx0IHNpdHVhdGlvbnMsIG9yIHRvbyBnb29kIG9mIEJheWVybj8gV2l0aCBzaXggZm91bGVkIHNpdHVhdGlvbnMgYWdhaW5zdCBCYXllcm4sIE5leW1hciB3YXMgZm91bGVkIGEgdG90YWwgb2YgMjIgdGltZXMgc3RhcnRpbmcgZnJvbSB0aGUgMjAxOS8yMCBDaGFtcGlvbnMgTGVhZ3VlIHF1YXJ0ZXItZmluYWxzIGFnYWluc3QgQXRhbGFudGEsIGFuZCB3YXMgdGhlIG1vc3QgZm91bGVkIHBsYXllciBpbiB0aGUgdG91cm5hbWVudCBpbiB0aGUgZW50aXJlIHNlYXNvbi4gZW5kLiBPZiBjb3Vyc2UsIGZpcmUgbXVzdCBoYXZlIHNtb2tlLiBOZXltYXIgaGFzIGEgZGVzaXJlIHRvIGdvIGJhbGwsIHRvIGxlYWQgYW5kIHRvIHBlcmZvcm0sIHRvIG1ha2UgaGlzIG9wcG9uZW50IGludGVyY2VwdC4gQnV0IHRoZSBCcmF6aWxpYW4gc3RhciBkaWQgbm90IHRha2UgYWR2YW50YWdlIG9mIHRoZSBjdW5uaW5nIGZlYXR1cmVzIG9mIGhpcyBwbGF5IGluIHRoZSBwc3ljaG9sb2d5IG9mIHRoZSBnYW1lLiBUaGUgbW9yZSB0aGUgb3Bwb25lbnQgbWFkZSB0aGUgbWlzdGFrZSwgdGhlIG1vcmUgTmV5bWFyIHdlbnQgdG8gdGhlIGJhbGwsIGFuZCB0aGUgZGFya2VyIHRoZSBiYWxsIHdlbnQuIEJyYXZlcnkgaW4gYmlnIGdhbWVzIGlzIHNvbWV0aGluZyB0aGF0IE5leW1hciB3aWxsIHN0aWxsIGhhdmUgdG8gbGVhcm4gYSBsb3QgZnJvbS4gTGVnZW5kYXJ5IFJ1dWQgR3VsbGl0IHByYWlzZWQgU2VyZ2UgR25hYnJ5IGZvciBoaXMgImFnZ3Jlc3NpdmUiIGFmdGVyIGtpY2tpbmcgTmV5bWFyIGluIHRoZSBmb290IHdoZW4gaGUgd2FzIGJsb2NraW5nIHRoaXMgcGxheWVyIGF0IHRoZSBib3JkZXJsaW5lLCB3aGljaCB0b29rIHBsYWNlIGluIHRoZSBzZWNvbmQgaGFsZiBvZiB0aGUgbWF0Y2guIEhlIHNhaWQgdGhhdCB0aGlzIHdhcyBhICJwaXZvdGFsIG1vbWVudCIgdG8gd2luIEJheWVybi4gVGhlIGNvbGQsIHRhY2l0dXJuIEdlcm1hbiBoYXMgd29uIG92ZXIgYSBzZW5zaXRpdmUgTmV5bWFyLjwvc3Bhbj48L3A+PHAgc3R5bGU9Im1hcmdpbi1sZWZ0OmF1dG87Ij4mbmJzcDs8L3A+PGZpZ3VyZSBjbGFzcz0iaW1hZ2UgaW1hZ2VfcmVzaXplZCIgc3R5bGU9IndpZHRoOjE1MTkuMnB4OyI+PGltZyBzcmM9Imh0dHBzOi8vY2RuLjI0aC5jb20udm4vdXBsb2FkLzMtMjAyMC9pbWFnZXMvMjAyMC0wOC0yNC90dGdnLTE1OTgyNDMzOTQtNzU3LXdpZHRoMTYwMGhlaWdodDkwMC5qcGciIGFsdD0iIj48L2ZpZ3VyZT48cCBzdHlsZT0ibWFyZ2luLWxlZnQ6YXV0bzt0ZXh0LWFsaWduOmp1c3RpZnk7Ij5XaGVuIE5leW1hciAicmFuIG91dCBvZiBwZXJtaXNzaW9uIiwgdGhlIFBTRyB0ZWFtIGFsc28gc3VmZmVyZWQgImRvbWlubyBlZmZlY3QiLCB3aGVuIHRoZWlyIGJyaWdodGVzdCBzdGFycyBNYmFwcGUgYW5kIEFuZ2VsIGRpIE1hcmlhIGRpZCBub3Qgc2hvdyBzaGFycG5lc3MgYXBhcnQgZnJvbSBhIGZldyBzaW5nbGUgc2l0dWF0aW9ucy4gTWJhcHBlIGRpc2FwcG9pbnRlZCBpbiBoaXMgYWJpbGl0eSB0byBmaW5pc2gsIHdoaWxlIERpIE1hcmlhJ3MgYnJpZ2h0IHNwb3Qgd2FzIGp1c3QgQWxwaG9uc28gRGF2aWVzLiBDb2FjaCBUaG9tYXMgVHVjaGVsIG1lbnRpb25lZCBMaW9uZWwgTWVzc2kgYWZ0ZXIgdGhlIGdhbWUgaW4gYSBqb2tpbmcgam9rZSBhYm91dCBQU0cgY2FuIGJ1eSB0aGlzIHN1cGVyc3Rhci4gQnV0IFBTRyBwZW9wbGUgbmVlZCB0byByZWNvZ25pemUgdGhlIGZhY3QgdGhhdCBpdCB3aWxsIGJlIGRpZmZpY3VsdCBmb3IgTmV5bWFyLCB3aXRoIGhpcyBwZXJzb25hbGl0eSBhbmQgaGFiaXRzLCB0byByaXNlIHRvIGJlY29tZSBhIHRydWUgbGVhZGVyLCBib3RoIHByb2Zlc3Npb25hbGx5IGFuZCBtZW50YWxseS4gWW91IGNhbiBvbmx5IGFjaGlldmUgc3VibGltYXRpb24sIGJ5IHBsYXlpbmcgd2l0aCBwZW9wbGUgbGlrZSB0aGF0LkNvYWNoIFRob21hcyBUdWNoZWwgbWVudGlvbmVkIExpb25lbCBNZXNzaSBhZnRlciB0aGUgZ2FtZSBpbiBhIGpva2luZyBqb2tlIGFib3V0IFBTRyBjYW4gYnV5IHRoaXMgc3VwZXJzdGFyLiBCdXQgUFNHIHBlb3BsZSBuZWVkIHRvIHJlY29nbml6ZSB0aGUgZmFjdCB0aGF0IGl0IHdpbGwgYmUgZGlmZmljdWx0IGZvciBOZXltYXIsIHdpdGggaGlzIHBlcnNvbmFsaXR5IGFuZCBoYWJpdHMsIHRvIHJpc2UgdG8gYmVjb21lIGEgdHJ1ZSBsZWFkZXIsIGJvdGggcHJvZmVzc2lvbmFsbHkgYW5kIG1lbnRhbGx5LiBZb3UgY2FuIG9ubHkgYWNoaWV2ZSBzdWJsaW1hdGlvbiwgYnkgcGxheWluZyB3aXRoIHBlb3BsZSBsaWtlIHRoYXQuPC9wPjxwIHN0eWxlPSJtYXJnaW4tbGVmdDphdXRvOyI+Jm5ic3A7PC9wPg==', '0000-00-00 00:00:00', '0000-00-00 00:00:00', 0, 0, 0),
-(7, 2, 'vi', 'article', 'Quang Hải xoá hết ảnh Huỳnh Anh: Bạn gái hot girl phản ứng bất ngờ Thứ Hai, ngày 24/08/2020 12:37 PM (GMT+7)', 'quang-hai-xoa-het-anh-huynh-anh-ban-gai-hot-girl-phan-ung-bat-ngo-thu-hai-ngay-24-08-2020-12-37-pm-gmt-7', '', '', 0, 'PHAgc3R5bGU9Im1hcmdpbi1sZWZ0OjBweDsiPjxzdHJvbmc+VGnhu4FuIHbhu4cgTmd1eeG7hW4gUXVhbmcgSOG6o2kgYuG6pXQgbmfhu50geG/DoSBo4bq/dCBow6xuaCDhuqNuaCBjaOG7pXAgY2h1bmcgduG7m2kgSHXhu7NuaCBBbmggdHLDqm4gbeG6oW5nIHjDoyBo4buZaSwgdHJvbmcga2hpIGPDtCBi4bqhbiBnw6FpIGhvdCBnaXJsIGPFqW5nIGPDsyBwaOG6o24g4bupbmcgbOG6oS48L3N0cm9uZz48L3A+', 'PHA+UXVhbmcgSOG6o2kgY8O0bmcga2hhaSBo4bq5biBow7IgduG7m2kgSHXhu7NuaCBBbmggaMO0bSAxMi81IGLhurFuZyBt4buZdCBow6xuaCDhuqNuaCBnw6J5IHjDtG4geGFvIG3huqFuZyB4w6MgaOG7mWkuIEvhu4MgdOG7qyDEkcOzLCBRdWFuZyBI4bqjaSB2w6AgSHXhu7NuaCBBbmggbmjGsCBow6xuaCB24bubaSBiw7NuZy4gQ8O0IGLhuqFuIGfDoWkgaG90IGdpcmwgdGhlbyBjaMOibiBj4buVIHbFqSBRdWFuZyBI4bqjaSB0csOqbiBraOG6r3AgY8OhYyBzw6JuIGLDs25nIHRyw6puIGPhuqMgbsaw4bubYywgZMO5IHRp4buBbiB24buHIMSQVCBWaeG7h3QgTmFtIGPDsyBs4bqnbiBn4bq3cCBy4bqvYyBy4buRaSB2w6wgbOG7mSB0aW4gbmjhuq9uIG5o4bqheSBj4bqjbSB0csOqbiBt4bqhbmcuPC9wPjxmaWd1cmUgY2xhc3M9ImltYWdlIGltYWdlX3Jlc2l6ZWQiIHN0eWxlPSJ3aWR0aDo2NjBweDsiPjxpbWcgc3JjPSJodHRwczovL2Nkbi4yNGguY29tLnZuL3VwbG9hZC8zLTIwMjAvaW1hZ2VzLzIwMjAtMDgtMjQvcWgtMTU5ODI0Njk5Ny0yMS13aWR0aDY2MGhlaWdodDQ5Mi5qcGciIGFsdD0iUXVhbmcgSOG6o2kgeG/DoSBo4bq/dCDhuqNuaCBIdeG7s25oIEFuaDogQuG6oW4gZ8OhaSBob3QgZ2lybCBwaOG6o24g4bupbmcgYuG6pXQgbmfhu50gLSAxIj48L2ZpZ3VyZT48cCBzdHlsZT0idGV4dC1hbGlnbjpjZW50ZXI7Ij48aT5RdWFuZyBI4bqjaSBjw7RuZyBraGFpIGjhurluIGjDsiB24bubaSBIdeG7s25oIEFuaCBow7RtIDEyLzUuPC9pPjwvcD48cD7EkOG6v24ga2hpIFF1YW5nIEjhuqNpIGThu7EgbOG7hSB0cmFvIGdp4bqjaSBRdeG6oyBiw7NuZyB2w6BuZyBWaeG7h3QgTmFtIG5nw6B5IDI2LzUsIEh14buzbmggQW5oIGPFqW5nIGfDs3AgbeG6t3QsIHPDoW5oIGLGsOG7m2MgY8O5bmcgYuG6oW4gdHJhaS4gxJDDsyBjxaluZyBsw6AgbOG6p24gxJHhuqd1IHRpw6puIFF1YW5nIEjhuqNpIOKAkyBIdeG7s25oIEFuaCBjw7luZyBuaGF1IHh14bqldCBoaeG7h24gdHLGsOG7m2MgxJHDtG5nIMSR4bqjbyBnaeG7m2kgdHJ1eeG7gW4gdGjDtG5nIHbDoCBuZ8aw4budaSBow6JtIG3hu5kuPC9wPjxwPk5nb8OgaSByYSwgUXVhbmcgSOG6o2kgY8OybiBk4bqrbiBIdeG7s25oIEFuaCB24buBIHJhIG3huq90IGdpYSDEkcOsbmguIOG7niB0cuG6rW4gxJHhuqV1IGdp4buvYSBUUC5IQ00gdsOgIEjDoCBO4buZaSBow7RtIDI0LzcsIG3hurkgY+G7p2EgUXVhbmcgSOG6o2kgxJHDoyBkw6BuaCBuaGnhu4F1IGPhu60gY2jhu4kgdGjDom4gbeG6rXQgdsOgIGNoxINtIHPDs2MgSHXhu7NuaCBBbmggdHLDqm4ga2jDoW4gxJHDoGkgc8OibiB24bqtbiDEkeG7mW5nIFRo4buRbmcgTmjhuqV0LjwvcD48cD5UaOG6vyBuaMawbmcsIGRp4buFbiBiaeG6v24gbeG7m2kgbmjhuqV0IGPhu6dhIGNodXnhu4duIHTDrG5oIGPhuqNtIGdp4buvYSBRdWFuZyBI4bqjaSB2w6AgSHXhu7NuaCBBbmggbMOgbSBuaGnhu4F1IG5nxrDhu51pIGjDom0gbeG7mSBraMO0bmcga2jhu49pIHTDsiBtw7IuIFRoZW8gxJHDsywgdOG7kWkgbmfDoHkgMjMvOCwgbmhp4buBdSBuZ8aw4budaSBow6JtIG3hu5kgcGjDoXQgaGnhu4duIFF1YW5nIEjhuqNpIMSRw6MgYuG6pXQgbmfhu50geG/DoSDEkWkgaGFpIGLhu6ljIOG6o25oIHTDrG5oIGPhuqNtIGNo4bulcCBjw7luZyBIdeG7s25oIEFuaCB0csOqbiBt4bqhbmcgeMOjIGjhu5lpLjwvcD48cCBzdHlsZT0idGV4dC1hbGlnbjpjZW50ZXI7Ij4mbmJzcDs8L3A+PHA+Jm5ic3A7PC9wPjxwIHN0eWxlPSJ0ZXh0LWFsaWduOmNlbnRlcjsiPiZuYnNwOzwvcD48ZmlndXJlIGNsYXNzPSJpbWFnZSBpbWFnZV9yZXNpemVkIiBzdHlsZT0id2lkdGg6NjYwcHg7Ij48aW1nIHNyYz0iaHR0cHM6Ly9jZG4uMjRoLmNvbS52bi91cGxvYWQvMy0yMDIwL2ltYWdlcy8yMDIwLTA4LTI0L3VudGl0bGVkLTMtMTU5ODI0NzA0My0zMS13aWR0aDY2MGhlaWdodDQ1Ny5qcGciIGFsdD0iUXVhbmcgSOG6o2kgeG/DoSBo4bq/dCDhuqNuaCBIdeG7s25oIEFuaDogQuG6oW4gZ8OhaSBob3QgZ2lybCBwaOG6o24g4bupbmcgYuG6pXQgbmfhu50gLSAyIj48L2ZpZ3VyZT48cCBzdHlsZT0ibWFyZ2luLWxlZnQ6YXV0bzt0ZXh0LWFsaWduOmNlbnRlcjsiPiZuYnNwOzwvcD48cD4mbmJzcDs8L3A+PHA+Jm5ic3A7PC9wPjxwIHN0eWxlPSJ0ZXh0LWFsaWduOmNlbnRlcjsiPjxpPlBo4bqjbiDhu6luZyBs4bqhIGPhu6dhIEh14buzbmggQW5oIGtoaeG6v24gZMOibiBt4bqhbmcgxJHhu5NuIMSRb8OhbiB24buBIGNodXnhu4duIHTDrG5oIGPhuqNtIGPhu6dhIFF1YW5nIEjhuqNpLjwvaT48L3A+PHA+xJDDsyBsw6AgaMOsbmgg4bqjbmggUXVhbmcgSOG6o2kgZMO5bmcgxJHhu4MgY8O0bmcga2hhaSBt4buRaSBxdWFuIGjhu4cgduG7m2kgY8O0IGLhuqFuIGfDoWkgcXXDqiBOaGEgVHJhbmcgdsOgIG3hu5l0IGLhu6ljIOG6o25oIGtow6FjIGhhaSBuZ8aw4budaSDEkcaw4bujYyBjaOG7pXAg4bufIGzhu4UgdHJhbyBnaeG6o2kgUXXhuqMgYsOzbmcgdsOgbmcgVmnhu4d0IE5hbS48L3A+PHA+VuG7gSBwaOG6p24gbcOsbmgsIEh14buzbmggQW5oIGPFqW5nIGPDsyBwaOG6o24g4bupbmcga2jDoSBs4bqhLiZuYnNwO0h14buzbmggQW5oIMSRxINuZyB04bqjaSBsw6puIHRyYW5nIGPDoSBuaMOibiBt4buZdCBi4bupYyDhuqNuaCBjw7MgbcOgdSBz4bqvYyB1IHThu5FpIGvDqG0gY2jhu68g4oCcQuG6oWPigJ0uIE3hurd0IGtow6FjLCBIdeG7s25oIEFuaCBjw7JuIGNodXnhu4NuIHNhbmcgdHLhuqFuZyB0aMOhaSDigJzEkOG7mWMgdGjDom7igJ0g4bufIHBo4bqnbiBnaeG7m2kgdGhp4buHdSB0csOqbiBmYWNlYm9vayBjw6EgbmjDom4sIGTDuSBRdWFuZyBI4bqjaSB24bqrbiBnaeG7ryBjaOG6vyDEkeG7mSDigJxI4bq5biBow7LigJ0uPC9wPjxwPlRoZW8gdMOsbSBoaeG7g3UsIMSRw6J5IGtow7RuZyBwaOG6o2kgbOG6p24gxJHhuqd1IHRpw6puIEh14buzbmggQW5oIHRoYXkgxJHhu5VpIHRy4bqhbmcgdGjDoWkg4oCcSOG6uW4gaMOy4oCdIOKAkyDigJzEkOG7mWMgdGjDom7igJ0gdHLDqm4gdHJhbmcgY8OhIG5ow6JuIGvhu4MgdOG7qyBuZ8OgeSBjw7RuZyBraGFpIGNodXnhu4duIHTDrG5oIGPhuqNtIHbhu5tpIFF1YW5nIEjhuqNpLiBOaMawbmcg4bufIGzhuqduIG7DoHksIHZp4buHYyBRdWFuZyBI4bqjaSB4b8OhIMSRaSBow6xuaCDhuqNuaCB0w6xuaCBj4bqjbSBjw7luZyBi4bqhbiBnw6FpIGzDoG0gbmhp4buBdSBuZ8aw4budaSBraMO0bmcga2jhu49pIGPDsyBuaOG7r25nIMSR4buTbiDEkW/DoW4gbeG7kWkgcXVhbiBo4buHIGdp4buvYSB0aeG7gW4gduG7hyDEkFQgVmnhu4d0IE5hbSB2w6AgSHXhu7NuaCBBbmggZMaw4budbmcgbmjGsCDEkWFuZyBjw7MgZOG6pXUgaGnhu4d1IHLhuqFuIG7hu6l0PzwvcD4=', '0000-00-00 00:00:00', '0000-00-00 00:00:00', 0, 0, 0),
-(8, 2, 'en', 'article', 'Quang Hai deleted all pictures Huynh Anh: Hot girl\'s girlfriend responded unexpectedly Monday, August 24, 2020 12:37 PM (GMT + 7)', 'quang-hai-deleted-all-pictures-huynh-anh-hot-girl-s-girlfriend-responded-unexpectedly-monday-august-24-2020-12-37-pm-gmt-7', '', '', 0, 'PHA+PHNwYW4gc3R5bGU9ImJhY2tncm91bmQtY29sb3I6cmdiKDI0OCwyNDksMjUwKTtjb2xvcjpyZ2IoMzQsMzQsMzQpOyI+TWlkZmllbGRlciBOZ3V5ZW4gUXVhbmcgSGFpIHN1ZGRlbmx5IGRlbGV0ZWQgYWxsIHRoZSBwaWN0dXJlcyB0YWtlbiB3aXRoIEh1eW5oIEFuaCBvbiBzb2NpYWwgbmV0d29ya3MsIHdoaWxlIHRoZSBob3QgZ2lybCdzIGdpcmxmcmllbmQgYWxzbyByZWFjdGVkIHN0cmFuZ2VseS48L3NwYW4+PC9wPg==', 'PHA+UXVhbmcgSGFpIHB1YmxpY2x5IGRhdGVkIEh1eW5oIEFuaCBvbiBNYXkgMTIgd2l0aCBhbiBpbWFnZSB0aGF0IGNhdXNlZCBhIHN0aXIgaW4gc29jaWFsIG5ldHdvcmtzLiBTaW5jZSB0aGVuLCBRdWFuZyBIYWkgYW5kIEh1eW5oIEFuaCBhcmUgc2hvd24gd2l0aCBhIHNoYWRvdy4gVGhlIGhvdCBnaXJsJ3MgZ2lybGZyaWVuZCBmb2xsb3dlZCBRdWFuZyBIYWkncyBmb290c3RlcHMgb24gYWxsIGZvb3RiYWxsIGZpZWxkcyBhY3Jvc3MgdGhlIGNvdW50cnksIGFsdGhvdWdoIHRoZSBWaWV0bmFtZXNlIG1pZGZpZWxkZXIgd2FzIG9uYzwvcD48ZmlndXJlIGNsYXNzPSJpbWFnZSBpbWFnZV9yZXNpemVkIiBzdHlsZT0id2lkdGg6NjYwcHg7Ij48aW1nIHNyYz0iaHR0cHM6Ly9jZG4uMjRoLmNvbS52bi91cGxvYWQvMy0yMDIwL2ltYWdlcy8yMDIwLTA4LTI0L3FoLTE1OTgyNDY5OTctMjEtd2lkdGg2NjBoZWlnaHQ0OTIuanBnIiBhbHQ9IlF1YW5nIEjhuqNpIHhvw6EgaOG6v3Qg4bqjbmggSHXhu7NuaCBBbmg6IELhuqFuIGfDoWkgaG90IGdpcmwgcGjhuqNuIOG7qW5nIGLhuqV0IG5n4budIC0gMSI+PC9maWd1cmU+PHA+Jm5ic3A7PC9wPjxwPlF1YW5nIEhhaSBwdWJsaWNseSBkYXRlZCBIdXluaCBBbmggb24gTWF5IDEyLg0KDQpVbnRpbCBRdWFuZyBIYWkgYXR0ZW5kZWQgdGhlIFZpZXRuYW0gR29sZGVuIEJhbGwgQXdhcmRzIG9uIE1heSAyNiwgSHV5bmggQW5oIGFsc28gam9pbmVkIGluLCB3YWxraW5nIGFsb25nc2lkZSBoaXMgYm95ZnJpZW5kLiBJdCB3YXMgYWxzbyB0aGUgZmlyc3QgdGltZSB0aGF0IFF1YW5nIEhhaSAtIEh1eW5oIEFuaCB0b2dldGhlciBhcHBlYXJlZCBpbiBmcm9udCBvZiB0aGUgbWVkaWEgYW5kIGZhbnMuDQoNCkluIGFkZGl0aW9uLCBRdWFuZyBIYWkgYWxzbyBsZWQgSHV5bmggQW5oIHRvIGxhdW5jaCBoaXMgZmFtaWx5LiBJbiB0aGUgbWF0Y2ggYmV0d2VlbiBIbyBDaGkgTWluaCBDaXR5IGFuZCBIYW5vaSBvbiBKdWx5IDI0dGgsIFF1YW5nIEhhaSdzIG1vdGhlciB0b29rIGEgbG90IG9mIGludGltYXRlIGdlc3R1cmVzIGFuZCB0b29rIGNhcmUgb2YgSHV5bmggQW5oIGluIHRoZSBzdGFuZHMgb2YgVGhvbmcgTmhhdCBzdGFkaXVtLg0KDQpIb3dldmVyLCB0aGUgbGF0ZXN0IGRldmVsb3BtZW50IG9mIHRoZSBsb3ZlIHN0b3J5IGJldHdlZW4gUXVhbmcgSGFpIGFuZCBIdXluaCBBbmggbWFkZSBtYW55IGZhbnMgY3VyaW91cy4gQWNjb3JkaW5nbHksIG9uIHRoZSBldmVuaW5nIG9mIEF1Z3VzdCAyMywgbWFueSBmYW5zIGRpc2NvdmVyZWQgdGhhdCBRdWFuZyBIYWkgaGFkIHN1ZGRlbmx5IGRlbGV0ZWQgdHdvIGVtb3Rpb25hbCBwaG90b3MgdGFrZW4gd2l0aCBIdXluaCBBbmggb24gc29jaWFsIG5ldHdvcmtzLjwvcD48cD4mbmJzcDs8L3A+PHA+ZSBpbiB0cm91YmxlIGJlY2F1c2UgaGUgcmV2ZWFsZWQgc2Vuc2l0aXZlIG1lc3NhZ2VzIG9ubGluZS48L3A+', '0000-00-00 00:00:00', '0000-00-00 00:00:00', 0, 0, 0);
-
--- --------------------------------------------------------
-
---
--- Cấu trúc bảng cho bảng `language`
---
-
-CREATE TABLE `language` (
-  `id` int(11) NOT NULL,
-  `title` varchar(255) NOT NULL,
-  `canonical` varchar(255) NOT NULL,
-  `image` varchar(255) NOT NULL,
-  `description` text NOT NULL,
-  `order` int(11) NOT NULL,
-  `default` tinyint(1) NOT NULL,
-  `created_at` datetime NOT NULL,
-  `updated_at` datetime NOT NULL,
-  `deleted_at` tinyint(1) NOT NULL,
-  `publish` tinyint(1) NOT NULL,
-  `userid_created` int(11) NOT NULL,
-  `userid_updated` int(11) NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
-
---
--- Đang đổ dữ liệu cho bảng `language`
---
-
-INSERT INTO `language` (`id`, `title`, `canonical`, `image`, `description`, `order`, `default`, `created_at`, `updated_at`, `deleted_at`, `publish`, `userid_created`, `userid_updated`) VALUES
-(1, 'English', 'en', '/upload/image/language/en.png', 'PHA+TmfDtG4gTmfhu68gVGnhur9uZyBBbmg8L3A+', 0, 0, '2020-08-17 15:06:01', '2020-08-19 14:32:54', 0, 1, 8, 8),
-(2, 'Việt Nam', 'vi', '/upload/image/language/vietnam.jpg', 'PHA+VGnhur9uZyBWaeG7h3QgMTIxMzwvcD4=', 0, 1, '2020-08-17 15:11:03', '2020-08-19 14:59:30', 0, 1, 8, 8),
-(3, 'Japanese', 'jp', '/upload/image/language/japan.png', 'PHA+VGnhur9uZyBOaOG6rXQ8L3A+', 0, 0, '2020-08-17 15:36:18', '2020-08-19 14:33:40', 0, 1, 8, 8);
-
--- --------------------------------------------------------
-
---
--- Cấu trúc bảng cho bảng `object_relationship`
---
-
-CREATE TABLE `object_relationship` (
-  `id` int(11) NOT NULL,
-  `objectid` int(11) NOT NULL,
-  `catalogueid` int(11) NOT NULL,
-  `module` varchar(50) NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
-
---
--- Đang đổ dữ liệu cho bảng `object_relationship`
---
-
-INSERT INTO `object_relationship` (`id`, `objectid`, `catalogueid`, `module`) VALUES
-(1, 2, 14, 'article'),
-(2, 2, 15, 'article'),
-(3, 2, 17, 'article'),
-(4, 2, 16, 'article'),
-(7, 4, 17, 'article'),
-(8, 4, 14, 'article'),
-(9, 5, 14, 'article'),
-(10, 6, 18, 'article'),
-(11, 7, 18, 'article'),
-(12, 1, 2, 'article'),
-(13, 2, 2, 'article');
-
--- --------------------------------------------------------
-
---
--- Cấu trúc bảng cho bảng `slide`
+-- Table structure for table `slide`
 --
 
 CREATE TABLE `slide` (
@@ -200,7 +40,7 @@ CREATE TABLE `slide` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 --
--- Đang đổ dữ liệu cho bảng `slide`
+-- Dumping data for table `slide`
 --
 
 INSERT INTO `slide` (`id`, `catalogue_id`, `image`, `order`, `created_at`, `updated_at`, `deleted_at`, `userid_created`, `userid_updated`) VALUES
@@ -210,7 +50,7 @@ INSERT INTO `slide` (`id`, `catalogue_id`, `image`, `order`, `created_at`, `upda
 -- --------------------------------------------------------
 
 --
--- Cấu trúc bảng cho bảng `slide_catalogue`
+-- Table structure for table `slide_catalogue`
 --
 
 CREATE TABLE `slide_catalogue` (
@@ -227,7 +67,7 @@ CREATE TABLE `slide_catalogue` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 --
--- Đang đổ dữ liệu cho bảng `slide_catalogue`
+-- Dumping data for table `slide_catalogue`
 --
 
 INSERT INTO `slide_catalogue` (`id`, `title`, `keyword`, `publish`, `data`, `created_at`, `updated_at`, `deleted_at`, `userid_created`, `userid_updated`) VALUES
@@ -236,7 +76,7 @@ INSERT INTO `slide_catalogue` (`id`, `title`, `keyword`, `publish`, `data`, `cre
 -- --------------------------------------------------------
 
 --
--- Cấu trúc bảng cho bảng `slide_translate`
+-- Table structure for table `slide_translate`
 --
 
 CREATE TABLE `slide_translate` (
@@ -255,7 +95,7 @@ CREATE TABLE `slide_translate` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 --
--- Đang đổ dữ liệu cho bảng `slide_translate`
+-- Dumping data for table `slide_translate`
 --
 
 INSERT INTO `slide_translate` (`id`, `object_id`, `language`, `title`, `url`, `description`, `content`, `created_at`, `updated_at`, `deleted_at`, `userid_created`, `userid_updated`) VALUES
@@ -268,7 +108,7 @@ INSERT INTO `slide_translate` (`id`, `object_id`, `language`, `title`, `url`, `d
 -- --------------------------------------------------------
 
 --
--- Cấu trúc bảng cho bảng `user`
+-- Table structure for table `user`
 --
 
 CREATE TABLE `user` (
@@ -302,7 +142,7 @@ CREATE TABLE `user` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 --
--- Đang đổ dữ liệu cho bảng `user`
+-- Dumping data for table `user`
 --
 
 INSERT INTO `user` (`id`, `catalogueid`, `email`, `password`, `salt`, `fullname`, `image`, `gender`, `address`, `cityid`, `districtid`, `wardid`, `phone`, `birthday`, `description`, `verify`, `remote_addr`, `user_agent`, `otp`, `otp_live`, `created_at`, `updated_at`, `deleted_at`, `last_login`, `publish`, `userid_created`, `userid_updated`) VALUES
@@ -317,7 +157,7 @@ INSERT INTO `user` (`id`, `catalogueid`, `email`, `password`, `salt`, `fullname`
 -- --------------------------------------------------------
 
 --
--- Cấu trúc bảng cho bảng `user_catalogue`
+-- Table structure for table `user_catalogue`
 --
 
 CREATE TABLE `user_catalogue` (
@@ -334,7 +174,7 @@ CREATE TABLE `user_catalogue` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 --
--- Đang đổ dữ liệu cho bảng `user_catalogue`
+-- Dumping data for table `user_catalogue`
 --
 
 INSERT INTO `user_catalogue` (`id`, `title`, `permission`, `description`, `created_at`, `updated_at`, `deleted_at`, `publish`, `userid_created`, `userid_updated`) VALUES
@@ -346,7 +186,7 @@ INSERT INTO `user_catalogue` (`id`, `title`, `permission`, `description`, `creat
 -- --------------------------------------------------------
 
 --
--- Cấu trúc bảng cho bảng `vn_district`
+-- Table structure for table `vn_district`
 --
 
 CREATE TABLE `vn_district` (
@@ -356,7 +196,7 @@ CREATE TABLE `vn_district` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 --
--- Đang đổ dữ liệu cho bảng `vn_district`
+-- Dumping data for table `vn_district`
 --
 
 INSERT INTO `vn_district` (`districtid`, `name`, `provinceid`) VALUES
@@ -1075,7 +915,7 @@ INSERT INTO `vn_district` (`districtid`, `name`, `provinceid`) VALUES
 -- --------------------------------------------------------
 
 --
--- Cấu trúc bảng cho bảng `vn_province`
+-- Table structure for table `vn_province`
 --
 
 CREATE TABLE `vn_province` (
@@ -1085,7 +925,7 @@ CREATE TABLE `vn_province` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 --
--- Đang đổ dữ liệu cho bảng `vn_province`
+-- Dumping data for table `vn_province`
 --
 
 INSERT INTO `vn_province` (`provinceid`, `name`, `order`) VALUES
@@ -1156,7 +996,7 @@ INSERT INTO `vn_province` (`provinceid`, `name`, `order`) VALUES
 -- --------------------------------------------------------
 
 --
--- Cấu trúc bảng cho bảng `vn_village`
+-- Table structure for table `vn_village`
 --
 
 CREATE TABLE `vn_village` (
@@ -1166,45 +1006,45 @@ CREATE TABLE `vn_village` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 --
--- Chỉ mục cho các bảng đã đổ
+-- Indexes for dumped tables
 --
 
 --
--- Chỉ mục cho bảng `slide`
+-- Indexes for table `slide`
 --
 ALTER TABLE `slide`
   ADD PRIMARY KEY (`id`);
 
 --
--- Chỉ mục cho bảng `slide_catalogue`
+-- Indexes for table `slide_catalogue`
 --
 ALTER TABLE `slide_catalogue`
   ADD PRIMARY KEY (`id`);
 
 --
--- Chỉ mục cho bảng `slide_translate`
+-- Indexes for table `slide_translate`
 --
 ALTER TABLE `slide_translate`
   ADD PRIMARY KEY (`id`);
 
 --
--- AUTO_INCREMENT cho các bảng đã đổ
+-- AUTO_INCREMENT for dumped tables
 --
 
 --
--- AUTO_INCREMENT cho bảng `slide`
+-- AUTO_INCREMENT for table `slide`
 --
 ALTER TABLE `slide`
   MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=223;
 
 --
--- AUTO_INCREMENT cho bảng `slide_catalogue`
+-- AUTO_INCREMENT for table `slide_catalogue`
 --
 ALTER TABLE `slide_catalogue`
   MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=233;
 
 --
--- AUTO_INCREMENT cho bảng `slide_translate`
+-- AUTO_INCREMENT for table `slide_translate`
 --
 ALTER TABLE `slide_translate`
   MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=205;
