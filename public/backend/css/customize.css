@@ -1522,7 +1522,7 @@ ul li{
 	height:20px;
 }
 
-<<<<<<< Updated upstream
+
 /*========================================================tv admin===========================*/
 .tv-admin{
 	display: none;
@@ -1648,9 +1648,7 @@ ul li{
 .m-b{
 	margin-bottom: 10px!important
 }
-button, input, optgroup, select, textarea{
-	font: caption!important;
-}
+
 
 =======
 @media (min-width: 768px){
@@ -2518,4 +2516,4 @@ button.toast-close-button {
 .va-width-auto{
 	width: 100px;
 }
->>>>>>> Stashed changes
+

@@ -186,20 +186,9 @@ $config['AccessControl'][] = Array(
 		// 'fileUpload' =>  (in_array('fileUpload', $permission))? true : false,
 		// 'fileRename' =>  (in_array('fileRename', $permission))? true : false,
 		// 'fileDelete' =>  (in_array('fileDelete', $permission))? true : false,
-	);
+	// );
 
-<<<<<<< Updated upstream
-=======
-		'folderView' => true,
-		'folderCreate' => true,
-		'folderRename' => true,
-		'folderDelete' => true,
-
-		'fileView' => true,
-		'fileUpload' => true,
-		'fileRename' => true,
-		'fileDelete' => true);
->>>>>>> Stashed changes
+		);
 
 /*
 For example, if you want to restrict the upload, rename or delete of files in

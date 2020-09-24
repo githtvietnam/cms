@@ -4,6 +4,7 @@
     $language = $baseController->currentLanguage();
     $AutoloadModel = new App\Models\AutoloadModel();
     $languageList = get_full_language(['currentLanguage' => $language]);
+    // pre($_POST);
 ?>
 <div class="row wrapper border-bottom white-bg page-heading">
     <div class="col-lg-10">
@@ -17,7 +18,7 @@
         <div class="uk-flex uk-flex-middle" >
             <?php if(isset($languageList) && is_array($languageList) && count($languageList)){ ?>
                 <?php foreach($languageList as $key => $val){ ?>
-                    <a href="<?php echo base_url('backend/system/general/translator/'.$val['canonical'].'') ?>" class="mr10" title="<?php echo $val['canonical'] ?>">
+                    <a href="<?php echo base_url('backend/system/general/translator/'.$val['canonical']) ?>" class="mr10" title="<?php echo $val['canonical'] ?>">
                         <span class="icon-flag img-cover"><img src="<?php echo getthumb($val['image']); ?>" alt=""></span>
                     </a>
             <?php }} ?>
@@ -55,7 +56,7 @@
                                         $val['content'] = $AutoloadModel->_get_where([
                                             'select' => 'content',
                                             'table' => 'system_translate',
-                                            'where' => ['keyword' => $key.'_'.$keyVal,'language' => $language]
+                                            'where' => ['keyword' => $key.'_'.$keyVal,'language' => $languageCurrent]
                                         ]);
                                         $val['content'] = $val['content']['content'];
                                 ?>

@@ -69,7 +69,7 @@ class Catalogue extends BaseController{
 			], TRUE);
 
 		}
-		pre($this->data['articleCatalogueList']);
+		// pre($this->data['articleCatalogueList']);
 
 		$this->data['template'] = 'backend/article/catalogue/index';
 		return view('backend/dashboard/layout/home', $this->data);

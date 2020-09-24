@@ -7,16 +7,16 @@
 			<description>Xem</description>
 		</item>
 		<item>
-			<param>backend/system/general/create</param>
-			<description>Thêm</description>
+			<param>backend/system/general/translator/en</param>
+			<description>Xem bản dịch</description>
 		</item>
 		<item>
-			<param>backend/system/general/update</param>
-			<description>Sửa</description>
+			<param>backend/system/general/translator/jp</param>
+			<description>Xem bản dịch</description>
 		</item>
 		<item>
-			<param>backend/system/general/delete</param>
-			<description>Xóa</description>
+			<param>backend/system/general/translator/vi</param>
+			<description>Xem bản dịch</description>
 		</item>
 	</permissions>
 	<permissions>

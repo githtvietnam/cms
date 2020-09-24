@@ -1,118 +1,94 @@
 <?php 
 namespace App\Controllers\Backend\System;
 use App\Controllers\BaseController;
-use App\Libraries\Nestedsetbie;
+use App\Controllers\Backend\System\Libraries\Configbie;
 
 class General extends BaseController{
 	protected $data;
-	public $nestedsetbie;
-	
+	public $configbie;
 	
 	public function __construct(){
+		$this->configbie = new ConfigBie();
 		$this->data = [];
 		$this->data['module'] = 'system';
 		$this->data['module_2'] = 'system_catalogue';
 
 	}
 
-	public function index($page = 1){
-
+	public function _remap($method = '',$languageCurrent = ''){
 		$session = session();
-	
+		if($method != 'translator'){
+			$flag = $this->authentication->check_permission([
+				'routes' => 'backend/system/general/'.$method
+			]);
+			if($flag == false){
+	 			$session->setFlashdata('message-danger', 'Bạn không có quyền truy cập vào chức năng này!');
+	 			return redirect()->to(BASE_URL.'backend/dashboard/dashboard/index');
+			}else{
+				if(method_exists($this, $method)){
+					return $this->$method();
+				}
+				throw \CodeIgniter\Exceptions\PageNotFoundException::forPagenotFound();
+			}
+		}else{
+			$language = $this->currentLanguage();
 
-		$flag = $this->authentication->check_permission([
-			'routes' => 'backend/system/general/index'
-		]);
-		if($flag == false){
- 			$this->session->setFlashdata('message-danger', 'Bạn không có quyền truy cập vào chức năng này!');
- 			return redirect()->to(BASE_URL.'backend/dashboard/dashboard/index');
+			$count = $this->authentication->check_permission([
+				'routes' => 'backend/system/general/'.$method.'/'.$language
+			]); 
+
+			if($count == false){
+	 			$session->setFlashdata('message-danger', 'Bạn không có quyền truy cập vào chức năng này!');
+	 			return redirect()->to(BASE_URL.'backend/dashboard/dashboard/index');
+			}else{
+				if(method_exists($this, $method)){
+					return $this->$method($languageCurrent);
+				}
+				throw \CodeIgniter\Exceptions\PageNotFoundException::forPagenotFound();
+			}
 		}
+		
+		
+	}
 
-		$config['total_rows'] = $this->AutoloadModel->_get_where([
-			'select' => 'id',
-			'table' => $this->data['module_2'],
-			'where' => ['publish' => 0],
-			'count' => TRUE
-		]);
-		if($config['total_rows'] > 0){
-			$languageDetact = $this->detect_language();
-			$this->data['systemCatalogueList'] = $this->AutoloadModel->_get_where([
-				'select' => 'tb1.id,  tb2.title, tb2.module, tb2.description,tb2.keyword,'.((isset($languageDetact['select'])) ? $languageDetact['select'] : ''),
-				'table' => $this->data['module_2'].' as tb1',
-				'join' =>  [
-					[
-						'system_translate as tb2','tb1.id = tb2.objectid AND tb2.module = "system_catalogue" AND tb2.language = \''.$this->currentLanguage().'\' ','inner'
-					]
-				],
-				'where' => [
-					'tb2.deleted_at' => 0,
-				],
-				'order_by'=> 'tb2.title asc'
-			], TRUE);
-			$this->data['systemList'] = $this->AutoloadModel->_get_where([
-				'select' => 'tb1.id, tb1.catalogueid, tb2.title, tb2.module,tb2.attention, tb2.start_text, tb2.end_text, tb2.title_link, tb2.link, tb2.type, tb2.content, tb2.keyword',
-				'table' => $this->data['module'].' as tb1',
-				'join' =>  [
-					[
-						'system_translate as tb2','tb1.id = tb2.objectid AND tb2.module = "system" AND tb2.language = \''.$this->currentLanguage().'\' ','inner',
-					]
-				],
-				'where' => [
-					'tb2.deleted_at' => 0,
-				],
-			], TRUE);
-
-			$this->data['systemSelectList'] = $this->AutoloadModel->_get_where([
-				'select' => 'tb1.id, tb1.catalogueid, tb2.title, tb2.module,tb2.attention,tb2.select_title, tb2.select_value,tb2.user_select, tb2.title_link, tb2.link, tb2.type, tb2.keyword',
-				'table' => $this->data['module'].' as tb1',
-				'join' =>  [
-					[
-						'system_select as tb2','tb1.id = tb2.objectid AND tb2.module = "system" AND tb2.language = \''.$this->currentLanguage().'\' ','inner',
-					]
-				],
-				'where' => [
-					'tb2.deleted_at' => 0,
-				],
-			], TRUE);
-		}
+	public function index($page = 1){
+		// pre($this->configbie->system() );
+		$session = session();
+		
+		$this->data['systemList'] = $this->configbie->system();
+		
 
 
 		if($this->request->getMethod() == 'post'){
 			$config  = $this->request->getPost('config');
-			$select  = $this->request->getPost('select');
-	 		// pre($select);
+	 		// pre($config);
 			if(isset($config) && is_array($config) && count($config)){
 				foreach($config as $key => $val){
 					$_update = NULL;
-					$_update['keyword'] = $key;
-					$_update['content'] = $val;
-					$_update['userid_updated'] = $this->auth['id'];
-					$_update['updated_at'] = $this->currentTime;
+
+					$delete = $this->AutoloadModel->_delete([
+						'table' => 'system_translate',
+						'where' => ['keyword' => $key, 'language' => $this->currentLanguage(),'deleted_at' => 0]
+					]);
+					// print_r($flag);
+
 					
-					$flag =	$this->AutoloadModel->_update([
-						'where' => ['keyword' => $key],
+					$_update = [
+						'language' => $this->currentLanguage(),
+						'keyword' => $key,
+						'content' => $val,
+						'userid_updated' => $this->auth['id'],
+						'deleted_at' => 0,
+						'updated_at' => $this->currentTime
+					];
+					$flag =	$this->AutoloadModel->_insert([
 						'table' => 'system_translate',
 						'data' => $_update,
 					]);
-				}
-			}
-			if(isset($select) && is_array($select) && count($select)){
-				foreach($select as $key => $val){
-					$_update = NULL;
-					$_update['keyword'] = $key;
-					$_update['user_select'] = $val;
-					$_update['userid_updated'] = $this->auth['id'];
-					$_update['updated_at'] = $this->currentTime;
 					
-					$count =	$this->AutoloadModel->_update([
-						'where' => ['keyword' => $key],
-						'table' => 'system_select',
-						'data' => $_update,
-					]);
 				}
 			}
-
-	 		if($flag > 0 || $count > 0){
+	 		if($flag > 0){
 
 	 			$session->setFlashdata('message-success', 'Cập Nhật Cấu hình chung Thành Công!');
 				return redirect()->to(BASE_URL.'backend/system/general/index');
@@ -125,121 +101,57 @@ class General extends BaseController{
 		return view('backend/dashboard/layout/home', $this->data);
 	}
 
-	public function translator($language = ''){
+	public function translator($languageCurrent = ''){
 		$session = session();
-
-		$languageDetact = $this->detect_language();
-		$this->data['systemCatalogueList'] = $this->AutoloadModel->_get_where([
-			'select' => 'tb1.id,  tb2.title, tb2.module, tb2.description,tb2.keyword,'.((isset($languageDetact['select'])) ? $languageDetact['select'] : ''),
-			'table' => $this->data['module_2'].' as tb1',
-			'join' =>  [
-				[
-					'system_translate as tb2','tb1.id = tb2.objectid AND tb2.module = "system_catalogue" AND tb2.language = \''.$language.'\' ','inner'
-				]
-			],
-			'where' => [
-				'tb2.deleted_at' => 0,
-			],
-			'order_by'=> 'tb2.title asc'
-		], TRUE);
-
-		$this->data['systemList'] = $this->AutoloadModel->_get_where([
-			'select' => 'tb1.id, tb1.catalogueid, tb2.title, tb2.module,tb2.attention, tb2.start_text, tb2.end_text, tb2.title_link, tb2.link, tb2.type, tb2.content, tb2.keyword',
-			'table' => $this->data['module'].' as tb1',
-			'join' =>  [
-				[
-					'system_translate as tb2','tb1.id = tb2.objectid AND tb2.module = "system" AND tb2.language = \''.$language.'\' ','inner',
-				]
-			],
-			'where' => [
-				'tb2.deleted_at' => 0,
-			],
-		], TRUE);
-
-		$this->data['systemSelectList'] = $this->AutoloadModel->_get_where([
-			'select' => 'tb1.id, tb1.catalogueid, tb2.title, tb2.module,tb2.attention,tb2.select_title, tb2.select_value,tb2.user_select, tb2.title_link, tb2.link, tb2.type, tb2.keyword',
-			'table' => $this->data['module'].' as tb1',
-			'join' =>  [
-				[
-					'system_select as tb2','tb1.id = tb2.objectid AND tb2.module = "system" AND tb2.language = \''.$language.'\' ','inner',
-				]
-			],
-			'where' => [
-				'tb2.deleted_at' => 0,
-			],
-		], TRUE);
-
+		$this->data['systemList'] = $this->configbie->system();
+		$this->data['languageCurrent'] = $languageCurrent;
 
 		if($this->request->getMethod() == 'post'){
 			$config  = $this->request->getPost('config');
-			$select  = $this->request->getPost('select');
-	 		// pre($select);
+	 		// pre($config);
 			if(isset($config) && is_array($config) && count($config)){
 				foreach($config as $key => $val){
 					$_update = NULL;
-					$_update['keyword'] = $key;
-					$_update['content'] = $val;
-					$_update['userid_updated'] = $this->auth['id'];
-					$_update['updated_at'] = $this->currentTime;
+
+					$delete = $this->AutoloadModel->_delete([
+						'table' => 'system_translate',
+						'where' => ['keyword' => $key, 'language' => $this->data['languageCurrent'],'deleted_at' => 0]
+					]);
+					// print_r($flag);
+
 					
-					$flag =	$this->AutoloadModel->_update([
-						'where' => ['keyword' => $key,'language' => $language],
+					$_update = [
+						'language' => $this->data['languageCurrent'],
+						'keyword' => $key,
+						'content' => $val,
+						'userid_updated' => $this->auth['id'],
+						'deleted_at' => 0,
+						'updated_at' => $this->currentTime
+					];
+					$flag =	$this->AutoloadModel->_insert([
 						'table' => 'system_translate',
 						'data' => $_update,
 					]);
-				}
-			}
-			if(isset($select) && is_array($select) && count($select)){
-				foreach($select as $key => $val){
-					$_update = NULL;
-					$_update['keyword'] = $key;
-					$_update['user_select'] = $val;
-					$_update['userid_updated'] = $this->auth['id'];
-					$_update['updated_at'] = $this->currentTime;
 					
-					$count =	$this->AutoloadModel->_update([
-						'where' => ['keyword' => $key,'language' => $language],
-						'table' => 'system_select',
-						'data' => $_update,
-					]);
 				}
 			}
-
-	 		if($flag > 0 || $count > 0){
+	 		if($flag > 0){
 
 	 			$session->setFlashdata('message-success', 'Cập Nhật Cấu hình chung Thành Công!');
-				return redirect()->to(BASE_URL.'backend/system/general/index');
+				return redirect()->to(BASE_URL.'backend/system/general/translator/'.$this->data['languageCurrent']);
 	 		}
-	 	}
 
-		$this->data['template'] = 'backend/system/general/index';
+	        
+		}
+
+
+		
+
+		$this->data['template'] = 'backend/system/general/translate';
 		return view('backend/dashboard/layout/home', $this->data);
 	}
 	
-	private function detect_language(){
-		$languageList = $this->AutoloadModel->_get_where([
-			'select' => 'id, canonical',
-			'table' => 'language',
-			'where' => ['publish' => 1,'deleted_at' => 0,'canonical !=' =>  $this->currentLanguage()]
-		], TRUE);
-
-		
-		$select = '';
-		$i = 3;
-		if(isset($languageList) && is_array($languageList) && count($languageList)){
-			foreach($languageList as $key => $val){
-				$select = $select.'(SELECT COUNT(objectid) FROM system_translate INNER JOIN system_catalogue ON system_catalogue.id = system_translate.objectid AND system_translate.module = "system_catalogue" AND system_translate.language  = "'.$val['canonical'].'") as '.$val['canonical'].'_detect , ';
-				$i++;
-			}	
-		}
-		// pre($select);
-
-
-		return [
-			'select' => $select,
-		];
-
-	}
+	
 	
 
 }

@@ -7,6 +7,9 @@ $(document).ready(function(){
 	$(document).on('click','.img-thumbnail', function(){
 		BrowseServerPreview($(this));
 	});
+    $(document).on('click','.va-img-click', function(){
+        BrowseServerInput($(this));
+    });
 	$(document).on('click','.uploadMultiImage', function(){
         let target = $(this).attr('data-target');
 		BrowseServerEditor('Images', target);
@@ -54,7 +57,7 @@ function BrowseServerInput  (object, type){
     finder.resourceType = type;
 
     finder.selectActionFunction = function( fileUrl, data ) {
-        
+        console.log(fileUrl)
         fileUrl =  fileUrl.replace(BASE_URL, "/");
 
         object.val(fileUrl)

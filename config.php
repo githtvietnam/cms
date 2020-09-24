@@ -7,7 +7,7 @@ define('BACKEND_DIRECTORY', 'admin');
 define('AUTH', 'HTVIETNAM_');
 define('ASSET_BACKEND', 'public/backend/');
 
-define('BASE_URL', 'http://tvadmin.com/');
+define('BASE_URL', 'http://ci4.com/');
 define('HTSUFFIX', '.html');
 
 define('DEBUG', 0);
@@ -17,7 +17,7 @@ define('CMS_NAME', 'HT VIETNAM CMS 3.0');
 
 define('HTDBHOST', 'localhost');
 define('HTDBUSER', 'root');
-define('HTDBPASS', 'root');
-define('HTDBNAME', 'ci4_cms1');
+define('HTDBPASS', '');
+define('HTDBNAME', 'ci4_cms');
 
 

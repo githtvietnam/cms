@@ -440,27 +440,24 @@ class CKFinder_Connector_Core_Config
         if (!isset($GLOBALS['config']['ResourceType']) || !is_array($GLOBALS['config']['ResourceType'])) {
             return $_null;
         }
-<<<<<<< Updated upstream
         
         reset($GLOBALS['config']['ResourceType']);
         foreach($GLOBALS['config']['ResourceType'] as $_key => $_resourceTypeNode){
-=======
 
-         reset($GLOBALS['config']['ResourceType']);
+            reset($GLOBALS['config']['ResourceType']);
 
 
-       foreach($GLOBALS['config']['ResourceType'] as $_key => $_resourceTypeNode){
->>>>>>> Stashed changes
-        // while (list($_key,$_resourceTypeNode) = each($GLOBALS['config']['ResourceType'])) {
-            if ($_resourceTypeNode['name'] === $resourceTypeName) {
-                $this->_resourceTypeConfigCache[$resourceTypeName] = new CKFinder_Connector_Core_ResourceTypeConfig($_resourceTypeNode);
+           foreach($GLOBALS['config']['ResourceType'] as $_key => $_resourceTypeNode){
+            // while (list($_key,$_resourceTypeNode) = each($GLOBALS['config']['ResourceType'])) {
+                if ($_resourceTypeNode['name'] === $resourceTypeName) {
+                    $this->_resourceTypeConfigCache[$resourceTypeName] = new CKFinder_Connector_Core_ResourceTypeConfig($_resourceTypeNode);
 
-                return $this->_resourceTypeConfigCache[$resourceTypeName];
+                    return $this->_resourceTypeConfigCache[$resourceTypeName];
+                }
             }
+            return $_null;
         }
-        return $_null;
     }
-
     /**
      * Get thumbnails config
      *
