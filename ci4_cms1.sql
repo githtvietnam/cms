@@ -2,10 +2,10 @@
 -- version 5.0.2
 -- https://www.phpmyadmin.net/
 --
--- Host: 127.0.0.1:3306
--- Generation Time: Sep 18, 2020 at 10:30 AM
--- Server version: 5.6.47
--- PHP Version: 7.2.29
+-- Máy chủ: 127.0.0.1:3306
+-- Thời gian đã tạo: Th9 24, 2020 lúc 03:00 PM
+-- Phiên bản máy phục vụ: 5.6.47
+-- Phiên bản PHP: 7.2.29
 
 SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
 START TRANSACTION;
@@ -18,13 +18,13 @@ SET time_zone = "+00:00";
 /*!40101 SET NAMES utf8mb4 */;
 
 --
--- Database: `ci4_cms1`
+-- Cơ sở dữ liệu: `ci4_cms1`
 --
 
 -- --------------------------------------------------------
 
 --
--- Table structure for table `article`
+-- Cấu trúc bảng cho bảng `article`
 --
 
 CREATE TABLE `article` (
@@ -44,7 +44,7 @@ CREATE TABLE `article` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 --
--- Dumping data for table `article`
+-- Đang đổ dữ liệu cho bảng `article`
 --
 
 INSERT INTO `article` (`id`, `catalogueid`, `catalogue`, `album`, `viewed`, `image`, `order`, `created_at`, `updated_at`, `deleted_at`, `publish`, `userid_created`, `userid_updated`) VALUES
@@ -53,7 +53,7 @@ INSERT INTO `article` (`id`, `catalogueid`, `catalogue`, `album`, `viewed`, `ima
 -- --------------------------------------------------------
 
 --
--- Table structure for table `article_catalogue`
+-- Cấu trúc bảng cho bảng `article_catalogue`
 --
 
 CREATE TABLE `article_catalogue` (
@@ -75,7 +75,7 @@ CREATE TABLE `article_catalogue` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 --
--- Dumping data for table `article_catalogue`
+-- Đang đổ dữ liệu cho bảng `article_catalogue`
 --
 
 INSERT INTO `article_catalogue` (`id`, `parentid`, `lft`, `rgt`, `level`, `album`, `viewed`, `image`, `order`, `created_at`, `updated_at`, `deleted_at`, `publish`, `userid_created`, `userid_updated`) VALUES
@@ -86,7 +86,7 @@ INSERT INTO `article_catalogue` (`id`, `parentid`, `lft`, `rgt`, `level`, `album
 -- --------------------------------------------------------
 
 --
--- Table structure for table `article_translate`
+-- Cấu trúc bảng cho bảng `article_translate`
 --
 
 CREATE TABLE `article_translate` (
@@ -109,7 +109,7 @@ CREATE TABLE `article_translate` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 --
--- Dumping data for table `article_translate`
+-- Đang đổ dữ liệu cho bảng `article_translate`
 --
 
 INSERT INTO `article_translate` (`id`, `objectid`, `language`, `module`, `title`, `canonical`, `meta_title`, `meta_description`, `viewed`, `description`, `content`, `created_at`, `updated_at`, `deleted_at`, `userid_created`, `userid_updated`) VALUES
@@ -123,7 +123,7 @@ INSERT INTO `article_translate` (`id`, `objectid`, `language`, `module`, `title`
 -- --------------------------------------------------------
 
 --
--- Table structure for table `language`
+-- Cấu trúc bảng cho bảng `language`
 --
 
 CREATE TABLE `language` (
@@ -143,7 +143,7 @@ CREATE TABLE `language` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 --
--- Dumping data for table `language`
+-- Đang đổ dữ liệu cho bảng `language`
 --
 
 INSERT INTO `language` (`id`, `title`, `canonical`, `image`, `description`, `order`, `default`, `created_at`, `updated_at`, `deleted_at`, `publish`, `userid_created`, `userid_updated`) VALUES
@@ -154,7 +154,7 @@ INSERT INTO `language` (`id`, `title`, `canonical`, `image`, `description`, `ord
 -- --------------------------------------------------------
 
 --
--- Table structure for table `object_relationship`
+-- Cấu trúc bảng cho bảng `object_relationship`
 --
 
 CREATE TABLE `object_relationship` (
@@ -165,7 +165,7 @@ CREATE TABLE `object_relationship` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 --
--- Dumping data for table `object_relationship`
+-- Đang đổ dữ liệu cho bảng `object_relationship`
 --
 
 INSERT INTO `object_relationship` (`id`, `objectid`, `catalogueid`, `module`) VALUES
@@ -184,49 +184,68 @@ INSERT INTO `object_relationship` (`id`, `objectid`, `catalogueid`, `module`) VA
 -- --------------------------------------------------------
 
 --
--- Table structure for table `slide`
+-- Cấu trúc bảng cho bảng `slide`
 --
 
 CREATE TABLE `slide` (
   `id` int(11) NOT NULL,
-  `name` varchar(50) NOT NULL,
-  `canonical` varchar(50) NOT NULL,
-  `album` longtext NOT NULL,
-  `image` varchar(255) NOT NULL,
-  `stt` int(11) NOT NULL,
+  `catalogue_id` int(11) NOT NULL,
+  `image` longtext NOT NULL,
+  `order` int(4) NOT NULL,
   `created_at` datetime NOT NULL,
   `updated_at` datetime NOT NULL,
   `deleted_at` tinyint(1) NOT NULL,
-  `publish` tinyint(1) NOT NULL,
   `userid_created` int(11) NOT NULL,
   `userid_updated` int(11) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 --
--- Dumping data for table `slide`
+-- Đang đổ dữ liệu cho bảng `slide`
 --
 
-INSERT INTO `slide` (`id`, `name`, `canonical`, `album`, `image`, `stt`, `created_at`, `updated_at`, `deleted_at`, `publish`, `userid_created`, `userid_updated`) VALUES
-(46, 'co', 'aaaaaaaaa', '', '[\"\\/upload\\/image\\/language\\/japan.png\"]', 0, '0000-00-00 00:00:00', '0000-00-00 00:00:00', 0, 0, 0, 0);
+INSERT INTO `slide` (`id`, `catalogue_id`, `image`, `order`, `created_at`, `updated_at`, `deleted_at`, `userid_created`, `userid_updated`) VALUES
+(221, 232, '/upload/image/phap-luat/3_zing.jpg', 0, '0000-00-00 00:00:00', '2020-09-24 18:18:04', 0, 0, 8),
+(222, 232, '/upload/image/doi-song/ea1a87173fb4c2ea9ba5.jpg', 0, '0000-00-00 00:00:00', '2020-09-24 18:18:04', 0, 0, 8);
 
 -- --------------------------------------------------------
 
 --
--- Table structure for table `slide_translate`
+-- Cấu trúc bảng cho bảng `slide_catalogue`
+--
+
+CREATE TABLE `slide_catalogue` (
+  `id` int(11) NOT NULL,
+  `title` varchar(50) NOT NULL,
+  `keyword` varchar(50) NOT NULL,
+  `publish` tinyint(1) NOT NULL,
+  `data` longtext NOT NULL,
+  `created_at` datetime NOT NULL,
+  `updated_at` datetime NOT NULL,
+  `deleted_at` tinyint(1) NOT NULL,
+  `userid_created` int(11) NOT NULL,
+  `userid_updated` int(11) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+--
+-- Đang đổ dữ liệu cho bảng `slide_catalogue`
+--
+
+INSERT INTO `slide_catalogue` (`id`, `title`, `keyword`, `publish`, `data`, `created_at`, `updated_at`, `deleted_at`, `userid_created`, `userid_updated`) VALUES
+(232, 'tin tức', 'tin_tuc', 1, '[{\"image\":\"\\/upload\\/image\\/phap-luat\\/3_zing.jpg\",\"order\":\"0\",\"title\":\"b\\u00e1n rau\",\"url\":\"ban_rau.com\",\"description\":\"khu ch\\u1ee3 rau nh\\u1ed9n nh\\u1ecbp nh\\u1ea5t h\\u00e0 n\\u1ed9i\",\"content\":\"b\\u00e1n rau m\\u00f9a d\\u1ecbch\"},{\"image\":\"\\/upload\\/image\\/doi-song\\/ea1a87173fb4c2ea9ba5.jpg\",\"order\":\"0\",\"title\":\"qqqqqqqqqqqqqqqqqqq\",\"url\":\"qqqqqqqqqq\",\"description\":\"qqqqqqqqq\",\"content\":\"qqqqqq\"}]', '2020-09-24 17:51:58', '2020-09-24 18:18:04', 0, 8, 8);
+
+-- --------------------------------------------------------
+
+--
+-- Cấu trúc bảng cho bảng `slide_translate`
 --
 
 CREATE TABLE `slide_translate` (
   `id` int(11) NOT NULL,
-  `objectid` int(11) NOT NULL,
-  `language` longtext NOT NULL,
-  `module` varchar(50) NOT NULL,
-  `number` varchar(11) NOT NULL,
-  `title` varchar(255) NOT NULL,
-  `canonical` varchar(255) NOT NULL,
-  `meta_title` varchar(255) NOT NULL,
-  `meta_description` longtext NOT NULL,
-  `viewed` int(11) NOT NULL,
-  `description` text NOT NULL,
+  `object_id` int(11) NOT NULL,
+  `language` varchar(10) NOT NULL,
+  `title` varchar(50) NOT NULL,
+  `url` varchar(50) NOT NULL,
+  `description` varchar(50) NOT NULL,
   `content` longtext NOT NULL,
   `created_at` datetime NOT NULL,
   `updated_at` datetime NOT NULL,
@@ -236,16 +255,20 @@ CREATE TABLE `slide_translate` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 --
--- Dumping data for table `slide_translate`
+-- Đang đổ dữ liệu cho bảng `slide_translate`
 --
 
-INSERT INTO `slide_translate` (`id`, `objectid`, `language`, `module`, `number`, `title`, `canonical`, `meta_title`, `meta_description`, `viewed`, `description`, `content`, `created_at`, `updated_at`, `deleted_at`, `userid_created`, `userid_updated`) VALUES
-(38, 46, 'vi', 'slide', '[\"0\"]', '[\"co nhat\"]', '', '[\"co nhat 3\"]', '[\"qqqqqqqqqqq\"]', 0, '[\"co nhat111111\"]', '', '0000-00-00 00:00:00', '0000-00-00 00:00:00', 0, 0, 0);
+INSERT INTO `slide_translate` (`id`, `object_id`, `language`, `title`, `url`, `description`, `content`, `created_at`, `updated_at`, `deleted_at`, `userid_created`, `userid_updated`) VALUES
+(197, 214, 'en', 'bán rau. vegetable', 'vegetable', 'vegetable', 'vegetable', '2020-09-24 17:53:07', '0000-00-00 00:00:00', 0, 8, 0),
+(198, 215, 'en', 'gold', 'gold', 'gold', 'gold', '2020-09-24 17:53:07', '0000-00-00 00:00:00', 0, 8, 0),
+(202, 221, 'en', 'aaaaaaaaaa', 'asssssssssssss', 'sssssss', 'ssdvfnmnnfd', '2020-09-24 18:17:40', '0000-00-00 00:00:00', 0, 8, 0),
+(203, 222, 'vi', 'bán rau', 'ban_rau.com', 'khu chợ rau nhộn nhịp nhất hà nội', 'bán rau mùa dịch', '0000-00-00 00:00:00', '2020-09-24 18:18:04', 0, 0, 8),
+(204, 222, 'vi', 'qqqqqqqqqqqqqqqqqqq', 'qqqqqqqqqq', 'qqqqqqqqq', 'qqqqqq', '0000-00-00 00:00:00', '2020-09-24 18:18:04', 0, 0, 8);
 
 -- --------------------------------------------------------
 
 --
--- Table structure for table `user`
+-- Cấu trúc bảng cho bảng `user`
 --
 
 CREATE TABLE `user` (
@@ -279,20 +302,22 @@ CREATE TABLE `user` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 --
--- Dumping data for table `user`
+-- Đang đổ dữ liệu cho bảng `user`
 --
 
 INSERT INTO `user` (`id`, `catalogueid`, `email`, `password`, `salt`, `fullname`, `image`, `gender`, `address`, `cityid`, `districtid`, `wardid`, `phone`, `birthday`, `description`, `verify`, `remote_addr`, `user_agent`, `otp`, `otp_live`, `created_at`, `updated_at`, `deleted_at`, `last_login`, `publish`, `userid_created`, `userid_updated`) VALUES
-(8, 1, 'htvietnam@gmail.com', 'd3ba6506f10e5bb0009fe0dba670108e', '7GZ7Hz5xLpz5ODUX6Z3hu6AIavRGMnNLTsrQcP4J4JiKBpuf0ReAQFEllgCWDekqK3bh2HaoyyN1oEwY9Os4HKnbjJqXID8TmFlSfYQA29SvFUboCcNu9RBrfgU0Sj1PmtxqWx021vdcMiwIdzwkdyMYgCTpmiVVOG6Vk8P5', 'HT Việt Nam', '/upload/image/75072700_731756833976762_8445131186954567680_n.jpg', 0, 'The One Gamuda 885 Tam Trinh, Hà Nội', '01TTT', '008HH', '00334', '0982365824', '10/10/1989', '', '', '127.0.0.1', 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/85.0.4183.102 Safari/537.36', '', '0000-00-00 00:00:00', '0000-00-00 00:00:00', '2020-08-04 17:03:53', 0, '2020-09-18 13:51:40', 1, 0, 8),
+(8, 1, 'htvietnam@gmail.com', 'd3ba6506f10e5bb0009fe0dba670108e', '7GZ7Hz5xLpz5ODUX6Z3hu6AIavRGMnNLTsrQcP4J4JiKBpuf0ReAQFEllgCWDekqK3bh2HaoyyN1oEwY9Os4HKnbjJqXID8TmFlSfYQA29SvFUboCcNu9RBrfgU0Sj1PmtxqWx021vdcMiwIdzwkdyMYgCTpmiVVOG6Vk8P5', 'HT Việt Nam', '/upload/image/75072700_731756833976762_8445131186954567680_n.jpg', 0, 'The One Gamuda 885 Tam Trinh, Hà Nội', '01TTT', '008HH', '00334', '0982365824', '10/10/1989', '', '', '127.0.0.1', 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/85.0.4183.121 Safari/537.36', '', '0000-00-00 00:00:00', '0000-00-00 00:00:00', '2020-08-04 17:03:53', 0, '2020-09-24 14:09:34', 1, 0, 8),
 (19, 2, 'tuannc.dev@gmail.com', '5d49b267bc89abe78a0e2c8f62caddf8', '7raOShZu8ES36TfMokFs5C1kfWNnD0wyhlImgIC2XmgELD7QqB1bpsrjS1vwJrzkUw4Jon64G9XpKoGycvR0WtxWtMIyectaHaNQbLfPU0UeFsjMOXiOqQF3PYpuHdzVBAigDbhAC2xTHm5NYK47A9q8l3dZnx8vBeK2VTdz', 'Hoàng Văn Nam', '', 1, 'Số nhà 108B Ngõ 1277 Đường Giải Phóng, Quận Hoàng Mai', '0', '0', '0', '0982365824', '', '', '', '127.0.0.1', 'Mozilla/5.0 (Windows NT 10.0; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/84.0.4147.105 Safari/537.36', '163902', '2020-08-21 15:28:11', '2020-07-29 17:36:52', '2020-08-04 17:23:44', 0, '2020-08-04 17:26:43', 1, 8, 8),
 (20, 3, 'tudo2109@gmail.com', 'b4c68e78585d4b3d9b5dc4e1969d408a', 'TjXIfSXX0yMkQyG7cCPDPzjm8wLO2i8YHFZ8UpNqyAdEMAcZ06qCVzGr7gY9nWOouNahmejlzpm6TtLhI3vDKtfp4ktJ3R9RcxHYbHlvbWZs7uo5ArFJvqo52PJLdgQeSusw9f4GUaT62xRb11dCx3aNDMVBUK0EWnrO5esB', 'Tú Đỗ', '', 1, 'Hà Nội', '', '', '', '0987654211', '21/09/1994', '', '', '', '', '', '0000-00-00 00:00:00', '2020-07-30 15:46:25', '2020-07-31 16:56:15', 0, '0000-00-00 00:00:00', 0, 8, 8),
 (21, 2, 'webchuanseohtvietnam@gmail.com', '8623fcd0e8ce8e0cdf7af7026f15c330', 'yTpkpqbiedRowtwJ7ObPt2GVKiRhsyFtrusxeYNl3q1x8nTQ4kCHI9Z3rLDlKfEY54fsJDF4mHV7jQWWzWUvrvgag5AbKkAJzn06PMXTydN9oRphA2IHZBSqB0aM1G8966XmLacj0egcxFEdOUu5vnDZVQUXShwI8NC13jPO', 'Công Nghệ HT', '', 1, 'Xóm Cầu Tiên, ngõ 1277 đường Giải Phóng, phường Thịnh Liệt', '', '', '', '0982365824', '10/10/1989', '', '', '127.0.0.1', 'Mozilla/5.0 (Windows NT 10.0; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/84.0.4147.105 Safari/537.36', '', '0000-00-00 00:00:00', '2020-07-31 15:42:44', '2020-07-31 16:56:20', 0, '2020-07-31 15:43:57', 1, 8, 8),
-(22, 3, 'vietduc54kd@gmail.com', 'e07755fa7867e1225f2b65ed2a633066', 'yKIsCdpw03m8DsmGBQVOjHLwyVFeGJDUQt9vn7rqtZx9JgukMCpWOX2OS2UUPAPfYz5PGfN03HIrcT6Y8uESHjeo4XQh5Xs5DlZtZ1EfoJrMbwExlVaq4zja8pF6Ri03vCkcS9gYRnzWL6n7MITbmioxNilTeNyd2c71KhBg', 'Phạm Việt Đức', '', 1, 'CT6A Xa La, Kiến Hưng, Hà Đông, Hà Nội', '', '', '', '0966929991', '', '', '', '', '', '', '0000-00-00 00:00:00', '2020-07-31 15:50:10', '2020-07-31 17:04:45', 0, '0000-00-00 00:00:00', 0, 8, 8);
+(22, 3, 'vietduc54kd@gmail.com', 'e07755fa7867e1225f2b65ed2a633066', 'yKIsCdpw03m8DsmGBQVOjHLwyVFeGJDUQt9vn7rqtZx9JgukMCpWOX2OS2UUPAPfYz5PGfN03HIrcT6Y8uESHjeo4XQh5Xs5DlZtZ1EfoJrMbwExlVaq4zja8pF6Ri03vCkcS9gYRnzWL6n7MITbmioxNilTeNyd2c71KhBg', 'Phạm Việt Đức', '', 1, 'CT6A Xa La, Kiến Hưng, Hà Đông, Hà Nội', '', '', '', '0966929991', '', '', '', '', '', '', '0000-00-00 00:00:00', '2020-07-31 15:50:10', '2020-07-31 17:04:45', 0, '0000-00-00 00:00:00', 0, 8, 8),
+(0, 1, 'tranviet@gmail.com', '', '', 'viet', '/upload/image/language/vietnam.jpg', 0, '', '0', '0', '0', '', '01/09/1999', '', '', '127.0.0.1', 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/85.0.4183.102 Safari/537.36', '', '0000-00-00 00:00:00', '0000-00-00 00:00:00', '2020-09-18 17:03:06', 1, '2020-09-18 17:05:09', 0, 0, 8),
+(0, 1, 'tranviet@gmail.com', '4a4aa641dcb96e8492ae3e5016d1c2c1', 'sWOQVqFTjBISfptTeV5CNAo8PGsFNY0DZ26a14fWL6owNKnlHwKkRsL2JrXmKkJyHxDjaJPr0f4bS1McctUpWhMxUhquz8tevgbnoO8GudI7BF5pMl2xvlX4VI3cv9EHigDmrQ3d6YC0CBwg759Oi3P9eZzQLaARZEYydTbm', 'viet', '/upload/image/language/vietnam.jpg', 1, '', '0', '0', '0', '', '01/09/1999', '', '', '127.0.0.1', 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/85.0.4183.102 Safari/537.36', '', '0000-00-00 00:00:00', '2020-09-18 17:04:36', '0000-00-00 00:00:00', 0, '2020-09-18 17:05:09', 1, 8, 0);
 
 -- --------------------------------------------------------
 
 --
--- Table structure for table `user_catalogue`
+-- Cấu trúc bảng cho bảng `user_catalogue`
 --
 
 CREATE TABLE `user_catalogue` (
@@ -309,11 +334,11 @@ CREATE TABLE `user_catalogue` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 --
--- Dumping data for table `user_catalogue`
+-- Đang đổ dữ liệu cho bảng `user_catalogue`
 --
 
 INSERT INTO `user_catalogue` (`id`, `title`, `permission`, `description`, `created_at`, `updated_at`, `deleted_at`, `publish`, `userid_created`, `userid_updated`) VALUES
-(1, 'Quản trị viên', '[\"backend\\/article\\/catalogue\\/index\",\"backend\\/article\\/catalogue\\/create\",\"backend\\/article\\/catalogue\\/update\",\"backend\\/article\\/catalogue\\/delete\",\"backend\\/article\\/article\\/index\",\"backend\\/article\\/article\\/create\",\"backend\\/article\\/article\\/update\",\"backend\\/article\\/article\\/delete\",\"backend\\/language\\/language\\/index\",\"backend\\/language\\/language\\/create\",\"backend\\/language\\/language\\/update\",\"backend\\/language\\/language\\/delete\",\"backend\\/user\\/catalogue\\/index\",\"backend\\/user\\/catalogue\\/create\",\"backend\\/user\\/catalogue\\/update\",\"backend\\/user\\/catalogue\\/delete\",\"backend\\/user\\/user\\/index\",\"backend\\/user\\/user\\/create\",\"backend\\/user\\/user\\/update\",\"backend\\/user\\/user\\/delete\",\"All\",\"folderView\",\"folderCreate\",\"folderRename\",\"folderDelete\",\"fileView\",\"fileUpload\",\"fileRename\",\"fileDelete\"]', '', '0000-00-00 00:00:00', '2020-08-17 14:55:11', 0, 1, 0, 8),
+(1, 'Quản trị viên', '[\"backend\\/article\\/catalogue\\/index\",\"backend\\/article\\/catalogue\\/create\",\"backend\\/article\\/catalogue\\/update\",\"backend\\/article\\/catalogue\\/delete\",\"backend\\/article\\/article\\/index\",\"backend\\/article\\/article\\/create\",\"backend\\/article\\/article\\/update\",\"backend\\/article\\/article\\/delete\",\"backend\\/language\\/language\\/index\",\"backend\\/language\\/language\\/create\",\"backend\\/language\\/language\\/update\",\"backend\\/language\\/language\\/delete\",\"backend\\/language\\/language\\/index\",\"backend\\/language\\/language\\/index\",\"backend\\/slide\\/slide\\/index\",\"backend\\/slide\\/slide\\/create\",\"backend\\/slide\\/slide\\/update\",\"backend\\/slide\\/slide\\/delete\",\"All\",\"folderView\",\"folderCreate\",\"folderRename\",\"folderDelete\",\"fileView\",\"fileUpload\",\"fileRename\",\"fileDelete\",\"backend\\/user\\/catalogue\\/index\",\"backend\\/user\\/catalogue\\/create\",\"backend\\/user\\/catalogue\\/update\",\"backend\\/user\\/catalogue\\/delete\",\"backend\\/user\\/user\\/index\",\"backend\\/user\\/user\\/create\",\"backend\\/user\\/user\\/update\",\"backend\\/user\\/user\\/delete\",\"All\",\"folderView\",\"folderCreate\",\"folderRename\",\"folderDelete\",\"fileView\",\"fileUpload\",\"fileRename\",\"fileDelete\"]', '', '0000-00-00 00:00:00', '2020-09-19 14:41:55', 0, 1, 0, 8),
 (2, 'Thành viên', '[\"backend\\/user\\/catalogue\\/index\",\"backend\\/user\\/catalogue\\/create\",\"backend\\/user\\/catalogue\\/update\",\"backend\\/user\\/catalogue\\/delete\",\"backend\\/user\\/user\\/index\",\"backend\\/user\\/user\\/create\",\"backend\\/user\\/user\\/update\",\"backend\\/user\\/user\\/delete\",\"folderView\",\"folderCreate\",\"folderRename\",\"folderDelete\",\"fileView\",\"fileUpload\",\"fileRename\",\"fileDelete\"]', '', '0000-00-00 00:00:00', '2020-08-04 17:26:35', 0, 1, 0, 8),
 (3, 'Cộng tác viên', '', '', '0000-00-00 00:00:00', '2020-07-31 16:11:53', 0, 0, 0, 8),
 (4, 'Thực tập', '', '', '2020-07-31 16:15:32', '0000-00-00 00:00:00', 1, 1, 8, 0);
@@ -321,7 +346,7 @@ INSERT INTO `user_catalogue` (`id`, `title`, `permission`, `description`, `creat
 -- --------------------------------------------------------
 
 --
--- Table structure for table `vn_district`
+-- Cấu trúc bảng cho bảng `vn_district`
 --
 
 CREATE TABLE `vn_district` (
@@ -331,7 +356,7 @@ CREATE TABLE `vn_district` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 --
--- Dumping data for table `vn_district`
+-- Đang đổ dữ liệu cho bảng `vn_district`
 --
 
 INSERT INTO `vn_district` (`districtid`, `name`, `provinceid`) VALUES
@@ -1050,7 +1075,7 @@ INSERT INTO `vn_district` (`districtid`, `name`, `provinceid`) VALUES
 -- --------------------------------------------------------
 
 --
--- Table structure for table `vn_province`
+-- Cấu trúc bảng cho bảng `vn_province`
 --
 
 CREATE TABLE `vn_province` (
@@ -1060,7 +1085,7 @@ CREATE TABLE `vn_province` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 --
--- Dumping data for table `vn_province`
+-- Đang đổ dữ liệu cho bảng `vn_province`
 --
 
 INSERT INTO `vn_province` (`provinceid`, `name`, `order`) VALUES
@@ -1131,7 +1156,7 @@ INSERT INTO `vn_province` (`provinceid`, `name`, `order`) VALUES
 -- --------------------------------------------------------
 
 --
--- Table structure for table `vn_village`
+-- Cấu trúc bảng cho bảng `vn_village`
 --
 
 CREATE TABLE `vn_village` (
@@ -1141,36 +1166,48 @@ CREATE TABLE `vn_village` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 --
--- Indexes for dumped tables
+-- Chỉ mục cho các bảng đã đổ
 --
 
 --
--- Indexes for table `slide`
+-- Chỉ mục cho bảng `slide`
 --
 ALTER TABLE `slide`
   ADD PRIMARY KEY (`id`);
 
 --
--- Indexes for table `slide_translate`
+-- Chỉ mục cho bảng `slide_catalogue`
+--
+ALTER TABLE `slide_catalogue`
+  ADD PRIMARY KEY (`id`);
+
+--
+-- Chỉ mục cho bảng `slide_translate`
 --
 ALTER TABLE `slide_translate`
   ADD PRIMARY KEY (`id`);
 
 --
--- AUTO_INCREMENT for dumped tables
+-- AUTO_INCREMENT cho các bảng đã đổ
 --
 
 --
--- AUTO_INCREMENT for table `slide`
+-- AUTO_INCREMENT cho bảng `slide`
 --
 ALTER TABLE `slide`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=47;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=223;
 
 --
--- AUTO_INCREMENT for table `slide_translate`
+-- AUTO_INCREMENT cho bảng `slide_catalogue`
+--
+ALTER TABLE `slide_catalogue`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=233;
+
+--
+-- AUTO_INCREMENT cho bảng `slide_translate`
 --
 ALTER TABLE `slide_translate`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=39;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=205;
 COMMIT;
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
