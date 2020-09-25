@@ -18,6 +18,16 @@ if (! function_exists('get_data')){
 	 	return $object;
 	}
 }
+if(!function_exists('get_id_create_batch')){
+	function get_id_create_batch(int $firstid = 0, int $length = 0){
+		$data[] = $firstid;
+		for($i = 1 ; $i < $length; $i++){
+			$data[] = $firstid + $i;
+		}
+
+		return $data;
+	}
+}
 
 if (! function_exists('count_object')){
 	function count_object(array $param = []){
