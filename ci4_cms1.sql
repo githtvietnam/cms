@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1:3306
--- Generation Time: Sep 24, 2020 at 03:31 PM
+-- Generation Time: Sep 25, 2020 at 06:48 AM
 -- Server version: 5.6.47
 -- PHP Version: 7.2.29
 
@@ -44,8 +44,8 @@ CREATE TABLE `slide` (
 --
 
 INSERT INTO `slide` (`id`, `catalogue_id`, `image`, `order`, `created_at`, `updated_at`, `deleted_at`, `userid_created`, `userid_updated`) VALUES
-(221, 232, '/upload/image/phap-luat/3_zing.jpg', 0, '0000-00-00 00:00:00', '2020-09-24 18:18:04', 0, 0, 8),
-(222, 232, '/upload/image/doi-song/ea1a87173fb4c2ea9ba5.jpg', 0, '0000-00-00 00:00:00', '2020-09-24 18:18:04', 0, 0, 8);
+(351, 242, '/upload/image/language/japan.png', 0, '0000-00-00 00:00:00', '2020-09-25 10:47:23', 0, 0, 8),
+(352, 242, '/upload/image/language/vietnam.jpg', 0, '0000-00-00 00:00:00', '2020-09-25 10:47:23', 0, 0, 8);
 
 -- --------------------------------------------------------
 
@@ -71,7 +71,7 @@ CREATE TABLE `slide_catalogue` (
 --
 
 INSERT INTO `slide_catalogue` (`id`, `title`, `keyword`, `publish`, `data`, `created_at`, `updated_at`, `deleted_at`, `userid_created`, `userid_updated`) VALUES
-(232, 'tin tức', 'tin_tuc', 1, '[{\"image\":\"\\/upload\\/image\\/phap-luat\\/3_zing.jpg\",\"order\":\"0\",\"title\":\"b\\u00e1n rau\",\"url\":\"ban_rau.com\",\"description\":\"khu ch\\u1ee3 rau nh\\u1ed9n nh\\u1ecbp nh\\u1ea5t h\\u00e0 n\\u1ed9i\",\"content\":\"b\\u00e1n rau m\\u00f9a d\\u1ecbch\"},{\"image\":\"\\/upload\\/image\\/doi-song\\/ea1a87173fb4c2ea9ba5.jpg\",\"order\":\"0\",\"title\":\"qqqqqqqqqqqqqqqqqqq\",\"url\":\"qqqqqqqqqq\",\"description\":\"qqqqqqqqq\",\"content\":\"qqqqqq\"}]', '2020-09-24 17:51:58', '2020-09-24 18:18:04', 0, 8, 8);
+(242, 'rrrrrrrr', 'rrrrrrrrrrrr', 1, '[{\"image\":\"\\/upload\\/image\\/language\\/japan.png\",\"order\":\"0\",\"title\":\"pppp\",\"url\":\"pppppppp\",\"description\":\"\",\"content\":\"\"},{\"image\":\"\\/upload\\/image\\/language\\/vietnam.jpg\",\"order\":\"0\",\"title\":\"ppppp\",\"url\":\"ppppp\",\"description\":\"\",\"content\":\"\"}]', '2020-09-25 10:31:56', '2020-09-25 10:47:23', 0, 8, 8);
 
 -- --------------------------------------------------------
 
@@ -99,11 +99,18 @@ CREATE TABLE `slide_translate` (
 --
 
 INSERT INTO `slide_translate` (`id`, `object_id`, `language`, `title`, `url`, `description`, `content`, `created_at`, `updated_at`, `deleted_at`, `userid_created`, `userid_updated`) VALUES
-(197, 214, 'en', 'bán rau. vegetable', 'vegetable', 'vegetable', 'vegetable', '2020-09-24 17:53:07', '0000-00-00 00:00:00', 0, 8, 0),
-(198, 215, 'en', 'gold', 'gold', 'gold', 'gold', '2020-09-24 17:53:07', '0000-00-00 00:00:00', 0, 8, 0),
-(202, 221, 'en', 'aaaaaaaaaa', 'asssssssssssss', 'sssssss', 'ssdvfnmnnfd', '2020-09-24 18:17:40', '0000-00-00 00:00:00', 0, 8, 0),
-(203, 222, 'vi', 'bán rau', 'ban_rau.com', 'khu chợ rau nhộn nhịp nhất hà nội', 'bán rau mùa dịch', '0000-00-00 00:00:00', '2020-09-24 18:18:04', 0, 0, 8),
-(204, 222, 'vi', 'qqqqqqqqqqqqqqqqqqq', 'qqqqqqqqqq', 'qqqqqqqqq', 'qqqqqq', '0000-00-00 00:00:00', '2020-09-24 18:18:04', 0, 0, 8);
+(305, 328, 'en', 'ssssssssssssss', 'ssssssssss', '', '', '2020-09-25 10:40:35', '0000-00-00 00:00:00', 0, 8, 0),
+(306, 329, 'en', 'ssssssssss', 'ssssssss', '', '', '2020-09-25 10:40:35', '0000-00-00 00:00:00', 0, 8, 0),
+(307, 330, 'en', 'sssssss', 'ffffffffff', '', '', '2020-09-25 10:40:35', '0000-00-00 00:00:00', 0, 8, 0),
+(308, 331, 'en', 'fffffffffffff', '', '', '', '2020-09-25 10:40:35', '0000-00-00 00:00:00', 0, 8, 0),
+(309, 328, 'jp', '111111111', '111111', '', '', '2020-09-25 10:41:32', '0000-00-00 00:00:00', 0, 8, 0),
+(310, 329, 'jp', '11111', '1111', '', '', '2020-09-25 10:41:32', '0000-00-00 00:00:00', 0, 8, 0),
+(311, 330, 'jp', '2222', '111', '', '', '2020-09-25 10:41:32', '0000-00-00 00:00:00', 0, 8, 0),
+(312, 331, 'jp', '111', '', '', '', '2020-09-25 10:41:32', '0000-00-00 00:00:00', 0, 8, 0),
+(320, 351, 'en', 'aaaaaaaaaa', 'rrrrrrrrrrr', '', '', '2020-09-25 10:46:44', '0000-00-00 00:00:00', 0, 8, 0),
+(321, 352, 'en', 'rrrrrrrrrrrr', 'rtgggggggggggg', '', '', '2020-09-25 10:46:44', '0000-00-00 00:00:00', 0, 8, 0),
+(322, 351, 'vi', 'pppp', 'pppppppp', '', '', '0000-00-00 00:00:00', '2020-09-25 10:47:23', 0, 0, 8),
+(323, 352, 'vi', 'ppppp', 'ppppp', '', '', '0000-00-00 00:00:00', '2020-09-25 10:47:23', 0, 0, 8);
 
 -- --------------------------------------------------------
 
@@ -1035,19 +1042,19 @@ ALTER TABLE `slide_translate`
 -- AUTO_INCREMENT for table `slide`
 --
 ALTER TABLE `slide`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=223;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=353;
 
 --
 -- AUTO_INCREMENT for table `slide_catalogue`
 --
 ALTER TABLE `slide_catalogue`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=233;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=243;
 
 --
 -- AUTO_INCREMENT for table `slide_translate`
 --
 ALTER TABLE `slide_translate`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=205;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=324;
 COMMIT;
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;

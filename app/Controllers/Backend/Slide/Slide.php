@@ -147,7 +147,9 @@ class Slide extends BaseController{
 		 		$update['data']= json_decode($update['data'],true);
 		 		if($updateResultId > 0){
 		 			$data1=[];
-		 			$data1 = $this->separateArray($update['data'],['image','order']); 
+		 			if (isset($update['data'])){
+		 				$data1 = $this->separateArray($update['data'],['image','order']); 
+		 			}
 		 			if (isset($update['data']) && is_array($update['data']) && count($update['data'])){
 		 				foreach ($update['data'] as $key => $val) {
 		 					$data1[$key]['catalogue_id'] = $id; 
@@ -190,33 +192,33 @@ class Slide extends BaseController{
 			 				'select' => 'id',
 			 				'where' => ['catalogue_id' => $id],
 			 			],true);//moi
-			 			foreach ($oldId as $key => $val) {
-			 				foreach ($object_id as $keyob => $valob) {
-			 					$deleteCatalogue = $this->AutoloadModel->_update([
-									'table' => $this->data['module'].'_translate',
-									'data' => ['object_id' => $valob['id']],
-									'where' => ['object_id' => $val['id']],
-									]);
-			 				}
-			 			}
 			 			$data2=[];
 			 			$data2 = $this->separateArray($update['data'],['title','url','content','description']);
 		 				foreach ($update['data'] as $key => $val) {
-		 					{
-		 						foreach ($object_id as $keyob => $valob) {
-				 					$data2[$key]['object_id'] = $valob['id'];
-				 					$data2[$key]['updated_at']=$update['updated_at'];
-				 					$data2[$key]['userid_updated']=$update['userid_updated'];
-				 					$data2[$key]['language']=$this->currentLanguage();
-		 						}
+		 					if(isset($object_id[$key])){
+		 						$data2[$key]['object_id'] = $object_id[$key]['id'];
+			 					$data2[$key]['updated_at']=$update['updated_at'];
+			 					$data2[$key]['userid_updated']=$update['userid_updated'];
+			 					$data2[$key]['language']=$this->currentLanguage();
 		 					}
-		 					
+				 					
 		 				}
 			 			foreach ($data2 as $key => $val){
 			 			$insertResult = $this->AutoloadModel->_insert([
 					 		 	'table' => $this->data['module'].'_translate',
 					 		 	'data' => $data2[$key],
 					 		]);
+			 			}
+			 			foreach ($oldId as $key => $val) {
+			 				if (isset($object_id[$key])){
+
+			 					$deleteCatalogue = $this->AutoloadModel->_update([
+									'table' => $this->data['module'].'_translate',
+									'data' => ['object_id' => $object_id[$key]['id']],
+									'where' => ['object_id' => $val['id'], 'language !=' => $this->currentLanguage()],
+									]);
+			 				}
+			 				
 			 			}
 			 		}
 				$session->setFlashdata('message-success', 'Cập nhật Slide Thành Công! Hãy tạo danh mục tiếp theo.');
