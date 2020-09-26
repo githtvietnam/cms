@@ -117,13 +117,23 @@ class Translate extends BaseController
 						$dataTrans = $this->dataTranslate($store, $idTrans , 'update');
 			 		}
 			 		$flag = 0;
-			 		foreach ($dataTrans as $key => $val) {
-						$flag = $this->AutoloadModel->_update([
-			 				'table' => $moduleExtract[0].'_translate',
-			 				'where' => ['object_id' => $idTrans[$key]['id'], 'language' => $language],
-				 			'data' => $val,
-				 		]);
+			 		if (isset($dataTrans) && is_array($dataTrans) && count($dataTrans)){
+						foreach ($dataTrans as $key => $val) {
+							$deleteAll = $this->AutoloadModel->_delete([
+				 				'table' => $moduleExtract[0].'_translate',
+				 				'where' => ['object_id' => $idTrans[$key]['id'], 'language' => $language],
+					 			'data' => $val,
+					 		]);
+						}
+					 	foreach ($dataTrans as $key => $val) {
+				 			$flag = $this->AutoloadModel->_insert([
+					 			'table' => $moduleExtract[0].'_translate',
+					 			'data' => $dataTrans[$key],
+					 		]);
+			 			}
+			 			
 			 		}
+			 		
 			 		if($flag > 0){
 		 			$session->setFlashdata('message-success', 'Tạo Bản Dịch Thành Công! Hãy tạo danh mục tiếp theo.');
  	 				return redirect()->to(BASE_URL.'backend/'.$moduleExtract[0].'/'.((count($moduleExtract) == 1) ? $moduleExtract[0] : $moduleExtract[1]).'/index');
