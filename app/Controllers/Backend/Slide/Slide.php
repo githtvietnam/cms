@@ -19,7 +19,6 @@ class Slide extends BaseController{
  			$session->setFlashdata('message-danger', 'Bạn không có quyền truy cập vào chức năng này!');
  			return redirect()->to(BASE_URL.'backend/dashboard/dashboard/index');
 		}
-
 		$page = (int)$page;
 		$perpage = ($this->request->getGet('perpage')) ? $this->request->getGet('perpage') : 20;
 		$where = $this->condition_where();
@@ -42,7 +41,7 @@ class Slide extends BaseController{
 			$page = $page - 1;
 			$languageDetact = $this->detect_language();
 			$this->data['slideList'] = $this->AutoloadModel->_get_where([
-				'select' => 'id,title, keyword, userid_created, userid_updated, created_at, updated_at,'.((isset($languageDetact['select'])) ? $languageDetact['select'] : ''),
+				'select' => 'id, title, keyword, userid_created, userid_updated, created_at, updated_at,'.((isset($languageDetact['select'])) ? $languageDetact['select'] : ''),
 				'table' => $this->data['module'].'_catalogue',
 				'where' => $where,
 				'keyword' => $keyword,
@@ -66,7 +65,6 @@ class Slide extends BaseController{
 		}
 		if($this->request->getMethod() == 'post'){
 			$validate = $this->validation();
-			$language = $this->currentLanguage();
 			if ($this->validate($validate['validate'], $validate['errorValidate'])){
 		 		$insert = $this->store(['method' => 'create']);
 		 		$insertCatId = $this->AutoloadModel->_insert([
@@ -74,7 +72,7 @@ class Slide extends BaseController{
 		 			'data' => $insert,
 		 		]);
 		 		if($insertCatId > 0){
-		 			$insertSlide = $this->separateArray($this->execute($insertCatId),['order', 'image', 'catalogue_id', 'created_at','userid_created']);
+		 			$insertSlide = separateArray($this->execute($insertCatId), ['order', 'image', 'catalogue_id', 'created_at', 'userid_created']);
 		 				$insertSlideId =  $this->AutoloadModel->_create_batch([
 		 					'table' => $this->data['module'],
 			 		 		'data' => $insertSlide,
@@ -87,7 +85,7 @@ class Slide extends BaseController{
 		 			}
 		 			$idInsertBatch = get_id_create_batch($insertSlideId[0]['id'], count($insertSlide));
 		 				if(isset($idInsertBatch) && is_array($idInsertBatch) && count($idInsertBatch)){
-				 			$dataSlideTranslate = $this->separateArray($this->execute($insertCatId, $idInsertBatch),['object_id', 'title', 'description', 'language', 'content','url']);
+				 			$dataSlideTranslate = separateArray($this->execute($insertCatId, $idInsertBatch), ['object_id', 'title', 'description', 'language', 'content','url','userid_created', 'created_at']);
 			 			}
 			 			if(isset($dataSlideTranslate) && is_array($dataSlideTranslate) && count($dataSlideTranslate)){
 						$dataSlideTranslate = $this->AutoloadModel->_create_batch([
@@ -96,7 +94,7 @@ class Slide extends BaseController{
 						]);
 					}
 					if($dataSlideTranslate > 0){
-	 					$session->setFlashdata('message-success', 'Tạo Bài Viết Thành Công! Hãy tạo danh mục tiếp theo.');
+	 					$session->setFlashdata('message-success', 'Tạo Bản Ghi Thành Công! Hãy tạo danh mục tiếp theo.');
  						return redirect()->to(BASE_URL.'backend/slide/slide/index');
 	 				}else{
 	 					$session->setFlashdata('message-danger', 'Có vấn đề xảy ra, vui lòng thử lại!');
@@ -130,59 +128,64 @@ class Slide extends BaseController{
 		 		$updateCatId = $this->AutoloadModel->_update([
 			 			'table' => $this->data['module'].'_catalogue',
 			 			'data' => $update,
-			 		]);
+			 			'where' => ['id' => $id],
+			 		]);//update vao bang cat
 		 		$update['data']= json_decode($update['data'],true);
 		 		if($updateCatId > 0){
 		 			$dataSlide=[];
 		 			if (isset($update['data'])){
-		 				$dataSlide = $this->separateArray($this->execute($id),['order', 'image', 'catalogue_id', 'userid_updated','userid_updated']);
+		 				$dataSlide = separateArray($this->execute($id),['order', 'image', 'catalogue_id', 'userid_updated', 'userid_updated']);
 		 				$object_id = [];
 		 				$object_id = $this->AutoloadModel->_get_where([
 			 				'table' => $this->data['module'],
 			 				'select' => 'id',
 			 				'where' => ['catalogue_id' => $id],
-			 			],true);//cu
+			 			],true);//lay id cu trong bang slide
 			 			$oldId = $object_id;
-			 			foreach ($oldId as $key => $val){
-			 				$delete =  $this->AutoloadModel->_delete([
-			 					'table' => $this->data['module'],
-				 		 		'where' => ['id' => $val],
-			 				]);
-			 			}
+			 			if (isset($oldId) && is_array($oldId) && count($oldId)){
+				 			foreach ($oldId as $key => $val){
+				 				$delete =  $this->AutoloadModel->_delete([
+				 					'table' => $this->data['module'],
+					 		 		'where' => ['id' => $val],
+				 				]);
+			 			}}//xoa cac ban ghi cu di
 			 			$updateSlideId =  $this->AutoloadModel->_create_batch([
 		 					'table' => $this->data['module'],
 			 		 		'data' => $dataSlide,
-		 				]);
+		 				]);//insert du lieu moi vao bang slide
 		 				if ($updateSlideId > 0 ){
 		 					$object_id = $this->AutoloadModel->_get_where([
 				 				'table' => 'slide',
 				 				'select' => 'id',
 				 				'where' => ['catalogue_id' => $id],
-			 				],true);//moi
+			 				],true);//lay id moi trong bang slide
 			 				$object_id = array_column($object_id, 'id');
-			 				foreach ($oldId as $key => $val){
-				 				$delete =  $this->AutoloadModel->_delete([
-				 					'table' => $this->data['module'].'_translate',
-					 		 		'where' => ['object_id' => $val, 'language' => $this->currentLanguage()],
-				 				]);
-				 			}
-				 			$dataSlideTranslate = $this->separateArray($this->execute($updateCatId, $object_id),['object_id', 'title', 'description', 'language', 'content','url']);
+			 				if (isset($oldId) && is_array($oldId) && count($oldId)){
+			 					foreach ($oldId as $key => $val){
+					 				$delete =  $this->AutoloadModel->_delete([
+					 					'table' => $this->data['module'].'_translate',
+						 		 		'where' => ['object_id' => $val, 'language' => $this->currentLanguage()],
+					 				]);
+				 				}
+			 				}//xoa cac ban ghi cu trong bang slide_transslate
+				 			$dataSlideTranslate = separateArray($this->execute($updateCatId, $object_id),['object_id', 'title', 'description', 'language', 'content', 'url']);
 				 			$updateSlideTranslateId =  $this->AutoloadModel->_create_batch([
 		 					'table' => $this->data['module'].'_translate',
 			 		 		'data' => $dataSlideTranslate,
-		 				]);
-				 			foreach ($oldId as $key => $val) {
-			 				if (isset($object_id)){
-
-			 					$deleteCatalogue = $this->AutoloadModel->_update([
-									'table' => $this->data['module'].'_translate',
-									'data' => ['object_id' => $object_id[$key]],
-									'where' => ['object_id' => $val['id'], 'language !=' => $this->currentLanguage()],
-									]);
-			 				}
-			 			}
+		 				]);//insert cac ban ghi moi vao
+				 			if (isset($oldId) && is_array($oldId) && count($oldId)){
+					 			foreach ($oldId as $key => $val) {
+					 				if (isset($object_id)){
+					 					$deleteCatalogue = $this->AutoloadModel->_update([
+											'table' => $this->data['module'].'_translate',
+											'data' => ['object_id' => $object_id[$key]],
+											'where' => ['object_id' => $val['id'], 'language !=' => $this->currentLanguage()],
+											]);
+					 				}
+				 				}
+				 			}//update cac id moi cho cac bang da dich
 				 			$session->setFlashdata('message-success', 'Cập nhật Slide Thành Công! Hãy tạo danh mục tiếp theo.');
-						return redirect()->to(BASE_URL.'backend/slide/slide/index');
+							return redirect()->to(BASE_URL.'backend/slide/slide/index');
 		 				}
 		 			}
 		 		}
@@ -201,7 +204,7 @@ class Slide extends BaseController{
 	public function delete($id = 0){
 		$session = session();
 		$flag = $this->authentication->check_permission([
-				'routes'=>'backend/article/article/delete',
+				'routes'=>'backend/slide/slide/delete',
 			]);
 		if ($flag == false){
 			$session = session();
@@ -220,18 +223,18 @@ class Slide extends BaseController{
 				'data' => ['deleted_at' => 1],
 				'where' => ['id' => $id],
 				]);
-			if ($deleteCatalogue>0){
+			if ($deleteCatalogue > 0){
 				$deleteSlide = $this->AutoloadModel->_update([
-				'table' => $this->data['module'],
-				'data' => ['deleted_at' => 1],
-				'where' => ['catalogue_id' => $id],
+					'table' => $this->data['module'],
+					'data' => ['deleted_at' => 1],
+					'where' => ['catalogue_id' => $id],
 				]);
 				$DeleteTranslate = $this->AutoloadModel->_get_where([
 					'select' => 'id',
 					'table' => $this->data['module'],
 					'where' => ['catalogue_id' => $id,]
 				],true);//lay ra id cua cac anh da xoa
-				if (isset($DeleteTranslate) && is_array($DeleteTranslate) &&count($DeleteTranslate)){
+				if (isset($DeleteTranslate) && is_array($DeleteTranslate) && count($DeleteTranslate)){
 					foreach ($DeleteTranslate as $key => $val) {
 						$deleteTranslate = $this->AutoloadModel->_update([
 							'table' => $this->data['module'].'_translate',
@@ -319,16 +322,6 @@ class Slide extends BaseController{
  		}
  		return $store;
 	}
-	private function separateArray($param= [], $target=[]){
-		$data=[];
-		for ($i=0; $i<count($param);$i++){
-			if (isset($param[$i]))
-				for ($j=0; $j<count($target);$j++){
-					$data[$i][$target[$j]] = $param[$i][$target[$j]]; 
-				}
-			}
-		return $data;
-	} 
 	public function execute(int $insertid = 0, array $param = []){
 		$data = $this->request->getPost('data');
 		foreach ($data as $key => $val) {
@@ -341,7 +334,6 @@ class Slide extends BaseController{
 			if(isset($param) && is_array($param) && count($param)){
 				$data[$key]['object_id'] = $param[$key];
 			}
-
 		}
 		return $data;
 	}

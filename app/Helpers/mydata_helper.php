@@ -18,6 +18,18 @@ if (! function_exists('get_data')){
 	 	return $object;
 	}
 }
+if (! function_exists('separateArray')){
+	function separateArray($param= [], $target=[]){
+		$data=[];
+		for ($i=0; $i<count($param);$i++){
+			if (isset($param[$i]))
+				for ($j=0; $j<count($target);$j++){
+					$data[$i][$target[$j]] = $param[$i][$target[$j]]; 
+				}
+			}
+		return $data;
+	} 
+}
 if(!function_exists('get_id_create_batch')){
 	function get_id_create_batch(int $firstid = 0, int $length = 0){
 		$data[] = $firstid;
