@@ -37,11 +37,11 @@
 																	<div  class="tab-0 tab-pane active">
 																		<div class="panel-body">
 																			<div class="row mb5">
-																				<input  placeholder="Tên Slide..." type="text"  class="form-control m-b" name="data[<?php echo $key ?>][title]" value="<?php echo isset($object[$key]['title'])? $object[$key]['title']: '' ?>" readonly >
+																				<input  placeholder="URL..." type="text"  class="form-control m-b" name="data[<?php echo $key ?>][url]" value="<?php echo isset($object[$key]['url'])? $object[$key]['url']: '' ?>" readonly >
 																			</div>
 																			<div class="row ">
-																				<?php  $url= isset($object[$key]['url'])? $object[$key]['url']: '' ?>
-																				<textarea readonly  placeholder="URL..."  class="form-control m-b"  name="data[<?php echo $key ?>][url]"><?php echo $url  ?></textarea>
+																				<?php  $title= isset($object[$key]['title'])? $object[$key]['title']: '' ?>
+																				<textarea readonly  placeholder="Tên Slide..."  class="form-control m-b"  name="data[<?php echo $key ?>][title]"><?php echo $title  ?></textarea>
 																			</div>
 																		</div>
 																	</div>

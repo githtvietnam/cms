@@ -21,9 +21,9 @@ if (! function_exists('get_data')){
 if (! function_exists('separateArray')){
 	function separateArray($param= [], $target=[]){
 		$data=[];
-		for ($i=0; $i<count($param);$i++){
+		for ($i = 0; $i < count($param);$i++){
 			if (isset($param[$i]))
-				for ($j=0; $j<count($target);$j++){
+				for ($j = 0; $j < count($target);$j++){
 					$data[$i][$target[$j]] = $param[$i][$target[$j]]; 
 				}
 			}

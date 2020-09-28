@@ -108,11 +108,11 @@
 																	<div  class="tab-0 tab-pane active">
 																		<div class="panel-body">
 																			<div class="row mb5">
-																				<input  placeholder="Tên Slide..." type="text"  class="form-control m-b" name="data[<?php echo $key ?>][title]" value="<?php echo isset($data[$key]['title'])? $data[$key]['title']: '' ?>">
+																				<input  placeholder="URL..." type="text"  class="form-control m-b" name="data[<?php echo $key ?>][url]" value="<?php echo isset($data[$key]['url'])? $data[$key]['url']: '' ?>">
 																			</div>
 																			<div class="row ">
-																				<?php  $url= isset($data[$key]['url'])? $data[$key]['url']: '' ?>
-																				<textarea  placeholder="URL..."  class="form-control m-b"  name="data[<?php echo $key ?>][url]"><?php echo $url  ?></textarea>
+																				<?php  $title= isset($data[$key]['title'])? $data[$key]['title']: '' ?>
+																				<textarea  placeholder="Tên Slide..."  class="form-control m-b"  name="data[<?php echo $key ?>][title]"><?php echo $title  ?></textarea>
 																			</div>
 																		</div>
 																	</div>

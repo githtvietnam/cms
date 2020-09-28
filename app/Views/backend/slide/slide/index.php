@@ -3,7 +3,7 @@
     $baseController = new App\Controllers\BaseController();
     $language = $baseController->currentLanguage();
     $languageList = get_list_language(['currentLanguage' => $language]);
-   
+
 ?>
 <div class="row wrapper border-bottom white-bg page-heading">
    <div class="col-lg-8">
@@ -90,11 +90,8 @@
                         </tr>
                         </thead>
                         <tbody>
-                            
                             <?php if(isset($slideList) && is_array($slideList) && count($slideList)){ ?>
                             <?php foreach($slideList as $key => $val){ ?>
-                            
-                            
                             <tr id="post-<?php echo $val['id']; ?>" data-id="<?php echo $val['id']; ?>">
                                 <td>
                                     <input type="checkbox" name="checkbox[]" value="<?php echo $val['id']; ?>" class="checkbox-item">

@@ -76,15 +76,9 @@ function BrowseServerAlbum(object, type){
     finder.selectActionFunction = function(fileUrl , data, allFiles ) {
         var files = allFiles;
         var li = '';
-
-        // let leng = k + files.length;
-        // console.log(leng);
-
-       
         for(var i= 0 ; i < files.length; i++)
         {
             fileUrl =  files[i].url.replace(BASE_URL, "/");
-           
             li=li+ '<li class="tv-block ui-state-default">';
               li=li+  '<div class="tv-slide-container">';
                   li=li+   '<div class="col-sm-3">';
@@ -110,10 +104,10 @@ function BrowseServerAlbum(object, type){
                                 li=li+ '<div  class="tab-0 tab-pane active">';
                                    li=li+  '<div class="panel-body">';
                                     li=li+ '<div class="row mb5">';
-                                          li=li+   '<input  placeholder="Tên slide..." type="text" name="data['+k+'][title]"  class="form-control m-b">';
+                                          li=li+   '<input  placeholder="URL..." type="text" name="data['+k+'][url]"  class="form-control m-b">';
                                           li=li+ '</div>';
                                           li=li+ '<div class="row ">';
-                                          li=li+   '<textarea  placeholder="URL..." name="data['+k+'][url]"  class="form-control m-b"></textarea>';
+                                          li=li+   '<textarea  placeholder="Tên slide..." name="data['+k+'][title]"  class="form-control m-b"></textarea>';
                                           li=li+ '</div>'; 
                                     li=li+ '</div>';
                                 li=li+ '</div>';

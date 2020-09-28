@@ -1,4 +1,5 @@
 $(document).ready(function(){
+
 	$(document).on('click','.delete-all', function(){
 		let id = [];
 		$('.checkbox-item:checked').each(function(){

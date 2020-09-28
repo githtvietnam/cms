@@ -1581,6 +1581,7 @@ ul li{
 .tv-block{
 	display: block;
 	width: 100%!important;
+	font-weight: 500!important;
 }
 .form-horizontal.box{
 	margin-top: 0 !important;
@@ -2520,6 +2521,11 @@ button.toast-close-button {
 
 .va-width-auto{
 	width: 100px;
->>>>>>> 041486a9437a9a0ba3accd89b67329ff184ddf2b
+
+}
+#tv-off-sortable{
+	list-style: none;
+    padding-left: 0;
+    margin-top: 16px;
 }
 

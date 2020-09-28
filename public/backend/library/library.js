@@ -4,16 +4,14 @@ $(document).ready(function(){
 		$( "#sortable" ).sortable();
 		$( "#sortable" ).disableSelection();
 	});
-
+	
 	$(document).on('click','.ui-state-default .thumb .fa-trash', function(){
 		let _this = $(this);
 		_this.parents('.ui-state-default').remove();
-
 		if($('#sortable li').length == 0){
 			$('.click-to-upload').show();
    		 	$('.upload-list').hide();
 		}
-
 	});
 
 

@@ -69,9 +69,9 @@ class Translate extends BaseController
 		$this->data['template'] = 'backend/translate/translate/translateArticle';
 		return view('backend/dashboard/layout/home', $this->data);
 	}
-	public function translateSlide($catalogue_id = 0, $module = '', $language = ''){
+	public function translateSlide($catalogueid = 0, $module = '', $language = ''){
 		$session = session();
-		$catalogue_id = (int)$catalogue_id;
+		$catalogueid = (int)$catalogueid;
 		$moduleExtract = explode('_', $module);
 		$dataTrans=[];
 		$this->data['object'] = $this->AutoloadModel->_get_where([
@@ -79,62 +79,48 @@ class Translate extends BaseController
 			'table' => $module.'_catalogue as tb1',
 			'join' => [
 				[
-		 			$moduleExtract[0].' as tb2','tb1.id = tb2.catalogue_id','inner'
+		 			$moduleExtract[0].' as tb2','tb1.id = tb2.catalogueid','inner'
 				],
 				[
-		 			$moduleExtract[0].'_translate as tb3','tb2.id = tb3.object_id AND tb3.language = \''.$this->currentLanguage().'\' ','inner'
+		 			$moduleExtract[0].'_translate as tb3','tb2.id = tb3.objectid AND tb3.language = \''.$this->currentLanguage().'\' ','inner'
 				],
 			],
-			'where' => ['tb1.id'=>$catalogue_id, 'tb3.language' => $this->currentLanguage() ],
+			'where' => ['tb1.id'=>$catalogueid, 'tb3.language' => $this->currentLanguage() ],
 		],true);
 		if(!isset($this->data['object']) || is_array($this->data['object']) == false || count($this->data['object']) == 0){
 		 	$session->setFlashdata('message-danger', 'Bản ghi không tồn tại!');
 		 	return redirect()->to(BASE_URL.'backend/'.$moduleExtract[0].'/'.((count($moduleExtract) == 1) ? $moduleExtract[0] : $moduleExtract[1]).'/index');
 		 }
-			$idTrans=[];
-			$idTrans = $this->AutoloadModel->_get_where([
-		 		'table' => 'slide',
-		 		'select' => 'id',
-		 		'where' => ['catalogue_id' => $catalogue_id ],
-		 	],true);
-		 	foreach ($idTrans as $key => $val) {
-		 		$check[] = $this->AutoloadModel->_get_where([
-		 			'table' => 'slide_translate',
-		 			'select' => 'id, language, content, description, title, url',
-		 			'where' => ['language' => $language, 'object_id' => $val['id']]
-		 		]);
-		 	}
+	 		$check = $this->AutoloadModel->_get_where([
+	 			'table' => 'slide_translate',
+	 			'select' => 'catalogueid, language, content, description, title, url',
+				'where' => ['catalogueid' => $catalogueid,'language' => $language],
+	 		],true);//lay gia tri da dich do ra view
+	 		$idTrans = $this->AutoloadModel->_get_where([
+	 			'table' => 'slide',
+	 			'select' => 'id',
+				'where' => ['catalogueid' => $catalogueid],
+	 		],true);
+
+	 		$idTrans = array_column($idTrans, 'id');
 			$this->data['value'] = $check;
-			if(isset($check) && is_array($check) && $check[0] != null){
+			if(isset($check) && is_array($check) && $check != null){
 				if($this->request->getMethod() == 'post'){
-					$check = array_column($check, 'id');
-					foreach ($check as $key => $value) {
-						$store = $this->storeSlide([
-				  			'object_id' => $value,
-				  			'language' => $language,
-				  			'method' => 'update',
-					 	]);
-						$dataTrans = $this->dataTranslate($store, $idTrans , 'update');
-			 		}
-			 		$flag = 0;
-			 		if (isset($dataTrans) && is_array($dataTrans) && count($dataTrans)){
-						foreach ($dataTrans as $key => $val) {
-							$deleteAll = $this->AutoloadModel->_delete([
-				 				'table' => $moduleExtract[0].'_translate',
-				 				'where' => ['object_id' => $idTrans[$key]['id'], 'language' => $language],
-					 			'data' => $val,
-					 		]);
-						}
-					 	foreach ($dataTrans as $key => $val) {
-				 			$flag = $this->AutoloadModel->_insert([
-					 			'table' => $moduleExtract[0].'_translate',
-					 			'data' => $dataTrans[$key],
-					 		]);
-			 			}
-			 			
-			 		}
-			 		
-			 		if($flag > 0){
+					$deleteAll = $this->AutoloadModel->_delete([
+		 				'table' => $moduleExtract[0].'_translate',
+		 				'where' => ['catalogueid' => $catalogueid, 'language' => $language],
+			 		]);
+					$store = $this->storeSlide([
+			  			'language' => $language,
+			  			'method' => 'update',
+				 	]);	
+					$dataTrans = $this->dataTranslate($store, $idTrans, 'update', $catalogueid);
+					$slideTranslate = 0;
+				 	$slideTranslate =  $this->AutoloadModel->_create_batch([
+	 					'table' => 'slide_translate',
+		 		 		'data' => $dataTrans,
+	 				]);
+			 		if($slideTranslate > 0){
 		 			$session->setFlashdata('message-success', 'Tạo Bản Dịch Thành Công! Hãy tạo danh mục tiếp theo.');
  	 				return redirect()->to(BASE_URL.'backend/'.$moduleExtract[0].'/'.((count($moduleExtract) == 1) ? $moduleExtract[0] : $moduleExtract[1]).'/index');
 		  			}
@@ -142,20 +128,17 @@ class Translate extends BaseController
 			}else{
 				if($this->request->getMethod() == 'post'){
 					$store = $this->storeSlide([
-			  			'object_id' => $catalogue_id,
 			  			'language' => $language,
 			  			'method' => 'create',
 				 	]);
-				 	$dataTrans = $this->dataTranslate($store, $idTrans , 'create');
-			 		$flag = 0;
-			 		foreach ($dataTrans as $key => $val) {
-			 			$flag = $this->AutoloadModel->_insert([
-				 			'table' => $moduleExtract[0].'_translate',
-				 			'data' => $dataTrans[$key],
-				 		]);
-			 		}
-					$this->data['dataTrans'] = $dataTrans;
-		 		if($flag > 0){
+				 	$dataTrans = $this->dataTranslate($store, $idTrans, 'create', $catalogueid);
+			 		$slideTranslate = 0;
+			 		$slideTranslate =  $this->AutoloadModel->_create_batch([
+	 					'table' => 'slide_translate',
+		 		 		'data' => $dataTrans,
+	 				]);
+					
+		 		if($slideTranslate > 0){
 		 			$session->setFlashdata('message-success', 'Tạo Bản Dịch Thành Công! Hãy tạo danh mục tiếp theo.');
  	 				return redirect()->to(BASE_URL.'backend/'.$moduleExtract[0].'/'.((count($moduleExtract) == 1) ? $moduleExtract[0] : $moduleExtract[1]).'/index');
 		  			}
@@ -182,7 +165,7 @@ class Translate extends BaseController
 	private function storeSlide($param = []){
 		helper(['text']);
 		$store = [
-			'object_id' => $param['object_id'],
+			// 'objectid' => $param['objectid'],
 			'dataTrans' => $this->request->getPost('dataTrans'),
 			'language' => $param['language'],
 		];
@@ -195,7 +178,7 @@ class Translate extends BaseController
  		}
 		return $store;
 	}
-	private function dataTranslate($store = [], $idTrans = [], $method = ''){
+	private function dataTranslate($store = [], $objectid = [], $method = '', $catalogueid = ''){
 		$dataTrans = [];
 		foreach ($store['dataTrans'] as $key => $val) {
  			$dataTrans[$key]['title'] = $val['title'];
@@ -203,9 +186,8 @@ class Translate extends BaseController
  			$dataTrans[$key]['description'] = $val['description'];
  			$dataTrans[$key]['content'] = $val['content'];
  			$dataTrans[$key]['language'] = $store['language'];
- 			if (isset($idTrans) && is_array($idTrans) && count($idTrans)){
- 				$dataTrans[$key]['object_id'] = $idTrans[$key]['id'];
- 			}
+ 			$dataTrans[$key]['catalogueid'] = $catalogueid;
+ 			$dataTrans[$key]['objectid'] = $objectid[$key];
  			if ($method == 'create'){
  				$dataTrans[$key]['created_at'] = $store['created_at'];
  				$dataTrans[$key]['userid_created'] = $store['userid_created'];

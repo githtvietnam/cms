@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1:3306
--- Generation Time: Sep 25, 2020 at 06:52 AM
+-- Generation Time: Sep 28, 2020 at 10:30 AM
 -- Server version: 5.6.47
 -- PHP Version: 7.2.29
 
@@ -29,7 +29,7 @@ SET time_zone = "+00:00";
 
 CREATE TABLE `slide` (
   `id` int(11) NOT NULL,
-  `catalogue_id` int(11) NOT NULL,
+  `catalogueid` int(11) NOT NULL,
   `image` longtext NOT NULL,
   `order` int(4) NOT NULL,
   `created_at` datetime NOT NULL,
@@ -43,9 +43,12 @@ CREATE TABLE `slide` (
 -- Dumping data for table `slide`
 --
 
-INSERT INTO `slide` (`id`, `catalogue_id`, `image`, `order`, `created_at`, `updated_at`, `deleted_at`, `userid_created`, `userid_updated`) VALUES
-(351, 242, '/upload/image/language/japan.png', 0, '0000-00-00 00:00:00', '2020-09-25 10:47:23', 0, 0, 8),
-(352, 242, '/upload/image/language/vietnam.jpg', 0, '0000-00-00 00:00:00', '2020-09-25 10:47:23', 0, 0, 8);
+INSERT INTO `slide` (`id`, `catalogueid`, `image`, `order`, `created_at`, `updated_at`, `deleted_at`, `userid_created`, `userid_updated`) VALUES
+(673, 313, '/upload/image/language/en.png', 0, '2020-09-27 09:33:15', '0000-00-00 00:00:00', 0, 8, 0),
+(674, 313, '/upload/image/language/japan.png', 0, '2020-09-27 09:33:15', '0000-00-00 00:00:00', 0, 8, 0),
+(677, 314, '/upload/image/phap-luat/3_zing.jpg', 0, '0000-00-00 00:00:00', '2020-09-28 14:29:24', 0, 0, 8),
+(678, 314, '/upload/image/Bong-da/cat-1.jpg', 0, '0000-00-00 00:00:00', '2020-09-28 14:29:24', 0, 0, 8),
+(679, 314, '/upload/image/Bong-da/cat-1.jpg', 0, '0000-00-00 00:00:00', '2020-09-28 14:29:24', 0, 0, 8);
 
 -- --------------------------------------------------------
 
@@ -71,7 +74,8 @@ CREATE TABLE `slide_catalogue` (
 --
 
 INSERT INTO `slide_catalogue` (`id`, `title`, `keyword`, `publish`, `data`, `created_at`, `updated_at`, `deleted_at`, `userid_created`, `userid_updated`) VALUES
-(242, 'rrrrrrrr', 'rrrrrrrrrrrr', 1, '[{\"image\":\"\\/upload\\/image\\/language\\/japan.png\",\"order\":\"0\",\"title\":\"pppp\",\"url\":\"pppppppp\",\"description\":\"\",\"content\":\"\"},{\"image\":\"\\/upload\\/image\\/language\\/vietnam.jpg\",\"order\":\"0\",\"title\":\"ppppp\",\"url\":\"ppppp\",\"description\":\"\",\"content\":\"\"}]', '2020-09-25 10:31:56', '2020-09-25 10:47:23', 0, 8, 8);
+(313, 'cờ', 'co', 1, '[{\"image\":\"\\/upload\\/image\\/language\\/en.png\",\"order\":\"0\",\"title\":\"ch\\u01b0a d\\u1ecbch\",\"url\":\"ch\\u01b0a d\\u1ecbch\",\"description\":\"ch\\u01b0a d\\u1ecbch\",\"content\":\"ch\\u01b0a d\\u1ecbch\"},{\"image\":\"\\/upload\\/image\\/language\\/japan.png\",\"order\":\"0\",\"title\":\"ch\\u01b0a d\\u1ecbch\",\"url\":\"ch\\u01b0a d\\u1ecbch\",\"description\":\"ch\\u01b0a d\\u1ecbch\",\"content\":\"ch\\u01b0a d\\u1ecbch\"}]', '2020-09-27 09:33:15', '0000-00-00 00:00:00', 0, 8, 0),
+(314, 'tin tức', 'tin', 1, '[{\"image\":\"\\/upload\\/image\\/phap-luat\\/3_zing.jpg\",\"order\":\"0\",\"title\":\"b\\u00e1n rau\",\"url\":\"b\\u00e1n rau 1\",\"description\":\"b\\u00e1n rau 2\",\"content\":\"b\\u00e1n rau 2 3\"},{\"image\":\"\\/upload\\/image\\/Bong-da\\/cat-1.jpg\",\"order\":\"0\",\"title\":\"b\\u00f3ng \\u0111\\u00e1\",\"url\":\"b\\u00f3ng \\u0111\\u00e1 1\",\"description\":\"b\\u00f3ng \\u0111\\u00e1 2\",\"content\":\"b\\u00f3ng \\u0111\\u00e1 3\"},{\"image\":\"\\/upload\\/image\\/Bong-da\\/cat-1.jpg\",\"order\":\"0\",\"title\":\"\",\"url\":\"\",\"description\":\"\",\"content\":\"\"}]', '2020-09-27 09:41:50', '2020-09-28 14:29:24', 0, 8, 8);
 
 -- --------------------------------------------------------
 
@@ -80,8 +84,8 @@ INSERT INTO `slide_catalogue` (`id`, `title`, `keyword`, `publish`, `data`, `cre
 --
 
 CREATE TABLE `slide_translate` (
-  `id` int(11) NOT NULL,
-  `object_id` int(11) NOT NULL,
+  `catalogueid` int(11) NOT NULL,
+  `objectid` int(11) NOT NULL,
   `language` varchar(10) NOT NULL,
   `title` varchar(50) NOT NULL,
   `url` varchar(50) NOT NULL,
@@ -98,19 +102,16 @@ CREATE TABLE `slide_translate` (
 -- Dumping data for table `slide_translate`
 --
 
-INSERT INTO `slide_translate` (`id`, `object_id`, `language`, `title`, `url`, `description`, `content`, `created_at`, `updated_at`, `deleted_at`, `userid_created`, `userid_updated`) VALUES
-(305, 328, 'en', 'ssssssssssssss', 'ssssssssss', '', '', '2020-09-25 10:40:35', '0000-00-00 00:00:00', 0, 8, 0),
-(306, 329, 'en', 'ssssssssss', 'ssssssss', '', '', '2020-09-25 10:40:35', '0000-00-00 00:00:00', 0, 8, 0),
-(307, 330, 'en', 'sssssss', 'ffffffffff', '', '', '2020-09-25 10:40:35', '0000-00-00 00:00:00', 0, 8, 0),
-(308, 331, 'en', 'fffffffffffff', '', '', '', '2020-09-25 10:40:35', '0000-00-00 00:00:00', 0, 8, 0),
-(309, 328, 'jp', '111111111', '111111', '', '', '2020-09-25 10:41:32', '0000-00-00 00:00:00', 0, 8, 0),
-(310, 329, 'jp', '11111', '1111', '', '', '2020-09-25 10:41:32', '0000-00-00 00:00:00', 0, 8, 0),
-(311, 330, 'jp', '2222', '111', '', '', '2020-09-25 10:41:32', '0000-00-00 00:00:00', 0, 8, 0),
-(312, 331, 'jp', '111', '', '', '', '2020-09-25 10:41:32', '0000-00-00 00:00:00', 0, 8, 0),
-(320, 351, 'en', 'aaaaaaaaaa', 'rrrrrrrrrrr', '', '', '2020-09-25 10:46:44', '0000-00-00 00:00:00', 0, 8, 0),
-(321, 352, 'en', 'rrrrrrrrrrrr', 'rtgggggggggggg', '', '', '2020-09-25 10:46:44', '0000-00-00 00:00:00', 0, 8, 0),
-(322, 351, 'vi', 'pppp', 'pppppppp', '', '', '0000-00-00 00:00:00', '2020-09-25 10:47:23', 0, 0, 8),
-(323, 352, 'vi', 'ppppp', 'ppppp', '', '', '0000-00-00 00:00:00', '2020-09-25 10:47:23', 0, 0, 8);
+INSERT INTO `slide_translate` (`catalogueid`, `objectid`, `language`, `title`, `url`, `description`, `content`, `created_at`, `updated_at`, `deleted_at`, `userid_created`, `userid_updated`) VALUES
+(313, 673, 'vi', 'chưa dịch', 'chưa dịch', 'chưa dịch', 'chưa dịch', '2020-09-27 09:33:15', '0000-00-00 00:00:00', 0, 8, 0),
+(313, 674, 'vi', 'chưa dịch', 'chưa dịch', 'chưa dịch', 'chưa dịch', '2020-09-27 09:33:15', '0000-00-00 00:00:00', 0, 8, 0),
+(313, 673, 'en', 'đã dịch tiếng anh', 'đã dịch tiếng anh', '', '', '0000-00-00 00:00:00', '2020-09-27 09:40:37', 0, 0, 8),
+(313, 674, 'en', 'đã dịch tiếng anh', 'đã dịch tiếng anh', '', '', '0000-00-00 00:00:00', '2020-09-27 09:40:37', 0, 0, 8),
+(314, 677, 'en', 'ddax dicjh  tiếng anh', 'đã dịch tiếng anh', 'đã dịch tiếng anh', 'đã dịch tiếng anh', '2020-09-28 14:29:01', '0000-00-00 00:00:00', 0, 8, 0),
+(314, 677, 'en', 'đã dịch tiếng anh', 'đã dịch tiếng anh', 'đã dịch tiếng anh', 'đã dịch tiếng anh', '2020-09-28 14:29:01', '0000-00-00 00:00:00', 0, 8, 0),
+(314, 677, 'vi', 'bán rau', 'bán rau 1', 'bán rau 2', 'bán rau 2 3', '0000-00-00 00:00:00', '0000-00-00 00:00:00', 0, 0, 0),
+(314, 678, 'vi', 'bóng đá', 'bóng đá 1', 'bóng đá 2', 'bóng đá 3', '0000-00-00 00:00:00', '0000-00-00 00:00:00', 0, 0, 0),
+(314, 679, 'vi', '', '', '', '', '0000-00-00 00:00:00', '0000-00-00 00:00:00', 0, 0, 0);
 
 --
 -- Indexes for dumped tables
@@ -129,12 +130,6 @@ ALTER TABLE `slide_catalogue`
   ADD PRIMARY KEY (`id`);
 
 --
--- Indexes for table `slide_translate`
---
-ALTER TABLE `slide_translate`
-  ADD PRIMARY KEY (`id`);
-
---
 -- AUTO_INCREMENT for dumped tables
 --
 
@@ -142,19 +137,13 @@ ALTER TABLE `slide_translate`
 -- AUTO_INCREMENT for table `slide`
 --
 ALTER TABLE `slide`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=353;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=680;
 
 --
 -- AUTO_INCREMENT for table `slide_catalogue`
 --
 ALTER TABLE `slide_catalogue`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=243;
-
---
--- AUTO_INCREMENT for table `slide_translate`
---
-ALTER TABLE `slide_translate`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=324;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=315;
 COMMIT;
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
