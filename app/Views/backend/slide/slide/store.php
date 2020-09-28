@@ -27,7 +27,6 @@
 									<?php  echo form_input('title', validate_input(set_value('title', (isset($slide_catalogue['title'])) ? $slide_catalogue['title'] : '')), 'class="form-control title" placeholder="" id="title" autocomplete="off"'); ?>
 								</div>
 							</div>
-						
 							<div class="col-lg-6">
 								<div class="form-row">
 									<label class="control-label text-left">
@@ -39,17 +38,12 @@
 						</div>
 					</div>
 				</div>
-
 				<div class="ibox mb20 data">
 					<div class="ibox-title">
 						<div class="uk-flex uk-flex-middle uk-flex-space-between">
 							<h5>Slide Ảnh </h5>
 
 							<div class="uk-flex uk-flex-middle uk-flex-space-between">
-								<!-- <form class="js_upload_now" action="" method="post" enctype="multipart/form-data">
-									<input data-result="" class="m-r " type="file" name="a" multiple>
-									<input type="submit" name="abx" value="Add">
-								</form> -->
 								<div class="edit">
 									<a onclick="BrowseServerAlbum(this);return false;" href="" title="" class="upload-picture tv-button">Thêm ảnh Slide</a>
 								</div>
@@ -64,8 +58,6 @@
 							}else if(isset($slide_catalogue)){
 								$data = json_decode($slide_catalogue['data'], TRUE);
 							}
-
-							//pre($data);
 						 ?>
 						<div class="row">
 							<div class="col-lg-12">
@@ -79,13 +71,13 @@
 								</div>
 								<div class="upload-list" <?php echo (isset($slide_catalogue['data']))?'':'style="display:none"' ?> style="padding:5px;">
 									<div class="row"> 
-										<ul id="sortable" class="clearfix sortui">
+										<ul id="sortable" class="tv clearfix sortui">
 											<?php if(isset($data) && is_array($data) && count($data)){ ?>
 											<?php foreach($data as $key => $val){ ?>
 												<script type="text/javascript">
 													var k = <?php echo $key+1 ?>;
 												</script>
-												<li class="tv-block ui-state-default">
+												<li class="tv-block ui-state-default ui-sortable-handle">
 													<div class="tv-slide-container">
 														<div class="col-sm-3">
 															<div class="thumb tv">
@@ -121,7 +113,6 @@
 																			<div class="row mb5">
 																				<div class="form-row">
 																					<input  placeholder="Mô tả..." type="text"  class="form-control m-b" name="data[<?php echo $key ?>][description]" value="<?php echo isset($data[$key]['description'])? $data[$key]['description']: ''; ?>">
-
 																				</div>
 																			</div>
 																			<div class="row mb18">
@@ -129,7 +120,6 @@
 																					<?php $content = isset($data[$key]['content'])? $data[$key]['content']: '' ?>
 																					<textarea  placeholder="Nội dung..."  class="form-control m-b"   name="data[<?php echo $key ?>][content]"><?php echo $content?></textarea>
 																				</div>
-																				
 																			</div>
 																		</div>
 																	</div>
@@ -138,7 +128,6 @@
 														</div>
 													</div>
 												</li>
-        
 											<?php }}   ?>
 										</ul>
 									</div>
@@ -147,10 +136,7 @@
 						</div>
 					</div>
 				</div>
-				
-				
 				<button type="submit" name="create" value="create" class="btn btn-primary block m-b pull-right">Lưu</button>
-				
 			</div>
 			<div class="col-lg-4">
 				<div class="ibox mb20">
@@ -174,7 +160,6 @@
 										<div class="i-checks" style="width:100%;">
 											<span style="color:#000;" class="uk-flex uk-flex-middle"> 
 												<?php echo form_radio('publish', set_value('publish', 0), ((isset($_POST['publish']) && $_POST['publish'] == 0 || (isset($article['publish']) && $article['publish'] == 0)) ? true : false),'class=""   id="no-publish" style="margin-top:0;margin-right:10px;" '); ?>
-												
 												<label for="no-publish" style="margin:0;cursor:pointer;">Không Cho phép hiển thị trên website</label>
 											</span>
 										</div>

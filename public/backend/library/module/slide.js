@@ -1,12 +1,16 @@
 $(document).ready(function(){
+	
 
+	$( function() {
+		$( ".tv.ui-sortable" ).sortable( "disable" );
+		$( ".tv.ui-sortable" ).denableSelection();
+	});
 	$(document).on('click','.delete-all', function(){
 		let id = [];
 		$('.checkbox-item:checked').each(function(){
 			let _this = $(this);
 		 	id.push(_this.val());
 		});
-
 		if(id.length > 0){
 			swal({
 				title: "Hãy chắc chắn rằng bạn muốn thực hiện thao tác này?",

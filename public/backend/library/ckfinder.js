@@ -66,18 +66,15 @@ function BrowseServerInput  (object, type){
 }
 
 function BrowseServerAlbum(object, type){
-
     if(typeof(type) == 'undefined'){
         type = 'Images';
     }
     var finder = new CKFinder();
     finder.resourceType = type;
-
     finder.selectActionFunction = function(fileUrl , data, allFiles ) {
         var files = allFiles;
         var li = '';
-        for(var i= 0 ; i < files.length; i++)
-        {
+        for(var i= 0 ; i < files.length; i++){
             fileUrl =  files[i].url.replace(BASE_URL, "/");
             li=li+ '<li class="tv-block ui-state-default">';
               li=li+  '<div class="tv-slide-container">';
@@ -89,11 +86,8 @@ function BrowseServerAlbum(object, type){
                             li=li+  '<div class="overlay"></div>';
                             li=li+   '<div class="delete-image"><i class="fa fa-trash" aria-hidden="true"></i></div>';
                             li=li+   '<div class="tv order"><input name="data['+k+'][order]"" value= "0" type="text"  class=" tv-input"></div>';
-                           
                           li=li+ '</div>';
-                         
                         li=li+  '</div>';
-
                     li=li+  '<div class="col-lg-9">';
                         li=li+ '<div class="tabs-container tv">';
                             li=li+ '<ul class="nav nav-tabs tv-nav-tabs">';
@@ -113,27 +107,16 @@ function BrowseServerAlbum(object, type){
                                 li=li+ '</div>';
                                 li=li+ '<div  class="tab-1 tab-pane">';
                                   li=li+'<div class="panel-body">';
-                                       
-                                           
                                             li=li+ '<div class="row mb5">';
-                                              
                                                 li=li+     '<div class="form-row">';
-                                                    
                                                       li=li+   '<input  placeholder="Mô tả..." name="data['+k+'][description]" type="text"  class="form-control m-b">';
                                                    li=li+  '</div>';
-                                               
                                            li=li+  '</div>';
                                             li=li+ '<div class="row mb18">';
-                                             
                                                li=li+      '<div class="form-row">';
-                                                       
                                                         li=li+ '<textarea  placeholder="Nội dung..." name="data['+k+'][content]"  class="form-control m-b"></textarea>';
                                                     li=li+ '</div>';
-                                                
                                             li=li+ '</div>';
-                                            
-                                      
-                                                                                               
                                    li=li+  '</div>';
                                 li=li+ '</div>';
                           li=li+  '</div>';
@@ -141,23 +124,14 @@ function BrowseServerAlbum(object, type){
                     li=li+ '</div>';
                 li=li+ '</div>';
             li=li+ '</li>';
-            
             k += 1;
-            
-
         }
         $('#sortable').append(li);
         $('.click-to-upload').hide();
         $('.upload-list').show();
-
     }
     finder.popup();
-
 }
-
-
-
-
 function BrowseServerPreview  (object, type){
 	if(typeof(type) == 'undefined'){
 		type = 'Images';
@@ -171,7 +145,6 @@ function BrowseServerPreview  (object, type){
     }
     finder.popup();
 }
-
 function BrowseServer (object, type){
 	if(typeof(type) == 'undefined'){
 		type = 'Images';
@@ -184,8 +157,6 @@ function BrowseServer (object, type){
     }
     finder.popup();
 }
-
-
 const editors = {};
 function ckeditor5(elementId){
     return  ClassicEditor

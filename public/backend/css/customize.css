@@ -833,6 +833,7 @@ table th {
 	height:250px !important;
 }
 
+
 .ui-sortable-placeholder{
 	border:0 !important;
 }
@@ -1578,11 +1579,7 @@ ul li{
 .sortui .ui-state-default.tv-block:first-child .thumb{
 	height:150px !important;
 }
-.tv-block{
-	display: block;
-	width: 100%!important;
-	font-weight: 500!important;
-}
+
 .form-horizontal.box{
 	margin-top: 0 !important;
 }
@@ -1614,6 +1611,10 @@ ul li{
 	height: 170px;
 	border-top: 1px solid #e3e3e3!important;
 	padding-top: 10px!important;
+	display: block;
+	width: 100%!important;
+	font-weight: 500!important;
+	cursor: default!important;
 }
 .tv-input{
 	width: 30px;
@@ -2521,11 +2522,5 @@ button.toast-close-button {
 
 .va-width-auto{
 	width: 100px;
-
-}
-#tv-off-sortable{
-	list-style: none;
-    padding-left: 0;
-    margin-top: 16px;
 }
 

@@ -75,7 +75,7 @@ class Translate extends BaseController
 		$moduleExtract = explode('_', $module);
 		$dataTrans=[];
 		$this->data['object'] = $this->AutoloadModel->_get_where([
-		 	'select' => 'tb2.id, tb3.title, tb3.url,tb3.language, tb3.content, tb3.description ',
+		 	'select' => 'tb2.id, tb3.title, tb3.url, tb3.language, tb3.content, tb3.description ',
 			'table' => $module.'_catalogue as tb1',
 			'join' => [
 				[
@@ -101,7 +101,6 @@ class Translate extends BaseController
 	 			'select' => 'id',
 				'where' => ['catalogueid' => $catalogueid],
 	 		],true);
-
 	 		$idTrans = array_column($idTrans, 'id');
 			$this->data['value'] = $check;
 			if(isset($check) && is_array($check) && $check != null){
@@ -137,7 +136,6 @@ class Translate extends BaseController
 	 					'table' => 'slide_translate',
 		 		 		'data' => $dataTrans,
 	 				]);
-					
 		 		if($slideTranslate > 0){
 		 			$session->setFlashdata('message-success', 'Tạo Bản Dịch Thành Công! Hãy tạo danh mục tiếp theo.');
  	 				return redirect()->to(BASE_URL.'backend/'.$moduleExtract[0].'/'.((count($moduleExtract) == 1) ? $moduleExtract[0] : $moduleExtract[1]).'/index');
@@ -165,7 +163,6 @@ class Translate extends BaseController
 	private function storeSlide($param = []){
 		helper(['text']);
 		$store = [
-			// 'objectid' => $param['objectid'],
 			'dataTrans' => $this->request->getPost('dataTrans'),
 			'language' => $param['language'],
 		];
