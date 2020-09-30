@@ -1,7 +1,34 @@
 $(document).ready(function(){
 	
+	$(document).on('click','.delete-image', function(){
+		$('#btn-submit-slide').addClass('js-btn-update');
+		return false;
+	});
 
-	$( function() {
+	$(document).on('click','.js-btn-update', function(){
+
+		swal({
+				title: "Hãy chắc chắn rằng bạn muốn thực hiện thao tác này?",
+				text: 'Các bản dịch sẽ bị thay đổi.',
+				type: "warning",
+				showCancelButton: true,
+				confirmButtonColor: "#DD6B55",
+				confirmButtonText: "Thực hiện!",
+				cancelButtonText: "Hủy bỏ!",
+				closeOnConfirm: false,
+				closeOnCancel: false },
+			function (isConfirm) {
+				if (isConfirm) {
+					$('#btn-submit-slide').removeClass('js-btn-update');
+					$('#btn-submit-slide').click();
+				} else {
+					swal("Hủy bỏ", "Thao tác bị hủy bỏ", "error");
+				}
+			});
+		return false;
+	});
+
+	$( function(){
 		$( ".tv.ui-sortable" ).sortable( "disable" );
 		$( ".tv.ui-sortable" ).denableSelection();
 	});

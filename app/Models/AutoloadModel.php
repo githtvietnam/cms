@@ -118,4 +118,10 @@ class AutoloadModel extends Model{
 		$result = $this->db->affectedRows();
 		return $result;
 	}
+	public function _update_batch(array $param = []){
+		$this->builder = $this->db->table($param['table']);	
+		$this->builder->updateBatch($param['data'], $param['field']);
+		$result = $this->db->affectedRows();
+		return $result;
+	}
 }

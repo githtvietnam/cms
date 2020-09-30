@@ -32,7 +32,7 @@ class Translate extends BaseController
 			'table' => $module.' as tb1',
 			'join' => [
 				[
-					$moduleExtract[0].'_translate as tb2','tb1.id = tb2.objectid AND tb2.language = \''.$language.'\' ','inner'
+					$moduleExtract[0].'_translate as tb2', 'tb1.id = tb2.objectid AND tb2.language = \''.$language.'\' ', 'inner'
 				]
 			],
 			'where' => ['tb1.id' => $objectid]
@@ -85,21 +85,21 @@ class Translate extends BaseController
 		 			$moduleExtract[0].'_translate as tb3','tb2.id = tb3.objectid AND tb3.language = \''.$this->currentLanguage().'\' ','inner'
 				],
 			],
-			'where' => ['tb1.id'=>$catalogueid, 'tb3.language' => $this->currentLanguage() ],
+			'where' => ['tb1.id' => $catalogueid, 'tb3.language' => $this->currentLanguage() ],
 		],true);
 		if(!isset($this->data['object']) || is_array($this->data['object']) == false || count($this->data['object']) == 0){
 		 	$session->setFlashdata('message-danger', 'Bản ghi không tồn tại!');
 		 	return redirect()->to(BASE_URL.'backend/'.$moduleExtract[0].'/'.((count($moduleExtract) == 1) ? $moduleExtract[0] : $moduleExtract[1]).'/index');
 		 }
 	 		$check = $this->AutoloadModel->_get_where([
-	 			'table' => 'slide_translate',
+	 			'table'  => 'slide_translate',
 	 			'select' => 'catalogueid, language, content, description, title, url',
-				'where' => ['catalogueid' => $catalogueid,'language' => $language],
+				'where'  => ['catalogueid' => $catalogueid,'language' => $language],
 	 		],true);//lay gia tri da dich do ra view
 	 		$idTrans = $this->AutoloadModel->_get_where([
-	 			'table' => 'slide',
+	 			'table'  => 'slide',
 	 			'select' => 'id',
-				'where' => ['catalogueid' => $catalogueid],
+				'where'  => ['catalogueid' => $catalogueid],
 	 		],true);
 	 		$idTrans = array_column($idTrans, 'id');
 			$this->data['value'] = $check;
@@ -111,13 +111,13 @@ class Translate extends BaseController
 			 		]);
 					$store = $this->storeSlide([
 			  			'language' => $language,
-			  			'method' => 'update',
+			  			'method'   => 'update',
 				 	]);	
 					$dataTrans = $this->dataTranslate($store, $idTrans, 'update', $catalogueid);
 					$slideTranslate = 0;
 				 	$slideTranslate =  $this->AutoloadModel->_create_batch([
 	 					'table' => 'slide_translate',
-		 		 		'data' => $dataTrans,
+		 		 		'data'  => $dataTrans,
 	 				]);
 			 		if($slideTranslate > 0){
 		 			$session->setFlashdata('message-success', 'Tạo Bản Dịch Thành Công! Hãy tạo danh mục tiếp theo.');
@@ -128,13 +128,13 @@ class Translate extends BaseController
 				if($this->request->getMethod() == 'post'){
 					$store = $this->storeSlide([
 			  			'language' => $language,
-			  			'method' => 'create',
+			  			'method'   => 'create',
 				 	]);
 				 	$dataTrans = $this->dataTranslate($store, $idTrans, 'create', $catalogueid);
 			 		$slideTranslate = 0;
 			 		$slideTranslate =  $this->AutoloadModel->_create_batch([
 	 					'table' => 'slide_translate',
-		 		 		'data' => $dataTrans,
+		 		 		'data'  => $dataTrans,
 	 				]);
 		 		if($slideTranslate > 0){
 		 			$session->setFlashdata('message-success', 'Tạo Bản Dịch Thành Công! Hãy tạo danh mục tiếp theo.');
@@ -164,7 +164,7 @@ class Translate extends BaseController
 		helper(['text']);
 		$store = [
 			'dataTrans' => $this->request->getPost('dataTrans'),
-			'language' => $param['language'],
+			'language'  => $param['language'],
 		];
 		if($param['method'] == 'create' && isset($param['method'])){	
  			$store['created_at'] = $this->currentTime;
@@ -210,7 +210,7 @@ class Translate extends BaseController
 			],
 		];
 		return [
-			'validate' => $validate,
+			'validate'      => $validate,
 			'errorValidate' => $errorValidate,
 		];
 	}

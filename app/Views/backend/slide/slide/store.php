@@ -136,7 +136,7 @@
 						</div>
 					</div>
 				</div>
-				<button type="submit" name="create" value="create" class="btn btn-primary block m-b pull-right">Lưu</button>
+				<button type="submit" name="create" value="create" id="btn-submit-slide" class=" btn btn-primary block m-b pull-right">Lưu</button>
 			</div>
 			<div class="col-lg-4">
 				<div class="ibox mb20">
