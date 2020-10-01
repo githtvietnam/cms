@@ -1,5 +1,16 @@
 /*+++++++++++++++++ MODULE BOOKING+++++++++++++++++++++*/
 /* FULLCALENDAR */
+.image.img-cover.tv{
+	border: 1px solid #e3e3e3;
+}
+.pd-20{
+	padding-left: 20px!important;
+	padding-right: 20px;
+}
+
+
+
+
 .list-time{}
 .list-time .btn-time{
 	position: relative;
@@ -829,6 +840,7 @@ table th {
 .sortui .ui-state-default:first-child {
     width: calc(40% - 2px);
 }
+
 .sortui .ui-state-default:first-child .thumb{
 	height:250px !important;
 }
@@ -1565,16 +1577,10 @@ ul li{
 	text-decoration: none;
 }
 
-..sortui .ui-state-default:first-child {
-    width: calc(20% - 2px)!important;
-}
+
 .thumb{
 	width:200px;
 	height: 150px!important;
-}
-
-.sortui .ui-state-default.tv-block:first-child {
-    width: calc(20% - 2px);
 }
 .sortui .ui-state-default.tv-block:first-child .thumb{
 	height:150px !important;
@@ -1588,7 +1594,6 @@ ul li{
 }
 
 .tv.order {
-    
     position: absolute;
     top: 5px;
     width: 23px;
@@ -1608,13 +1613,23 @@ ul li{
     
 }
 .tv-block{
-	height: 170px;
-	border-top: 1px solid #e3e3e3!important;
-	padding-top: 10px!important;
+	border-top: 2px solid #e3e3e3;
+	padding-top: 15px!important;
 	display: block;
 	width: 100%!important;
 	font-weight: 500!important;
 	cursor: default!important;
+	background: #ffffff!important;
+}
+.ibox-content.tv{
+	border: none;
+}
+
+.lable-language{
+	background: #fff;
+	font-weight: bold;
+	text-align: center;
+	padding: 30px 0 10px 0;
 }
 .tv-input{
 	width: 30px;
@@ -1639,7 +1654,7 @@ ul li{
 	height: 90px;
 }
 .tabs-container .panel-body {
-	padding:15px !important;
+	padding:0px;
 }
 .tabs-container .nav-tabs > li.active > a{
 	border:none!important;
@@ -1650,14 +1665,10 @@ ul li{
 .m-b{
 	margin-bottom: 10px!important
 }
-<<<<<<< HEAD
 .tv.style{
 	padding:20px 0 5px 20px;
 	font-weight: bold;
-=======
-
-
-=======
+}
 @media (min-width: 768px){
 	.modal-dialog {
 	    width: 600px;
@@ -2523,4 +2534,5 @@ button.toast-close-button {
 .va-width-auto{
 	width: 100px;
 }
+
 

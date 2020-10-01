@@ -75,7 +75,7 @@ class Translate extends BaseController
 		$moduleExtract = explode('_', $module);
 		$dataTrans=[];
 		$this->data['object'] = $this->AutoloadModel->_get_where([
-		 	'select' => 'tb2.id, tb3.title, tb3.url, tb3.language, tb3.content, tb3.description ',
+		 	'select' => 'tb2.id, tb3.title, tb2.image, tb2.order, tb3.url, tb3.language, tb3.content, tb3.description ',
 			'table' => $module.'_catalogue as tb1',
 			'join' => [
 				[
@@ -103,6 +103,7 @@ class Translate extends BaseController
 	 		],true);
 	 		$idTrans = array_column($idTrans, 'id');
 			$this->data['value'] = $check;
+			$this->data['language'] = $language;
 			if(isset($check) && is_array($check) && $check != null){
 				if($this->request->getMethod() == 'post'){
 					$deleteAll = $this->AutoloadModel->_delete([

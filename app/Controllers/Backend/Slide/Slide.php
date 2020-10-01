@@ -235,15 +235,14 @@ class Slide extends BaseController{
 					'table'  => $this->data['module'],
 					'where'  => ['catalogueid' => $id,]
 				],true);//lay ra id cua cac anh da xoa
-				if (isset($DeleteTranslate) && is_array($DeleteTranslate) && count($DeleteTranslate)){
-					foreach ($DeleteTranslate as $key => $val) {
-						$deleteTranslate = $this->AutoloadModel->_update([
-							'table' => $this->data['module'].'_translate',
-							'data'  => ['deleted_at' => 1],
-							'where' => ['objectid' => $val,]
-						]);
-					}
-				}
+				
+				$deleteTranslate = $this->AutoloadModel->_update([
+					'table' => $this->data['module'].'_translate',
+					'data'  => ['deleted_at' => 1],
+					'where' => ['catalogueid' => $id,]
+				]);
+					
+				
 	 		$session->setFlashdata('message-success', 'Xóa bản ghi thành công!');
 			}else{
 				$session->setFlashdata('message-danger', 'Có vấn đề xảy ra, vui lòng thử lại!');
