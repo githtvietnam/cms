@@ -104,7 +104,7 @@
 																			</div>
 																			<div class="row ">
 																				<?php  $title= isset($data[$key]['title'])? $data[$key]['title']: '' ?>
-																				<textarea  placeholder="Tên Slide..."  class="form-control m-b"  name="data[<?php echo $key ?>][title]"><?php echo $title  ?></textarea>
+																				<textarea  placeholder="Tên Slide..."  class="form-control m-b tv"  name="data[<?php echo $key ?>][title]"><?php echo $title  ?></textarea>
 																			</div>
 																		</div>
 																	</div>
@@ -118,7 +118,7 @@
 																			<div class="row mb18">
 																				<div class="form-row">
 																					<?php $content = isset($data[$key]['content'])? $data[$key]['content']: '' ?>
-																					<textarea  placeholder="Nội dung..."  class="form-control m-b"   name="data[<?php echo $key ?>][content]"><?php echo $content?></textarea>
+																					<textarea  placeholder="Nội dung..."  class="form-control m-b tv"   name="data[<?php echo $key ?>][content]"><?php echo $content?></textarea>
 																				</div>
 																			</div>
 																		</div>

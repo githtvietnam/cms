@@ -1580,7 +1580,7 @@ ul li{
 
 .thumb{
 	
-	height: 135px!important;
+	height: 150px!important;
 }
 .sortui .ui-state-default.tv-block:first-child .thumb{
 	height:150px !important;
@@ -1655,6 +1655,9 @@ ul li{
 }
 .tabs-container .panel-body {
 	padding:0px;
+}
+.form-control.tv{
+	height: 68px!important;
 }
 .tabs-container .nav-tabs > li.active > a{
 	border:none!important;
