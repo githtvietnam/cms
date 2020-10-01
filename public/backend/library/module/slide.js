@@ -51,7 +51,7 @@ $(document).ready(function(){
 				closeOnCancel: false },
 			function (isConfirm) {
 				if (isConfirm) {
-					var formURL = 'ajax/slight/delete';
+					var formURL = 'ajax/slide/delete';
 					$.post(formURL, {
 						id: id,},
 						function(data){
