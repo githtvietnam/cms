@@ -79,7 +79,7 @@
 												</script>
 												<li class="tv-block ui-state-default ui-sortable-handle">
 													<div class="tv-slide-container">
-														<div class="col-sm-3">
+														<div class="col-sm-4">
 															<div class="thumb tv">
 																<span class="image img-cover">
 																	<img src="<?php echo isset($data[$key]['image'])? $data[$key]['image']: '' ?>" alt="" /> 
@@ -90,7 +90,7 @@
 																<div class="tv order"><input  value="<?php echo isset($data[$key]['order'])? $data[$key]['order']: 0 ?>" type="text"  class=" tv-input" name="data[<?php echo $key ?>][order]"></div>
 															</div>
 														</div>
-														<div class="col-lg-9">
+														<div class="col-lg-8">
 															<div class="tabs-container tv">
 																<ul class="nav nav-tabs tv-nav-tabs">
 																	<li class=" tab-0 tab-pane active"><a href=".tab-0" aria-expanded="true"> Thông tin chung</a></li>

@@ -28,7 +28,7 @@
 												</script>
 												<li class="tv-block ui-state-default translate pd-20">
 													<div class="tv-slide-container">
-														<div class="col-lg-4">
+														<div class="col-lg-5">
 															<div class="thumb tv">
 																<span class="image img-cover tv">
 																	<img src="<?php echo isset($object[$key]['image'])? $object[$key]['image']: '' ?>" alt="" /> 
@@ -36,7 +36,7 @@
 																</span>
 															</div>
 														</div>
-														<div class="col-lg-8">
+														<div class="col-lg-7">
 															<div class="tabs-container tv">
 																<div class="tab-content">
 																	<div  class="tab-0 tab-pane active">
