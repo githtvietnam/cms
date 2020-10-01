@@ -301,7 +301,7 @@ class Slide extends BaseController{
 	private function condition_keyword($keyword = ''): string{
 		if(!empty($this->request->getGet('keyword'))){
 			$keyword = $this->request->getGet('keyword');
-			$keyword = '(title LIKE \'%'.$keyword.'%\' OR name LIKE \'%'.$keyword.'%\' )';
+			$keyword = '(title LIKE \'%'.$keyword.'%\' OR title LIKE \'%'.$keyword.'%\' )';
 		}
 		return $keyword;
 	}

@@ -89,7 +89,7 @@
 						$text = 'Tiếng Anh';
 					}else{
 						if ($language == 'jp')
-							$text = 'Tieengs Nhật';
+							$text = 'Tiếng Nhật';
 					}
 
 				 ?>

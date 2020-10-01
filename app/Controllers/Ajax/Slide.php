@@ -30,16 +30,4 @@ class Slide extends BaseController{
 		}
 		echo $flag;die();
 	}
-	public function update_by_field(){
-		$post['id'] = $this->request->getPost('id');
-		$post['module'] = $this->request->getPost('module');
-		$post['value'] = $this->request->getPost('value');
-		$post['field'] = $this->request->getPost('field');
-		
-		$flag = $this->AutoloadModel->_update([
-			'table' => $post['module'],
-			'data' => [$post['field'] => $post['value']]
-		]);
-
-	}
 }
