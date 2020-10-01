@@ -1579,8 +1579,8 @@ ul li{
 
 
 .thumb{
-	width:200px;
-	height: 150px!important;
+	
+	height: 135px!important;
 }
 .sortui .ui-state-default.tv-block:first-child .thumb{
 	height:150px !important;
@@ -1641,7 +1641,7 @@ ul li{
 	border:none;
 }
 .tabs-container.tv{
-	padding:0 5px;
+	padding:0 20px 0 10px ;
 }
 .tab-pane>a{
 	color: #eee;
