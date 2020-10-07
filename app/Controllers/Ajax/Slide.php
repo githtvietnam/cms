@@ -30,4 +30,25 @@ class Slide extends BaseController{
 		}
 		echo $flag;die();
 	}
+	public function echoview(){
+		$file = $this->request->getPost('file');
+		$count = $this->request->getPost('count');
+		$fileData = [];
+		if (isset($file) && is_array($file) && count($file)){
+			foreach ($file as $key => $value) {
+				$fileData[$key]['image'] = $value;
+				$fileData[$key]['order'] = 0;
+				$fileData[$key]['url'] = '';
+				$fileData[$key]['title'] = '';
+				$fileData[$key]['description'] = '';
+				$fileData[$key]['content'] = '';
+			}
+		}
+		$html = view('backend/dashboard/common/slideblock', ['listSlide' => $fileData, 'count' => $count], ['saveData' => true]);
+		echo json_encode([
+			'fileData' => $fileData,
+			'html' => $html,
+		]);
+		die();
+	}
 }

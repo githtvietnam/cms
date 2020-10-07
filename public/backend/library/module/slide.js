@@ -9,7 +9,7 @@ $(document).ready(function(){
 
 		swal({
 				title: "Hãy chắc chắn rằng bạn muốn thực hiện thao tác này?",
-				text: 'Các bản dịch sẽ bị thay đổi.',
+				text: 'Nếu bạn xóa nhóm Slide này, thì toàn bộ tất cả các bản dịch của slide sẽ bị xóa.',
 				type: "warning",
 				showCancelButton: true,
 				confirmButtonColor: "#DD6B55",
@@ -30,7 +30,6 @@ $(document).ready(function(){
 
 	$( function(){
 		$( ".tv.ui-sortable" ).sortable( "disable" );
-		$( ".tv.ui-sortable" ).denableSelection();
 	});
 	$(document).on('click','.delete-all', function(){
 		let id = [];

@@ -24,11 +24,16 @@ class Slide extends BaseController{
 		$where = $this->condition_where();
 		$keyword = $this->condition_keyword();
 		$config['total_rows'] = $this->AutoloadModel->_get_where([
-			'select'   => 'id',
-			'table'    => $this->data['module'].'_catalogue',
+			'select'   => 'tb1.id',
+			'table'    => $this->data['module'].'_catalogue as tb1',
+			'join' => [
+				[
+					$this->data['module'].'_translate as tb2', 'tb1.id = tb2.catalogueid', 'inner'
+				],
+			],
 			'keyword'  => $keyword,
 			'where'    => $where,
-			'group_by' => 'id',
+			'group_by' => 'tb1.id',
 			'count'    => TRUE
 		]);
 		if($config['total_rows'] > 0){
@@ -41,15 +46,21 @@ class Slide extends BaseController{
 			$page = $page - 1;
 			$languageDetact = $this->detect_language();
 			$this->data['slideList'] = $this->AutoloadModel->_get_where([
-				'select' => 'id, title, keyword, userid_created, userid_updated, created_at, updated_at,'.((isset($languageDetact['select'])) ? $languageDetact['select'] : ''),
-				'table'    => $this->data['module'].'_catalogue',
+				'select' => 'tb1.id, tb1.title, tb1.keyword, tb1.userid_created, tb1.userid_updated, tb1.created_at, tb1.updated_at,'.((isset($languageDetact['select'])) ? $languageDetact['select'] : ''),
+				'table'    => $this->data['module'].'_catalogue as tb1',
+				'join' => [
+					[
+						$this->data['module'].'_translate as tb2', 'tb1.id = tb2.catalogueid ', 'inner'
+					],
+				],
 				'where'    => $where,
 				'keyword'  => $keyword,
 				'limit'    => $config['per_page'],
 				'start'    => $page * $config['per_page'],
-				'order_by' => 'id desc',
-				'group_by' => 'id'
+				'order_by' => 'tb1.id desc',
+				'group_by' => 'tb1.id'
 			], TRUE);
+			 //pre($this->data['slideList']);
 		}
 		$this->data['template'] = 'backend/slide/slide/index';
 		return view('backend/dashboard/layout/home', $this->data);
@@ -262,9 +273,9 @@ class Slide extends BaseController{
 		$i = 3;
 		if(isset($languageList) && is_array($languageList) && count($languageList)){
 			foreach($languageList as $key => $val){
-				$select = $select.'(SELECT COUNT(catalogueid) FROM slide_translate  WHERE slide_translate.catalogueid = slide_catalogue.id AND slide_translate.language = "'.$val['canonical'].'") as '.$val['canonical'].'_detect, ';
+				$select = $select.'(SELECT  COUNT(catalogueid) FROM slide_translate WHERE slide_translate.catalogueid = tb1.id AND slide_translate.language = "'.$val['canonical'].'") as '.$val['canonical'].'_detect, ';
 				$i++;
-			}	
+			}
 		}
 		return [
 			'select' => $select,
@@ -291,17 +302,24 @@ class Slide extends BaseController{
 	private function condition_where(){
 		$where = [];
 		$deleted_at = $this->request->getGet('deleted_at');
+		$publish = $this->request->getGet('publish');
 		if(isset($deleted_at)){
-			$where['deleted_at'] = $deleted_at;
+			$where['tb1.deleted_at'] = $deleted_at;
 		}else{
-			$where['deleted_at'] = 0;
+			$where['tb1.deleted_at'] = 0;
 		}
+		// if(isset($publish)){
+		// 	$where['publish'] = $publish;
+		// }else{
+		// 	$where['publish'] = 0;
+		// }
+		$where['tb2.language'] = $this->currentLanguage();
 		return $where;
 	}
 	private function condition_keyword($keyword = ''): string{
 		if(!empty($this->request->getGet('keyword'))){
 			$keyword = $this->request->getGet('keyword');
-			$keyword = '(title LIKE \'%'.$keyword.'%\' OR title LIKE \'%'.$keyword.'%\' )';
+			$keyword = '(tb1.title LIKE \'%'.$keyword.'%\' OR tb1.keyword LIKE \'%'.$keyword.'%\' )';
 		}
 		return $keyword;
 	}

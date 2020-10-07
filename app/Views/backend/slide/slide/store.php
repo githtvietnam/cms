@@ -69,66 +69,20 @@
 									</div>
 									<div class="small-text">Sử dụng nút <b>Chọn hình</b> để thêm hình.</div>
 								</div>
+								<?php $count = 0; ?>
+								<script type="text/javascript">
+									var count = <?php echo $count ?>;
+								</script>
 								<div class="upload-list" <?php echo (isset($slide_catalogue['data']))?'':'style="display:none"' ?> style="padding:5px;">
 									<div class="row"> 
 										<ul id="sortable" class="tv clearfix sortui">
 											<?php if(isset($data) && is_array($data) && count($data)){ ?>
-											<?php foreach($data as $key => $val){ ?>
-												<script type="text/javascript">
-													var k = <?php echo $key+1 ?>;
-												</script>
-												<li class="tv-block ui-state-default ui-sortable-handle">
-													<div class="tv-slide-container">
-														<div class="col-sm-4">
-															<div class="thumb tv">
-																<span class="image img-cover">
-																	<img src="<?php echo isset($data[$key]['image'])? $data[$key]['image']: '' ?>" alt="" /> 
-																	<input type="hidden" value="<?php echo isset($data[$key]['image'])? $data[$key]['image']: '' ?>" name="data[<?php echo $key ?>][image]" />
-																</span>
-																<div class="overlay"></div>
-																<div class="delete-image"><i class="fa fa-trash" aria-hidden="true"></i></div>
-																<div class="tv order"><input  value="<?php echo isset($data[$key]['order'])? $data[$key]['order']: 0 ?>" type="text"  class=" tv-input" name="data[<?php echo $key ?>][order]"></div>
-															</div>
-														</div>
-														<div class="col-lg-8">
-															<div class="tabs-container tv">
-																<ul class="nav nav-tabs tv-nav-tabs">
-																	<li class=" tab-0 tab-pane active"><a href=".tab-0" aria-expanded="true"> Thông tin chung</a></li>
-																	<li class="tab-1 tab-pane"><a href=".tab-1" aria-expanded="false">SEO</a></li>
-																</ul>
-																<div class="tab-content">
-																	<div  class="tab-0 tab-pane active">
-																		<div class="panel-body">
-																			<div class="row mb5">
-																				<input  placeholder="URL..." type="text"  class="form-control m-b" name="data[<?php echo $key ?>][url]" value="<?php echo isset($data[$key]['url'])? $data[$key]['url']: '' ?>">
-																			</div>
-																			<div class="row ">
-																				<?php  $title= isset($data[$key]['title'])? $data[$key]['title']: '' ?>
-																				<textarea  placeholder="Tên Slide..."  class="form-control m-b tv"  name="data[<?php echo $key ?>][title]"><?php echo $title  ?></textarea>
-																			</div>
-																		</div>
-																	</div>
-																	<div  class="tab-1 tab-pane">
-																		<div class="panel-body">
-																			<div class="row mb5">
-																				<div class="form-row">
-																					<input  placeholder="Mô tả..." type="text"  class="form-control m-b" name="data[<?php echo $key ?>][description]" value="<?php echo isset($data[$key]['description'])? $data[$key]['description']: ''; ?>">
-																				</div>
-																			</div>
-																			<div class="row mb18">
-																				<div class="form-row">
-																					<?php $content = isset($data[$key]['content'])? $data[$key]['content']: '' ?>
-																					<textarea  placeholder="Nội dung..."  class="form-control m-b tv"   name="data[<?php echo $key ?>][content]"><?php echo $content?></textarea>
-																				</div>
-																			</div>
-																		</div>
-																	</div>
-																</div>
-															</div>
-														</div>
-													</div>
-												</li>
-											<?php }}   ?>
+                                                <?php 
+                                                	$_data['listSlide'] = $data;
+                                                	$_data['count'] = $count;
+                                                 ?>
+                                                <?php echo view('backend/dashboard/common/slideblock', $_data); ?>
+                                          	<?php }  ?>
 										</ul>
 									</div>
 								</div>

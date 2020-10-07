@@ -30,7 +30,7 @@
 							if($permission == ''){
 								$permission = json_decode($user_catalogue['permission'], TRUE);
 							}
-							// pre($permission);
+							 //pre($permission);
 
 						?>
 						<?php if(isset($folder) && is_array($folder) && count($folder)){ ?>
@@ -40,7 +40,7 @@
 						<?php 
 							$xml = simplexml_load_file($dir.'/'.$val.'/permission.xml') or die('Error: Cannot create object '.$dir.'/'.$val.'/permission.xml');  
 							$xml = json_decode(json_encode((array)$xml), TRUE);
-							// pre($xml);
+							 pre($xml);
 						?>
 						<?php if(isset($xml['permissions']) && is_array($xml['permissions']) && count($xml['permissions'])){ ?>
 						<?php foreach($xml['permissions'] as $keyXml => $valPermission){ ?>

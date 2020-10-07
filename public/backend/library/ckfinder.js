@@ -73,62 +73,23 @@ function BrowseServerAlbum(object, type){
     finder.resourceType = type;
     finder.selectActionFunction = function(fileUrl , data, allFiles ) {
         var files = allFiles;
-        var li = '';
+        var file = {};
+
         for(var i= 0 ; i < files.length; i++){
-            fileUrl =  files[i].url.replace(BASE_URL, "/");
-            li=li+ '<li class="tv-block ui-state-default">';
-              li=li+  '<div class="tv-slide-container">';
-                  li=li+   '<div class="col-sm-3">';
-                      li=li+  '<div class="thumb tv">';
-                        li=li+  '<span class="image img-cover">';
-                          li=li+    '<img src="'+fileUrl+'" alt="" /> <input type="hidden" value="'+fileUrl+'" name="data['+k+'][image]" />';
-                            li=li+  '</span>';
-                            li=li+  '<div class="overlay"></div>';
-                            li=li+   '<div class="delete-image"><i class="fa fa-trash" aria-hidden="true"></i></div>';
-                            li=li+   '<div class="tv order"><input name="data['+k+'][order]"" value= "0" type="text"  class=" tv-input"></div>';
-                          li=li+ '</div>';
-                        li=li+  '</div>';
-                    li=li+  '<div class="col-lg-9">';
-                        li=li+ '<div class="tabs-container tv">';
-                            li=li+ '<ul class="nav nav-tabs tv-nav-tabs">';
-                                li=li+ '<li class=" tab-0 tab-pane active"><a href=".tab-0" aria-expanded="true"> Thông tin chung</a></li>';
-                                li=li+ '<li class="tab-1 tab-pane"><a href=".tab-1" aria-expanded="false">SEO</a></li>';
-                            li=li+ '</ul>';
-                            li=li+ '<div class="tab-content">';
-                                li=li+ '<div  class="tab-0 tab-pane active">';
-                                   li=li+  '<div class="panel-body">';
-                                    li=li+ '<div class="row mb5">';
-                                          li=li+   '<input  placeholder="URL..." type="text" name="data['+k+'][url]"  class="form-control m-b">';
-                                          li=li+ '</div>';
-                                          li=li+ '<div class="row ">';
-                                          li=li+   '<textarea  placeholder="Tên slide..." name="data['+k+'][title]"  class="form-control m-b"></textarea>';
-                                          li=li+ '</div>'; 
-                                    li=li+ '</div>';
-                                li=li+ '</div>';
-                                li=li+ '<div  class="tab-1 tab-pane">';
-                                  li=li+'<div class="panel-body">';
-                                            li=li+ '<div class="row mb5">';
-                                                li=li+     '<div class="form-row">';
-                                                      li=li+   '<input  placeholder="Mô tả..." name="data['+k+'][description]" type="text"  class="form-control m-b">';
-                                                   li=li+  '</div>';
-                                           li=li+  '</div>';
-                                            li=li+ '<div class="row mb18">';
-                                               li=li+      '<div class="form-row">';
-                                                        li=li+ '<textarea  placeholder="Nội dung..." name="data['+k+'][content]"  class="form-control m-b"></textarea>';
-                                                    li=li+ '</div>';
-                                            li=li+ '</div>';
-                                   li=li+  '</div>';
-                                li=li+ '</div>';
-                          li=li+  '</div>';
-                        li=li+ '</div>';
-                    li=li+ '</div>';
-                li=li+ '</div>';
-            li=li+ '</li>';
-            k += 1;
+            file[i] =  files[i].url.replace(BASE_URL, "/");
         }
-        $('#sortable').append(li);
-        $('.click-to-upload').hide();
-        $('.upload-list').show();
+
+        var formURL = 'ajax/slide/echoview';
+        $.post(formURL, {
+            file: file,
+            count: count
+        },
+            function(data){
+               let json = JSON.parse(data);
+                $('#sortable').append(json.html);
+                $('.click-to-upload').hide();
+                $('.upload-list').show();
+            });
     }
     finder.popup();
 }

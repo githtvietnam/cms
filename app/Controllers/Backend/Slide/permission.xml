@@ -2,7 +2,7 @@
 <module>
 	
 	<permissions>
-		<title>Slide - [Slide]</title>
+		<title>Slide</title>
 		<item>
 			<param>backend/slide/slide/index</param>
 			<description>Xem</description>
@@ -19,44 +19,9 @@
 			<param>backend/slide/slide/delete</param>
 			<description>Xóa</description>
 		</item>
-	</permissions>
-	<permissions>
-		<title>Upload</title>
-		<item>
-			<param>All</param>
-			<description>Toàn quyền</description>
-		</item>
-		<item>
-			<param>folderView</param>
-			<description>Xem Folder</description>
-		</item>
-		<item>
-			<param>folderCreate</param>
-			<description>Thêm Folder</description>
-		</item>
-		<item>
-			<param>folderRename</param>
-			<description>Đổi tên Folder</description>
-		</item>
-		<item>
-			<param>folderDelete</param>
-			<description>Xóa Folder</description>
-		</item>
-		<item>
-			<param>fileView</param>
-			<description>Xem File</description>
-		</item>
-		<item>
-			<param>fileUpload</param>
-			<description>Upload File</description>
-		</item>
-		<item>
-			<param>fileRename</param>
-			<description>Đổi tên File</description>
-		</item>
-		<item>
-			<param>fileDelete</param>
-			<description>Xóa File</description>
-		</item>
+		<!-- <item>
+			<param>backend/slide/translate/translate</param>
+			<description>Dịch</description>
+		</item> -->
 	</permissions>
 </module>
