@@ -8,6 +8,6 @@
         	'sb_setting' => 'Cấu hình chung',
         	'sb_language' => 'QL Ngôn Ngữ',
             'sb_config' => 'Cấu hình chung',
-            'sb_slight' => 'Banner and Slight',
+            'sb_slide' => 'QL Banner',
         ],
     ];

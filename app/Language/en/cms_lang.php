@@ -8,7 +8,7 @@
         	'sb_setting' => 'Setting',
         	'sb_language' => 'Language',
             'sb_config' => 'General Configuration',
-            'sb_slight' => 'Banner and Slight',
+            'sb_slide' => 'Banner Management',
 
         ],
     ];

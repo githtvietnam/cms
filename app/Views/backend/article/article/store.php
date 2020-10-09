@@ -219,10 +219,8 @@
 									<?php echo form_dropdown('catalogueid', $dropdown, set_value('catalogueid', (isset($article['catalogueid'])) ? $article['catalogueid'] : ''), 'class="form-control m-b select2"');?>
 								</div>
 
-								
-
 								<script>
-									var catalogue = <?php echo (isset($_POST['catalogue'])) ? json_encode($_POST['catalogue']) : ((isset($article['catalogue']) && $article['catalogue'] != null) ? $article['catalogue'] : '') ?>;	
+									var catalogue = '<?php echo (isset($_POST['catalogue'])) ? json_encode($_POST['catalogue']) : ((isset($article['catalogue']) && $article['catalogue'] != null) ? $article['catalogue'] : '');  ?>';	
 								</script>
 								<div class="form-row mt20">
 										<label class="control-label text-left">
@@ -230,7 +228,7 @@
 										</label>
 										
 										<div class="form-row">
-											<?php echo form_dropdown('catalogue[]', '', NULL, 'class="form-control selectMultiple" multiple="multiple" data-title="Nhập 2 kí tự để tìm kiếm.."  style="width: 100%;" data-module="'.$module.'_catalogue" data-select="title"'); ?>
+											<?php echo form_dropdown('catalogue[]', '', NULL, 'class="form-control selectMultiple" multiple="multiple" data-title="Nhập 2 kí tự để tìm kiếm..."  style="width: 100%;" data-join="'.$module.'_translate" data-module="'.$module.'_catalogue" data-select="title"'); ?>
 										</div>
 									</div>
 							</div>

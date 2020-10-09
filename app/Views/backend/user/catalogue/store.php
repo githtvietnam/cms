@@ -40,7 +40,7 @@
 						<?php 
 							$xml = simplexml_load_file($dir.'/'.$val.'/permission.xml') or die('Error: Cannot create object '.$dir.'/'.$val.'/permission.xml');  
 							$xml = json_decode(json_encode((array)$xml), TRUE);
-							 pre($xml);
+							 //pre($xml);
 						?>
 						<?php if(isset($xml['permissions']) && is_array($xml['permissions']) && count($xml['permissions'])){ ?>
 						<?php foreach($xml['permissions'] as $keyXml => $valPermission){ ?>

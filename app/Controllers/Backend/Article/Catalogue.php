@@ -25,9 +25,6 @@ class Catalogue extends BaseController{
  			return redirect()->to(BASE_URL.'backend/dashboard/dashboard/index');
 		}
 
-		
-
-
 		helper(['mypagination']);
 		$page = (int)$page;
 		$perpage = ($this->request->getGet('perpage')) ? $this->request->getGet('perpage') : 20;
@@ -45,12 +42,11 @@ class Catalogue extends BaseController{
 
 			$this->pagination->initialize($config);
 			$this->data['pagination'] = $this->pagination->create_links();
-
-
 			$totalPage = ceil($config['total_rows']/$config['per_page']);
 			$page = ($page <= 0)?1:$page;
 			$page = ($page > $totalPage)?$totalPage:$page;
 			$page = $page - 1;
+
 
 			$languageDetact = $this->detect_language();
 			$this->data['articleCatalogueList'] = $this->AutoloadModel->_get_where([
@@ -58,8 +54,8 @@ class Catalogue extends BaseController{
 				'table' => $this->data['module'].' as tb1',
 				'join' =>  [
 					[
-						'article_translate as tb2','tb1.id = tb2.objectid AND tb2.language = \''.$this->currentLanguage().'\' ','inner'
-					]
+						'article_translate as tb2','tb1.id = tb2.objectid AND tb2.module = \''.$this->data['module'].'\'   AND tb2.language = \''.$this->currentLanguage().'\' ','inner'
+					],
 				],
 				'where' => $where,
 				'keyword' => $keyword,
@@ -69,7 +65,6 @@ class Catalogue extends BaseController{
 			], TRUE);
 
 		}
-		// pre($this->data['articleCatalogueList']);
 
 		$this->data['template'] = 'backend/article/catalogue/index';
 		return view('backend/dashboard/layout/home', $this->data);
@@ -82,7 +77,6 @@ class Catalogue extends BaseController{
 			$validate = $this->validation();
 			if ($this->validate($validate['validate'], $validate['errorValidate'])){
 		 		$insert = $this->store(['method' => 'create']);
-
 		 		$resultid = $this->AutoloadModel->_insert([
 		 			'table' => $this->data['module'],
 		 			'data' => $insert,
@@ -117,9 +111,15 @@ class Catalogue extends BaseController{
 	public function update($id = 0){
 		$id = (int)$id;
 		$this->data[$this->data['module']] = $this->AutoloadModel->_get_where([
-			'select' => 'id, title, canonical, description, content, meta_title, meta_description, parentid, image, album, publish',
-			'table' => $this->data['module'],
-			'where' => ['id' => $id,'deleted_at' => 0]
+			'select' => 'tb1.id, tb2.title, tb2.canonical, tb2.description, tb2.content, tb2.meta_title, tb2.meta_description, tb1.parentid, tb1.image, tb1.album, tb1.publish',
+
+			'table' => $this->data['module'].' as tb1',
+			'join' =>  [
+					[
+						'article_translate as tb2','tb1.id = tb2.objectid AND tb2.language = \''.$this->currentLanguage().'\' ','inner'
+					]
+				],
+			'where' => ['tb1.id' => $id,'tb1.deleted_at' => 0]
 		]);
 
 		$this->data[$this->data['module']]['description'] = base64_decode($this->data[$this->data['module']]['description']);
@@ -129,10 +129,12 @@ class Catalogue extends BaseController{
 			$session->setFlashdata('message-danger', 'Nhóm Bài Viết không tồn tại');
  			return redirect()->to(BASE_URL.'backend/article/catalogue/index');
 		}
+
 		if($this->request->getMethod() == 'post'){
 			$validate = $this->validation();
 			if ($this->validate($validate['validate'], $validate['errorValidate'])){
 		 		$update = $this->store(['method' => 'update']);
+		 		$updateLanguage = $this->storeLanguage($id);
 		 		$flag = $this->AutoloadModel->_update([
 		 			'table' => $this->data['module'],
 		 			'where' => ['id' => $id],
@@ -140,6 +142,11 @@ class Catalogue extends BaseController{
 		 		]);
 
 		 		if($flag > 0){
+		 			$flag = $this->AutoloadModel->_update([
+			 			'table' => 'article_translate',
+			 			'where' => ['objectid' => $id],
+			 			'data' => $updateLanguage
+			 		]);
 
 		 			$this->nestedsetbie->Get('level ASC, order ASC');
 					$this->nestedsetbie->Recursive(0, $this->nestedsetbie->Set());
@@ -164,9 +171,14 @@ class Catalogue extends BaseController{
 
 		$id = (int)$id;
 		$this->data[$this->data['module']] = $this->AutoloadModel->_get_where([
-			'select' => 'id, title, lft, rgt',
-			'table' => $this->data['module'],
-			'where' => ['id' => $id,'deleted_at' => 0]
+			'select' => 'tb1.id, tb2.title, tb1.lft, tb1.rgt',
+			'table' => $this->data['module'].' as tb1',
+			'join' =>  [
+					[
+						'article_translate as tb2','tb1.id = tb2.objectid AND tb2.language = \''.$this->currentLanguage().'\' ','inner'
+					]
+				],
+			'where' => ['tb1.id' => $id,'tb1.deleted_at' => 0]
 		]);
 		$session = session();
 		if(!isset($this->data[$this->data['module']]) || is_array($this->data[$this->data['module']]) == false || count($this->data[$this->data['module']]) == 0){
@@ -177,25 +189,25 @@ class Catalogue extends BaseController{
 		if($this->request->getPost('delete')){
 			$_id = $this->request->getPost('id');
 		
-			$flag = $this->AutoloadModel->_update([
-				'table' => $this->data['module'],
-				'data' => ['deleted_at' => 1],
-				'where' => [
-					'lft >=' => $this->data[$this->data['module']]['lft'],
-					'rgt <=' => $this->data[$this->data['module']]['rgt'],
-				]
-			]);
+			// $flag = $this->AutoloadModel->_update([
+			// 	'table' => $this->data['module'],
+			// 	'data' => ['deleted_at' => 1],
+			// 	'where' => [
+			// 		'lft >=' => $this->data[$this->data['module']]['lft'],
+			// 		'rgt <=' => $this->data[$this->data['module']]['rgt'],
+			// 	]
+			// ]);
 
-			$session = session();
-			if($flag > 0){
-				$this->nestedsetbie->Get('level ASC, order ASC');
-				$this->nestedsetbie->Recursive(0, $this->nestedsetbie->Set());
-				$this->nestedsetbie->Action();
-	 			$session->setFlashdata('message-success', 'Xóa bản ghi thành công!');
-			}else{
-				$session->setFlashdata('message-danger', 'Có vấn đề xảy ra, vui lòng thử lại!');
-			}
-			return redirect()->to(BASE_URL.'backend/article/catalogue/index');
+			// $session = session();
+			// if($flag > 0){
+			// 	$this->nestedsetbie->Get('level ASC, order ASC');
+			// 	$this->nestedsetbie->Recursive(0, $this->nestedsetbie->Set());
+			// 	$this->nestedsetbie->Action();
+	 	// 		$session->setFlashdata('message-success', 'Xóa bản ghi thành công!');
+			// }else{
+			// 	$session->setFlashdata('message-danger', 'Có vấn đề xảy ra, vui lòng thử lại!');
+			// }
+			// return redirect()->to(BASE_URL.'backend/article/catalogue/index');
 		}
 
 		$this->data['template'] = 'backend/article/catalogue/delete';
@@ -262,6 +274,7 @@ class Catalogue extends BaseController{
  		}
  		return $store;
 	}
+	
 
 	private function detect_language(){
 		$languageList = $this->AutoloadModel->_get_where([

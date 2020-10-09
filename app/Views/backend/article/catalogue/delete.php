@@ -35,9 +35,12 @@
 								</div>
 							</div>
 						</div>
+						<script type="text/javascript">
+							var id = '<?php echo $article_catalogue['id'] ?>';
+						</script>
 						<div class="toolbox action clearfix">
 							<div class="uk-flex uk-flex-middle uk-button pull-right">
-								<button class="btn btn-danger btn-sm" name="delete" value="delete" type="submit">Xóa</button>
+								<button class="btn btn-danger btn-sm delete" name="delete" value="delete" type="submit">Xóa</button>
 							</div>
 						</div>
 					</div>

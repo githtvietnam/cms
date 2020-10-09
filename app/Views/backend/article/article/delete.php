@@ -1,3 +1,6 @@
+<script type="text/javascript">
+	var id = '<?php echo $article['id'] ?>';
+</script>
 <div class="row wrapper border-bottom white-bg page-heading">
 	<div class="col-lg-10">
 		<h2>Xóa Nhóm Thành Viên: <?php echo $article['title'] ?></h2>
@@ -37,7 +40,7 @@
 						</div>
 						<div class="toolbox action clearfix">
 							<div class="uk-flex uk-flex-middle uk-button pull-right">
-								<button class="btn btn-danger btn-sm" name="delete" value="delete" type="submit">Xóa</button>
+								<button class="btn btn-danger btn-sm delete" name="delete" value="delete" type="submit">Xóa</button>
 							</div>
 						</div>
 					</div>

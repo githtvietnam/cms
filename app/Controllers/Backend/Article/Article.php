@@ -11,6 +11,7 @@ class Article extends BaseController{
 	public function __construct(){
 		$this->data = [];
 		$this->data['module'] = 'article';
+		$this->data['module2'] = 'article_catalogue';
 		$this->nestedsetbie = new Nestedsetbie(['table' => $this->data['module'].'_catalogue','language' => $this->currentLanguage()]);
 
 	}
@@ -33,21 +34,26 @@ class Article extends BaseController{
 		$keyword = $this->condition_keyword();
 		$catalogue = $this->condition_catalogue();
 		$config['total_rows'] = $this->AutoloadModel->_get_where([
-			'select' => 'tb1.id',
+			'select' => 'tb1.id, tb4.title',
 			'table' => $this->data['module'].' as tb1',
 			'keyword' => $keyword,
 			'where' => $where,
 			'where_in' => $catalogue['where_in'],
 			'where_in_field' => $catalogue['where_in_field'],
 			'join' => [
-				[
-					'object_relationship as tb2', 'tb1.id = tb2.objectid AND tb2.module = \''.$this->data['module'].'\' ', 'inner'
+					[
+						'object_relationship as tb2', 'tb1.id = tb2.objectid AND tb2.module = \''.$this->data['module'].'\' ', 'inner'
+					],
+					[
+						'user as tb3','tb1.userid_created = tb3.id','inner'
+					],
+					[
+						'article_translate as tb4','tb1.id = tb4.objectid AND tb4.language = \''.$this->currentLanguage().'\' ','inner'
+					]
 				],
-			],
 			'group_by' => 'tb1.id',
-			'count' => TRUE
+			'count' => TRUE,
 		]);
-
 
 		if($config['total_rows'] > 0){
 			$config = pagination_config_bt(['url' => 'backend/article/article/index','perpage' => $perpage], $config);
@@ -60,10 +66,9 @@ class Article extends BaseController{
 			$page = ($page <= 0)?1:$page;
 			$page = ($page > $totalPage)?$totalPage:$page;
 			$page = $page - 1;
-
 			$languageDetact = $this->detect_language();
 			$this->data['articleList'] = $this->AutoloadModel->_get_where([
-				'select' => 'tb1.id, tb4.title, tb2.catalogueid, tb1.publish, tb1.order, tb1.userid_created, tb1.userid_updated, tb1.created_at, tb1.viewed, tb1.image, tb1.updated_at, tb3.fullname as creator, tb4.title as cat_title, tb4.id as cat_id, tb1.catalogue, '.((isset($languageDetact['select'])) ? $languageDetact['select'] : ''),
+				'select' => 'tb1.id, tb4.title, tb2.catalogueid, tb1.publish, tb1.order, tb1.userid_created, tb1.userid_updated, tb1.created_at, tb1.viewed, tb1.image, tb1.updated_at, tb3.fullname as creator, tb4.title as cat_title, tb4.id as cat_id, tb1.catalogue, tb2.objectid, '.((isset($languageDetact['select'])) ? $languageDetact['select'] : ''),
 				'table' => $this->data['module'].' as tb1',
 				'where' => $where,
 				'where_in' => $catalogue['where_in'],
@@ -77,7 +82,7 @@ class Article extends BaseController{
 						'user as tb3','tb1.userid_created = tb3.id','inner'
 					],
 					[
-						'article_translate as tb4','tb1.id = tb4.objectid AND tb4.language = \''.$this->currentLanguage().'\' ','inner'
+						'article_translate as tb4','tb1.catalogueid = tb4.objectid AND tb4.language = \''.$this->currentLanguage().'\' ','inner'
 					]
 				],
 				'limit' => $config['per_page'],
@@ -117,7 +122,7 @@ class Article extends BaseController{
 	 				$flag = $this->create_relationship($resultid);
 	 				if($flag > 0){
 	 					$session->setFlashdata('message-success', 'Tạo Bài Viết Thành Công! Hãy tạo danh mục tiếp theo.');
- 						return redirect()->to(BASE_URL.'backend/article/article/create');
+ 						return redirect()->to(BASE_URL.'backend/article/article/index');
 	 				}else{
 	 					$session->setFlashdata('message-danger', 'Có vấn đề xảy ra, vui lòng thử lại!');
 	 					return redirect()->to(BASE_URL.'backend/article/article/index');
@@ -138,12 +143,22 @@ class Article extends BaseController{
 	public function update($id = 0){
 		$id = (int)$id;
 		$this->data[$this->data['module']] = $this->AutoloadModel->_get_where([
-			'select' => 'id, title, canonical, description, content, meta_title, meta_description, catalogueid, image, album, publish, catalogue',
-			'table' => $this->data['module'],
-			'where' => ['id' => $id,'deleted_at' => 0]
-		]);
+			'select' => 'tb1.id, tb4.title, tb4.canonical, tb4.description, tb4.content, tb4.meta_title, tb4.meta_description, tb1.catalogueid, tb1.image, tb1.album, tb1.publish, tb1.catalogue',
 
-		
+			'table' => $this->data['module'].' as tb1',
+			'join' => [
+					[
+						'object_relationship as tb2', 'tb1.id = tb2.objectid AND tb2.module = \''.$this->data['module'].'\' ', 'inner'
+					],
+					[
+						'user as tb3','tb1.userid_created = tb3.id','inner'
+					],
+					[
+						'article_translate as tb4','tb1.id = tb4.objectid AND tb4.language = \''.$this->currentLanguage().'\' ','inner'
+					]
+				],
+			'where' => ['tb1.id' => $id,'tb1.deleted_at' => 0]
+		]);
 		$session = session();
 		if(!isset($this->data[$this->data['module']]) || is_array($this->data[$this->data['module']]) == false || count($this->data[$this->data['module']]) == 0){
 			$session->setFlashdata('message-danger', 'Bài Viết không tồn tại');
@@ -157,6 +172,7 @@ class Article extends BaseController{
 			$validate = $this->validation();
 			if ($this->validate($validate['validate'], $validate['errorValidate'])){
 		 		$update = $this->store(['method' => 'update']);
+		 		$updateLanguage = $this->storeLanguage($id);
 		 		$flag = $this->AutoloadModel->_update([
 		 			'table' => $this->data['module'],
 		 			'where' => ['id' => $id],
@@ -164,6 +180,11 @@ class Article extends BaseController{
 		 		]);
 
 		 		if($flag > 0){
+		 			$flagLang = $this->AutoloadModel->_update([
+			 			'table' => $this->data['module'].'_translate',
+			 			'where' => ['objectid' => $id],
+			 			'data' => $updateLanguage,
+			 		]);
 		 			$session->setFlashdata('message-success', 'Cập Nhật Bài Viết Thành Công!');
  					return redirect()->to(BASE_URL.'backend/article/article/index');
 		 		}
@@ -183,9 +204,20 @@ class Article extends BaseController{
 
 		$id = (int)$id;
 		$this->data[$this->data['module']] = $this->AutoloadModel->_get_where([
-			'select' => 'id, title',
-			'table' => $this->data['module'],
-			'where' => ['id' => $id,'deleted_at' => 0]
+			'select' => 'tb1.id, tb4.title ',
+			'table' => $this->data['module'].' as tb1',
+			'join' => [
+					[
+						'object_relationship as tb2', 'tb1.id = tb2.objectid AND tb2.module = \''.$this->data['module'].'\' ', 'inner'
+					],
+					[
+						'user as tb3','tb1.userid_created = tb3.id','inner'
+					],
+					[
+						'article_translate as tb4','tb1.id = tb4.objectid AND tb4.language = \''.$this->currentLanguage().'\' ','inner'
+					]
+				],
+			'where' => ['tb1.id' => $id,'tb1.deleted_at' => 0]
 		]);
 		$session = session();
 		if(!isset($this->data[$this->data['module']]) || is_array($this->data[$this->data['module']]) == false || count($this->data[$this->data['module']]) == 0){
@@ -194,15 +226,15 @@ class Article extends BaseController{
 		}
 
 		if($this->request->getPost('delete')){
-			$_id = $this->request->getPost('id');
+			// $_id = $this->request->getPost('id');
 		
-			$flag = $this->AutoloadModel->_update([
-				'table' => $this->data['module'],
-				'data' => ['deleted_at' => 1],
-				'where' => [
-					'id' => $_id
-				]
-			]);
+			// $flag = $this->AutoloadModel->_update([
+			// 	'table' => $this->data['module'],
+			// 	'data' => ['deleted_at' => 1],
+			// 	'where' => [
+			// 		'id' => $_id
+			// 	]
+			// ]);
 
 			$session = session();
 			if($flag > 0){
@@ -248,13 +280,17 @@ class Article extends BaseController{
 
 	public function condition_catalogue(){
 		$catalogueid = $this->request->getGet('catalogueid');
-
 		$id = [];	
 		if($catalogueid > 0){
 			$catalogue = $this->AutoloadModel->_get_where([
-				'select' => 'id, lft, rgt, title',
-				'table' => $this->data['module'].'_catalogue',
-				'where' => ['id' => $catalogueid],
+				'select' => 'tb1.id, tb1.lft, tb1.rgt, tb4.title',
+				'table' => $this->data['module'].'_catalogue as tb1',
+				'join' =>  [
+					[
+						'article_translate as tb4','tb1.id = tb4.objectid AND tb4.language = \''.$this->currentLanguage().'\' ','inner'
+					],
+									],
+				'where' => ['tb1.id' => $catalogueid],
 			]);
 
 			$catalogueChildren = $this->AutoloadModel->_get_where([
@@ -265,7 +301,6 @@ class Article extends BaseController{
 
 			$id = array_column($catalogueChildren, 'id');
 		}
-		
 		return [
 			'where_in' => $id,
 			'where_in_field' => 'tb2.catalogueid'
@@ -278,6 +313,8 @@ class Article extends BaseController{
 		$publish = $this->request->getGet('publish');
 		if(isset($publish)){
 			$where['tb1.publish'] = $publish;
+		}else{
+			$where['tb1.publish'] = 1;
 		}
 
 		$deleted_at = $this->request->getGet('deleted_at');
@@ -293,7 +330,7 @@ class Article extends BaseController{
 	private function condition_keyword($keyword = ''): string{
 		if(!empty($this->request->getGet('keyword'))){
 			$keyword = $this->request->getGet('keyword');
-			$keyword = '(tb1.title LIKE \'%'.$keyword.'%\')';
+			$keyword = '(tb4.title LIKE \'%'.$keyword.'%\')';
 		}
 		return $keyword;
 	}
@@ -358,7 +395,7 @@ class Article extends BaseController{
 		$i = 3;
 		if(isset($languageList) && is_array($languageList) && count($languageList)){
 			foreach($languageList as $key => $val){
-				$select = $select.'(SELECT COUNT(object_id) FROM slide_translate, slide WHERE  slide_translate.language = "'.$val['canonical'].'") as '.$val['canonical'].'_detect, ';
+				$select = $select.'(SELECT COUNT(objectid) FROM article_translate WHERE article_translate.objectid = tb1.id AND  article_translate.language = "'.$val['canonical'].'") as '.$val['canonical'].'_detect, ';
 				$i++;
 			}	
 		}

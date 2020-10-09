@@ -102,14 +102,18 @@ if (! function_exists('get_catalogue_object')){
 
 
 		$object = $model->_get_where([
-		  	'select' => 'id, title',
-            'table' => $param['module'].'_catalogue',
-            'where' => ['deleted_at' => 0],
+		  	'select' => 'tb1.id, tb4.title',
+            'table' => $param['module'].'_catalogue as tb1',
+            'join' => [
+	            		[
+							$param['module'].'_translate as tb4','tb1.id = tb4.objectid ','inner'
+						]
+					],
+            'where' => ['tb1.deleted_at' => 0],
             'where_in' => $param['catalogue'],
-            'where_in_field' => 'id',
-            'order_by' => 'title asc'
+            'where_in_field' => 'tb1.id',
+            'order_by' => 'tb4.title asc'
 		], TRUE);
-
 		return $object;
 		
 	}

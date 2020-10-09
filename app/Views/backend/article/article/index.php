@@ -80,6 +80,7 @@
                             </div>
                         </div>
                     </form>
+
                     <table class="table table-striped table-bordered table-hover dataTables-example">
                         <thead>
                         <tr>
@@ -102,8 +103,10 @@
                         </tr>
                         </thead>
                         <tbody>
+
                             <?php if(isset($articleList) && is_array($articleList) && count($articleList)){ ?>
                             <?php foreach($articleList as $key => $val){ ?>
+
                             <?php  
                                 $image = getthumb($val['image'], true);
                                 $catalogue = json_decode($val['catalogue'], TRUE);
@@ -119,6 +122,7 @@
                             <?php  
                                 $status = ($val['publish'] == 1) ? '<span class="text-success">Active</span>'  : '<span class="text-danger">Deactive</span>';
                             ?>
+
                             <tr id="post-<?php echo $val['id']; ?>" data-id="<?php echo $val['id']; ?>">
                                 <td>
                                     <input type="checkbox" name="checkbox[]" value="<?php echo $val['id']; ?>" class="checkbox-item">
@@ -135,7 +139,7 @@
                                                 <span style="color:#f00000;">Nhóm hiển thị: </span>
                                                 <a class="" style="color:#333;" href="<?php echo site_url('backend/article/article/index?catalogueid='.$val['cat_id']); ?>" title=""><?php echo $val['cat_title'] ?></a> 
                                                 <?php if(isset($cat_list) && is_array($cat_list) && count($cat_list)){ foreach($cat_list as $keyCat => $valCat){ ?>
-                                                    ,<a class="" style="color:#333;" href="<?php echo site_url('backend/article/article/index?catalogueid='.$valCat['id']); ?>" title=""><?php echo $valCat['title'] ?></a><?php echo ($keyCat + 1 < count($cat_list)) ? ',' : '' ?> 
+                                                    <a class="" style="color:#333;" href="<?php echo site_url('backend/article/article/index?catalogueid='.$valCat['id']); ?>" title=""><?php echo $valCat['title'] ?></a><?php echo ($keyCat + 1 < count($cat_list)) ? ',' : '' ?> 
                                                 <?php }} ?>
                                             </div>
                                         </div>
@@ -167,6 +171,7 @@
                                 </tr>
                             <?php } ?>
                         </tbody>
+
                     </table>
                     <div id="pagination">
                         <?php echo (isset($pagination)) ? $pagination : ''; ?>

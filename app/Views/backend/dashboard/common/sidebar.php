@@ -44,12 +44,12 @@
                     <li><a href="<?php echo base_url('backend/user/user/index') ?>"><?php echo translate('cms_lang.sidebar.sb_user', $language) ?></a></li>
                 </ul>
             </li>
-            <li class="<?php echo ( $uriModule == 'language' || $uriModule == 'system') ? 'active'  : '' ?>">
+            <li class="<?php echo ( $uriModule == 'language' || $uriModule == 'system' || $uriModule == 'slide') ? 'active'  : '' ?>">
                 <a href="index.html"><i class="fa fa-cog"></i> <span class="nav-label"><?php echo translate('cms_lang.sidebar.sb_setting', $language) ?></span> <span class="fa arrow"></span></a>
                 <ul class="nav nav-second-level">
                     <li><a href="<?php echo base_url('backend/language/language/index') ?>"><?php echo translate('cms_lang.sidebar.sb_language', $language) ?></a></li>
 
-                    <li><a href="<?php echo base_url('backend/slide/slide/index') ?>"><?php echo translate('cms_lang.sidebar.sb_slight', $language) ?></a></li>
+                    <li><a href="<?php echo base_url('backend/slide/slide/index') ?>"><?php echo translate('cms_lang.sidebar.sb_slide', $language) ?></a></li>
 
                     <li><a href="<?php echo base_url('backend/system/general/index') ?>">Cấu hình chung</a></li>
                 </ul>

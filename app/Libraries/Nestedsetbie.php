@@ -23,7 +23,7 @@ class Nestedsetbie{
 		$this->builder->select('tb1.id, tb2.title, tb1.parentid, tb1.lft, tb1.rgt, tb1.level, tb1.order');
 		$this->builder->join($moduleExtract[0].'_translate as tb2','tb1.id = tb2.objectid AND tb2.language = \''.$this->params['language'].'\' ', 'inner');
 		$this->builder->orderBy($order);
-		$this->builder->where(['tb1.deleted_at' => 0,]);
+		$this->builder->where(['tb1.deleted_at' => 0, 'tb2.module' => $this->params['table']]);
 		$result = $this->builder->get()->getResultArray();
 		$this->data = $result;
 	}

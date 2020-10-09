@@ -24,15 +24,17 @@ $(document).ready(function(){
 
 		$('.selectMultiple').each(function(){
 			let _this = $(this);
-			let select = _this.attr('data-select');
+			let select = _this.attr('data-select');		
 			let module = _this.attr('data-module');
-
+			let join = _this.attr('data-join');
+			console.log(join);
 			setTimeout(function(){
 				if(catalogue != ''){
 					$.post('ajax/dashboard/pre_select2', {
-						value: catalogue, module: module,select:select},
+						value: catalogue, module: module, select: select, join: join,},
 						function(data){
 							let json = JSON.parse(data);
+							console.log(json);
 							if(json.items!='undefined' && json.items.length){
 								for(let i = 0; i< json.items.length; i++){
 									var option = new Option(json.items[i].text, json.items[i].id, true, true);
@@ -415,7 +417,7 @@ function get_select2(object){
 
 	let module = object.attr('data-module');
 	let select = object.attr('data-select');
-	console.log(module);
+	let join = object.attr('data-join');
 	$('.selectMultiple').select2({
 			minimumInputLength: 2,
 			placeholder: 'Nhập tối thiểu 2 ký tự để tìm kiếm',
@@ -427,7 +429,10 @@ function get_select2(object){
 					data: function (params) {
 						return {
 							locationVal: params.term,
-							module:module,select: select,
+							module:module,
+							select: select,
+							join: join,
+
 						};
 					},
 					processResults: function (data) {

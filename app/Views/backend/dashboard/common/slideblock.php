@@ -29,8 +29,7 @@
 								<input  placeholder="URL..." type="text"  class="form-control m-b" name="data[<?php echo $count ?>][url]" value="<?php echo isset($val['url'])? $val['url']: '' ?>">
 							</div>
 							<div class="row ">
-								<?php  $title= isset($val['title'])? $val['title']: '' ?>
-								<textarea  placeholder="Tên Slide..."  class="form-control m-b tv"  name="data[<?php echo $count ?>][title]"><?php echo $title  ?></textarea>
+								<input  placeholder="Tiêu đề..." type="text"  class="form-control m-b tv-text" name="data[<?php echo $count ?>][title]" value="<?php echo isset($val['title'])? $val['title']: '' ?>">
 							</div>
 						</div>
 					</div>
@@ -43,8 +42,7 @@
 							</div>
 							<div class="row mb18">
 								<div class="form-row">
-									<?php $content = isset($val['content'])? $val['content']: '' ?>
-									<textarea  placeholder="Nội dung..."  class="form-control m-b tv"   name="data[<?php echo $count ?>][content]"><?php echo $content?></textarea>
+									<input  placeholder="Nội dung..." type="text"  class="form-control m-b tv-text" name="data[<?php echo $count ?>][content]" value="<?php echo isset($val['content'])? $val['content']: ''; ?>">
 								</div>
 							</div>
 						</div>
