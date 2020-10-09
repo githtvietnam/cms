@@ -85,7 +85,7 @@
 									$metaDescription = (isset($_POST['meta_description'])) ? $_POST['meta_description'] : ((isset($object['meta_description']) && $object['meta_description'] != '') ? $object['meta_description'] : 'Bạn Chưa nhập mô tả SEO cho bài viết') ;
 								?>
 								<div class="google">
-									<div class="g-title"><?php echo $metaTitle; ?></div>
+									<div class="g-titleNosub"><?php echo $metaTitle; ?></div>
 									<div class="g-link"><?php echo $googleLink ?></div>
 									<div class="g-description" id="metaDescription">
 										<?php echo $metaDescription; ?>

@@ -20,23 +20,23 @@ class Dashboard extends BaseController{
 	}
 
 	public function pre_select2(){
-		$param['value'] = $this->request->getPost('value');
+		$param['value'] = json_decode($this->request->getPost('value'));
 		$param['module'] = $this->request->getPost('module');
 		$param['select'] = $this->request->getPost('select');
-
-
+		$param['join'] = $this->request->getPost('join');
 		$object = [];
 		if($param['value'] != ''){
 			$object = $this->AutoloadModel->_get_where([
 				'select' => 'tb1.id, tb2.'.$param['select'].'',
-					'table' => $param['module'].' as tb1',
-					'join' => [
-							[
-								$param['join'].' as tb2', 'tb1.id = tb2.objectid AND tb2.module = \''.$param['module'].'\'  AND tb2.language = \''.$this->currentLanguage().'\' ','inner'
-							],
+				'table' => $param['module'].' as tb1',
+				'join' => [
+						[
+							$param['join'].' as tb2', 'tb1.id = tb2.objectid AND tb2.module = \''.$param['module'].'\'  AND tb2.language = \''.$this->currentLanguage().'\' ','inner'
 						],
-					'keyword' => '('.$param['select'].' LIKE \'%'.$param['keyword'].'%\')',
-					'order_by' => ''.$param['select'].' asc'
+					],
+				'where_in' => $param['value'],
+				'where_in_field' => 'tb2.objectid',
+				'order_by' => ''.$param['select'].' asc'
 			], TRUE);
 		}
 		$temp = [];

@@ -131,10 +131,10 @@
                                 <td> 
                                     <div class="uk-flex uk-flex-middle">
                                         <div class="image mr5">
-                                            <span class="image-post img-cover"><img src="<?php echo $image; ?>" alt="<?php echo $val['title']; ?>" /></span>
+                                            <span class="image-post img-cover"><img src="<?php echo $image; ?>" alt="<?php echo $val['article_title']; ?>" /></span>
                                         </div>
                                         <div class="main-info">
-                                            <div class="title"><a class="maintitle" href="<?php echo site_url('backend/article/article/update/'.$val['id']); ?>" title=""><?php echo $val['title']; ?> (<?php echo $val['viewed']; ?>)</a></div>
+                                            <div class="title"><a class="maintitle" href="<?php echo site_url('backend/article/article/update/'.$val['id']); ?>" title=""><?php echo $val['article_title']; ?> (<?php echo $val['viewed']; ?>)</a></div>
                                             <div class="catalogue" style="font-size:10px">
                                                 <span style="color:#f00000;">Nhóm hiển thị: </span>
                                                 <a class="" style="color:#333;" href="<?php echo site_url('backend/article/article/index?catalogueid='.$val['cat_id']); ?>" title=""><?php echo $val['cat_title'] ?></a> 

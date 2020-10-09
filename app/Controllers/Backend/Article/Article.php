@@ -68,7 +68,7 @@ class Article extends BaseController{
 			$page = $page - 1;
 			$languageDetact = $this->detect_language();
 			$this->data['articleList'] = $this->AutoloadModel->_get_where([
-				'select' => 'tb1.id, tb4.title, tb2.catalogueid, tb1.publish, tb1.order, tb1.userid_created, tb1.userid_updated, tb1.created_at, tb1.viewed, tb1.image, tb1.updated_at, tb3.fullname as creator, tb4.title as cat_title, tb4.id as cat_id, tb1.catalogue, tb2.objectid, '.((isset($languageDetact['select'])) ? $languageDetact['select'] : ''),
+				'select' => 'tb1.id,  tb2.catalogueid, tb1.publish, tb1.order, tb1.userid_created, tb1.userid_updated, tb1.created_at, tb1.viewed, tb1.image, tb1.updated_at, tb3.fullname as creator, tb4.title as cat_title, tb4.id as cat_id, tb1.catalogue, tb2.objectid, (SELECT title FROM article_translate INNER JOIN article ON article_translate.objectid = article.id  WHERE article_translate.module = \''.$this->data['module'].'\' AND article_translate.language = \''.$this->currentLanguage().'\' AND tb1.id = article_translate.objectid ) as article_title, '.((isset($languageDetact['select'])) ? $languageDetact['select'] : ''),
 				'table' => $this->data['module'].' as tb1',
 				'where' => $where,
 				'where_in' => $catalogue['where_in'],
@@ -82,15 +82,15 @@ class Article extends BaseController{
 						'user as tb3','tb1.userid_created = tb3.id','inner'
 					],
 					[
-						'article_translate as tb4','tb1.catalogueid = tb4.objectid AND tb4.language = \''.$this->currentLanguage().'\' ','inner'
-					]
+						'article_translate as tb4','tb1.catalogueid = tb4.objectid  AND tb4.language = \''.$this->currentLanguage().'\' ','inner'
+					],
+					
 				],
 				'limit' => $config['per_page'],
 				'start' => $page * $config['per_page'],
 				'order_by'=> 'tb1.id desc',
 				'group_by' => 'tb1.id'
 			], TRUE);
-
 
 		}
 		$this->data['dropdown'] = $this->nestedsetbie->dropdown();
