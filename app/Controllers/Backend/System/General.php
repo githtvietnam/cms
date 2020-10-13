@@ -57,36 +57,44 @@ class General extends BaseController{
 		
 		$this->data['systemList'] = $this->configbie->system();
 		
+		$this->data['system'] = $this->AutoloadModel->_get_where([
+			'select' => 'keyword, content',
+			'table' => 'system_translate',
+			'where' => ['language' => $this->currentLanguage() ]
+		], TRUE);
 
+		$temp = [];
+		if(isset($this->data['system'])){
+			foreach($this->data['system'] as $key => $val){
+				$temp[$val['keyword']] = $val['content'];
+			}
+		}
+
+		$this->data['temp'] = $temp;
 
 		if($this->request->getMethod() == 'post'){
 			$config  = $this->request->getPost('config');
 	 		// pre($config);
 			if(isset($config) && is_array($config) && count($config)){
+				$delete = $this->AutoloadModel->_delete([
+					'table' => 'system_translate',
+					'where' => ['language' => $this->currentLanguage()]
+				]);
+				$_update = [];
 				foreach($config as $key => $val){
-					$_update = NULL;
-
-					$delete = $this->AutoloadModel->_delete([
-						'table' => 'system_translate',
-						'where' => ['keyword' => $key, 'language' => $this->currentLanguage(),'deleted_at' => 0]
-					]);
-					// print_r($flag);
-
-					
-					$_update = [
+					$_update[] = [
 						'language' => $this->currentLanguage(),
 						'keyword' => $key,
 						'content' => $val,
 						'userid_updated' => $this->auth['id'],
-						'deleted_at' => 0,
 						'updated_at' => $this->currentTime
 					];
-					$flag =	$this->AutoloadModel->_insert([
-						'table' => 'system_translate',
-						'data' => $_update,
-					]);
 					
 				}
+				$flag =	$this->AutoloadModel->_create_batch([
+					'table' => 'system_translate',
+					'data' => $_update,
+				]);
 			}
 	 		if($flag > 0){
 
@@ -106,46 +114,59 @@ class General extends BaseController{
 		$this->data['systemList'] = $this->configbie->system();
 		$this->data['languageCurrent'] = $languageCurrent;
 
+
+		$this->data['system'] = $this->AutoloadModel->_get_where([
+			'select' => 'keyword, content',
+			'table' => 'system_translate',
+			'where' => ['language' => $this->data['languageCurrent']]
+		], TRUE);
+
+		$temp = [];
+		if(isset($this->data['system'])){
+			foreach($this->data['system'] as $key => $val){
+				$temp[$val['keyword']] = $val['content'];
+			}
+		}
+
+		$this->data['temp'] = $temp;
+
 		if($this->request->getMethod() == 'post'){
 			$config  = $this->request->getPost('config');
-	 		// pre($config);
+
+
+
+	 		$delete = $this->AutoloadModel->_delete([
+				'table' => 'system_translate',
+				'where' => ['language' => $this->data['languageCurrent']]
+			]);
 			if(isset($config) && is_array($config) && count($config)){
+				$_insert = [];
 				foreach($config as $key => $val){
-					$_update = NULL;
-
-					$delete = $this->AutoloadModel->_delete([
-						'table' => 'system_translate',
-						'where' => ['keyword' => $key, 'language' => $this->data['languageCurrent'],'deleted_at' => 0]
-					]);
-					// print_r($flag);
-
 					
-					$_update = [
+					$_insert[] = [
 						'language' => $this->data['languageCurrent'],
 						'keyword' => $key,
 						'content' => $val,
 						'userid_updated' => $this->auth['id'],
-						'deleted_at' => 0,
 						'updated_at' => $this->currentTime
 					];
-					$flag =	$this->AutoloadModel->_insert([
-						'table' => 'system_translate',
-						'data' => $_update,
-					]);
-					
 				}
+
+				$flag =	$this->AutoloadModel->_create_batch([
+					'table' => 'system_translate',
+					'data' => $_insert,
+				]);
+
 			}
 	 		if($flag > 0){
 
 	 			$session->setFlashdata('message-success', 'Cập Nhật Cấu hình chung Thành Công!');
 				return redirect()->to(BASE_URL.'backend/system/general/translator/'.$this->data['languageCurrent']);
 	 		}
-
-	        
+		    
 		}
 
 
-		
 
 		$this->data['template'] = 'backend/system/general/translate';
 		return view('backend/dashboard/layout/home', $this->data);

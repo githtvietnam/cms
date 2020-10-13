@@ -105,16 +105,30 @@ class AutoloadModel extends Model{
 	public function _delete(array $param = []){
 		$this->builder = $this->db->table($param['table']);	
 		$this->builder->where($param['where']);
+		if(isset($param['where_in']) && is_array($param['where_in']) && count($param['where_in']) && isset($param['where_in_field']) && $param['where_in_field'] != ''){
+				$this->builder->whereIn($param['where_in_field'], $param['where_in']);
+			}
 		$this->builder->delete();
 		$result = $this->db->affectedRows();
 		return $result;
 	}
 
+	public function delete_batch($data = ''){  // tú viết
+		if(isset($data['data']) && is_array($data['data']) && count($data['data'])){
+			$this->db->where_in($data['field'], $data['data']);
+			$this->builder->where($data['where']);
+			$this->db->delete($data['table']);
+			$result = $this->db->affected_rows();
+			$this->db->flush_cache();
+			return $result;
+		}
+	}
 
 	// Hàm Insert Nhiều bản ghi Dữ liệu
 	public function _create_batch(array $param = []){
 		$this->builder = $this->db->table($param['table']);	
 		$this->builder->insertBatch($param['data']);
+
 		$result = $this->db->affectedRows();
 		return $result;
 	}

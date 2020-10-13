@@ -15,7 +15,7 @@ $(document).ready(function(){
 		BrowseServerEditor('Images', target);
         return false;
 	});
-  $(document).on('click','.tv-nav-tabs>li>a ', function(){
+    $(document).on('click','.tv-nav-tabs>li>a ', function(){
         let _this = $(this);
         let parent = _this.closest('li.tv-block');
         let target = _this.attr('href');

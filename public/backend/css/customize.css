@@ -2542,3 +2542,28 @@ button.toast-close-button {
 }
 
 
+
+
+.icon-flag{
+	max-width:30px;
+	display: inline-block;
+	height:20px;
+}
+
+.va-content{
+	padding: 0;
+}
+
+.va-collapse{
+	font-size: 13px;
+    line-height: 20px;
+    color: #676a6c;
+    text-decoration: none;
+}
+
+.va-collapse:hover{
+    text-decoration: none;
+    color: #676a6c;
+	cursor: pointer;
+    font-weight: bold;
+}

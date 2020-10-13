@@ -135,7 +135,7 @@ if (! function_exists('get_language')){
 }
 
 
-if (! function_exists('get_language')){
+if (! function_exists('get_full_language')){
 	function get_full_language(array $param = []){
 		$model = new AutoloadModel();
 
@@ -148,6 +148,7 @@ if (! function_exists('get_language')){
 		return $language;
 	}
 }
+
 
 ?>
 
