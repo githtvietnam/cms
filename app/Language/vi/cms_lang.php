@@ -9,5 +9,7 @@
         	'sb_language' => 'QL Ngôn Ngữ',
             'sb_config' => 'Cấu hình chung',
             'sb_slide' => 'QL Banner',
+            'sb_contactCatalogue' => 'QL Nhóm liên hệ',
+            'sb_contact' => 'QL Liên hệ',
         ],
     ];

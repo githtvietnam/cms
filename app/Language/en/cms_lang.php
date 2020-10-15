@@ -8,7 +8,9 @@
         	'sb_setting' => 'Setting',
         	'sb_language' => 'Language',
             'sb_config' => 'General Configuration',
-            'sb_slide' => 'Banner Management',
+            'sb_slide' => 'Banner',
+            'sb_contactCatalogue' => 'Contact Group',
+            'sb_contact' => 'Contact',
 
         ],
     ];

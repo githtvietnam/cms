@@ -128,7 +128,6 @@ class Article extends BaseController{
 	 					return redirect()->to(BASE_URL.'backend/article/article/index');
 	 				}
 		 		}
-
 	        }else{
 	        	$this->data['validate'] = $this->validator->listErrors();
 	        }

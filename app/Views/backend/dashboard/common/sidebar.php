@@ -44,6 +44,14 @@
                     <li><a href="<?php echo base_url('backend/user/user/index') ?>"><?php echo translate('cms_lang.sidebar.sb_user', $language) ?></a></li>
                 </ul>
             </li>
+            <li class="<?php echo ( $uriModule == 'contact') ? 'active'  : '' ?>">
+                <a href="index.html"><i class="fa fa-address-card-o" aria-hidden="true"></i> <span class="nav-label"><?php echo translate('cms_lang.sidebar.sb_contact', $language) ?></span> <span class="fa arrow"></span></a>
+                <ul class="nav nav-second-level">
+                    <li><a href="<?php echo base_url('backend/contact/catalogue/index') ?>"><?php echo translate('cms_lang.sidebar.sb_contactCatalogue', $language) ?></a></li>
+
+                    <li><a href="<?php echo base_url('backend/contact/contact/index') ?>"><?php echo translate('cms_lang.sidebar.sb_contact', $language) ?></a></li>
+                </ul>
+            </li>
             <li class="<?php echo ( $uriModule == 'language' || $uriModule == 'system' || $uriModule == 'slide') ? 'active'  : '' ?>">
                 <a href="index.html"><i class="fa fa-cog"></i> <span class="nav-label"><?php echo translate('cms_lang.sidebar.sb_setting', $language) ?></span> <span class="fa arrow"></span></a>
                 <ul class="nav nav-second-level">
