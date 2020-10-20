@@ -56,7 +56,6 @@ class General extends BaseController{
 		$session = session();
 		
 		$this->data['systemList'] = $this->configbie->system();
-		
 		$this->data['system'] = $this->AutoloadModel->_get_where([
 			'select' => 'keyword, content',
 			'table' => 'system_translate',

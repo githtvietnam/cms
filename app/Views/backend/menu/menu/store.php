@@ -1,9 +1,11 @@
 <?php  
     helper('form');
+    helper('mydata');
     $baseController = new App\Controllers\BaseController();
     $language = $baseController->currentLanguage();
     $AutoloadModel = new App\Models\AutoloadModel();
     $languageList = get_full_language(['currentLanguage' => $language]);
+
 ?>
 <div class="row wrapper border-bottom white-bg page-heading">
     <div class="col-lg-10">
@@ -73,50 +75,63 @@
                 <div class="ibox-content va-content" style="">
                     <div class="panel-body va-panel-body">
                         <div class="panel-group" id="accordion">
-                            <div class="panel panel-default">
-                                <div class="panel-heading va-panel-heading">
-                                    <a data-toggle="collapse" data-parent="#accordion" href="#collapseOne" aria-expanded="true" class="collapsed va-collapse">Bài viết</a>
-                                    <i class="fa fa-caret-up" aria-hidden="true"></i>
-                                </div>
-                                <div id="collapseOne" class="panel-collapse collapse in relative" aria-expanded="true" style="">
-                                    <div class="panel-body va-panel-body">
-                                        <ul class="tabs">
-                                            <li class="tab-link current" data-tab="tab-2">Mới nhất</li>
-                                            <li class="tab-link" data-tab="tab-3">Tìm kiếm</li>
-                                        </ul>
-                                        <ul class="tabs-content">
-                                            <li id="tab-2" class="tab-content current">
-                                                <div class="menu_newest">
-                                                    <?php if(isset($articleList) && is_array($articleList) && count($articleList)){ ?>
-                                                        <?php foreach ($articleList as $key => $val) { ?>
-                                                        <div class="uk-flex mb5 va_select_all">
-                                                            <input type="checkbox" data-title="<?php echo $val['title'] ?>" name="check[check_select]" id="<?php echo $val['canonical'] ?>" value="<?php echo $val['canonical'] ?>" > 
-                                                            <label for="<?php echo $val['canonical'] ?>" class="ml15 va-checkbox va-label"><?php echo $val['title'] ?></label>
+                            <?php 
+
+                                if(isset($object) && is_array($object) && count($object)){
+                                    foreach ($object as $key => $value) {
+                                        $object_menu = object_menu($value[$key]['module'],$value[$key]['translate'], $languageABC);
+                                        // print_r($object_menu);
+                            ?>
+                                <div class="panel panel-default va-general" data-id="#<?php echo $value[$key]['module'] ?>">
+                                    <a data-toggle="collapse" data-parent="#accordion" href="#<?php echo $value[$key]['module'] ?>_collapse" aria-expanded="true" class="collapsed va-collapse panel-heading va-panel-heading">
+                                        <?php echo $value[$key]['name'] ?>
+                                        <i class="fa fa-caret-up va-arrow" aria-hidden="true"></i>
+                                    </a>
+                                    <div id="<?php echo $value[$key]['module'] ?>_collapse" class="panel-collapse collapse" aria-expanded="true" style="">
+                                        <div class="panel-body va-panel-body" id="<?php echo $value[$key]['module'] ?>">
+                                            <ul class="tabs">
+                                                <li class="tab-link current" data-tab="<?php echo $value[$key]['module'].'_new' ?>">Mới nhất</li>
+                                                <li class="tab-link" data-tab="<?php echo $value[$key]['module'].'_search' ?>">Tìm kiếm</li>
+                                            </ul>
+                                            <ul class="tabs-content">
+                                                <li id="<?php echo $value[$key]['module'].'_new' ?>" class="tab-content current">
+                                                    <div class="va-checkbox-all" data-class=".list_<?php echo $value[$key]['module'] ?>">
+                                                        <div class="list_<?php echo $value[$key]['module'] ?>">
+                                                            <?php 
+                                                            if(isset($object_menu) && is_array($object_menu) && count($object_menu)){ ?>
+                                                                <?php foreach ($object_menu as $key => $val) { ?>
+                                                                <div class="uk-flex mb5 va_select_all">
+                                                                    <input type="checkbox" data-title="<?php echo $val['title'] ?>" name="check[check_select]" data-catid="<?php echo $val['catalogueid'] ?>" data-id="<?php echo $val['objectid'] ?>" data-module="<?php echo $val['module'] ?>" data-language="<?php echo $languageABC ?>" id="<?php echo $val['canonical'] ?>" value="<?php echo $val['canonical'] ?>" > 
+                                                                    <label for="<?php echo $val['canonical'] ?>" class="ml15 va-checkbox va-label"><?php echo $val['title'] ?></label>
+                                                                </div>
+                                                            <?php }} ?>
+                                                            <div class="uk-flex uk-flex-middle">
+                                                                <input type="checkbox" name="<?php echo $value[$key]['module'] ?>_all" id="<?php echo $value[$key]['module'] ?>_all" class="<?php echo $value[$key]['module'] ?>_all va_check_id" value="all"> 
+                                                                <label for="<?php echo $value[$key]['module'] ?>_all" class="ml15">Chọn tất cả</label>
+                                                            </div>
+                                                            <a href="" class="btn btn-default va-search va_select_checkbox right block m-b" name="add_menu_item">Thêm vào Menu</a>
                                                         </div>
-                                                    <?php }} ?>
-                                                    <div class="uk-flex uk-flex-middle">
-                                                        <input type="checkbox" name="newest" id="newest" class="newest" value="all"> 
-                                                        <label for="newest" class="ml15">Chọn tất cả</label>
                                                     </div>
+                                                </li>
+                                                <li id="<?php echo $value[$key]['module'].'_search' ?>" class="tab-content">
+                                                    <input type="text" placeholder="Nhập để tìm kiếm ..." class="typeahead_2 mb20 search_general form-control" data-search="<?php echo $value[$key]['module']?>" data-translate="<?php echo $value[$key]['translate']?> " data-language="<?php echo $languageABC; ?>">
+                                                    <div class="va-list-general">
+                                                    </div>
+                                                    
                                                     <a href="" class="btn btn-default va-search va_select_checkbox right block m-b" name="add_menu_item">Thêm vào Menu</a>
-                                                </div>
-                                            </li>
-                                            <li id="tab-3" class="tab-content">
-                                                <input type="text" placeholder="Nhập để tìm kiếm ..." class="typeahead_2 mb20 search_article form-control">
-                                                <div class="va-list-article">
-                                                </div>
-                                                
-                                                <a href="" class="btn btn-default va-search va_select_checkbox right block m-b" name="add_menu_item">Thêm vào Menu</a>
-                                            </li>
-                                        </ul>
+                                                </li>
+                                            </ul>
+                                        </div>
                                     </div>
                                 </div>
-                            </div>
+                               
+                            <?php }} ?>
+
                             <div class="panel panel-default">
-                                <div class="panel-heading va-panel-heading">
-                                    <a data-toggle="collapse" data-parent="#accordion" href="#collapseTwo" class="collapsed va-collapse" aria-expanded="false">Liên kết tự tạo</a>
+                                <a data-toggle="collapse" data-parent="#accordion" href="#collapseTwo" aria-expanded="true" class="collapsed va-collapse panel-heading va-panel-heading">
+                                    Liên kết tự tạo
                                     <i class="fa fa-caret-up va-arrow" aria-hidden="true"></i>
-                                </div>
+                                </a>
                                 <div id="collapseTwo" class="panel-collapse collapse" aria-expanded="false" style="height: 0px;">
                                     <div class="panel-body va-panel-body">
                                         <h2 class="panel-title">Tạo menu</h2>
@@ -127,45 +142,6 @@
                                             <p><small class="text-danger">* Hệ Thống chỉ hỗ trợ tối đa 5 cấp menu.</small></p>
                                             <a style="color:#000;border-color:#c4cdd5;display:inline-block !important;" href="" title="" class="btn btn-default add-menu m-b m-r right">Thêm đường dẫn</a>
                                         </div>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="panel panel-default">
-                                <div class="panel-heading va-panel-heading">
-                                    <a data-toggle="collapse" data-parent="#accordion" href="#collapseThree" class="collapsed va-collapse" aria-expanded="false">Chuyên mục</a>
-                                    <i class="fa fa-caret-up va-arrow" aria-hidden="true"></i>
-                                </div>
-                                <div id="collapseThree" class="panel-collapse collapse" aria-expanded="false">
-                                    <div class="panel-body va-panel-body">
-                                        <ul class="tabs-2">
-                                            <li class="tab-link current" data-tab="tab_2_1">Dùng nhiều nhất</li>
-                                            <li class="tab-link" data-tab="val_3">Tìm kiếm</li>
-                                        </ul>
-                                        <ul class="tabs-content-2">
-                                            <li id="tab_2_1" class="tab-content-2 current">
-                                                <div class="menu_all">
-                                                    <?php if(isset($articleCatalogueList) && is_array($articleCatalogueList) && count($articleCatalogueList)){ ?>
-                                                        <?php foreach ($articleCatalogueList as $key => $val) { ?>
-                                                        <div class="uk-flex mb5 va_select_all">
-                                                            <input type="checkbox" data-title="<?php echo $val['title'] ?>" name="check[check_select]" id="<?php echo $val['canonical'] ?>" value="<?php echo $val['canonical'] ?>" > 
-                                                            <label for="<?php echo $val['canonical'] ?>" class="ml15 va-checkbox va-label"><?php echo $val['title'] ?></label>
-                                                        </div>
-                                                    <?php }} ?>
-                                                     <div class="uk-flex uk-flex-middle">
-                                                        <input type="checkbox" name="select_all" id="select_all" class="select_all" value="all"> 
-                                                        <label for="select_all" class="ml15">Chọn tất cả</label>
-                                                    </div>
-                                                    <a href="" class="btn btn-default va-search va_select_checkbox right block m-b" name="add_menu_item">Thêm vào Menu</a>
-                                                </div>
-                                            </li>
-                                            <li id="val_3" class="tab-content-2">
-                                                <input type="text" placeholder="Nhập để tìm kiếm ..." class="typeahead_2 mb20 search_article_catalogue form-control">
-                                                <div class="va-list-article">
-                                                </div>
-                                                
-                                                <a href="" class="btn btn-default va-search right block m-b va_select_checkbox" name="add_menu_item">Thêm vào Menu</a>
-                                            </li>
-                                        </ul>
                                     </div>
                                 </div>
                             </div>

@@ -8,7 +8,7 @@ class Menu extends BaseController{
 	public $nestedsetbie;
 
 	public function __construct(){
-
+		helper('mydata');
 		$this->nestedsetbie = new Nestedsetbie(['table' => 'menu','language' => $this->currentLanguage()]);
 		
 	}
@@ -31,6 +31,32 @@ class Menu extends BaseController{
 			'where' => ['id' => $id],
 		]);
 		echo $flag;die();
+	}
+
+	public function render_link(){
+		$param = [];
+		$param['canonical'] = json_decode($this->request->getPost('canonical'));
+		$param['title'] = json_decode($this->request->getPost('title'));
+		$param['catid'] = json_decode($this->request->getPost('catid'));
+		$param['id'] = json_decode($this->request->getPost('id'));
+		$param['module'] = $this->request->getPost('module');
+		$param['lang'] = $this->request->getPost('lang');
+		$data = [];
+		$url = [];
+		foreach ($param['canonical'] as $key => $value) {
+			$data[$key] = ['canonical' => $param['canonical'][$key]];
+			$data[$key]['id'] = $param['id'][$key];
+			$data[$key]['module'] = $param['module'];
+			$data[$key]['lang'] = $param['lang'];
+			$data[$key]['catid'] = $param['catid'][$key];
+		}
+		foreach ($data as $key => $value) {
+			$data[$key]['url'] = silo($value['id'], $value['canonical'], $value['module'], $value['catid'], $value['lang']);
+			$data[$key]['title'] = $param['title'][$key];
+		}
+		// pre($data);
+		
+		echo json_encode($data);die();		
 	}
 
 	public function add_menu(){
@@ -58,36 +84,35 @@ class Menu extends BaseController{
 		echo json_encode($param['data']);die();		
 	}
 
-	public function search_article(){
+	public function search_general(){
 		$param['val'] = $this->request->getPost('value');
+		$param['module'] = $this->request->getPost('module');
+		$param['translate'] = $this->request->getPost('translate');
+		$param['language'] = $this->request->getPost('language');
+		$moduleExplode = explode('_', $param['module']);
 		$keyword = $this->condition_keyword($param['val']);
-		$search_article = $this->AutoloadModel->_get_where([
-			'select' => 'title, canonical, objectid',
-			'table' => 'article_translate',
-			'keyword' => $keyword,
-			'where' => ['language' => $this->currentLanguage(), 'module' => 'article'],
-			'group_by' => 'title'
-		]);
+		if($param['translate'] == 1){
+			$search_general = $this->AutoloadModel->_get_where([
+				'select' => 'title, canonical, objectid',
+				'table' => $moduleExplode[0].'_translate',
+				'keyword' => $keyword,
+				'where' => ['language' => $param['language'], 'module' => $param['module']],
+				'limit' => 5,
+				'group_by' => 'title'
+			],TRUE);
+		}else{
+			$search_general = $this->AutoloadModel->_get_where([
+				'select' => 'title, canonical, id',
+				'table' => $moduleExplode[0],
+				'keyword' => $keyword,
+				'limit' => 5,
+				'where' => ['deleted_at' => 0],
+				'group_by' => 'title'
+			],TRUE);
+		}
 		
-		$param['data'] =  $search_article;
+		$param['data'] =  $search_general;
 
-
-		echo json_encode($param['data']);die();		
-	}
-
-	public function search_article_catalogue(){
-		$param['val'] = $this->request->getPost('value');
-		$keyword = $this->condition_keyword($param['val']);
-		$search_article = $this->AutoloadModel->_get_where([
-			'select' => 'title, canonical, objectid',
-			'table' => 'article_translate',
-			'keyword' => $keyword,
-			'where' => ['language' => $this->currentLanguage(), 'module' => 'article_catalogue'],
-			'group_by' => 'title'
-		], TRUE);
-		
-		$param['data'] =  $search_article;
-		// pre($param['data']);
 
 		echo json_encode($param['data']);die();		
 	}

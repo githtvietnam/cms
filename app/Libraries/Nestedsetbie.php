@@ -18,7 +18,7 @@ class Nestedsetbie{
 
 	public function Get($order = 'lft ASC, order ASC', $language = ''){
 		$moduleExtract = explode('_', $this->params['table']);
-		if($moduleExtract[0] == 'menu'){
+		if($moduleExtract[0] == 'menu' && $language != ''){
 			$this->params['language'] = $language;
 		}
 		$this->builder = $this->db->table($this->params['table'].' as tb1');	

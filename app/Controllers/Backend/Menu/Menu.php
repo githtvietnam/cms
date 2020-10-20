@@ -1,13 +1,17 @@
 <?php 
 namespace App\Controllers\Backend\Menu;
 use App\Controllers\BaseController;
+use App\Controllers\Backend\Menu\Libraries\Configbie;
 use App\Libraries\Nestedsetbie;
 
 class Menu extends BaseController{
 	protected $data;
 	public $nestedsetbie;
+	public $configbie;
+
 
 	public function __construct(){
+		$this->configbie = new ConfigBie();
 		$this->data = [];
 		$this->data['module'] = 'menu';
 		$this->nestedsetbie = new Nestedsetbie(['table' => $this->data['module'],'language' => $this->currentLanguage()]);
@@ -65,10 +69,21 @@ class Menu extends BaseController{
 	}
 
 	public function createmenu($language = ''){
+		$configbie = $this->configbie->menu();
+		$configbieList = [];
+		foreach ($configbie as $key => $value) {
+			$configbieList[] = $this->ObjectList($language, $key, $value); 
+		}
 
+		foreach ($configbieList as $key => $value) {
+			foreach ($configbieList[$key] as $keyChild => $valChild) {
+				$configbieList[$key][$keyChild]['name'] =  $configbie[$value[$key]['module']]['title'];
+				$configbieList[$key][$keyChild]['translate'] =  $configbie[$value[$key]['module']]['translate'];
+			}
+		}
+		$this->data['languageABC'] = $language;
+		$this->data['object'] = $configbieList;
 		$session = session();
-		$this->data['articleList'] = $this->articleList($language);
-		$this->data['articleCatalogueList'] = $this->articleCatalogueList($language);
 		$this->data['menuCatalogue'] = $this->AutoloadModel->_get_where([
 			'select' => ' value, title, id',
 			'table' => 'menu_catalogue',
@@ -125,13 +140,15 @@ class Menu extends BaseController{
 							'limit' => $count
 						],TRUE);
 						foreach ($getData as $key => $value) {
+							$rewrite_url[] = ['id' => $value['id'],'canonical' => $menu['link'][$key]];
+							$dataURL = rewrite_url($rewrite_url, 'silo', 'menu' , 'menu', '.html');
 							$canonical = $menu['link'][$key].'.html';
 							$newMenu[] = [
 								'objectid' => $getData[$key]['id'],
 								'title' => $menu['title'][$key],
-								'canonical'  => $canonical,
+								'canonical'  => $dataURL[$key],
 								'catalogueid' => $this->request->getPost('parentid'),
-								'language' => $this->currentLanguage(),
+								'language' => $language,
 								'module' => 'menu',
 								'created_at' => $this->currentTime,
 								'userid_created' => $this->auth['id']
@@ -147,7 +164,7 @@ class Menu extends BaseController{
 						$this->nestedsetbie->Action();
 						
 						$session->setFlashdata('message-success', 'Tạo Menu Thành Công!');
-						return redirect()->to(BASE_URL.'backend/menu/menu/index/'.$catalogueid.'');
+						return redirect()->to(BASE_URL.'backend/menu/menu/index/'.$catalogueid.'/'.$language.'');
 					}
 		 		}
 		 	}else{
@@ -215,12 +232,24 @@ class Menu extends BaseController{
 		return view('backend/dashboard/layout/home', $this->data);
 	}
 
-	public function create($id = 0, $language){
+	public function create($id = 0, $language = ''){
+		$configbie = $this->configbie->menu();
+		$configbieList = [];
+		foreach ($configbie as $key => $value) {
+			$configbieList[] = $this->ObjectList($language, $key, $value); 
+		}
+
+		foreach ($configbieList as $key => $value) {
+			foreach ($configbieList[$key] as $keyChild => $valChild) {
+				$configbieList[$key][$keyChild]['name'] =  $configbie[$value[$key]['module']]['title'];
+				$configbieList[$key][$keyChild]['translate'] =  $configbie[$value[$key]['module']]['translate'];
+			}
+		}
+		$this->data['languageABC'] = $language;
+		$this->data['object'] = $configbieList;
 		$session = session();
 		$this->data['id'] = $id;
 		$this->data['menuList'] = $this->menuList($id, $language);
-		$this->data['articleList'] = $this->articleList($language);
-		$this->data['articleCatalogueList'] = $this->articleCatalogueList($language);
 
 
 		$this->data['menuCatalogue'] = $this->AutoloadModel->_get_where([
@@ -241,14 +270,15 @@ class Menu extends BaseController{
 					$count = 0;
 					$id = $this->request->getPost('parentid');
 					$GetdataLanguage = $this->AutoloadModel->_get_where([
-						'select' => 'id',
+						'select' => 'objectid',
 						'table' => 'menu_translate',
 						'where' => ['language' => $language, 'catalogueid' => $id]
 					], TRUE);
 					foreach ($GetdataLanguage as $key => $value) {
-						$idLanguageList[] =  $value['id'];
+						$idLanguageList[] =  $value['objectid'];
 					}
 					// pre($idLanguageList);
+
 					$delete = $this->AutoloadModel->_delete([
 						'table' => 'menu',
 						'where' => ['catalogueid' => $id],
@@ -286,11 +316,12 @@ class Menu extends BaseController{
 							'limit' => $count
 						],TRUE);
 						foreach ($getData as $key => $value) {
-							$canonical = $menu['link'][$key].'.html';
+							$rewrite_url[] = ['id' => $value['id'],'canonical' => $menu['link'][$key]];
+							$dataURL = rewrite_url($rewrite_url, 'normal', 'menu' , 'menu', '.html');
 							$newMenu[] = [
 								'objectid' => $getData[$key]['id'],
 								'title' => $menu['title'][$key],
-								'canonical'  => $canonical,
+								'canonical'  => $dataURL[$key],
 								'catalogueid' => $this->request->getPost('parentid'),
 								'language' => $language,
 								'module' => 'menu',
@@ -397,29 +428,29 @@ class Menu extends BaseController{
 		return $keyword;
 	}
 
-
-	private function articleList($language = ''){
-		$articleList = $this->AutoloadModel->_get_where([
-			'select' => 'title, canonical, id',
-			'table' => 'article_translate',
-			'where' => [
-				'module' => 'article',
-				'language' => $language,
-			]
-		],TRUE);
-		return $articleList;
-	}
-
-	private function articleCatalogueList($language = ''){
-		$articleCatalogueList = $this->AutoloadModel->_get_where([
-			'select' => 'title, canonical, id',
-			'table' => 'article_translate',
-			'where' => [
-				'module' => 'article_catalogue',
-				'language' => $language,
-			]
-		],TRUE);
-		return $articleCatalogueList;
+	private function ObjectList($language = '', $module = '' , $params = []){
+		$moduleExplode = explode('_',  $module);
+		if(isset($params['translate']) && $params['translate'] == 0){
+			$ObjectList = $this->AutoloadModel->_get_where([
+				'select' => 'title, canonical, id',
+				'table' => $module,
+				'order_by' => 'created_at desc',
+				'limit' => 5
+			],TRUE);
+		}else{
+			$ObjectList = $this->AutoloadModel->_get_where([
+				'select' => 'title, canonical, id, module',
+				'table' => $moduleExplode[0].'_translate',
+				'where' => [
+					'module' => $module,
+					'language' => $language,
+				],
+				'order_by' => 'created_at desc',
+				'limit' => 5
+			],TRUE);
+			// $ObjectList[] = ['name' => $params['title']];
+		}
+		return $ObjectList;
 	}
 
 	private function condition_where(){
