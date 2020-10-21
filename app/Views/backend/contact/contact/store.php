@@ -36,7 +36,7 @@
 							<?php echo form_textarea('replycontent', htmlspecialchars_decode(html_entity_decode(set_value('content', (isset($reply['replycontent'])) ? $reply['replycontent'] : ''))), 'class="form-control ck-editor" id="content" placeholder="" autocomplete="off"');?>
 						</div>
 						<div class="mail-body tooltip-demo">
-								<button type="submit" name="create" value="post" class="btn btn-sm btn-primary"><i class="fa fa-reply"></i> Trả lời</button>
+								<button type="submit" name="create" value="post" class="btn btn-sm btn-primary"><i class="fa fa-reply"></i> Lưu lại</button>
 								
 							</div>
 					</div>

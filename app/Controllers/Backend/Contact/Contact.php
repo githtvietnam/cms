@@ -46,7 +46,7 @@ class Contact extends BaseController{
 			$page = ($page > $totalPage)?$totalPage:$page;
 			$page = $page - 1;
 			$this->data['contactList'] = $this->AutoloadModel->_get_where([
-				'select' => 'tb1.id, tb1.publish, tb1.fullname, tb1.phone, tb1.email, tb1.address,  tb1.content, tb1.created_at, tb4.title',
+				'select' => 'tb1.id, tb1.order, tb1.fullname, tb1.phone, tb1.email, tb1.address,  tb1.content, tb1.created_at, tb4.title',
 				'table' => $this->data['module'].' as tb1',
 				'where' => $where,
 				'keyword' => $keyword,
@@ -151,7 +151,7 @@ class Contact extends BaseController{
 		$updateContact = $this->AutoloadModel->_update([
  			'table' => 'contact',
  			'where' => ['id' => $id],
- 			'data' => ['publish' => 1]
+ 			'data' => ['order' => 1]
  		]);
 		
 		

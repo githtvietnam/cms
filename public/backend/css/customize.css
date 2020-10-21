@@ -2540,7 +2540,7 @@ button.toast-close-button {
 .tv-text{
 	height: 68px;
 }
-<<<<<<< HEAD
+
 .tv-title{
 	margin: 20px 10px;
 }
@@ -2594,10 +2594,6 @@ button.toast-close-button {
 	height: 40px!important;
 }
 .tv.content{
-	max-height: 90px!important;
-	overflow-x: hidden;
-	overflow-y: scroll;
-	padding: 10px;
 	color:#333;
 	text-decoration: none;
 }
@@ -2613,7 +2609,6 @@ button.toast-close-button {
 	color: #333;
 	
 }
-=======
 
 
 
@@ -2641,4 +2636,21 @@ button.toast-close-button {
 	cursor: pointer;
     font-weight: bold;
 }
->>>>>>> f65fb308629ee953c6ca85ac566635d3bdccfffe
+.tv-form{
+	display: flex;
+}
+.toolbox .form-control.tv{
+	height:32px;
+	max-width: 220px;
+}
+.toolbox.tv{
+	width: 480px;
+}
+.line-3{
+    display: -webkit-box !important;
+    -webkit-line-clamp: 3;
+    -webkit-box-orient: vertical;  
+    overflow: hidden;
+}
+/*text 3 dong*/
+

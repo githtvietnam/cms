@@ -20,7 +20,7 @@
 
         
         <?php  
-            $status = ($val['publish'] == 1) ? '<i class="fa fa-star  text-red" data-id="6" data-bookmark="1"></i>'  : '<i class="fa fa-star" data-id="6" data-bookmark="1"></i>';
+            $status = ($val['order'] == 1) ? '<i class="fa fa-star  text-red" data-id="6" data-bookmark="1"></i>'  : '<i class="fa fa-star" data-id="6" data-bookmark="1"></i>';
         ?>
 
         <tr id="post-<?php echo $val['id']; ?>" data-id="<?php echo $val['id']; ?>">
@@ -32,9 +32,9 @@
             <td class="information">
                 <div class="customer-name uk-flex uk-flex-middle uk-flex-space-between">
                     <div class="user-name"><?php echo $val['fullname']; ?></div>
-                    <div class="plus-icon"><i class="fa fa-plus" aria-hidden="true"></i></div>
+                   
                 </div>
-                <div class="customer-detail display-none">
+                <div class="customer-detail">
                     Phone: <?php echo $val['phone']; ?>
                     <br>
                     Email: <?php echo $val['email']; ?>
@@ -43,12 +43,10 @@
                 </div>
             </td>
             <td class="tv text">
-                <div class="tv content"><a href="<?php echo base_url('backend/contact/contact/reply/'.$val['id']) ?>"><?php echo $val['content']; ?></a></div></td>
+                <div class="tv content line-3"><a href="<?php echo base_url('backend/contact/contact/reply/'.$val['id']) ?>"><?php echo $val['content']; ?></a></div></td>
             <td class="text-center"><?php echo $val['created_at']; ?></td>
             <td class="text-center"><?php echo $val['title']; ?></td>
             <td class="text-center tv">
-                <a type="button" href="<?php echo base_url('backend/contact/contact/reply/'.$val['id']) ?>" class="btn btn-primary">Trả lời</a>
-                
                 <button class="btn btn-danger btn-sm delete1" id="<?php echo $val['id'] ?>" name="delete" value="delete" type="submit">Xóa</button>
             </td>
             

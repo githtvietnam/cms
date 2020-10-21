@@ -52,10 +52,10 @@
                                     
                                 </div>
                             </div>
-                            <div class="toolbox">
+                            <div class="toolbox tv">
                                 <div class="uk-flex uk-flex-middle uk-flex-space-between">
                                     <div class="uk-search uk-flex uk-flex-middle mr10">
-                                        <div class="input-group">
+                                        <div class="tv-form">
                                             <input type="text" name="keyword" value="<?php echo (isset($_GET['keyword'])) ? $_GET['keyword'] : ''; ?>" placeholder="Nhập Từ khóa bạn muốn tìm kiếm..." class="form-control"> 
                                             <span class="input-group-btn"> 
                                                 <button type="submit" name="search" value="search" class="btn btn-primary mb0 btn-sm">Tìm Kiếm
@@ -96,7 +96,7 @@
                             <?php if(isset($contactList) && is_array($contactList) && count($contactList)){ ?>
                             <?php foreach($contactList as $key => $val){ ?>
                                  <?php  
-                                $status = ($val['publish'] == 1) ? '<span class="text-success">Active</span>'  : '<span class="text-danger">Deactive</span>';
+                                $status = ($val['order'] == 1) ? '<span class="text-success">Active</span>'  : '<span class="text-danger">Deactive</span>';
                             ?>
                             <tr id="post-<?php echo $val['id']; ?>" data-id="<?php echo $val['id']; ?>">
                                 <td>
@@ -105,7 +105,7 @@
                                 </td>
                                 <td class=" text-center" data-module="<?php echo $module; ?>" data-where="id"><?php echo isset($val['title'])? $val['title'] : ''; ?></td>
                                 <td class="text-center "  data-module="<?php echo $module; ?>" data-where="id">
-                                    100</td>
+                                    <?php echo $val['count'] ?></td>
                                 <td class=" text-center" data-module="<?php echo $module; ?>" data-where="id"><?php echo isset($val['creator'])? $val['creator'] : ''; ?></td>
                                 <td class="text-center" data-module="<?php echo $module; ?>" data-where="id"><?php echo isset($val['created_at'])? $val['created_at'] : ''; ?></td>
                                 

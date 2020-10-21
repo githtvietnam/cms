@@ -30,9 +30,15 @@ class Catalogue extends BaseController{
 			'select'   => 'tb1.id',
 			'table'    => $this->data['module'].' as tb1',
 			'join' => [
-				[
-					$explode[0].'_translate as tb2', 'tb1.id = tb2.objectid', 'inner'
-				],
+					[
+						$explode[0].'_translate as tb2', 'tb1.id = tb2.objectid ', 'inner'
+					],
+					[
+						'user as tb3','tb1.userid_created = tb3.id','inner'
+					],
+					[
+						'contact as tb4','tb4.catalogueid = tb1.id','inner'
+					]
 			],
 			'keyword'  => $keyword,
 			'where'    => $where,
@@ -50,7 +56,7 @@ class Catalogue extends BaseController{
 			$page = $page - 1;
 			$languageDetact = $this->detect_language();
 			$this->data['contactList'] = $this->AutoloadModel->_get_where([
-				'select' => 'tb1.id, tb2.title, tb1.publish,  tb1.userid_created, tb1.userid_updated, tb1.created_at, tb1.updated_at, tb3.fullname as creator, '.((isset($languageDetact['select'])) ? $languageDetact['select'] : ''),
+				'select' => 'tb1.id, tb2.title, tb4.order,  tb1.userid_created, tb1.userid_updated, tb1.created_at, tb1.updated_at, tb3.fullname as creator, (SELECT COUNT(tb4.catalogueid) FROM contact_catalogue WHERE contact_catalogue.id = tb4.catalogueid) as count, '.((isset($languageDetact['select'])) ? $languageDetact['select'] : ''),
 				'table'    => $this->data['module'].' as tb1',
 				'join' => [
 					[
@@ -59,6 +65,9 @@ class Catalogue extends BaseController{
 					[
 						'user as tb3','tb1.userid_created = tb3.id','inner'
 					],
+					[
+						'contact as tb4','tb4.catalogueid = tb1.id','inner'
+					]
 					
 				],
 				'where'    => $where,
@@ -125,7 +134,7 @@ class Catalogue extends BaseController{
 		$id = (int)$id;
 		$explode = explode('_', $this->data['module']);
 		$this->data[$this->data['module']] = $this->AutoloadModel->_get_where([
-			'select' => ' tb2.title, tb1.publish',
+			'select' => ' tb2.title, tb1.order',
 			'table'  => $this->data['module'].' as tb1',
 			'join' => [
 					[
@@ -189,7 +198,7 @@ class Catalogue extends BaseController{
 		$id = (int)$id;
 		$explode = explode('_', $this->data['module']);
 		$this->data[$this->data['module']] = $this->AutoloadModel->_get_where([
-			'select' => ' tb2.title, tb1.publish, tb1.id',
+			'select' => ' tb2.title, tb1.order, tb1.id',
 			'table'  => $this->data['module'].' as tb1',
 			'join' => [
 					[
@@ -208,15 +217,6 @@ class Catalogue extends BaseController{
 
 	private function condition_where(){
 		$where = [];
-		$gender = $this->request->getGet('gender');
-		if($gender != -1 && $gender != '' && isset($gender)){
-			$where['gender'] = $this->request->getGet('gender');
-		}
-
-		$publish = $this->request->getGet('publish');
-		if(isset($publish)){
-			$where['publish'] = $publish;
-		}
 
 		$deleted_at = $this->request->getGet('deleted_at');
 		if(isset($deleted_at)){
@@ -240,7 +240,7 @@ class Catalogue extends BaseController{
 	private function store($param = []){
 		helper(['text']);
 		$store = [
- 			'publish'   => $this->request->getPost('publish'),
+ 			'order'   => $this->request->getPost('order'),
  		];
 
  		if($param['method'] == 'create' && isset($param['method'])){	
@@ -276,7 +276,7 @@ class Catalogue extends BaseController{
 		$languageList = $this->AutoloadModel->_get_where([
 			'select' => 'id, canonical',
 			'table'  => 'language',
-			'where'  => ['publish' => 1,'deleted_at' => 0,'canonical !=' =>  $this->currentLanguage()]
+			'where'  => ['deleted_at' => 0,'canonical !=' =>  $this->currentLanguage()]
 		], TRUE);
 		$select = '';
 		$i = 3;
