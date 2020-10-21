@@ -17,6 +17,7 @@
             ASSET_BACKEND.'plugin/jquery-ui.css', 
             ASSET_BACKEND.'css/style.css', 
             ASSET_BACKEND.'css/customize.css', 
+            ASSET_BACKEND.'css/vastyle.css', 
             ASSET_BACKEND.'css/plugins/sweetalert/sweetalert.css', 
         ];
     ?>
@@ -49,6 +50,7 @@
             ASSET_BACKEND.'js/plugins/jquery-ui/jquery-ui.min.js',
             ASSET_BACKEND.'js/plugins/gritter/jquery.gritter.min.js',
             ASSET_BACKEND.'js/plugins/sparkline/jquery.sparkline.min.js',
+            ASSET_BACKEND.'js/plugins/nestable/jquery.nestable.js',
             ASSET_BACKEND.'js/demo/sparkline-demo.js',
             ASSET_BACKEND.'js/plugins/toastr/toastr.min.js',
             ASSET_BACKEND.'js/plugins/sweetalert/sweetalert.min.js',
@@ -59,6 +61,7 @@
             ASSET_BACKEND.'library/ckfinder.js',
             // ASSET_BACKEND.'plugin/ckeditor5/packages/ckeditor5-build-classic/build/ckeditor.js',
             ASSET_BACKEND.'plugin/select2/dist/js/select2.min.js',
+            ASSET_BACKEND.'plugin/Select-All-Checkboxes-jQuery-checkboxAll/jquery.checkboxall-1.0.min.js',
             ASSET_BACKEND.'library/library.js',
         ];
         

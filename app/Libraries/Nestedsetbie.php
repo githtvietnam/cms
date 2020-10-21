@@ -16,9 +16,11 @@ class Nestedsetbie{
 		$this->db = \Config\Database::connect();
 	}
 
-	public function Get($order = 'lft ASC, order ASC'){
+	public function Get($order = 'lft ASC, order ASC', $language = ''){
 		$moduleExtract = explode('_', $this->params['table']);
-
+		if($moduleExtract[0] == 'menu' && $language != ''){
+			$this->params['language'] = $language;
+		}
 		$this->builder = $this->db->table($this->params['table'].' as tb1');	
 		$this->builder->select('tb1.id, tb2.title, tb1.parentid, tb1.lft, tb1.rgt, tb1.level, tb1.order');
 		$this->builder->join($moduleExtract[0].'_translate as tb2','tb1.id = tb2.objectid AND tb2.language = \''.$this->params['language'].'\' ', 'inner');

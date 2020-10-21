@@ -36,7 +36,6 @@ class ObjectRules {
 		return true;
  	}
 
- 	
 
 }
 

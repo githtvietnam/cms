@@ -60,6 +60,7 @@
                     <li><a href="<?php echo base_url('backend/slide/slide/index') ?>"><?php echo translate('cms_lang.sidebar.sb_slide', $language) ?></a></li>
 
                     <li><a href="<?php echo base_url('backend/system/general/index') ?>">Cấu hình chung</a></li>
+                    <li><a href="<?php echo base_url('backend/menu/menu/listmenu') ?>">QL Menu</a></li>
                 </ul>
             </li>
         </ul>

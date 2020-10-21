@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<module>
+	<permissions>
+		<title>Cấu hình chung</title>
+		<item>
+			<param>backend/menu/menu/index</param>
+			<description>Xem</description>
+		</item>
+		<item>
+			<param>backend/menu/menu/menuchild</param>
+			<description>Xem bản dịch</description>
+		</item>
+		<item>
+			<param>backend/menu/general/translator/jp</param>
+			<description>Xem bản dịch</description>
+		</item>
+		<item>
+			<param>backend/menu/general/translator/vi</param>
+			<description>Xem bản dịch</description>
+		</item>
+	</permissions>
+	<permissions>
+		<title>General System</title>
+		<item>
+			<param>backend/system/general/index</param>
+			<description>Xem Toàn Bộ</description>
+		</item>
+		<item>
+			<param>backend/system/general/index</param>
+			<description>Xem</description>
+		</item>
+	</permissions>
+</module>

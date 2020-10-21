@@ -2540,6 +2540,7 @@ button.toast-close-button {
 .tv-text{
 	height: 68px;
 }
+<<<<<<< HEAD
 .tv-title{
 	margin: 20px 10px;
 }
@@ -2612,3 +2613,32 @@ button.toast-close-button {
 	color: #333;
 	
 }
+=======
+
+
+
+
+.icon-flag{
+	max-width:30px;
+	display: inline-block;
+	height:20px;
+}
+
+.va-content{
+	padding: 0;
+}
+
+.va-collapse{
+	font-size: 13px;
+    line-height: 20px;
+    color: #676a6c;
+    text-decoration: none;
+}
+
+.va-collapse:hover{
+    text-decoration: none;
+    color: #676a6c;
+	cursor: pointer;
+    font-weight: bold;
+}
+>>>>>>> f65fb308629ee953c6ca85ac566635d3bdccfffe
