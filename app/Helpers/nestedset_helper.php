@@ -32,7 +32,7 @@ if (! function_exists('render_menu_recursive')){
                         $html = $html.''.$val['title'].'';                                       
                     $html = $html.'</div>';
                     $html = $html.'<span class="pull-right add-sub"> ';
-	                    $html = $html.'<a style="font-weight:normal;font-size:12px;" href="'.base_url('backend/menu/menu/create/'.$id.'').'" title="" class="">';
+	                    $html = $html.'<a style="font-weight:normal;font-size:12px;" href="'.base_url('backend/menu/menu/create/'.$id.'/'.$language).'" title="" class="">';
 	                        $html = $html.'Quản lý menu con';
 	                    $html = $html.'</a> ';
 	                $html = $html.'</span>';

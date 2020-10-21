@@ -76,27 +76,29 @@
                     <div class="panel-body va-panel-body">
                         <div class="panel-group" id="accordion">
                             <?php 
-
+                            // pre($object);
                                 if(isset($object) && is_array($object) && count($object)){
                                     foreach ($object as $key => $value) {
-                                        $object_menu = object_menu($value[$key]['module'],$value[$key]['translate'], $languageABC);
-                                        // print_r($object_menu);
+                                        
+                                        $object_menu = object_menu($value[0]['module'],$value[0]['translate'], $languageABC);
+
+                                        // pre($object_menu);
                             ?>
-                                <div class="panel panel-default va-general" data-id="#<?php echo $value[$key]['module'] ?>">
-                                    <a data-toggle="collapse" data-parent="#accordion" href="#<?php echo $value[$key]['module'] ?>_collapse" aria-expanded="true" class="collapsed va-collapse panel-heading va-panel-heading">
-                                        <?php echo $value[$key]['name'] ?>
+                                <div class="panel panel-default va-general" data-id="#<?php echo $value[0]['module'] ?>">
+                                    <a data-toggle="collapse" data-parent="#accordion" href="#<?php echo $value[0]['module'] ?>_collapse" aria-expanded="true" class="collapsed va-collapse panel-heading va-panel-heading">
+                                        <?php echo $value[0]['name'] ?>
                                         <i class="fa fa-caret-up va-arrow" aria-hidden="true"></i>
                                     </a>
-                                    <div id="<?php echo $value[$key]['module'] ?>_collapse" class="panel-collapse collapse" aria-expanded="true" style="">
-                                        <div class="panel-body va-panel-body" id="<?php echo $value[$key]['module'] ?>">
+                                    <div id="<?php echo $value[0]['module'] ?>_collapse" class="panel-collapse collapse" aria-expanded="true" style="">
+                                        <div class="panel-body va-panel-body" id="<?php echo $value[0]['module'] ?>">
                                             <ul class="tabs">
-                                                <li class="tab-link current" data-tab="<?php echo $value[$key]['module'].'_new' ?>">Mới nhất</li>
-                                                <li class="tab-link" data-tab="<?php echo $value[$key]['module'].'_search' ?>">Tìm kiếm</li>
+                                                <li class="tab-link current" data-tab="<?php echo $value[0]['module'].'_new' ?>">Mới nhất</li>
+                                                <li class="tab-link" data-tab="<?php echo $value[0]['module'].'_search' ?>">Tìm kiếm</li>
                                             </ul>
                                             <ul class="tabs-content">
-                                                <li id="<?php echo $value[$key]['module'].'_new' ?>" class="tab-content current">
-                                                    <div class="va-checkbox-all" data-class=".list_<?php echo $value[$key]['module'] ?>">
-                                                        <div class="list_<?php echo $value[$key]['module'] ?>">
+                                                <li id="<?php echo $value[0]['module'].'_new' ?>" class="tab-content current">
+                                                    <div class="va-checkbox-all" data-class=".list_<?php echo $value[0]['module'] ?>">
+                                                        <div class="list_<?php echo $value[0]['module'] ?>">
                                                             <?php 
                                                             if(isset($object_menu) && is_array($object_menu) && count($object_menu)){ ?>
                                                                 <?php foreach ($object_menu as $key => $val) { ?>
@@ -106,15 +108,15 @@
                                                                 </div>
                                                             <?php }} ?>
                                                             <div class="uk-flex uk-flex-middle">
-                                                                <input type="checkbox" name="<?php echo $value[$key]['module'] ?>_all" id="<?php echo $value[$key]['module'] ?>_all" class="<?php echo $value[$key]['module'] ?>_all va_check_id" value="all"> 
-                                                                <label for="<?php echo $value[$key]['module'] ?>_all" class="ml15">Chọn tất cả</label>
+                                                                <input type="checkbox" name="<?php echo $value[0]['module'] ?>_all" id="<?php echo $value[0]['module'] ?>_all" class="<?php echo $value[0]['module'] ?>_all va_check_id" value="all"> 
+                                                                <label for="<?php echo $value[0]['module'] ?>_all" class="ml15">Chọn tất cả</label>
                                                             </div>
                                                             <a href="" class="btn btn-default va-search va_select_checkbox right block m-b" name="add_menu_item">Thêm vào Menu</a>
                                                         </div>
                                                     </div>
                                                 </li>
-                                                <li id="<?php echo $value[$key]['module'].'_search' ?>" class="tab-content">
-                                                    <input type="text" placeholder="Nhập để tìm kiếm ..." class="typeahead_2 mb20 search_general form-control" data-search="<?php echo $value[$key]['module']?>" data-translate="<?php echo $value[$key]['translate']?> " data-language="<?php echo $languageABC; ?>">
+                                                <li id="<?php echo $value[0]['module'].'_search' ?>" class="tab-content">
+                                                    <input type="text" placeholder="Nhập để tìm kiếm ..." class="typeahead_2 mb20 search_general form-control" data-search="<?php echo $value[0]['module']?>" data-translate="<?php echo $value[0]['translate']?> " data-language="<?php echo $languageABC; ?>">
                                                     <div class="va-list-general">
                                                     </div>
                                                     

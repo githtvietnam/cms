@@ -81,7 +81,7 @@ ul.tabs li.current::before{
 .input-group {
     position: relative;
 }
-.input-group {
+.input-group-va {
     display: flex;
     align-items: center;
     margin-top: 20px;
