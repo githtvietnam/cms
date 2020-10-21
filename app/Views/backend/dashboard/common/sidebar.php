@@ -30,6 +30,13 @@
            <li class="landing_link">
                 <a  href="<?php echo base_url('backend/dashboard/dashboard/index') ?>"><i class="fa fa-star"></i> <span class="nav-label">Dashboard</span> <span class="label label-warning pull-right">NEW</span></a>
             </li>
+            <li class="<?php echo ( $uriModule == 'product') ? 'active'  : '' ?>">
+                <a href="index.html"><i class="fa fa-desktop"></i> <span class="nav-label">QL Sản phẩm</span> <span class="fa arrow"></span></a>
+                <ul class="nav nav-second-level">
+                    <li><a href="<?php echo base_url('backend/product/catalogue/index') ?>">QL Thương hiệu</a></li>
+                    <li><a href="<?php echo base_url('backend/product/product/index') ?>">QL Nhóm Thương hiệu</a></li>
+                </ul>
+            </li>
             <li class="<?php echo ( $uriModule == 'article') ? 'active'  : '' ?>">
                 <a href="index.html"><i class="fa fa-file"></i> <span class="nav-label"><?php echo translate('cms_lang.sidebar.sb_article', $language) ?></span> <span class="fa arrow"></span></a>
                 <ul class="nav nav-second-level">
