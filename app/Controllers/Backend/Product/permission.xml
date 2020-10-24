@@ -20,6 +20,25 @@
 		</item>
 	</permissions>
 	<permissions>
+		<title>Nhóm - [Sản phẩm]</title>
+		<item>
+			<param>backend/product/catalogue/index</param>
+			<description>Xem</description>
+		</item>
+		<item>
+			<param>backend/product/catalogue/create</param>
+			<description>Thêm</description>
+		</item>
+		<item>
+			<param>backend/product/catalogue/update</param>
+			<description>Sửa</description>
+		</item>
+		<item>
+			<param>backend/product/catalogue/delete</param>
+			<description>Xóa</description>
+		</item>
+	</permissions>
+	<permissions>
 		<title>Danh sách - [Thương hiệu]</title>
 		<item>
 			<param>backend/product/brand/brand/index</param>

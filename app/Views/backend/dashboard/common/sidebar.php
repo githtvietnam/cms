@@ -33,6 +33,7 @@
             <li class="<?php echo ( $uriModule == 'product') ? 'active'  : '' ?>">
                 <a href="index.html"><i class="fa fa-desktop"></i> <span class="nav-label">QL Sản phẩm</span> <span class="fa arrow"></span></a>
                 <ul class="nav nav-second-level">
+                    <li><a href="<?php echo base_url('backend/product/catalogue/index') ?>">QL Nhóm Sản phẩm</a></li>
                     <li><a href="<?php echo base_url('backend/product/brand/catalogue/index') ?>">QL Nhóm Thương hiệu</a></li>
                     <li><a href="<?php echo base_url('backend/product/brand/brand/index') ?>">QL Thương hiệu</a></li>
                     <li><a href="<?php echo base_url('backend/product/store/index') ?>">QL Cửa hàng</a></li>
