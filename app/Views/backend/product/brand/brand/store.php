@@ -1,4 +1,4 @@
-<form method="post" action="" class="form-horizontal box" >
+<form method="post" action="" >
 	<div class="wrapper wrapper-content animated fadeInRight">
 		<div class="row">
 			<div class="box-body">
@@ -18,12 +18,30 @@
 					</div>
 					<div class="ibox-content">
 						<div class="row mb15">
+							<div class="col-lg-6">
+								<div class="form-row">
+									<label class="control-label text-left">
+										<span>Tên Thương hiệu <b class="text-danger">(*)</b></span>
+									</label>
+									<?php echo form_input('title', validate_input(set_value('title', (isset($brand['title'])) ? $brand['title'] : '')), 'class="form-control title" placeholder="" id="title" autocomplete="off"'); ?>
+								</div>
+							</div>
+							<div class="col-lg-6">
+								<div class="form-row">
+									<label class="control-label text-left">
+										<span>Nhãn hiệu<b class="text-danger">(*)</b></span>
+									</label>
+									<?php echo form_input('keyword', validate_input(set_value('keyword', (isset($brand['keyword'])) ? $brand['keyword'] : '')), 'class="form-control keyword" placeholder="" id="keyword" autocomplete="off"'); ?>
+								</div>
+							</div>
+						</div>
+						<div class="row mb15">
 							<div class="col-lg-12">
 								<div class="form-row">
 									<label class="control-label text-left">
-										<span>Tiêu đề danh mục <b class="text-danger">(*)</b></span>
+										<span>Slogan</span>
 									</label>
-									<?php echo form_input('title', validate_input(set_value('title', (isset($article_catalogue['title'])) ? $article_catalogue['title'] : '')), 'class="form-control title" placeholder="" id="title" autocomplete="off"'); ?>
+									<?php echo form_input('slogan', validate_input(set_value('slogan', (isset($brand['slogan'])) ? $brand['slogan'] : '')), 'class="form-control slogan" placeholder="" id="slogan" autocomplete="off"'); ?>
 								</div>
 							</div>
 						</div>
@@ -36,7 +54,7 @@
 										</label>
 										<a href="" title="" data-target="description" class="uploadMultiImage">Upload hình ảnh</a>
 									</div>
-									<?php echo form_textarea('description', htmlspecialchars_decode(html_entity_decode(set_value('description', (isset($article_catalogue['description'])) ? $article_catalogue['description'] : ''))), 'class="form-control ck-editor" id="description" placeholder="" autocomplete="off"');?>
+									<?php echo form_textarea('description', htmlspecialchars_decode(html_entity_decode(set_value('description', (isset($brand['description'])) ? $brand['description'] : ''))), 'class="form-control ck-editor" id="description" placeholder="" autocomplete="off"');?>
 
 								</div>
 							</div>
@@ -51,7 +69,7 @@
 										</label>
 										<a href="" title="" data-target="content" class="uploadMultiImage">Upload hình ảnh</a>
 									</div>
-									<?php echo form_textarea('content', htmlspecialchars_decode(html_entity_decode(set_value('content', (isset($article_catalogue['content'])) ? $article_catalogue['content'] : ''))), 'class="form-control ck-editor" id="content" placeholder="" autocomplete="off"');?>
+									<?php echo form_textarea('content', htmlspecialchars_decode(html_entity_decode(set_value('content', (isset($brand['content'])) ? $brand['content'] : ''))), 'class="form-control ck-editor" id="content" placeholder="" autocomplete="off"');?>
 
 
 								</div>
@@ -80,9 +98,10 @@
 						<?php
 							if(isset($_POST['album'])){
 								$album = $_POST['album'];
-							}else if(isset($article_catalogue)){
-								$album = json_decode($article_catalogue['album'], TRUE);
+							}else if(isset($brand)){
+								$album = json_decode($brand['album'], TRUE);
 							}
+							
 						 ?>
 						<div class="row">
 							<div class="col-lg-12">
@@ -133,9 +152,9 @@
 						<div class="row">
 							<div class="col-lg-12">
 								<?php  
-									$metaTitle = (isset($_POST['meta_title'])) ? $_POST['meta_title'] : ((isset($article_catalogue['meta_title']) && $article_catalogue['meta_title'] != '') ? $article_catalogue['meta_title'] : 'Bạn chưa nhập tiêu đề SEO cho bài viết') ;
-									$googleLink = (isset($_POST['canonical'])) ? $_POST['canonical'] : ((isset($article_catalogue['canonical']) && $article_catalogue['canonical'] != '') ? BASE_URL.$article_catalogue['canonical'].HTSUFFIX : BASE_URL.'duong-dan-website'.HTSUFFIX) ;
-									$metaDescription = (isset($_POST['meta_description'])) ? $_POST['meta_description'] : ((isset($article_catalogue['meta_description']) && $article_catalogue['meta_description'] != '') ? $article_catalogue['meta_description'] : 'Bạn Chưa nhập mô tả SEO cho bài viết') ;
+									$metaTitle = (isset($_POST['meta_title'])) ? $_POST['meta_title'] : ((isset($brand['meta_title']) && $brand['meta_title'] != '') ? $brand['meta_title'] : 'Bạn chưa nhập tiêu đề SEO cho Thương hiệu') ;
+									$googleLink = (isset($_POST['canonical'])) ? $_POST['canonical'] : ((isset($brand['canonical']) && $brand['canonical'] != '') ? BASE_URL.$brand['canonical'].HTSUFFIX : BASE_URL.'duong-dan-website'.HTSUFFIX) ;
+									$metaDescription = (isset($_POST['meta_description'])) ? $_POST['meta_description'] : ((isset($brand['meta_description']) && $brand['meta_description'] != '') ? $brand['meta_description'] : 'Bạn Chưa nhập mô tả SEO cho Thương hiệu') ;
 								?>
 								<div class="google">
 									<div class="g-title"><?php echo $metaTitle; ?></div>
@@ -159,7 +178,7 @@
 											</label>
 											<span style="color:#9fafba;"><span id="titleCount">0</span> trên 70 ký tự</span>
 										</div>
-										<?php echo form_input('meta_title', htmlspecialchars_decode(html_entity_decode(set_value('meta_title', (isset($article_catalogue['meta_title'])) ? $article_catalogue['meta_title'] : ''))), 'class="form-control meta-title" placeholder="" autocomplete="off"');?>
+										<?php echo form_input('meta_title', htmlspecialchars_decode(html_entity_decode(set_value('meta_title', (isset($brand['meta_title'])) ? $brand['meta_title'] : ''))), 'class="form-control meta-title" placeholder="" autocomplete="off"');?>
 									</div>
 								</div>
 							</div>
@@ -172,7 +191,7 @@
 											</label>
 											<span style="color:#9fafba;"><span id="descriptionCount">0</span> trên 320 ký tự</span>
 										</div>
-										<?php echo form_textarea('meta_description', set_value('meta_description', (isset($article_catalogue['meta_description'])) ? $article_catalogue['meta_description'] : ''), 'class="form-control meta-description" id="seoDescription" placeholder="" autocomplete="off"');?>
+										<?php echo form_textarea('meta_description', set_value('meta_description', (isset($brand['meta_description'])) ? $brand['meta_description'] : ''), 'class="form-control meta-description" id="seoDescription" placeholder="" autocomplete="off"');?>
 									</div>
 								</div>
 							</div>
@@ -187,8 +206,8 @@
 										<div class="outer">
 											<div class="uk-flex uk-flex-middle">
 												<div class="base-url"><?php echo base_url(); ?></div>
-												<?php echo form_input('canonical', htmlspecialchars_decode(html_entity_decode(set_value('canonical', (isset($article_catalogue['canonical'])) ? $article_catalogue['canonical'] : ''))), 'class="form-control canonical" placeholder="" autocomplete="off" data-flag="0" ');?>
-												<?php echo form_hidden('original_canonical', htmlspecialchars_decode(html_entity_decode(set_value('canonical', (isset($article_catalogue['canonical'])) ? $article_catalogue['canonical'] : ''))), 'class="form-control canonical" placeholder="" autocomplete="off"');?>
+												<?php echo form_input('canonical', htmlspecialchars_decode(html_entity_decode(set_value('canonical', (isset($brand['canonical'])) ? $brand['canonical'] : ''))), 'class="form-control canonical" placeholder="" autocomplete="off" data-flag="0" ');?>
+												<?php echo form_hidden('original_canonical', htmlspecialchars_decode(html_entity_decode(set_value('canonical', (isset($brand['canonical'])) ? $brand['canonical'] : ''))), 'class="form-control canonical" placeholder="" autocomplete="off"');?>
 
 											</div>
 										</div>
@@ -215,23 +234,36 @@
 									<small class="text-danger">Chọn [Root] Nếu không có danh mục cha</small>
 								</div>
 								<div class="form-row">
-									<?php echo form_dropdown('parentid', $dropdown, set_value('parentid', (isset($article_catalogue['parentid'])) ? $article_catalogue['parentid'] : ''), 'class="form-control m-b select2"');?>
+									<?php echo form_dropdown('catalogueid', $dropdown, set_value('catalogueid', (isset($brand['catalogueid'])) ? $brand['catalogueid'] : ''), 'class="form-control m-b select2"');?>
 								</div>
+								<script>
+									var catalogue = '<?php echo (isset($_POST['catalogue'])) ? json_encode($_POST['catalogue']) : ((isset($brand['catalogue']) && $brand['catalogue'] != null) ? $brand['catalogue'] : '');  ?>';	
+								</script>
+								<div class="form-row mt20">
+										<label class="control-label text-left">
+											<span>Danh mục phụ</span>
+										</label>
+										
+										<div class="form-row">
+											<?php echo form_dropdown('catalogue[]', '', NULL, 'class="form-control selectMultiple" multiple="multiple" data-title="Nhập 2 kí tự để tìm kiếm..."  style="width: 100%;" data-join="'.$module.'_translate" data-module="'.$module.'_catalogue" data-select="title"'); ?>
+										</div>
+									</div>
 							</div>
 						</div>
 					</div>
 				</div>
 
 				<div class="ibox mb20">
-					<div class="ibox-title">
-						<h5 class="choose-image" style="cursor: pointer;">Ảnh đại diện </h5>
+					<div class="ibox-title uk-flex-space-between uk-flex uk-flex-middle">
+						<h5 class="choose-image" style="cursor: pointer;margin:0;">Logo</h5>
+						<a href="" title="" data-target="image" class="uploadImage">Upload hình ảnh</a>
 					</div>
 					<div class="ibox-content">
 						<div class="row">
 							<div class="col-lg-12">
 								<div class="form-row">
-									<div class="avatar" style="cursor: pointer;"><img src="<?php echo (isset($_POST['image'])) ? $_POST['image'] : ((isset($article_catalogue['image']) && $article_catalogue['image'] != '') ? $article_catalogue['image'] : 'public/not-found.png') ?>" class="img-thumbnail" alt=""></div>
-									<?php echo form_input('image', htmlspecialchars_decode(html_entity_decode(set_value('image', (isset($article_catalogue['image'])) ? $article_catalogue['image'] : ''))), 'class="form-control " placeholder="Đường dẫn của ảnh"  id="imageTxt"  autocomplete="off" style="display:none;" ');?>
+									<div class="avatar" style="cursor: pointer;"><img src="<?php echo (isset($_POST['image'])) ? $_POST['image'] : ((isset($brand['image']) && $brand['image'] != '') ? $brand['image'] : 'public/not-found.png') ?>" class="img-thumbnail" alt=""></div>
+									<?php echo form_input('image', htmlspecialchars_decode(html_entity_decode(set_value('image', (isset($brand['image'])) ? $brand['image'] : ''))), 'class="form-control " placeholder="Đường dẫn của ảnh"  id="imageTxt"  autocomplete="off" style="display:none;" ');?>
 								</div>
 							</div>
 						</div>
@@ -250,7 +282,7 @@
 									<div class="block clearfix">
 										<div class="i-checks mr30" style="width:100%;">
 											<span style="color:#000;" class="uk-flex uk-flex-middle"> 
-												<?php echo form_radio('publish', set_value('publish', 1), ((isset($_POST['publish']) && $_POST['publish'] == 1 || (isset($article_catalogue['publish']) && $article_catalogue['publish'] == 1)) ? true : (!isset($_POST['publish'])) ? true : false),'class=""  id="publish"  style="margin-top:0;margin-right:10px;" '); ?>
+												<?php echo form_radio('publish', set_value('publish', 1), ((isset($_POST['publish']) && $_POST['publish'] == 1 || (isset($brand['publish']) && $brand['publish'] == 1)) ? true : (!isset($_POST['publish'])) ? true : false),'class=""  id="publish"  style="margin-top:0;margin-right:10px;" '); ?>
 												<label for="publish" style="margin:0;cursor:pointer;">Cho phép hiển thị trên website</label>
 											</span>
 										</div>
@@ -258,7 +290,7 @@
 									<div class="block clearfix">
 										<div class="i-checks" style="width:100%;">
 											<span style="color:#000;" class="uk-flex uk-flex-middle"> 
-												<?php echo form_radio('publish', set_value('publish', 0), ((isset($_POST['publish']) && $_POST['publish'] == 0 || (isset($article_catalogue['publish']) && $article_catalogue['publish'] == 0)) ? true : false),'class=""   id="no-publish" style="margin-top:0;margin-right:10px;" '); ?>
+												<?php echo form_radio('publish', set_value('publish', 0), ((isset($_POST['publish']) && $_POST['publish'] == 0 || (isset($brand['publish']) && $brand['publish'] == 0)) ? true : false),'class=""   id="no-publish" style="margin-top:0;margin-right:10px;" '); ?>
 												
 												<label for="no-publish" style="margin:0;cursor:pointer;">Không Cho phép hiển thị trên website</label>
 											</span>

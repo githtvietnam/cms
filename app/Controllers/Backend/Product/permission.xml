@@ -1,0 +1,79 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<module>
+	<permissions>
+		<title>Nhóm - [Thương hiệu]</title>
+		<item>
+			<param>backend/product/brand/catalogue/index</param>
+			<description>Xem</description>
+		</item>
+		<item>
+			<param>backend/product/brand/catalogue/create</param>
+			<description>Thêm</description>
+		</item>
+		<item>
+			<param>backend/product/brand/catalogue/update</param>
+			<description>Sửa</description>
+		</item>
+		<item>
+			<param>backend/product/brand/catalogue/delete</param>
+			<description>Xóa</description>
+		</item>
+	</permissions>
+	<permissions>
+		<title>Danh sách - [Thương hiệu]</title>
+		<item>
+			<param>backend/product/brand/brand/index</param>
+			<description>Xem</description>
+		</item>
+		<item>
+			<param>backend/product/brand/brand/create</param>
+			<description>Thêm</description>
+		</item>
+		<item>
+			<param>backend/product/brand/brand/update</param>
+			<description>Sửa</description>
+		</item>
+		<item>
+			<param>backend/product/brand/brand/delete</param>
+			<description>Xóa</description>
+		</item>
+	</permissions>
+	<permissions>
+		<title>Danh sách - [Cửa hàng]</title>
+		<item>
+			<param>backend/product/store/index</param>
+			<description>Xem</description>
+		</item>
+		<item>
+			<param>backend/product/store/create</param>
+			<description>Thêm</description>
+		</item>
+		<item>
+			<param>backend/product/store/update</param>
+			<description>Sửa</description>
+		</item>
+		<item>
+			<param>backend/product/store/delete</param>
+			<description>Xóa</description>
+		</item>
+	</permissions>
+	<permissions>
+		<title>Danh sách - [Kho hàng]</title>
+		<item>
+			<param>backend/product/warehouse/index</param>
+			<description>Xem</description>
+		</item>
+		<item>
+			<param>backend/product/warehouse/create</param>
+			<description>Thêm</description>
+		</item>
+		<item>
+			<param>backend/product/warehouse/update</param>
+			<description>Sửa</description>
+		</item>
+		<item>
+			<param>backend/product/warehouse/delete</param>
+			<description>Xóa</description>
+		</item>
+	</permissions>
+</module>

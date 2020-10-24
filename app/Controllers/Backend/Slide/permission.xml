@@ -19,9 +19,24 @@
 			<param>backend/slide/slide/delete</param>
 			<description>Xóa</description>
 		</item>
-		<!-- <item>
-			<param>backend/slide/translate/translate</param>
-			<description>Dịch</description>
-		</item> -->
+	</permissions>
+	<permissions>
+		<title>Slide</title>
+		<item>
+			<param>backend/slide/slide/index</param>
+			<description>Xem</description>
+		</item>
+		<item>
+			<param>backend/slide/slide/create</param>
+			<description>Thêm</description>
+		</item>
+		<item>
+			<param>backend/slide/slide/update</param>
+			<description>Sửa</description>
+		</item>
+		<item>
+			<param>backend/slide/slide/delete</param>
+			<description>Xóa</description>
+		</item>
 	</permissions>
 </module>

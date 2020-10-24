@@ -106,7 +106,7 @@ if (! function_exists('get_catalogue_object')){
             'table' => $param['module'].'_catalogue as tb1',
             'join' => [
 	            		[
-							$param['module'].'_translate as tb4','tb1.id = tb4.objectid ','inner'
+							$param['module'].'_translate as tb4','tb1.id = tb4.objectid AND tb4.module = \''.$param['module'].'_catalogue'.'\'','inner'
 						]
 					],
             'where' => ['tb1.deleted_at' => 0],

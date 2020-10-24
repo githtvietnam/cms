@@ -1,12 +1,12 @@
 <div class="row wrapper border-bottom white-bg page-heading">
 	<div class="col-lg-10">
-		<h2>Thêm mới Nhóm Bài Viết</h2>
+		<h2>Cập nhật Thương hiệu</h2>
 		<ol class="breadcrumb">
 			<li>
 				<a href="<?php echo site_url('admin'); ?>">Home</a>
 			</li>
-			<li class="active"><strong>Thêm mới Nhóm Bài Viết</strong></li>
+			<li class="active"><strong>Cập nhật Thương hiệu</strong></li>
 		</ol>
 	</div>
 </div>
-<?php echo view('backend/article/catalogue/store') ?>
+<?php echo view('backend/product/brand/brand/store',  ['method' => $method]) ?>
