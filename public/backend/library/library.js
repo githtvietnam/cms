@@ -13,30 +13,42 @@ $(document).ready(function(){
    		 	$('.upload-list').hide();
 		}
 	});
+	$(document).ready(function(){
+		let data_0 = $('#insert_general').attr('data-max-0');
+		for(let i = 1; i <= data_0; i++ ){
+			$('.render_num0').append(0);
+		}
+		$('.render_num0').append('...');
+	})
+
 	$(document).on('keyup','#suffix', function(){
-		var suffix = $(this).val();
-        console.log(suffix);
+		let suffix = $(this).val();
+		$(this).parents().find('.render_suffix').html(suffix);
+	});
+	$(document).on('keyup','#prefix', function(){
+		let prefix = $(this).val();
+		$(this).parents().find('.render_prefix').html(prefix);
 	});
 
 	$('#insert_general').on("submit", function(event) {
         event.preventDefault();
-        
-   //      let title_menu = $('#title_menu').val();
-   //      let value_menu = $('#value_menu').val();
-   //      if (title_menu == "") {
-   //          alert("Vui lòng nhập vào trường Tiêu đề Menu!");
-   //      } else if (value_menu == '') {
-   //          alert("Vui lòng nhập vào trường Giá trị Menu!");
-   //      } else {
-   //          let form_URL = 'ajax/menu/add_menu';
-   //      	$.post(form_URL, {
-			// 	title_menu : title_menu, value_menu: value_menu
-			// },
-			// function(data){
-			// 	$('#insert_general')[0].reset();
-   //              location.reload();
-			// });	
-   //      }
+		let data_0 = $('#insert_general').attr('data-max-0');
+        let suffix = $('#suffix').val();
+        let prefix = $('#prefix').val();
+        if (suffix == "") {
+            alert("Vui lòng nhập vào trường Tiền tố!");
+        } else if (prefix == '') {
+            alert("Vui lòng nhập vào trường Hậu tố!");
+        } else {
+            let form_URL = 'ajax/product/general_id';
+        	$.post(form_URL, {
+				suffix : suffix, prefix: prefix, data_0: data_0, module: _module
+			},
+			function(data){
+				$('#insert_general')[0].reset();
+                // location.reload();
+			});	
+        }
     });
 
 	if($('.select2').length){
@@ -66,7 +78,6 @@ $(document).ready(function(){
 							}
 						});
 				}
-
 			}, 10);
 
 			get_select2(_this);
