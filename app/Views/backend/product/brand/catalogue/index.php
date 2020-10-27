@@ -46,14 +46,7 @@
                                         <option value="90">90 bản ghi</option>
                                         <option value="100">100 bản ghi</option>
                                     </select>
-                                    
-                                   
-                                    
-                                </div>
-                            </div>
-                            <div class="toolbox">
-                                <div class="uk-flex uk-flex-middle uk-flex-space-between">
-                                    <div class="uk-search uk-flex uk-flex-middle mr10">
+                                   <div class="uk-search uk-flex uk-flex-middle mr10">
                                         <div class="input-group">
                                             <input type="text" name="keyword" value="<?php echo (isset($_GET['keyword'])) ? $_GET['keyword'] : ''; ?>" placeholder="Nhập Từ khóa bạn muốn tìm kiếm..." class="form-control va-search"> 
                                             <span class="input-group-btn"> 
@@ -62,6 +55,11 @@
                                             </span>
                                         </div>
                                     </div>
+                                </div>
+                            </div>
+                            <div class="toolbox">
+                                <div class="uk-flex uk-flex-middle uk-flex-space-between">
+                                    
                                     <div class="uk-button">
                                         <a href="<?php echo base_url('backend/product/brand/catalogue/create') ?>" class="btn btn-danger btn-sm"><i class="fa fa-plus"></i> Thêm Nhóm Thương hiệu mới</a>
                                     </div>

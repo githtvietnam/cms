@@ -294,3 +294,26 @@ label{
 .va-first-p{
 	text-transform: capitalize;
 }
+
+.m0{
+	margin: 0 !important;
+}
+
+.h32{
+	height: 32px
+}
+
+.uk-clearfix:before {
+    content: "";
+    display: table-cell
+}
+
+.uk-clearfix:after {
+    content: "";
+    display: table;
+    clear: both
+}
+
+.float-right{
+	float:right;
+}

@@ -43,13 +43,6 @@
                                         <option value="90">90 bản ghi</option>
                                         <option value="100">100 bản ghi</option>
                                     </select>
-                                    
-                                   
-                                    
-                                </div>
-                            </div>
-                            <div class="toolbox">
-                                <div class="uk-flex uk-flex-middle uk-flex-space-between">
                                     <div class="uk-search uk-flex uk-flex-middle mr10">
                                         <div class="input-group">
                                             <input type="text" name="keyword" value="<?php echo (isset($_GET['keyword'])) ? $_GET['keyword'] : ''; ?>" placeholder="Nhập Từ khóa bạn muốn tìm kiếm..." class="form-control va-search"> 
@@ -59,6 +52,10 @@
                                             </span>
                                         </div>
                                     </div>
+                                </div>
+                            </div>
+                            <div class="toolbox">
+                                <div class="uk-flex uk-flex-middle uk-flex-space-between">
                                     <div class="uk-button">
                                         <a href="<?php echo base_url('backend/product/warehouse/create') ?>" class="btn btn-danger btn-sm"><i class="fa fa-plus"></i> Thêm Kho hàng mới</a>
                                     </div>
@@ -96,9 +93,9 @@
                                     <input type="checkbox" name="checkbox[]" value="<?php echo $val['id']; ?>" class="checkbox-item">
                                     <div for="" class="label-checkboxitem"></div>
                                 </td>
-                                <td class="text-primary text-center"><?php echo $val['warehouseid']; ?></td>
-                                <td class="text-primary"><?php echo $val['title']; ?></td>
-                                <td class="text-primary"><?php echo $address; ?></td>
+                                <td class="text-navy text-center"><?php echo $val['warehouseid']; ?></td>
+                                <td class="text-danger "><?php echo $val['title']; ?></td>
+                                <td class="text-primary" style="color: blue"><?php echo $address; ?></td>
                                 <td class="text-primary text-center"><?php echo $val['phone']; ?></td>
 
                                 <td class="text-center td-status" data-field="publish" data-module="<?php echo $module; ?>" data-where="id"><?php echo $status; ?></td>
@@ -122,3 +119,43 @@
         </div>
     </div>
 </div>
+
+
+<div id="add_data_Modal" class="modal fade">  
+      <div class="modal-dialog">  
+           <div class="modal-content">  
+                <div class="modal-header">
+                    <div class="uk-flex uk-flex-space-between uk-flex-middle" >
+                        <h4 class="modal-title">Tạo vị trí hiển thị cho Menu</h4>  
+                        <button type="button" class="close" data-dismiss="modal">&times;</button>  
+                    </div>  
+                </div>  
+                <div class="modal-body">  
+                    <form method="post" id="insert_form" class="uk-clearfix">  
+                        <div class="uk-grid uk-grid-width-large-1-2 uk-clearfix">
+                            <div class="va-input-general">
+                                <label>Tiền tố</label>  
+                                <input type="text" name="suffix" id="suffix" class="form-control" />  
+                            </div>
+                            <div class="va-input-general">
+                                <label>Hậu tố</label>  
+                                <input type="text" name="prefix" id="prefix" class="form-control" />  
+                            </div>
+                        </div>
+                        <br>
+                        <div class="va-input-general">
+                            <label>Số lượng số 0</label>  
+                            <input type="text" name="num0" id="num0" class="form-control" />  
+                        </div>
+                        <br>
+                        <div class="va-input-general">
+                            <label>Kết quả</label>  
+                            <input type="text" name="render" id="render" value="1233456" disabled class="form-control" />  
+                        </div>
+                        <br>
+                        <input type="submit" name="insert" id="insert" value="Lưu thay đổi" class="btn btn-success  float-right" />  
+                    </form>  
+                </div>   
+           </div>  
+      </div>  
+ </div> 

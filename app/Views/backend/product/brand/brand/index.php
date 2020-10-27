@@ -57,10 +57,6 @@
                                         <option value="90">90 bản ghi</option>
                                         <option value="100">100 bản ghi</option>
                                     </select>
-                                </div>
-                            </div>
-                            <div class="toolbox">
-                                <div class="uk-flex uk-flex-middle uk-flex-space-between">
                                     <div class="form-row cat-wrap">
                                         <?php echo form_dropdown('catalogueid', $dropdown, set_value('catalogueid', (isset($_GET['catalogueid'])) ? $_GET['catalogueid'] : ''), 'class="form-control m-b select2 mr10" style="width:220px;"');?>
                                     </div>
@@ -72,6 +68,13 @@
                                             </button> 
                                             </span>
                                         </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="toolbox">
+                                <div class="uk-flex uk-flex-middle uk-flex-space-between">
+                                    <div class="uk-button mr20">
+                                        <a href="<?php echo base_url('backend/product/brand/catalogue/index') ?>" class="btn btn-success btn-sm"><i class="fa fa-plus"></i> QL Nhóm Thương hiệu</a>
                                     </div>
                                     <div class="uk-button">
                                         <a href="<?php echo base_url('backend/product/brand/brand/create') ?>" class="btn btn-danger btn-sm"><i class="fa fa-plus"></i> Thêm Thương hiệu Mới</a>

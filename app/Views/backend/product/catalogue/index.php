@@ -77,7 +77,6 @@
                                 <label for="check-all" class="labelCheckAll"></label>
                             </th>
                             <th >Tiêu đề nhóm</th>
-
                             <?php if(isset($languageList) && is_array($languageList) && count($languageList)){ ?>
                             <?php foreach($languageList as $key => $val){ ?>
                             <th class="text-center" style="width: 100px;">

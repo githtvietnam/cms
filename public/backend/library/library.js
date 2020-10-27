@@ -13,8 +13,31 @@ $(document).ready(function(){
    		 	$('.upload-list').hide();
 		}
 	});
+	$(document).on('keyup','#suffix', function(){
+		var suffix = $(this).val();
+        console.log(suffix);
+	});
 
-
+	$('#insert_general').on("submit", function(event) {
+        event.preventDefault();
+        
+   //      let title_menu = $('#title_menu').val();
+   //      let value_menu = $('#value_menu').val();
+   //      if (title_menu == "") {
+   //          alert("Vui lòng nhập vào trường Tiêu đề Menu!");
+   //      } else if (value_menu == '') {
+   //          alert("Vui lòng nhập vào trường Giá trị Menu!");
+   //      } else {
+   //          let form_URL = 'ajax/menu/add_menu';
+   //      	$.post(form_URL, {
+			// 	title_menu : title_menu, value_menu: value_menu
+			// },
+			// function(data){
+			// 	$('#insert_general')[0].reset();
+   //              location.reload();
+			// });	
+   //      }
+    });
 
 	if($('.select2').length){
 		$('.select2').select2();
