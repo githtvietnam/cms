@@ -91,6 +91,9 @@
                                 $status = ($val['publish'] == 1) ? '<span class="text-success">Active</span>'  : '<span class="text-danger">Deactive</span>';
 
                             ?>
+                            <script>
+                                var _module = '<?php echo $module ?>';
+                            </script>
                             <tr id="post-<?php echo $val['id']; ?>" data-id="<?php echo $val['id']; ?>">
                                 <td>
                                     <input type="checkbox" name="checkbox[]" value="<?php echo $val['id']; ?>" class="checkbox-item">
@@ -123,7 +126,7 @@
     </div>
 </div>
 
-<div id="add_data_Modal" class="modal fade">  
+<div id="add_data_Modal" class="modal fade va-general">  
       <div class="modal-dialog">  
            <div class="modal-content">  
                 <div class="modal-header">
@@ -133,26 +136,27 @@
                     </div>  
                 </div>  
                 <div class="modal-body">  
-                    <form method="post" id="insert_general" class="uk-clearfix">  
+                    <form method="post" id="insert_general" class="uk-clearfix" data-max-0="3">  
                         <div class="uk-grid uk-grid-width-large-1-2 uk-clearfix">
                             <div class="va-input-general">
                                 <label>Tiền tố</label>  
-                                <input type="text" name="suffix" id="suffix" class="form-control" />  
+                                <input type="text" name="suffix" id="suffix" placeholder="VD: VA-..." class="form-control" />  
                             </div>
                             <div class="va-input-general">
                                 <label>Hậu tố</label>  
-                                <input type="text" name="prefix" id="prefix" class="form-control" />  
+                                <input type="text" name="prefix" id="prefix" placeholder="VD: ...-STORE" class="form-control" />  
                             </div>
                         </div>
                         <br>
                         <div class="va-input-general">
-                            <label>Số lượng số 0</label>  
-                            <input type="text" name="num0" id="num0" class="form-control" />  
-                        </div>
-                        <br>
-                        <div class="va-input-general">
-                            <label>Kết quả</label>  
-                            <input type="text" name="render" id="render" value="1233456" disabled class="form-control" />  
+                            <label class="mb10">Kết quả</label>  
+                            <div class="uk-flex uk-flex-middle">
+                                <span class="render_suffix text-danger">VA</span>
+                                <span>-</span>
+                                <span class="render_num0 text-danger"></span>
+                                <span>-</span>
+                                <span class="render_prefix text-danger">STR</span>
+                            </div>
                         </div>
                         <br>
                         <input type="submit" name="insert" id="insert" value="Lưu thay đổi" class="btn btn-success  float-right" />  

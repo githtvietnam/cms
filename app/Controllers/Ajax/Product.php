@@ -66,12 +66,12 @@ class Product extends BaseController{
 		$param['module'] = $this->request->getPost('module');
 
 
-		$dataInsert = [
-			'value' => $param['value_menu'],
-			'created_at' => $this->currentTime,
-			'title' => $param['title_menu'],
-			'userid_created' => $this->auth['id'],
-		];
+		// $dataInsert = [
+		// 	'value' => $param['value_menu'],
+		// 	'created_at' => $this->currentTime,
+		// 	'title' => $param['title_menu'],
+		// 	'userid_created' => $this->auth['id'],
+		// ];
 
 		// $flag = $this->AutoloadModel->_insert([
 		// 	'table' => 'menu_catalogue',
