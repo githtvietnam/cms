@@ -125,7 +125,47 @@
         </div>
     </div>
 </div>
-
+<?php if(isset($code) && is_array($code) && count($code)){ ?>
+<div id="add_data_Modal" class="modal fade va-general">  
+      <div class="modal-dialog">  
+           <div class="modal-content">  
+                <div class="modal-header">
+                    <div class="uk-flex uk-flex-space-between uk-flex-middle" >
+                        <h4 class="modal-title">Tạo cấu hình chung cho mã Cửa hàng</h4>  
+                        <button type="button" class="close" data-dismiss="modal">&times;</button>  
+                    </div>  
+                </div>  
+                <div class="modal-body">  
+                    <form method="post" id="insert_general" class="uk-clearfix" data-max-0="<?php echo ((isset($code['num0']) ? $code['num0'] : '')) ?>">  
+                        <div class="uk-grid uk-grid-width-large-1-2 uk-clearfix">
+                            <div class="va-input-general">
+                                <label>Tiền tố</label>  
+                                <input type="text" name="suffix" id="suffix" value="<?php echo ((isset($code['suffix']) ? $code['suffix'] : '')) ?>" placeholder="VD: VA-..." class="form-control va-uppercase" />  
+                            </div>
+                            <div class="va-input-general">
+                                <label>Hậu tố</label>  
+                                <input type="text" name="prefix" id="prefix" value="<?php echo ((isset($code['prefix']) ? $code['prefix'] : '')) ?>" placeholder="VD: ...-STORE" class="form-control va-uppercase" />  
+                            </div>
+                        </div>
+                        <br>
+                        <div class="va-input-general">
+                            <label class="mb10">Kết quả</label>  
+                            <div class="uk-flex uk-flex-middle">
+                                <span class="render_suffix text-danger va-uppercase"><?php echo ((isset($code['suffix']) ? $code['suffix'] : '')) ?></span>
+                                <span>-</span>
+                                <span class="render_num0 text-danger"></span>
+                                <span>-</span>
+                                <span class="render_prefix text-danger va-uppercase"><?php echo ((isset($code['prefix']) ? $code['prefix'] : '')) ?></span>
+                            </div>
+                        </div>
+                        <br>
+                        <input type="submit" name="insert" id="insert" value="Lưu thay đổi" class="btn btn-success  float-right" />  
+                    </form>  
+                </div>   
+           </div>  
+      </div>  
+ </div> 
+<?php }else{ ?>
 <div id="add_data_Modal" class="modal fade va-general">  
       <div class="modal-dialog">  
            <div class="modal-content">  
@@ -165,3 +205,4 @@
            </div>  
       </div>  
  </div> 
+<?php } ?>

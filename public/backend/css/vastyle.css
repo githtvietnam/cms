@@ -317,3 +317,7 @@ label{
 .float-right{
 	float:right;
 }
+
+.va-uppercase{
+	text-transform: uppercase;
+}
