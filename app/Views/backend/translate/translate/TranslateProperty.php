@@ -42,7 +42,7 @@
 											
 											<div class="form-row">
 												<label class="control-label text-left">
-													<span>Tên NHóm Hiển Thị <b class="text-danger">(*)</b></span>
+													<span>Tên Thuộc tính <b class="text-danger">(*)</b></span>
 												</label>
 												<input type="text" name="" value="<?php echo $object['title'] ?>" class="form-control title" placeholder="Nhập vào tên nhóm liên hệ..." id="title" autocomplete="off" disabled>
 											</div>
@@ -85,9 +85,9 @@
 												
 												<div class="form-row">
 													<label class="control-label text-left">
-														<span>Tên NHóm Hiển Thị <b class="text-danger">(*)</b></span>
+														<span>Tên thuộc tính <b class="text-danger">(*)</b></span>
 													</label>
-													<input type="text" name="title" value="<?php echo isset($dataTrans['title']) ? $dataTrans['title'] : '' ?>" class="form-control title" placeholder="Nhập vào tên nhóm ..." id="title" autocomplete="off" >
+													<input type="text" name="title" value="<?php echo isset($dataTrans['title']) ? $dataTrans['title'] : '' ?>" class="form-control title" placeholder="Nhập vào tên thuộc tính ..." id="title" autocomplete="off" >
 												</div>
 											
 											
@@ -101,7 +101,7 @@
 												<label class="control-label text-left">
 													<span>Giá trị <b class="text-danger">(*)</b></span>
 												</label>
-												<input type="text" name="" value="<?php echo $object['value'] ?>" class="form-control value" placeholder="Nhập vào tên giá trị..." id="value" autocomplete="off" >
+												<input type="text" name="value" value="<?php echo $dataTrans['value'] ?>" class="form-control value" placeholder="Nhập vào tên giá trị..." id="value" autocomplete="off" >
 											</div>
 										</div>
 											

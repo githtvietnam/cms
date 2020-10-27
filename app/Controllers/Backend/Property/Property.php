@@ -1,5 +1,5 @@
 <?php 
-namespace App\Controllers\Backend\Product\Property;
+namespace App\Controllers\Backend\Property;
 use App\Controllers\BaseController;
 use App\Libraries\Nestedsetbie;
 
@@ -59,7 +59,7 @@ class Property extends BaseController{
 			'count' => TRUE,
 		]);
 		if($config['total_rows'] > 0){
-			$config = pagination_config_bt(['url' => 'backend/article/article/index','perpage' => $perpage], $config);
+			$config = pagination_config_bt(['url' => 'backend/property/catalogue/index','perpage' => $perpage], $config);
 
 			$this->pagination->initialize($config);
 			$this->data['pagination'] = $this->pagination->create_links();
@@ -94,7 +94,7 @@ class Property extends BaseController{
 
 
 
-		$this->data['template'] = 'backend/product/property/property/index';
+		$this->data['template'] = 'backend/property/property/index';
 		return view('backend/dashboard/layout/home', $this->data);
 	}
 
@@ -160,7 +160,7 @@ class Property extends BaseController{
 		$session = session();
 		if(!isset($this->data[$this->data['module']]) || is_array($this->data[$this->data['module']]) == false || count($this->data[$this->data['module']]) == 0){
 			$session->setFlashdata('message-danger', 'Bài Viết không tồn tại');
- 			return redirect()->to(BASE_URL.'backend/product/property/property/index');
+ 			return redirect()->to(BASE_URL.'backend/property/property/index');
 		}
 
 		
@@ -183,7 +183,7 @@ class Property extends BaseController{
 			 			'data' => $updateLanguage,
 			 		]);
 		 			$session->setFlashdata('message-success', 'Cập Nhật Bài Viết Thành Công!');
- 					return redirect()->to(BASE_URL.'backend/product/property/property/index');
+ 					return redirect()->to(BASE_URL.'backend/property/property/index');
 		 		}
 
 	        }else{
@@ -203,7 +203,7 @@ class Property extends BaseController{
 		],true);
 		$this->data['fixWrapper'] = 'fix-wrapper';
 		$this->data['method'] = 'update';
-		$this->data['template'] = 'backend/product/property/property/update';
+		$this->data['template'] = 'backend/property/property/update';
 		return view('backend/dashboard/layout/home', $this->data);
 	}
 

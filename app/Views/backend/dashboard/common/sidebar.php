@@ -33,7 +33,6 @@
             <li class="<?php echo ( $uriModule == 'product') ? 'active'  : '' ?>">
                 <a href="index.html"><i class="fa fa-desktop"></i> <span class="nav-label">QL Sản phẩm</span> <span class="fa arrow"></span></a>
                 <ul class="nav nav-second-level">
-<<<<<<< HEAD
                     <li><a href="<?php echo base_url('backend/product/catalogue/index') ?>">QL Thương hiệu</a></li>
                     <li><a href="<?php echo base_url('backend/product/product/index') ?>">QL Nhóm Thương hiệu</a></li>
 
@@ -41,29 +40,12 @@
 
 
                     <li><a href="<?php echo base_url('backend/product/color/color/index') ?>">QL Màu sắc</a></li>
-                    <li>
-                        <a href="<?php echo base_url('backend/product/product/index') ?>" ><span class="nav-label">QL Danh mục SP</spann><span class="fa arrow"></span></a>
-                        <ul class="nav nav-third-level">
-                            <li><a href="<?php echo base_url('backend/product/product/index') ?>">QL Nhóm danh mục SP</a></li>
-                            
-                            <li><a href="<?php echo base_url('backend/product/product/index') ?>">QL Danh mục SP</a></li>
-                        </ul>
-                    </li>
-
-                    <li>
-                        <a href="<?php echo base_url('backend/product/product/index') ?>"><span class="nav-label">QL Nhóm Thuộc tính</span><span class="fa arrow"></span></a>
-                        <ul class="nav nav-third-level">
-                            <li><a href="<?php echo base_url('backend/product/property/catalogue/index') ?>">QL Nhóm thuộc tính</a></li>
-                            
-                            <li><a href="<?php echo base_url('backend/product/property/property/index') ?>">QL thuộc tính</a></li>
-                        </ul>
-                    </li>
-=======
+                    
                     <li><a href="<?php echo base_url('backend/product/catalogue/index') ?>">QL Nhóm Sản phẩm</a></li>
                     <li><a href="<?php echo base_url('backend/product/brand/brand/index') ?>">QL Thương hiệu</a></li>
                     <li><a href="<?php echo base_url('backend/product/store/index') ?>">QL Cửa hàng</a></li>
                     <li><a href="<?php echo base_url('backend/product/warehouse/index') ?>">QL Kho hàng</a></li>
->>>>>>> 24bd10b74a227724fd9692f02b162a8811750f48
+
                 </ul>
             </li>
             <li class="<?php echo ( $uriModule == 'article') ? 'active'  : '' ?>">
@@ -71,6 +53,14 @@
                 <ul class="nav nav-second-level">
                     <li><a href="<?php echo base_url('backend/article/catalogue/index') ?>"><?php echo translate('cms_lang.sidebar.sb_article_catalogue', $language) ?></a></li>
                     <li><a href="<?php echo base_url('backend/article/article/index') ?>"><?php echo translate('cms_lang.sidebar.sb_article', $language) ?></a></li>
+                </ul>
+            </li>
+            <li class="<?php echo ( $uriModule == 'property') ? 'active'  : '' ?>">
+                <a href="<?php echo base_url('backend/product/index') ?>"><span class="nav-label">QL Thuộc tính</span><span class="fa arrow"></span></a>
+                <ul class="nav nav-second-level">
+                    <li><a href="<?php echo base_url('backend/property/catalogue/index') ?>">QL Nhóm thuộc tính</a></li>
+                    
+                    <li><a href="<?php echo base_url('backend/property/property/index') ?>">QL thuộc tính</a></li>
                 </ul>
             </li>
             <li class="<?php echo ( $uriModule == 'user') ? 'active'  : '' ?>">

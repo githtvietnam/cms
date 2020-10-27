@@ -1,5 +1,5 @@
 <?php 
-namespace App\Controllers\Backend\Product\Property;
+namespace App\Controllers\Backend\Property;
 use App\Controllers\BaseController;
 use App\Libraries\Nestedsetbie;
 
@@ -40,9 +40,8 @@ class Catalogue extends BaseController{
 			'group_by' => 'tb1.id',
 			'count' => TRUE,
 		]);
-
 		if($config['total_rows'] > 0){
-			$config = pagination_config_bt(['url' => 'backend/product/property/catalogue/index','perpage' => $perpage], $config);
+			$config = pagination_config_bt(['url' => 'backend/property/catalogue/index','perpage' => $perpage], $config);
 
 			$this->pagination->initialize($config);
 			$this->data['pagination'] = $this->pagination->create_links();
@@ -53,7 +52,7 @@ class Catalogue extends BaseController{
 			$page = ($page > $totalPage)?$totalPage:$page;
 			$page = $page - 1;
 			$languageDetact = $this->detect_language();
-			$this->data['PropertyList'] = $this->AutoloadModel->_get_where([
+			$this->data['propertyList'] = $this->AutoloadModel->_get_where([
 				'select' => 'tb1.id, tb3.fullname as creator, tb1.created_at, tb4.title, '.((isset($languageDetact['select'])) ? $languageDetact['select'] : ''),
 				'table' => $this->data['module'].' as tb1',
 				'where' => $where,
@@ -77,7 +76,7 @@ class Catalogue extends BaseController{
 
 		}
 
-		$this->data['template'] = 'backend/product/property/catalogue/index';
+		$this->data['template'] = 'backend/property/catalogue/index';
 		return view('backend/dashboard/layout/home', $this->data);
 	}
 
@@ -89,7 +88,6 @@ class Catalogue extends BaseController{
 			$validate = $this->validation();
 			if ($this->validate($validate['validate'], $validate['errorValidate'])){
 				$property = $this->store(['method' => 'create']);
-				
 
 
 				$insertCat = $this->AutoloadModel->_insert([
@@ -107,7 +105,7 @@ class Catalogue extends BaseController{
 
 		 			
 	 					$session->setFlashdata('message-success', 'Tạo Bản Ghi Thành Công! Hãy tạo danh mục tiếp theo.');
- 						return redirect()->to(BASE_URL.'backend/product/property/catalogue/index');
+ 						return redirect()->to(BASE_URL.'backend/property/catalogue/index');
 	 				
 		 		}
 	        else{
@@ -117,7 +115,7 @@ class Catalogue extends BaseController{
 	}
 		
 		$this->data['method'] = 'create';
-		$this->data['template'] = 'backend/product/property/catalogue/create';
+		$this->data['template'] = 'backend/property/catalogue/create';
 		return view('backend/dashboard/layout/home', $this->data);
 	}
 
@@ -150,7 +148,7 @@ class Catalogue extends BaseController{
 		 		if($flag > 0){
 		 			
 		 			$session->setFlashdata('message-success', 'Cập Nhật Bài Viết Thành Công!');
- 					return redirect()->to(BASE_URL.'backend/product/property/catalogue/index');
+ 					return redirect()->to(BASE_URL.'backend/property/catalogue/index');
 		 		}
 
 	        }else{
@@ -159,7 +157,7 @@ class Catalogue extends BaseController{
 		}
 
 		$this->data['method'] = 'update';
-		$this->data['template'] = 'backend/product/property/catalogue/update';
+		$this->data['template'] = 'backend/property/catalogue/update';
 		return view('backend/dashboard/layout/home', $this->data);
 	}
 
@@ -206,7 +204,7 @@ class Catalogue extends BaseController{
 			// return redirect()->to(BASE_URL.'backend/article/catalogue/index');
 		// }
 
-		$this->data['template'] = 'backend/product/property/catalogue/delete';
+		$this->data['template'] = 'backend/property/catalogue/delete';
 		return view('backend/dashboard/layout/home', $this->data);
 	}
 
@@ -231,7 +229,7 @@ class Catalogue extends BaseController{
 	private function condition_keyword($keyword = ''): string{
 		if(!empty($this->request->getGet('keyword'))){
 			$keyword = $this->request->getGet('keyword');
-			$keyword = '(tb2.title LIKE \'%'.$keyword.'%\')';
+			$keyword = '(tb4.title LIKE \'%'.$keyword.'%\')';
 		}
 		return $keyword;
 	}

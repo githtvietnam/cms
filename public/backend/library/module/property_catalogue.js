@@ -25,7 +25,7 @@ $(document).ready(function(){
 									sweet_error_alert('Có vấn đề xảy ra','Vui lòng thử lại')
 								}else{
 									swal("Xóa thành công!", "Bản ghi đã được xóa khỏi danh sách.", "success");
-									window.location.href = BASE_URL+'backend/product/property/catalogue/index';
+									window.location.href = BASE_URL+'backend/property/catalogue/index';
 								}
 						});
 				} else {

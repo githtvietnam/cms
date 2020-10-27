@@ -74,7 +74,7 @@
 													<label class="control-label text-left">
 														<span>Tên NHóm Hiển Thị <b class="text-danger">(*)</b></span>
 													</label>
-													<input type="text" name="title" value="<?php echo isset($dataTrans['title']) ? $dataTrans['title'] : '' ?>" class="form-control title" placeholder="Nhập vào tên nhóm ..." id="title" autocomplete="off" >
+													<input type="text" name="title" value="<?php echo isset($dataTrans['title']) ? $dataTrans['title'] : '' ?>" class="form-control title" placeholder="Nhập vào tên thuộc tính ..." id="title" autocomplete="off" >
 												</div>
 											
 											

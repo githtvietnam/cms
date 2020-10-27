@@ -82,7 +82,7 @@
                                         </div>
                                     </div>
                                     <div class="uk-button">
-                                        <a href="<?php echo base_url('backend/product/property/property/create') ?>" class="btn btn-danger btn-sm"><i class="fa fa-plus"></i> Thêm Thuộc Tính Mới</a>
+                                        <a href="<?php echo base_url('backend/property/property/create') ?>" class="btn btn-danger btn-sm"><i class="fa fa-plus"></i> Thêm Thuộc Tính Mới</a>
                                     </div>
                                 </div>
                             </div>
@@ -141,9 +141,9 @@
                                     
                             
                                     <td class="text-center">
-                                        <a type="button" href="<?php echo base_url('backend/product/property/property/update/'.$val['id']) ?>" class="btn btn-primary"><i class="fa fa-edit"></i></a>
+                                        <a type="button" href="<?php echo base_url('backend/property/property/update/'.$val['id']) ?>" class="btn btn-primary"><i class="fa fa-edit"></i></a>
                                         <!-- link controller -->
-                                       <a type="button" href="<?php echo base_url('backend/product/property/property/delete/'.$val['id']) ?>" id = "<?php echo $val['id']; ?>" class="deleteProperty btn btn-danger"><i class="fa fa-trash"></i></a>
+                                       <a type="button" href="<?php echo base_url('backend/property/property/delete/'.$val['id']) ?>" id = "<?php echo $val['id']; ?>" class="deleteProperty btn btn-danger"><i class="fa fa-trash"></i></a>
                                     </td>
                                 </tr>
 

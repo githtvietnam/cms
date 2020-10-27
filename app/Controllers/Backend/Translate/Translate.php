@@ -239,10 +239,9 @@ class Translate extends BaseController
 			 			'data' => $dataTrans,
 			 		]);
 					
-				}
-				if($flag > 0){
+				
 		 			$session->setFlashdata('message-success', 'Tạo Bản Dịch Thành Công! Hãy tạo danh mục tiếp theo.');
- 					return redirect()->to(BASE_URL.'backend/product/'.$moduleExtract[0].'/'.((count($moduleExtract) == 1) ? $moduleExtract[0] : $moduleExtract[1]).'/index');
+ 					return redirect()->to(BASE_URL.'backend/'.$moduleExtract[0].'/'.((count($moduleExtract) == 1) ? $moduleExtract[0] : $moduleExtract[1]).'/index');
 		 		}
 		 		}else{
 	        	$this->data['validate'] = $this->validator->listErrors();
@@ -308,12 +307,9 @@ class Translate extends BaseController
 			 			'table' => $moduleExtract[0].'_translate',
 			 			'data' => $dataTrans,
 			 		]);
-					
-				}
-				if($flag > 0){
 		 			$session->setFlashdata('message-success', 'Tạo Bản Dịch Thành Công! Hãy tạo danh mục tiếp theo.');
- 					return redirect()->to(BASE_URL.'backend/product/'.$moduleExtract[0].'/'.((count($moduleExtract) == 1) ? $moduleExtract[0] : $moduleExtract[1]).'/index');
-		 		}
+ 					return redirect()->to(BASE_URL.'backend/'.$moduleExtract[0].'/'.((count($moduleExtract) == 1) ? $moduleExtract[0] : $moduleExtract[1]).'/index');
+		 			}
 		 		}else{
 	        	$this->data['validate'] = $this->validator->listErrors();
 			}

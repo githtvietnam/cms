@@ -17,7 +17,7 @@ define('CMS_NAME', 'HT VIETNAM CMS 3.0');
 
 define('HTDBHOST', 'localhost');
 define('HTDBUSER', 'root');
-define('HTDBPASS', '');
-define('HTDBNAME', 'ci4_cms');
+define('HTDBPASS', 'root');
+define('HTDBNAME', 'ci4_cms1');
 
 

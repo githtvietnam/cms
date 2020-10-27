@@ -9,4 +9,4 @@
 		</ol>
 	</div>
 </div>
-<?php echo view('backend/product/property/catalogue/store') ?>
+<?php echo view('backend/property/catalogue/store') ?>
