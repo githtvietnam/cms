@@ -36,7 +36,7 @@
             <?php echo view( (isset($template)) ? $template  :'' ) ?>
             
         </div>
-        <?php echo view('backend/dashboard/common/footer'); ?>
+       
        
     </div>
     <!-- Mainly scripts -->

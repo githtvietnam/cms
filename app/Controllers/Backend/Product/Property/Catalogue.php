@@ -32,6 +32,9 @@ class Catalogue extends BaseController{
 					[
 						'property_translate as tb4','tb1.id = tb4.objectid AND tb4.module = \''.$this->data['module'].'\' ','inner'
 					],
+					[
+						'user as tb3','tb1.userid_created = tb3.id','inner'
+					],
 					
 				],
 			'group_by' => 'tb1.id',
@@ -51,7 +54,7 @@ class Catalogue extends BaseController{
 			$page = $page - 1;
 			$languageDetact = $this->detect_language();
 			$this->data['PropertyList'] = $this->AutoloadModel->_get_where([
-				'select' => 'tb1.id, tb1.userid_created as creator, tb1.created_at, tb4.title, '.((isset($languageDetact['select'])) ? $languageDetact['select'] : ''),
+				'select' => 'tb1.id, tb3.fullname as creator, tb1.created_at, tb4.title, '.((isset($languageDetact['select'])) ? $languageDetact['select'] : ''),
 				'table' => $this->data['module'].' as tb1',
 				'where' => $where,
 				
@@ -60,6 +63,9 @@ class Catalogue extends BaseController{
 					
 					[
 						'property_translate as tb4','tb1.id = tb4.objectid AND tb4.module = \''.$this->data['module'].'\' AND tb4.language = \''.$this->currentLanguage().'\' ','inner'
+					],
+					[
+						'user as tb3','tb1.userid_created = tb3.id','inner'
 					],
 					
 				],
