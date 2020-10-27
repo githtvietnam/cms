@@ -1,11 +1,11 @@
 <div class="row wrapper border-bottom white-bg page-heading">
 	<div class="col-lg-10">
-		<h2>Xóa Nhóm Thành Viên: <?php echo $article_catalogue['title'] ?></h2>
+		<h2>Xóa Nhóm Sản phẩm: <?php echo $product_catalogue['title'] ?></h2>
 		<ol class="breadcrumb">
 			<li>
 				<a href="<?php echo site_url('admin'); ?>">Home</a>
 			</li>
-			<li class="active"><strong>Xóa Nhóm Thành Viên</strong></li>
+			<li class="active"><strong>Xóa Nhóm Sản phẩm</strong></li>
 		</ol>
 	</div>
 </div>
@@ -16,8 +16,8 @@
 				<div class="panel-head">
 					<h2 class="panel-title">Thông tin chung</h2>
 					<div class="panel-description">
-						Một số thông tin cơ bản của người sử dụng.
-						<div><span class="text-danger">Khi xóa Nhóm Thành Viên, thì Nhóm Thành Viên này sẽ không thể truy cập và mất toàn bộ thông tin. Hãy chắc chắn bạn muốn thực hiện chức năng này!</span></div>
+						Một số thông tin cơ bản của nhóm Sản phẩm.
+						<div><span class="text-danger">Khi xóa Nhóm Sản phẩm, thì Nhóm Sản phẩm này sẽ không thể truy cập và mất toàn bộ thông tin. Hãy chắc chắn bạn muốn thực hiện chức năng này!</span></div>
 					</div>
 				</div>
 			</div>
@@ -28,15 +28,15 @@
 							<div class="col-lg-12">
 								<div class="form-row">
 									<label class="control-label text-left">
-										<span>Nhóm Thành Viên <b class="text-danger">(*)</b></span>
+										<span>Nhóm Sản phẩm <b class="text-danger">(*)</b></span>
 									</label>
-									<?php echo form_input('title', set_value('title', $article_catalogue['title']), 'class="form-control" disabled placeholder="" autocomplete="off"');?>
-									<?php echo form_hidden('id', set_value('id', $article_catalogue['id']), 'class="form-control" disabled placeholder="" autocomplete="off"');?>
+									<?php echo form_input('title', set_value('title', $product_catalogue['title']), 'class="form-control" disabled placeholder="" autocomplete="off"');?>
+									<?php echo form_hidden('id', set_value('id', $product_catalogue['id']), 'class="form-control" disabled placeholder="" autocomplete="off"');?>
 								</div>
 							</div>
 						</div>
 						<script type="text/javascript">
-							var id = '<?php echo $article_catalogue['id'] ?>';
+							var id = '<?php echo $product_catalogue['id'] ?>';
 						</script>
 						<div class="toolbox action clearfix">
 							<div class="uk-flex uk-flex-middle uk-button pull-right">

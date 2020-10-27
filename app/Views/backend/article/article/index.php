@@ -148,7 +148,7 @@
 
                                 <?php if(isset($languageList) && is_array($languageList) && count($languageList)){ ?>
                                 <?php foreach($languageList as $keyLanguage => $valLanguage){ ?>
-                                <td class="text-center "><a class="text-small <?php echo ($val[$valLanguage['canonical'].'_detect'] > 0 ) ? 'text-success' : 'text-danger' ?> " href="<?php echo base_url('backend/translate/translate/translateArticle/'.$val['id'].'/'.$module.'/'.$valLanguage['canonical'].'') ?>">
+                                <td class="text-center "><a class="text-small <?php echo ($val[$valLanguage['canonical'].'_detect'] > 0 ) ? 'text-success' : 'text-danger' ?> " href="<?php echo base_url('backend/translate/translate/translateObject/'.$val['id'].'/'.$module.'/'.$valLanguage['canonical'].'') ?>">
                                     <?php echo ($val[$valLanguage['canonical'].'_detect'] > 0 ) ? 'Đã Dịch' : 'Chưa Dịch' ?>
 
                                 </a></td>

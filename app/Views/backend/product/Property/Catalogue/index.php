@@ -6,12 +6,20 @@
 ?>
 <div class="row wrapper border-bottom white-bg page-heading">
    <div class="col-lg-8">
+<<<<<<< HEAD:app/Views/backend/product/Property/Catalogue/index.php
       <h2>Quản Lý nhóm thuộc tính</h2>
+=======
+      <h2>Quản Lý Nhóm Sản phẩm</h2>
+>>>>>>> 24bd10b74a227724fd9692f02b162a8811750f48:app/Views/backend/product/catalogue/index.php
       <ol class="breadcrumb" style="margin-bottom:10px;">
          <li>
             <a href="<?php echo base_url('backend/dashboard/dashboard/index') ?>">Home</a>
          </li>
+<<<<<<< HEAD:app/Views/backend/product/Property/Catalogue/index.php
          <li class="active"><strong>Quản lý nhóm thuộc tính</strong></li>
+=======
+         <li class="active"><strong>Quản lý Nhóm Sản phẩm</strong></li>
+>>>>>>> 24bd10b74a227724fd9692f02b162a8811750f48:app/Views/backend/product/catalogue/index.php
       </ol>
    </div>
 </div>
@@ -20,7 +28,11 @@
         <div class="col-lg-12">
             <div class="ibox float-e-margins">
                 <div class="ibox-title">
+<<<<<<< HEAD:app/Views/backend/product/Property/Catalogue/index.php
                     <h5>Quản lý nhóm thuộc tính </h5>
+=======
+                    <h5>Quản lý Nhóm Sản phẩm </h5>
+>>>>>>> 24bd10b74a227724fd9692f02b162a8811750f48:app/Views/backend/product/catalogue/index.php
                     <div class="ibox-tools">
                         <a class="collapse-link">
                             <i class="fa fa-chevron-up"></i>
@@ -55,7 +67,7 @@
                                 <div class="uk-flex uk-flex-middle uk-flex-space-between">
                                     <div class="uk-search uk-flex uk-flex-middle mr10">
                                         <div class="input-group">
-                                            <input type="text" name="keyword" value="<?php echo (isset($_GET['keyword'])) ? $_GET['keyword'] : ''; ?>" placeholder="Nhập Từ khóa bạn muốn tìm kiếm..." class="form-control"> 
+                                            <input type="text" name="keyword" value="<?php echo (isset($_GET['keyword'])) ? $_GET['keyword'] : ''; ?>" placeholder="Nhập Từ khóa bạn muốn tìm kiếm..." class="form-control va-search"> 
                                             <span class="input-group-btn"> 
                                                 <button type="submit" name="search" value="search" class="btn btn-primary mb0 btn-sm">Tìm Kiếm
                                             </button> 
@@ -64,7 +76,11 @@
                                     </div>
 
                                     <div class="uk-button">
+<<<<<<< HEAD:app/Views/backend/product/Property/Catalogue/index.php
                                         <a href="<?php echo base_url('backend/product/property/catalogue/create') ?>" class="btn btn-danger btn-sm"><i class="fa fa-plus"></i> Thêm Nhóm Thuộc Tính Mới</a>
+=======
+                                        <a href="<?php echo base_url('backend/product/catalogue/create') ?>" class="btn btn-danger btn-sm"><i class="fa fa-plus"></i> Thêm Nhóm Sản phẩm mới</a>
+>>>>>>> 24bd10b74a227724fd9692f02b162a8811750f48:app/Views/backend/product/catalogue/index.php
                                     </div>
                                 </div>
                             </div>
@@ -77,8 +93,12 @@
                                 <input type="checkbox" id="checkbox-all">
                                 <label for="check-all" class="labelCheckAll"></label>
                             </th>
+<<<<<<< HEAD:app/Views/backend/product/Property/Catalogue/index.php
                             <th >Tiêu đề nhóm thuộc tính</th>
 
+=======
+                            <th >Tiêu đề nhóm</th>
+>>>>>>> 24bd10b74a227724fd9692f02b162a8811750f48:app/Views/backend/product/catalogue/index.php
                             <?php if(isset($languageList) && is_array($languageList) && count($languageList)){ ?>
                             <?php foreach($languageList as $key => $val){ ?>
                             <th class="text-center" style="width: 100px;">
@@ -91,6 +111,13 @@
                         </tr>
                         </thead>
                         <tbody>
+<<<<<<< HEAD:app/Views/backend/product/Property/Catalogue/index.php
+=======
+                            <?php if(isset($productCatalogueList) && is_array($productCatalogueList) && count($productCatalogueList)){ ?>
+                            <?php foreach($productCatalogueList as $key => $val){ ?>
+                            <?php  
+                                $status = ($val['publish'] == 1) ? '<span class="text-success">Active</span>'  : '<span class="text-danger">Deactive</span>';
+>>>>>>> 24bd10b74a227724fd9692f02b162a8811750f48:app/Views/backend/product/catalogue/index.php
 
                             <?php if(isset($PropertyList) && is_array($PropertyList) && count($PropertyList)){ ?>
                             <?php foreach($PropertyList as $key => $val){ ?>
@@ -102,6 +129,7 @@
                                     <input type="checkbox" name="checkbox[]" value="<?php echo $val['id']; ?>" class="checkbox-item">
                                     <div for="" class="label-checkboxitem"></div>
                                 </td>
+<<<<<<< HEAD:app/Views/backend/product/Property/Catalogue/index.php
                                 <td> 
                                     <?php echo $val['title']; ?>
                                 </td>
@@ -109,6 +137,17 @@
                                 <?php if(isset($languageList) && is_array($languageList) && count($languageList)){ ?>
                                 <?php foreach($languageList as $keyLanguage => $valLanguage){ ?>
                                 <td class="text-center "><a class="text-small <?php echo ($val[$valLanguage['canonical'].'_detect'] > 0 ) ? 'text-success' : 'text-danger' ?> " href="<?php echo base_url('backend/translate/translate/translatePropertyCatalogue/'.$val['id'].'/'.$module.'/'.$valLanguage['canonical'].'') ?>">
+=======
+                                <td <?php echo ($val['level'] == 1) ? 'class="text-success text-bold"' : '' ?>>
+                                    <a href="<?php echo base_url('backend/product/catalogue/update/'.$val['id'].'') ?>">
+                                        <?php echo str_repeat('|----', (($val['level'] > 0)?($val['level'] - 1):0)).$val['title']; ?>
+                                        </a>
+                                    </td>
+
+                                <?php if(isset($languageList) && is_array($languageList) && count($languageList)){ ?>
+                                <?php foreach($languageList as $keyLanguage => $valLanguage){ ?>
+                                <td class="text-center "><a class="text-small <?php echo ($val[$valLanguage['canonical'].'_detect'] > 0 ) ? 'text-success' : 'text-danger' ?> " href="<?php echo base_url('backend/translate/translate/translateObject/'.$val['id'].'/'.$module.'/'.$valLanguage['canonical'].'') ?>">
+>>>>>>> 24bd10b74a227724fd9692f02b162a8811750f48:app/Views/backend/product/catalogue/index.php
                                     <?php echo ($val[$valLanguage['canonical'].'_detect'] > 0 ) ? 'Đã Dịch' : 'Chưa Dịch' ?>
 
                                 </a></td>
@@ -118,8 +157,13 @@
                                 <td class="text-center text-primary"><?php echo gettime($val['created_at'],'Y-d-m') ?></td>
                                
                                 <td class="text-center">
+<<<<<<< HEAD:app/Views/backend/product/Property/Catalogue/index.php
                                     <a type="button" href="<?php echo base_url('backend/product/property/catalogue/update/'.$val['id']) ?>" class="btn btn-primary"><i class="fa fa-edit"></i></a>
                                     <a type="button" href="<?php echo base_url('backend/product/property/catalogue/delete/'.$val['id']) ?>" id = "<?php echo $val['id']; ?>" class="deleteCatalogue btn btn-danger"><i class="fa fa-trash"></i></a>
+=======
+                                    <a type="button" href="<?php echo base_url('backend/product/catalogue/update/'.$val['id']) ?>" class="btn btn-primary"><i class="fa fa-edit"></i></a>
+                                    <a type="button" href="<?php echo base_url('backend/product/catalogue/delete/'.$val['id']) ?>" class="btn btn-danger"><i class="fa fa-trash"></i></a>
+>>>>>>> 24bd10b74a227724fd9692f02b162a8811750f48:app/Views/backend/product/catalogue/index.php
                                 </td>
                             </tr>
                             <?php }}else{ ?>

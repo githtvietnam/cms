@@ -30,4 +30,15 @@
 			<description>Xem</description>
 		</item>
 	</permissions>
+	<permissions>
+		<title>Slide</title>
+		<item>
+			<param>backend/slide/slide/index</param>
+			<description>Xem Toàn Bộ</description>
+		</item>
+		<item>
+			<param>backend/system/general/index</param>
+			<description>Xem</description>
+		</item>
+	</permissions>
 </module>

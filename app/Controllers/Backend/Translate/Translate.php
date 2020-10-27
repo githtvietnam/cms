@@ -9,7 +9,7 @@ class Translate extends BaseController
 		public function __construct(){
 		$this->data = [];
 	}
-	public function translateArticle($objectid = 0, $module = '', $language = ''){
+	public function translateObject($objectid = 0, $module = '', $language = ''){
 		$session = session();
 		$objectid = (int)$objectid;
 		$moduleExtract = explode('_', $module);
@@ -18,11 +18,24 @@ class Translate extends BaseController
 			'table' => $module.' as tb1',
 			'join' => [
 				[
-					$moduleExtract[0].'_translate as tb2','tb1.id = tb2.objectid AND tb2.language = \''.$this->currentLanguage().'\' ','inner'
+					$moduleExtract[0].'_translate as tb2','tb1.id = tb2.objectid AND tb2.module = \''.$module.'\' AND tb2.language = \''.$this->currentLanguage().'\' ','inner'
 				]
 			],
 			'where' => ['tb1.id' => $objectid,'module' => $module]
 		]);
+		if($module == 'brand'){
+			$this->data['object'] = array_merge($this->data['object'], $this->AutoloadModel->_get_where([
+				'select' => 'tb2.slogan',
+				'table' => $module.' as tb1',
+				'join' => [
+					[
+						$moduleExtract[0].'_translate as tb2','tb1.id = tb2.objectid AND tb2.module = \''.$module.'\' AND tb2.language = \''.$this->currentLanguage().'\' ','inner'
+					]
+				],
+				'where' => ['tb1.id' => $objectid,'module' => $module]
+			]));
+		}	
+		// pre($this->data['object']);
 		if(!isset($this->data['object']) || is_array($this->data['object']) == false || count($this->data['object']) == 0){
 			$session->setFlashdata('message-danger', 'Bản ghi không tồn tại!');
 			return redirect()->to(BASE_URL.'backend/'.$moduleExtract[0].'/'.((count($moduleExtract) == 1) ? $moduleExtract[0] : $moduleExtract[1]).'/index');
@@ -32,11 +45,34 @@ class Translate extends BaseController
 			'table' => $module.' as tb1',
 			'join' => [
 				[
-					$moduleExtract[0].'_translate as tb2', 'tb1.id = tb2.objectid AND tb2.language = \''.$language.'\' ', 'inner'
+					$moduleExtract[0].'_translate as tb2', 'tb1.id = tb2.objectid AND tb2.module = \''.$module.'\' AND tb2.language = \''.$language.'\' ', 'inner'
 				]
 			],
 			'where' => ['tb1.id' => $objectid]
 		]);
+		if($module == 'brand' && $this->data['translate'] != []){
+			$this->data['translate'] = array_merge($this->data['translate'], $this->AutoloadModel->_get_where([
+				'select' => 'tb2.slogan',
+				'table' => $module.' as tb1',
+				'join' => [
+					[
+						$moduleExtract[0].'_translate as tb2', 'tb1.id = tb2.objectid AND tb2.module = \''.$module.'\' AND tb2.language = \''.$language.'\' ', 'inner'
+					]
+				],
+				'where' => ['tb1.id' => $objectid]
+			]));
+		}else if($module == 'brand' && $this->data['translate'] == []){
+			$this->data['translate'] = $this->AutoloadModel->_get_where([
+				'select' => 'tb2.slogan',
+				'table' => $module.' as tb1',
+				'join' => [
+					[
+						$moduleExtract[0].'_translate as tb2', 'tb1.id = tb2.objectid AND tb2.module = \''.$module.'\' AND tb2.language = \''.$language.'\' ', 'inner'
+					]
+				],
+				'where' => ['tb1.id' => $objectid]
+			]);
+		}
 		if($this->request->getMethod() == 'post'){
 			$validate = $this->validation($module);
 			if ($this->validate($validate['validate'], $validate['errorValidate'])){
@@ -45,6 +81,10 @@ class Translate extends BaseController
 		 			'module' => $module,
 		 			'language' => $language,
 		 		]);
+		 		if($module == 'brand'){
+					$store['slogan'] = $this->request->getPost('slogan') ;
+				}	
+		 		// pre($store);
 				if(isset($this->data['translate']) && is_array($this->data['translate']) && count($this->data['translate'])){
 					$flag = $this->AutoloadModel->_update([
 			 			'table' => $moduleExtract[0].'_translate',
@@ -60,15 +100,21 @@ class Translate extends BaseController
 				}
 		 		if($flag > 0){
 		 			$session->setFlashdata('message-success', 'Tạo Bản Dịch Thành Công! Hãy tạo danh mục tiếp theo.');
- 					return redirect()->to(BASE_URL.'backend/'.$moduleExtract[0].'/'.((count($moduleExtract) == 1) ? $moduleExtract[0] : $moduleExtract[1]).'/index');
+		 			if($moduleExtract[0] == 'brand'){
+		 				return redirect()->to(BASE_URL.'backend/product/brand/'.((isset($moduleExtract[1])) ? 'catalogue' : 'brand').'/index');
+		 			}else{
+ 						return redirect()->to(BASE_URL.'backend/'.$moduleExtract[0].'/'.((count($moduleExtract) == 1) ? $moduleExtract[0] : $moduleExtract[1]).'/index');
+		 			}
+
 		 		}
 	        }else{
 	        	$this->data['validate'] = $this->validator->listErrors();
 	        }
 		}
-		$this->data['template'] = 'backend/translate/translate/translateArticle';
+		$this->data['template'] = 'backend/translate/translate/translateObject';
 		return view('backend/dashboard/layout/home', $this->data);
 	}
+
 	public function translateContact($objectid = 0, $module = '', $language = ''){
 		$session = session();
 		$objectid = (int)$objectid;

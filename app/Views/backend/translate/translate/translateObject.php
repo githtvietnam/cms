@@ -36,6 +36,18 @@
 								</div>
 							</div>
 						</div>
+						<?php if(isset($object['slogan'])){ ?>
+							<div class="row mb15">
+								<div class="col-lg-12">
+									<div class="form-row">
+										<label class="control-label text-left">
+											<span>Slogan</span>
+										</label>
+										<?php echo form_input('slogan', validate_input(set_value('slogan', (isset($object['slogan'])) ? $object['slogan'] : '')), 'class="form-control slogan" placeholder="" id="slogan" autocomplete="off"'); ?>
+									</div>
+								</div>
+							</div>
+						<?php } ?>
 						<div class="row mb15">
 							<div class="col-lg-12">
 								<div class="form-row form-description">
@@ -85,7 +97,7 @@
 									$metaDescription = (isset($_POST['meta_description'])) ? $_POST['meta_description'] : ((isset($object['meta_description']) && $object['meta_description'] != '') ? $object['meta_description'] : 'Bạn Chưa nhập mô tả SEO cho bài viết') ;
 								?>
 								<div class="google">
-									<div class="g-titleNosub"><?php echo $metaTitle; ?></div>
+									<div class="g-title"><?php echo $metaTitle; ?></div>
 									<div class="g-link"><?php echo $googleLink ?></div>
 									<div class="g-description" id="metaDescription">
 										<?php echo $metaDescription; ?>
@@ -119,6 +131,18 @@
 								</div>
 							</div>
 						</div>
+						<?php if(isset($object['slogan'])){ ?>
+							<div class="row mb15">
+								<div class="col-lg-12">
+									<div class="form-row">
+									<label class="control-label text-left">
+										<span>Slogan</span>
+									</label>
+									<?php echo form_input('slogan', validate_input(set_value('slogan', (isset($translate['slogan'])) ? $translate['slogan'] : '')), 'class="form-control slogan" placeholder="" id="slogan" autocomplete="off"'); ?>
+								</div>
+								</div>
+							</div>
+						<?php } ?>
 						<div class="row mb15">
 							<div class="col-lg-12">
 								<div class="form-row form-description">

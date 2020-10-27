@@ -15,6 +15,10 @@ $(document).ready(function(){
 		BrowseServerEditor('Images', target);
         return false;
 	});
+    $(document).on('click','.uploadImage', function(){
+        BrowseServerImage($(this));
+        return false;
+    });
     $(document).on('click','.tv-nav-tabs>li>a ', function(){
         let _this = $(this);
         let parent = _this.closest('li.tv-block');
@@ -26,6 +30,21 @@ $(document).ready(function(){
   });
   
 });
+
+function BrowseServerImage  (object, type){
+    if(typeof(type) == 'undefined'){
+        type = 'Images';
+    }
+    var finder = new CKFinder();
+    finder.resourceType = type;
+    finder.selectActionFunction = function( fileUrl, data ) {
+        fileUrl =  fileUrl.replace(BASE_URL, "/");
+        path = object.parent().siblings('.ibox-content')
+        path.find('img').attr('src', fileUrl);
+        path.find('input').val(fileUrl);
+    }
+    finder.popup();
+}
 
 
 function BrowseServerEditor(type, field){
@@ -66,30 +85,33 @@ function BrowseServerInput  (object, type){
 }
 
 function BrowseServerAlbum(object, type){
-    if(typeof(type) == 'undefined'){
-        type = 'Images';
-    }
     var finder = new CKFinder();
     finder.resourceType = type;
+
     finder.selectActionFunction = function(fileUrl , data, allFiles ) {
-        var files = allFiles;
-        var file = {};
-
-        for(var i= 0 ; i < files.length; i++){
-            file[i] =  files[i].url.replace(BASE_URL, "/");
+        if(typeof(type) == 'undefined'){
+            type = 'Images';
         }
+        
 
-        var formURL = 'ajax/slide/echoview';
-        $.post(formURL, {
-            file: file,
-            count: count
-        },
-            function(data){
-               let json = JSON.parse(data);
-                $('#sortable').append(json.html);
-                $('.click-to-upload').hide();
-                $('.upload-list').show();
-            });
+        var files = allFiles;
+        var li = '';
+        for(var i = 0 ; i < files.length; i++){
+            fileUrl =  files[i].url.replace(BASE_URL, "/");
+
+            li = li + '<li class="ui-state-default">';
+                li = li + '<div class="thumb">';
+                    li = li + '<span class="image img-scaledown">';
+                        li = li + '<img src="'+fileUrl+'" alt="">'; 
+                        li = li + '<input type="hidden" value="'+fileUrl+'" name="album[]">';
+                    li = li + '</span>';
+                    li = li + '<div class="overlay"></div><div class="delete-image"><i class="fa fa-trash" aria-hidden="true"></i></div>';
+                li = li + '</div>';
+            li = li + '</li>';
+        }
+        $('#sortable').append(li);
+        $('.click-to-upload').hide();
+        $('.upload-list').show();
     }
     finder.popup();
 }

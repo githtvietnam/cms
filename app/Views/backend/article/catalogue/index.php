@@ -55,7 +55,7 @@
                                 <div class="uk-flex uk-flex-middle uk-flex-space-between">
                                     <div class="uk-search uk-flex uk-flex-middle mr10">
                                         <div class="input-group">
-                                            <input type="text" name="keyword" value="<?php echo (isset($_GET['keyword'])) ? $_GET['keyword'] : ''; ?>" placeholder="Nhập Từ khóa bạn muốn tìm kiếm..." class="form-control"> 
+                                            <input type="text" name="keyword" value="<?php echo (isset($_GET['keyword'])) ? $_GET['keyword'] : ''; ?>" placeholder="Nhập Từ khóa bạn muốn tìm kiếm..." class="form-control va-search"> 
                                             <span class="input-group-btn"> 
                                                 <button type="submit" name="search" value="search" class="btn btn-primary mb0 btn-sm">Tìm Kiếm
                                             </button> 
@@ -113,7 +113,7 @@
 
                                 <?php if(isset($languageList) && is_array($languageList) && count($languageList)){ ?>
                                 <?php foreach($languageList as $keyLanguage => $valLanguage){ ?>
-                                <td class="text-center "><a class="text-small <?php echo ($val[$valLanguage['canonical'].'_detect'] > 0 ) ? 'text-success' : 'text-danger' ?> " href="<?php echo base_url('backend/translate/translate/translateArticle/'.$val['id'].'/'.$module.'/'.$valLanguage['canonical'].'') ?>">
+                                <td class="text-center "><a class="text-small <?php echo ($val[$valLanguage['canonical'].'_detect'] > 0 ) ? 'text-success' : 'text-danger' ?> " href="<?php echo base_url('backend/translate/translate/translateObject/'.$val['id'].'/'.$module.'/'.$valLanguage['canonical'].'') ?>">
                                     <?php echo ($val[$valLanguage['canonical'].'_detect'] > 0 ) ? 'Đã Dịch' : 'Chưa Dịch' ?>
 
                                 </a></td>
