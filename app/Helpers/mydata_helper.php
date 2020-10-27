@@ -120,7 +120,7 @@ if (! function_exists('get_catalogue_object')){
 }
 
 
-if (! function_exists('get_language')){
+if (! function_exists('get_list_language')){
 	function get_list_language(array $param = []){
 		$model = new AutoloadModel();
 
@@ -128,6 +128,19 @@ if (! function_exists('get_language')){
 			'select' => 'id, canonical, image',
 			'table' => 'language',
 			'where' => ['publish' => 1,'canonical !=' => $param['currentLanguage']]
+		], TRUE);
+
+		return $language;
+	}
+}
+if (! function_exists('get_all_language')){
+	function get_all_language(){
+		$model = new AutoloadModel();
+
+		$language = $model->_get_where([
+			'select' => 'id, canonical, image',
+			'table' => 'language',
+			'where' => ['publish' => 1]
 		], TRUE);
 
 		return $language;

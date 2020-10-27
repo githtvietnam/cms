@@ -60,7 +60,7 @@ class Contact extends BaseController{
 				],
 				'limit' => $config['per_page'],
 				'start' => $page * $config['per_page'],
-				'order_by'=> 'tb1.id desc',
+				'order_by'=> 'tb1.order desc',
 				'group_by' => 'tb1.id'
 			], TRUE);
 		}

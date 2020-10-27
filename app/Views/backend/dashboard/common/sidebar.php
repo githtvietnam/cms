@@ -35,6 +35,28 @@
                 <ul class="nav nav-second-level">
                     <li><a href="<?php echo base_url('backend/product/catalogue/index') ?>">QL Thương hiệu</a></li>
                     <li><a href="<?php echo base_url('backend/product/product/index') ?>">QL Nhóm Thương hiệu</a></li>
+
+
+
+
+                    <li><a href="<?php echo base_url('backend/product/color/color/index') ?>">QL Màu sắc</a></li>
+                    <li>
+                        <a href="<?php echo base_url('backend/product/product/index') ?>" ><span class="nav-label">QL Danh mục SP</spann><span class="fa arrow"></span></a>
+                        <ul class="nav nav-third-level">
+                            <li><a href="<?php echo base_url('backend/product/product/index') ?>">QL Nhóm danh mục SP</a></li>
+                            
+                            <li><a href="<?php echo base_url('backend/product/product/index') ?>">QL Danh mục SP</a></li>
+                        </ul>
+                    </li>
+
+                    <li>
+                        <a href="<?php echo base_url('backend/product/product/index') ?>"><span class="nav-label">QL Nhóm Thuộc tính</span><span class="fa arrow"></span></a>
+                        <ul class="nav nav-third-level">
+                            <li><a href="<?php echo base_url('backend/product/property/catalogue/index') ?>">QL Nhóm thuộc tính</a></li>
+                            
+                            <li><a href="<?php echo base_url('backend/product/property/property/index') ?>">QL thuộc tính</a></li>
+                        </ul>
+                    </li>
                 </ul>
             </li>
             <li class="<?php echo ( $uriModule == 'article') ? 'active'  : '' ?>">

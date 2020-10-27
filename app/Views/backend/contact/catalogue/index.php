@@ -7,7 +7,7 @@
 ?>
 <div class="row wrapper border-bottom white-bg page-heading">
    <div class="col-lg-8">
-      <h2>Quản Lý Nhóm Thành Viên</h2>
+      <h2>Quản Lý Nhóm Liên Hệ</h2>
       <ol class="breadcrumb" style="margin-bottom:10px;">
          <li>
             <a href="<?php echo base_url('backend/dashboard/dashboard/index') ?>">Home</a>

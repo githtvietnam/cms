@@ -68,7 +68,6 @@ class Catalogue extends BaseController{
 					[
 						'contact as tb4','tb4.catalogueid = tb1.id','inner'
 					]
-					
 				],
 				'where'    => $where,
 				'keyword'  => $keyword,

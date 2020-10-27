@@ -2653,4 +2653,12 @@ button.toast-close-button {
     overflow: hidden;
 }
 /*text 3 dong*/
+.tv-font-size10{
+	font-size: 10px;
+}
+.tv-button.update{
+	background: green!important;
+	margin-right: 10px!important;
+	border-color: green!important;
+}
 

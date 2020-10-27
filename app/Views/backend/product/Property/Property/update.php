@@ -1,12 +1,12 @@
 <div class="row wrapper border-bottom white-bg page-heading">
 	<div class="col-lg-10">
-		<h2>Thắc mắc của khách hàng</h2>
+		<h2>Cập nhật thuộc tính</h2>
 		<ol class="breadcrumb">
 			<li>
 				<a href="<?php echo site_url('admin'); ?>">Home</a>
 			</li>
-			<li class="active"><strong>Thắc mắc của khách hàng</strong></li>
+			<li class="active"><strong>Cập nhật thuộc tính</strong></li>
 		</ol>
 	</div>
 </div>
-<?php echo view('backend/contact/contact/store') ?>
+<?php echo view('backend/product/property/property/store',  ['method' => $method]) ?>

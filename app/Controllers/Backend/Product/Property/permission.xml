@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<module>
+	<permissions>
+		<title>Nhóm - [Bài viết]</title>
+		<item>
+			<param>backend/article/catalogue/index</param>
+			<description>Xem</description>
+		</item>
+		<item>
+			<param>backend/article/catalogue/create</param>
+			<description>Thêm</description>
+		</item>
+		<item>
+			<param>backend/article/catalogue/update</param>
+			<description>Sửa</description>
+		</item>
+		<item>
+			<param>backend/article/catalogue/delete</param>
+			<description>Xóa</description>
+		</item>
+	</permissions>
+	<permissions>
+		<title>Danh sách - [Bài viết]</title>
+		<item>
+			<param>backend/article/article/index</param>
+			<description>Xem</description>
+		</item>
+		<item>
+			<param>backend/article/article/create</param>
+			<description>Thêm</description>
+		</item>
+		<item>
+			<param>backend/article/article/update</param>
+			<description>Sửa</description>
+		</item>
+		<item>
+			<param>backend/article/article/delete</param>
+			<description>Xóa</description>
+		</item>
+	</permissions>
+</module>

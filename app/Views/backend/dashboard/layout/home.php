@@ -34,8 +34,9 @@
         <div id="page-wrapper" class="gray-bg dashbard-1 <?php echo (isset($fixWrapper)) ? $fixWrapper : '' ?>">
             <?php echo view('backend/dashboard/common/nav') ?>
             <?php echo view( (isset($template)) ? $template  :'' ) ?>
-            <?php echo view('backend/dashboard/common/footer'); ?>
+            
         </div>
+        <?php echo view('backend/dashboard/common/footer'); ?>
        
     </div>
     <!-- Mainly scripts -->

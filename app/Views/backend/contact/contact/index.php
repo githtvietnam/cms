@@ -1,3 +1,14 @@
+<div class="row wrapper border-bottom white-bg page-heading">
+    <div class="col-lg-10">
+        <h2>Trả lời thắc mắc của khách hàng</h2>
+        <ol class="breadcrumb">
+            <li>
+                <a href="<?php echo site_url('admin'); ?>">Home</a>
+            </li>
+            <li class="active"><strong>Trả lời thắc mắc của khách hàng</strong></li>
+        </ol>
+    </div>
+</div>
 <table class="table table-striped table-bordered table-hover dataTables-example">
     <thead>
     <tr>
@@ -5,7 +16,7 @@
             <input type="checkbox" id="checkbox-all">
             <label for="check-all" class="labelCheckAll"></label>
         </th>
-        <th class="text-center small">Tình trạng</th>
+        <th class="text-center small">Độ ưu tiên</th>
         <th class="text-center medium">Thông tin người gửi</th>
         <th class="text-center big"> Nội dung gửi</th>
         <th class="text-center">Thời gian gửi</th>
@@ -28,7 +39,7 @@
                 <input type="checkbox" name="checkbox[]" value="<?php echo $val['id']; ?>" class="checkbox-item">
                 <div for="" class="label-checkboxitem"></div>
             </td>
-            <td class="text-center"><?php echo $status ?></td>
+            <td class="text-center"><?php echo $val['order'] ?></td>
             <td class="information">
                 <div class="customer-name uk-flex uk-flex-middle uk-flex-space-between">
                     <div class="user-name"><?php echo $val['fullname']; ?></div>

@@ -139,6 +139,146 @@ class Translate extends BaseController
 		$this->data['template'] = 'backend/translate/translate/translateContact';
 		return view('backend/dashboard/layout/home', $this->data);
 	}
+	public function translatePropertyCatalogue($objectid = 0, $module = '', $language = ''){
+		$session = session();
+		$objectid = (int)$objectid;
+		$moduleExtract = explode('_', $module);
+		$this->data['language'] = $language;
+		$this->data['flag'] = $this->AutoloadModel->_get_where([
+			'select' => 'image ',
+			'table' => 'language',
+		],true);
+		$this->data['object'] = $this->AutoloadModel->_get_where([
+			'select' => 'tb2.objectid, tb2.title,  ',
+			'table' => $module.' as tb1',
+			'join' => [
+				[
+					$moduleExtract[0].'_translate as tb2','tb1.id = tb2.objectid AND tb2.language = \''.$this->currentLanguage().'\' AND tb2.module = \''.$module.'\' ','inner'
+				]
+			],
+			'where' => ['tb1.id' => $objectid,'module' => $module]
+		]);
+		if(!isset($this->data['object']) || is_array($this->data['object']) == false || count($this->data['object']) == 0){
+			$session->setFlashdata('message-danger', 'Bản ghi không tồn tại!');
+			return redirect()->to(BASE_URL.'backend/product/'.$moduleExtract[0].'/'.((count($moduleExtract) == 1) ? $moduleExtract[0] : $moduleExtract[1]).'/index');
+		}
+		$this->data['dataTrans'] = $this->AutoloadModel->_get_where([
+			'select' => 'tb2.objectid, tb2.title,  ',
+			'table' => $module.' as tb1',
+			'join' => [
+				[
+					$moduleExtract[0].'_translate as tb2','tb1.id = tb2.objectid AND tb2.language = \''.$language.'\' ','inner'
+				]
+			],
+			'where' => ['tb1.id' => $objectid,'module' => $module]
+		]);
+		if($this->request->getMethod() == 'post'){
+			$validate = $this->validationContact();
+			if ($this->validate($validate['validate'], $validate['errorValidate'])){
+				$dataTrans = $this->storeContact([
+		 			'objectid' => $objectid,
+		 			'module' => $module,
+		 			'language' => $language,
+		 		]);
+				$flag = 0;
+		 		if(isset($this->data['dataTrans']) && is_array($this->data['dataTrans']) && count($this->data['dataTrans'])){
+					$flag = $this->AutoloadModel->_update([
+			 			'table' => $moduleExtract[0].'_translate',
+			 			'where' => ['objectid' => $objectid,'language' => $language, 'module' => $module],
+			 			'data' => $dataTrans,
+			 		]);
+				}else{
+					$flag = $this->AutoloadModel->_insert([
+			 			'table' => $moduleExtract[0].'_translate',
+			 			'data' => $dataTrans,
+			 		]);
+					
+				}
+				if($flag > 0){
+		 			$session->setFlashdata('message-success', 'Tạo Bản Dịch Thành Công! Hãy tạo danh mục tiếp theo.');
+ 					return redirect()->to(BASE_URL.'backend/product/'.$moduleExtract[0].'/'.((count($moduleExtract) == 1) ? $moduleExtract[0] : $moduleExtract[1]).'/index');
+		 		}
+		 		}else{
+	        	$this->data['validate'] = $this->validator->listErrors();
+			}
+		}
+
+
+
+
+		$this->data['template'] = 'backend/translate/translate/translatePropertyCatalogue';
+		return view('backend/dashboard/layout/home', $this->data);
+	}
+	public function translateProperty($objectid = 0, $module = '', $language = ''){
+		$session = session();
+		$objectid = (int)$objectid;
+		$moduleExtract = explode('_', $module);
+		$this->data['language'] = $language;
+		$this->data['flag'] = $this->AutoloadModel->_get_where([
+			'select' => 'image ',
+			'table' => 'language',
+		],true);
+		$this->data['object'] = $this->AutoloadModel->_get_where([
+			'select' => 'tb2.objectid, tb2.title, tb2.value  ',
+			'table' => $module.' as tb1',
+			'join' => [
+				[
+					$moduleExtract[0].'_translate as tb2','tb1.id = tb2.objectid AND tb2.language = \''.$this->currentLanguage().'\' AND tb2.module = \''.$module.'\' ','inner'
+				]
+			],
+			'where' => ['tb1.id' => $objectid,'module' => $module]
+		]);
+		if(!isset($this->data['object']) || is_array($this->data['object']) == false || count($this->data['object']) == 0){
+			$session->setFlashdata('message-danger', 'Bản ghi không tồn tại!');
+			return redirect()->to(BASE_URL.'backend/product/'.$moduleExtract[0].'/'.((count($moduleExtract) == 1) ? $moduleExtract[0] : $moduleExtract[1]).'/index');
+		}
+		$this->data['dataTrans'] = $this->AutoloadModel->_get_where([
+			'select' => 'tb2.objectid, tb2.title, tb2.value ',
+			'table' => $module.' as tb1',
+			'join' => [
+				[
+					$moduleExtract[0].'_translate as tb2','tb1.id = tb2.objectid AND tb2.language = \''.$language.'\' ','inner'
+				]
+			],
+			'where' => ['tb1.id' => $objectid,'module' => $module]
+		]);
+		if($this->request->getMethod() == 'post'){
+			$validate = $this->validationContact();
+			if ($this->validate($validate['validate'], $validate['errorValidate'])){
+				$dataTrans = $this->storeProperty([
+		 			'objectid' => $objectid,
+		 			'module' => $module,
+		 			'language' => $language,
+		 		]);
+				$flag = 0;
+		 		if(isset($this->data['dataTrans']) && is_array($this->data['dataTrans']) && count($this->data['dataTrans'])){
+					$flag = $this->AutoloadModel->_update([
+			 			'table' => $moduleExtract[0].'_translate',
+			 			'where' => ['objectid' => $objectid,'language' => $language, 'module' => $module],
+			 			'data' => $dataTrans,
+			 		]);
+				}else{
+					$flag = $this->AutoloadModel->_insert([
+			 			'table' => $moduleExtract[0].'_translate',
+			 			'data' => $dataTrans,
+			 		]);
+					
+				}
+				if($flag > 0){
+		 			$session->setFlashdata('message-success', 'Tạo Bản Dịch Thành Công! Hãy tạo danh mục tiếp theo.');
+ 					return redirect()->to(BASE_URL.'backend/product/'.$moduleExtract[0].'/'.((count($moduleExtract) == 1) ? $moduleExtract[0] : $moduleExtract[1]).'/index');
+		 		}
+		 		}else{
+	        	$this->data['validate'] = $this->validator->listErrors();
+			}
+		}
+
+
+
+
+		$this->data['template'] = 'backend/translate/translate/translateProperty';
+		return view('backend/dashboard/layout/home', $this->data);
+	}
 	
 	private function storeLanguage($param = []){
 		helper(['text']);
@@ -159,6 +299,18 @@ class Translate extends BaseController
 		helper(['text']);
 		$store = [
 			'title' => $this->request->getPost('title'),
+			'language' => $param['language'],
+			'module' => $param['module'],
+			'objectid' => $param['objectid'],
+		];
+
+		return $store;
+	}
+	private function storeProperty($param = []){
+		helper(['text']);
+		$store = [
+			'title' => $this->request->getPost('title'),
+			'value' => $this->request->getPost('value'),
 			'language' => $param['language'],
 			'module' => $param['module'],
 			'objectid' => $param['objectid'],
