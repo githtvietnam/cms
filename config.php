@@ -7,7 +7,7 @@ define('BACKEND_DIRECTORY', 'admin');
 define('AUTH', 'HTVIETNAM_');
 define('ASSET_BACKEND', 'public/backend/');
 
-define('BASE_URL', 'http://tvadmin.com/');
+define('BASE_URL', 'http://ci4.com/');
 define('HTSUFFIX', '.html');
 
 define('DEBUG', 0);
