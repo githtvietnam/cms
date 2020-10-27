@@ -21,6 +21,16 @@ class Store extends BaseController{
  			return redirect()->to(BASE_URL.'backend/dashboard/dashboard/index');
 		}
 
+		$this->data['storeList'] = $this->AutoloadModel->_get_where([
+			'select' => 'id, suffix, prefix, module, num0',
+			'table' =>$this->data['module'],
+			'where' => $where,
+			'keyword' => $keyword,
+			'limit' => $config['per_page'],
+			'start' => $page * $config['per_page'],
+			'order_by'=> 'id asc',
+			'group_by' => 'id'
+		]);
 
 		helper(['mypagination']);
 		$page = (int)$page;

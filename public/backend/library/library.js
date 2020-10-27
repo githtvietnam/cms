@@ -46,7 +46,7 @@ $(document).ready(function(){
 			},
 			function(data){
 				$('#insert_general')[0].reset();
-                // location.reload();
+                location.reload();
 			});	
         }
     });
