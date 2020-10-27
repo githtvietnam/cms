@@ -18,7 +18,7 @@ class Property extends BaseController{
 	public function index($page = 1){
 		$session = session();
 		// $flag = $this->authentication->check_permission([
-		// 	'routes' => 'backend/product/property/property/index'
+		// 	'routes' => 'backend/property/property/index'
 		// ]);
 		// if($flag == false){
  	// 		$session->setFlashdata('message-danger', 'Bạn không có quyền truy cập vào chức năng này!');
@@ -118,7 +118,7 @@ class Property extends BaseController{
 
 
 	 					$session->setFlashdata('message-success', 'Tạo Bài Viết Thành Công! Hãy tạo danh mục tiếp theo.');
- 						return redirect()->to(BASE_URL.'backend/product/property/property/index');
+ 						return redirect()->to(BASE_URL.'backend/property/property/index');
 		 		}
 	        }else{
 	        	$this->data['validate'] = $this->validator->listErrors();
@@ -137,7 +137,7 @@ class Property extends BaseController{
 		],true);
 		$this->data['fixWrapper'] = 'fix-wrapper';
 		$this->data['method'] = 'create';
-		$this->data['template'] = 'backend/product/property/property/create';
+		$this->data['template'] = 'backend/property/property/create';
 		return view('backend/dashboard/layout/home', $this->data);
 	}
 
