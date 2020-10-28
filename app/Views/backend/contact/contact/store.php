@@ -28,15 +28,9 @@
 							<p><?php echo $reply['content'] ?></p>
 						</div>
 						<hr>
-						<div class="rely-custumer">
-							<div class="uk-flex uk-flex-middle uk-flex-space-between">
-								<h3>Trả lời:</h3>
-								<a href="" title="" data-target="content" class="uploadMultiImage">Upload hình ảnh</a>
-							</div>
-							<?php echo form_textarea('replycontent', htmlspecialchars_decode(html_entity_decode(set_value('content', (isset($reply['replycontent'])) ? $reply['replycontent'] : ''))), 'class="form-control ck-editor" id="content" placeholder="" autocomplete="off"');?>
-						</div>
+						
 						<div class="mail-body tooltip-demo">
-								<button type="submit" name="create" value="post" class="btn btn-sm btn-primary"><i class="fa fa-reply"></i> Lưu lại</button>
+								<a type="button" class="btn btn-primary " href="<?php echo base_url('backend/contact/contact/index/') ?>">Quay lại</a>
 								
 							</div>
 					</div>
