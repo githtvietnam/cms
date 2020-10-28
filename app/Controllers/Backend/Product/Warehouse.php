@@ -21,7 +21,11 @@ class Warehouse extends BaseController{
  			return redirect()->to(BASE_URL.'backend/dashboard/dashboard/index');
 		}
 
-
+		$this->data['code'] = $this->AutoloadModel->_get_where([
+			'select' => 'id, suffix, prefix, module, num0',
+			'table' => 'id_general',
+			'where' => ['module' => $this->data['module']]
+		]);
 		helper(['mypagination']);
 		$page = (int)$page;
 		$perpage = ($this->request->getGet('perpage')) ? $this->request->getGet('perpage') : 20;
@@ -84,25 +88,51 @@ class Warehouse extends BaseController{
 
 	public function create(){
 		$session = session();
-		if($this->request->getMethod() == 'post'){
-			$validate = $this->validation();
-			if ($this->validate($validate['validate'], $validate['errorValidate'])){
-		 		$insert = $this->store(['method' => 'create']);
+		$flag = $this->authentication->check_permission([
+			'routes' => 'backend/product/warehouse/create'
+		]);
+		if($flag == false){
+ 			$session->setFlashdata('message-danger', 'Bạn không có quyền truy cập vào chức năng này!');
+ 			return redirect()->to(BASE_URL.'backend/dashboard/dashboard/index');
+		}
+		$this->data['check_code'] = $this->AutoloadModel->_get_where([
+			'select' => 'code,objectid',
+			'table' => 'id_general',
+			'where' => ['module' => $this->data['module']],
+		]);
+		if(!isset($this->data['check_code']) && !is_array($this->data['check_code']) && !count($this->data['check_code'])){
+			$session->setFlashdata('message-danger', 'Bạn chưa tạo phần cấu hình chung cho mã Kho hàng!');
+ 			return redirect()->to(BASE_URL.'backend/product/warehouse/index');
+		}else{
+			$this->data['warehouseid'] = convert_code($this->data['check_code']['code'], $this->data['module']);
+			if($this->request->getMethod() == 'post'){
+				$validate = $this->validation();
+				if ($this->validate($validate['validate'], $validate['errorValidate'])){
+			 		$insert = $this->store(['method' => 'create']);
 
-		 		$resultid = $this->AutoloadModel->_insert([
-		 			'table' => $this->data['module'],
-		 			'data' => $insert,
-		 		]);
- 				if($resultid > 0){
- 					$session->setFlashdata('message-success', 'Tạo Kho hàng Thành Công! Hãy tạo danh mục tiếp theo.');
-						return redirect()->to(BASE_URL.'backend/product/warehouse/index');
- 				}else{
- 					$session->setFlashdata('message-danger', 'Có vấn đề xảy ra, vui lòng thử lại!');
- 					return redirect()->to(BASE_URL.'backend/product/warehouse/index');
- 				}
-	        }else{
-	        	$this->data['validate'] = $this->validator->listErrors();
-	        }
+			 		$resultid = $this->AutoloadModel->_insert([
+			 			'table' => $this->data['module'],
+			 			'data' => $insert,
+			 		]);
+	 				if($resultid > 0){
+
+	 					$this->AutoloadModel->_update([
+	 						'table' => 'id_general',
+	 						'data' => [
+	 							'objectid' => $this->data['check_code']['objectid'] + 1
+	 						]
+	 					]);
+
+	 					$session->setFlashdata('message-success', 'Tạo Kho hàng Thành Công! Hãy tạo danh mục tiếp theo.');
+							return redirect()->to(BASE_URL.'backend/product/warehouse/index');
+	 				}else{
+	 					$session->setFlashdata('message-danger', 'Có vấn đề xảy ra, vui lòng thử lại!');
+	 					return redirect()->to(BASE_URL.'backend/product/warehouse/index');
+	 				}
+		        }else{
+		        	$this->data['validate'] = $this->validator->listErrors();
+		        }
+			}
 		}
 		$this->data['fixWrapper'] = 'fix-wrapper';
 		$this->data['method'] = 'create';

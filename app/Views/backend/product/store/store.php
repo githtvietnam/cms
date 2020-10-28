@@ -23,7 +23,7 @@
 									<label class="control-label text-left">
 										<span>Mã cửa hàng<b class="text-danger">(*)</b></span>
 									</label>
-									<?php echo form_input('storeid', set_value('storeid', (isset($store['storeid'])) ? $store['storeid'] : ''), 'class="form-control " placeholder="" autocomplete="off"');?>
+									<?php echo form_input('storeid', set_value('storeid', (isset($store['storeid'])) ? $store['storeid'] : $storeid), 'class="form-control va-uppercase" readonly placeholder="" autocomplete="off"');?>
 								</div>
 							</div>
 							<div class="col-lg-6">

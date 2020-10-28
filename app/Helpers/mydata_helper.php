@@ -88,11 +88,32 @@ if (! function_exists('count_object')){
 				'count' => TRUE
 			]);
 		}
-
 		
 
 		return $count;
 		
+	}
+}
+
+if (! function_exists('convert_code')){
+	function convert_code($code = '', $module =''){
+		$model = new AutoloadModel();
+		// $flag = $model->_get_where([
+			
+		// ]);
+
+
+		$code_Explode = explode('-',  $code );
+		$code = (int)'1'.$code_Explode[1];
+		$id = $model->_get_where([
+			'select' => 'objectid',
+			'table' => 'id_general',
+			'where' => ['module' => $module]
+		]);
+		$code  = $code + $id['objectid'];
+		$code = substr($code, 1);
+		$code = $code_Explode[0].'-'.$code.'-'.$code_Explode[2];
+		return $code;
 	}
 }
 
@@ -159,6 +180,21 @@ if (! function_exists('get_full_language')){
 		], TRUE);
 
 		return $language;
+	}
+}
+
+
+if (! function_exists('check_id_exist')){
+	function check_id_exist($module = ''){
+		$model = new AutoloadModel();
+
+		$count = $model->_get_where([
+			'table' => 'id_general',
+			'where' => ['module' => $module],
+			'count' => TRUE
+		], TRUE);
+
+		return $count;
 	}
 }
 

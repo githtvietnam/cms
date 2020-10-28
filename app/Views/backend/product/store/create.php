@@ -9,8 +9,4 @@
 		</ol>
 	</div>
 </div>
-<<<<<<< HEAD:app/Views/backend/product/color/create.php
-<?php echo view('backend/product/color/store') ?>
-=======
 <?php echo view('backend/product/store/store') ?>
->>>>>>> 24bd10b74a227724fd9692f02b162a8811750f48:app/Views/backend/product/store/create.php

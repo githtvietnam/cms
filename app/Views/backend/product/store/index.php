@@ -99,8 +99,8 @@
                                     <input type="checkbox" name="checkbox[]" value="<?php echo $val['id']; ?>" class="checkbox-item">
                                     <div for="" class="label-checkboxitem"></div>
                                 </td>
-                                <td class="text-navy text-center"><?php echo $val['storeid']; ?></td>
-                                <td class="text-danger"><?php echo $val['title']; ?></td>
+                                <td class="text-navy text-center va-uppercase" style="color:blue;"><?php echo $val['storeid']; ?></td>
+                                <td class="text-danger" style="color:blue;"><?php echo $val['title']; ?></td>
                                 <td class="text-primary" style="color:blue;"><?php echo $address; ?></td>
                                 <td class="text-primary text-center"><?php echo $val['phone']; ?></td>
 
@@ -191,11 +191,11 @@
                         <div class="va-input-general">
                             <label class="mb10">Kết quả</label>  
                             <div class="uk-flex uk-flex-middle">
-                                <span class="render_suffix text-danger">VA</span>
-                                <span>-</span>
-                                <span class="render_num0 text-danger"></span>
-                                <span>-</span>
-                                <span class="render_prefix text-danger">STR</span>
+                                <span class="render_suffix text-danger va-uppercase">VA</span>
+                                <span class=" text-danger va-uppercase">-</span>
+                                <span class="render_num0 text-danger va-uppercase"></span>
+                                <span class=" text-danger va-uppercase">-</span>
+                                <span class="render_prefix text-danger va-uppercase">STR</span>
                             </div>
                         </div>
                         <br>

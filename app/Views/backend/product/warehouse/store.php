@@ -23,7 +23,8 @@
 									<label class="control-label text-left">
 										<span>Mã Kho hàng<b class="text-danger">(*)</b></span>
 									</label>
-									<?php echo form_input('warehouseid', set_value('warehouseid', (isset($warehouse['warehouseid'])) ? $warehouse['warehouseid'] : ''), 'class="form-control " placeholder="" autocomplete="off"');?>
+									<?php echo form_input('warehouseid', set_value('warehouseid', (isset($warehouse['warehouseid'])) ? $warehouse['warehouseid'] : $warehouseid), 'class="form-control va-uppercase" readonly placeholder="" autocomplete="off"');?>
+									
 								</div>
 							</div>
 							<div class="col-lg-6">

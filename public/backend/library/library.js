@@ -18,7 +18,6 @@ $(document).ready(function(){
 		for(let i = 1; i <= data_0; i++ ){
 			$('.render_num0').append(0);
 		}
-		$('.render_num0').append('...');
 	})
 
 	$(document).on('keyup','#suffix', function(){
