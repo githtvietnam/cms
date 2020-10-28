@@ -16,7 +16,7 @@ class Catalogue extends BaseController{
 		$session = session();
 		$explode = explode('_', $this->data['module']);
 		// $flag = $this->authentication->check_permission([
-		// 	'routes' => 'backend/slide/slide/index'
+		// 	'routes' => 'backend/contact/catalogue/index'
 		// ]);
 		// if($flag == false){
  	// 		$session->setFlashdata('message-danger', 'Bạn không có quyền truy cập vào chức năng này!');

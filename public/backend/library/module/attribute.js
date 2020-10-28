@@ -1,10 +1,9 @@
 $(document).ready(function(){
-		$(document).on('click','.deleteCatalogue', function(){
+		$(document).on('click','.deleteAttribute', function(){
 
 
 		let _this = $(this);
 		let id = _this.attr('id');
-
 			swal({
 				title: "Hãy chắc chắn rằng bạn muốn thực hiện thao tác này?",
 				text: 'Xóa Bài viết này. Dữ liệu sẽ không thể khôi phục!',
@@ -17,15 +16,15 @@ $(document).ready(function(){
 				closeOnCancel: false },
 			function (isConfirm) {
 				if (isConfirm) {
-					var formURL = 'ajax/property/deleteCatalogue';
+					var formURL = 'ajax/attribute/deleteAttribute';
 					$.post(formURL, {
-						id: id,},
+						id: id, },
 						function(data){
 							if(data == 0){
 									sweet_error_alert('Có vấn đề xảy ra','Vui lòng thử lại')
 								}else{
 									swal("Xóa thành công!", "Bản ghi đã được xóa khỏi danh sách.", "success");
-									window.location.href = BASE_URL+'backend/property/catalogue/index';
+									window.location.href = BASE_URL+'backend/attribute/attribute/index';
 								}
 						});
 				} else {

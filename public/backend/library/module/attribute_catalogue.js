@@ -1,12 +1,13 @@
 $(document).ready(function(){
-		$(document).on('click','.deleteProperty', function(){
+		$(document).on('click','.deleteCatalogue', function(){
 
 
 		let _this = $(this);
 		let id = _this.attr('id');
+
 			swal({
 				title: "Hãy chắc chắn rằng bạn muốn thực hiện thao tác này?",
-				text: 'Xóa Bài viết này. Dữ liệu sẽ không thể khôi phục!',
+				text: 'Xóa nhóm thuộc tính này. Các thuộc tính con sẽ bị xóa!',
 				type: "warning",
 				showCancelButton: true,
 				confirmButtonColor: "#DD6B55",
@@ -16,7 +17,7 @@ $(document).ready(function(){
 				closeOnCancel: false },
 			function (isConfirm) {
 				if (isConfirm) {
-					var formURL = 'ajax/property/deleteProperty';
+					var formURL = 'ajax/attribute/deleteCatalogue';
 					$.post(formURL, {
 						id: id,},
 						function(data){
@@ -24,7 +25,7 @@ $(document).ready(function(){
 									sweet_error_alert('Có vấn đề xảy ra','Vui lòng thử lại')
 								}else{
 									swal("Xóa thành công!", "Bản ghi đã được xóa khỏi danh sách.", "success");
-									window.location.href = BASE_URL+'backend/property/property/index';
+									window.location.href = BASE_URL+'backend/attribute/catalogue/index';
 								}
 						});
 				} else {

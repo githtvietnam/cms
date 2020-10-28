@@ -185,7 +185,7 @@ class Translate extends BaseController
 		$this->data['template'] = 'backend/translate/translate/translateContact';
 		return view('backend/dashboard/layout/home', $this->data);
 	}
-	public function translatePropertyCatalogue($objectid = 0, $module = '', $language = ''){
+	public function translateAttributeCatalogue($objectid = 0, $module = '', $language = ''){
 		$session = session();
 		$objectid = (int)$objectid;
 		$moduleExtract = explode('_', $module);
@@ -206,7 +206,7 @@ class Translate extends BaseController
 		]);
 		if(!isset($this->data['object']) || is_array($this->data['object']) == false || count($this->data['object']) == 0){
 			$session->setFlashdata('message-danger', 'Bản ghi không tồn tại!');
-			return redirect()->to(BASE_URL.'backend/product/'.$moduleExtract[0].'/'.((count($moduleExtract) == 1) ? $moduleExtract[0] : $moduleExtract[1]).'/index');
+			return redirect()->to(BASE_URL.'backend/'.$moduleExtract[0].'/'.((count($moduleExtract) == 1) ? $moduleExtract[0] : $moduleExtract[1]).'/index');
 		}
 		$this->data['dataTrans'] = $this->AutoloadModel->_get_where([
 			'select' => 'tb2.objectid, tb2.title,  ',
@@ -254,7 +254,7 @@ class Translate extends BaseController
 		$this->data['template'] = 'backend/translate/translate/translatePropertyCatalogue';
 		return view('backend/dashboard/layout/home', $this->data);
 	}
-	public function translateProperty($objectid = 0, $module = '', $language = ''){
+	public function translateAttribute($objectid = 0, $module = '', $language = ''){
 		$session = session();
 		$objectid = (int)$objectid;
 		$moduleExtract = explode('_', $module);
@@ -275,7 +275,7 @@ class Translate extends BaseController
 		]);
 		if(!isset($this->data['object']) || is_array($this->data['object']) == false || count($this->data['object']) == 0){
 			$session->setFlashdata('message-danger', 'Bản ghi không tồn tại!');
-			return redirect()->to(BASE_URL.'backend/product/'.$moduleExtract[0].'/'.((count($moduleExtract) == 1) ? $moduleExtract[0] : $moduleExtract[1]).'/index');
+			return redirect()->to(BASE_URL.'backend/'.$moduleExtract[0].'/'.((count($moduleExtract) == 1) ? $moduleExtract[0] : $moduleExtract[1]).'/index');
 		}
 		$this->data['dataTrans'] = $this->AutoloadModel->_get_where([
 			'select' => 'tb2.objectid, tb2.title, tb2.value ',
@@ -318,7 +318,7 @@ class Translate extends BaseController
 
 
 
-		$this->data['template'] = 'backend/translate/translate/translateProperty';
+		$this->data['template'] = 'backend/translate/translate/translateAttribute';
 		return view('backend/dashboard/layout/home', $this->data);
 	}
 	

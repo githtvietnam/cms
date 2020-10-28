@@ -1,30 +1,30 @@
 <?php 
-namespace App\Controllers\Backend\Article;
+namespace App\Controllers\Backend\Attribute;
 use App\Controllers\BaseController;
 use App\Libraries\Nestedsetbie;
 
-class Article extends BaseController{
+class Attribute extends BaseController{
 	protected $data;
 	public $nestedsetbie;
 	
 	
 	public function __construct(){
 		$this->data = [];
-		$this->data['module'] = 'article';
-		$this->data['module2'] = 'article_catalogue';
+		$this->data['module'] = 'attribute';
+		$this->data['module2'] = 'attribute_catalogue';
 		$this->nestedsetbie = new Nestedsetbie(['table' => $this->data['module'].'_catalogue','language' => $this->currentLanguage()]);
 
 	}
 
 	public function index($page = 1){
 		$session = session();
-		$flag = $this->authentication->check_permission([
-			'routes' => 'backend/article/article/index'
-		]);
-		if($flag == false){
- 			$session->setFlashdata('message-danger', 'Bạn không có quyền truy cập vào chức năng này!');
- 			return redirect()->to(BASE_URL.'backend/dashboard/dashboard/index');
-		}
+		// $flag = $this->authentication->check_permission([
+		// 	'routes' => 'backend/attribute/attribute/index'
+		// ]);
+		// if($flag == false){
+ 	// 		$session->setFlashdata('message-danger', 'Bạn không có quyền truy cập vào chức năng này!');
+ 	// 		return redirect()->to(BASE_URL.'backend/dashboard/dashboard/index');
+		// }
 
 		helper(['mypagination']);
 		$page = (int)$page;
@@ -33,7 +33,7 @@ class Article extends BaseController{
 		$keyword = $this->condition_keyword();
 		$catalogue = $this->condition_catalogue();
 		$config['total_rows'] = $this->AutoloadModel->_get_where([
-			'select' => 'tb1.id, tb4.title',
+			'select' => 'tb1.id, tb2.title',
 			'table' => $this->data['module'].' as tb1',
 			'keyword' => $keyword,
 			'where' => $where,
@@ -41,20 +41,17 @@ class Article extends BaseController{
 			'where_in_field' => $catalogue['where_in_field'],
 			'join' => [
 					[
-						'object_relationship as tb2', 'tb1.id = tb2.objectid AND tb2.module = \''.$this->data['module'].'\' ', 'inner'
-					],
-					[
 						'user as tb3','tb1.userid_created = tb3.id','inner'
 					],
 					[
-						'article_translate as tb4','tb1.id = tb4.objectid AND tb4.language = \''.$this->currentLanguage().'\' ','inner'
-					]
+						'attribute_translate as tb2','tb1.id = tb2.objectid AND tb2.module = \''.$this->data['module'].'\'   AND tb2.language = \''.$this->currentLanguage().'\' ','inner'
+					],
 				],
 			'group_by' => 'tb1.id',
 			'count' => TRUE,
 		]);
 		if($config['total_rows'] > 0){
-			$config = pagination_config_bt(['url' => 'backend/article/article/index','perpage' => $perpage], $config);
+			$config = pagination_config_bt(['url' => 'backend/attribute/attribute/index','perpage' => $perpage], $config);
 
 			$this->pagination->initialize($config);
 			$this->data['pagination'] = $this->pagination->create_links();
@@ -66,8 +63,8 @@ class Article extends BaseController{
 			$page = $page - 1;
 			$languageDetact = $this->detect_language();
 			
-			$this->data['articleList'] = $this->AutoloadModel->_get_where([
-				'select' => 'tb1.id,  tb2.catalogueid, tb1.publish, tb1.order, tb1.userid_created, tb1.userid_updated, tb1.created_at, tb1.viewed, tb1.image, tb1.updated_at, tb3.fullname as creator, tb4.title as cat_title, tb4.id as cat_id, tb1.catalogue, tb2.objectid, (SELECT title FROM article_translate INNER JOIN article ON article_translate.objectid = article.id  AND article_translate.module = \''.$this->data['module'].'\' AND article_translate.language = \''.$this->currentLanguage().'\' WHERE tb1.id = article_translate.objectid GROUP BY article.id ) as article_title, '.((isset($languageDetact['select'])) ? $languageDetact['select'] : ''),
+			$this->data['attributeList'] = $this->AutoloadModel->_get_where([
+				'select' => 'tb1.id, tb2.title, tb2.value, tb1.created_at,  tb1.catalogueid, tb1.publish, tb3.fullname as creator,  tb1.catalogue, tb2.objectid, '.((isset($languageDetact['select'])) ? $languageDetact['select'] : ''),
 				'table' => $this->data['module'].' as tb1',
 				'where' => $where,
 				'where_in' => $catalogue['where_in'],
@@ -75,15 +72,11 @@ class Article extends BaseController{
 				'keyword' => $keyword,
 				'join' => [
 					[
-						'object_relationship as tb2', 'tb1.id = tb2.objectid AND tb2.module = \''.$this->data['module'].'\' ', 'inner'
-					],
-					[
 						'user as tb3','tb1.userid_created = tb3.id','inner'
 					],
 					[
-						'article_translate as tb4','tb1.catalogueid = tb4.objectid  AND tb4.language = \''.$this->currentLanguage().'\' ','inner'
+						'attribute_translate as tb2','tb1.id = tb2.objectid AND tb2.module = \''.$this->data['module'].'\'   AND tb2.language = \''.$this->currentLanguage().'\' ','inner'
 					],
-					
 				],
 				'limit' => $config['per_page'],
 				'start' => $page * $config['per_page'],
@@ -93,7 +86,7 @@ class Article extends BaseController{
 
 		}
 		$this->data['dropdown'] = $this->nestedsetbie->dropdown();
-		$this->data['template'] = 'backend/article/article/index';
+		$this->data['template'] = 'backend/attribute/attribute/index';
 		return view('backend/dashboard/layout/home', $this->data);
 	}
 
@@ -103,7 +96,6 @@ class Article extends BaseController{
 			$validate = $this->validation();
 			if ($this->validate($validate['validate'], $validate['errorValidate'])){
 		 		$insert = $this->store(['method' => 'create']);
-
 		 		$resultid = $this->AutoloadModel->_insert([
 		 			'table' => $this->data['module'],
 		 			'data' => $insert,
@@ -113,18 +105,18 @@ class Article extends BaseController{
 
 		 			$storeLanguage = $this->storeLanguage($resultid);
 		 			$insertid = $this->AutoloadModel->_insert([
-			 			'table' => 'article_translate',
+			 			'table' => 'attribute_translate',
 			 			'data' => $storeLanguage,
 			 		]);
 
 
-	 				$flag = $this->create_relationship($resultid);
-	 				if($flag > 0){
+	 				
+	 				if($resultid > 0){
 	 					$session->setFlashdata('message-success', 'Tạo Bài Viết Thành Công! Hãy tạo danh mục tiếp theo.');
- 						return redirect()->to(BASE_URL.'backend/article/article/index');
+ 						return redirect()->to(BASE_URL.'backend/attribute/attribute/index');
 	 				}else{
 	 					$session->setFlashdata('message-danger', 'Có vấn đề xảy ra, vui lòng thử lại!');
-	 					return redirect()->to(BASE_URL.'backend/article/article/index');
+	 					return redirect()->to(BASE_URL.'backend/attribute/attribute/index');
 	 				}
 		 		}
 	        }else{
@@ -134,37 +126,35 @@ class Article extends BaseController{
 		$this->data['dropdown'] = $this->nestedsetbie->dropdown();
 		$this->data['fixWrapper'] = 'fix-wrapper';
 		$this->data['method'] = 'create';
-		$this->data['template'] = 'backend/article/article/create';
+		$this->data['template'] = 'backend/attribute/attribute/create';
 		return view('backend/dashboard/layout/home', $this->data);
 	}
 
 	public function update($id = 0){
 		$id = (int)$id;
 		$this->data[$this->data['module']] = $this->AutoloadModel->_get_where([
-			'select' => 'tb1.id, tb4.title, tb4.canonical, tb4.description, tb4.content, tb4.meta_title, tb4.meta_description, tb1.catalogueid, tb1.image, tb1.album, tb1.publish, tb1.catalogue',
-
-			'table' => $this->data['module'].' as tb1',
-			'join' => [
-					[
-						'object_relationship as tb2', 'tb1.id = tb2.objectid AND tb2.module = \''.$this->data['module'].'\' ', 'inner'
-					],
+				'select' => 'tb1.id, tb2.title, tb2.value,  tb1.created_at,  tb1.catalogueid, tb1.publish, tb3.fullname as creator,  tb1.catalogue, tb2.objectid, ',
+				'table' => $this->data['module'].' as tb1',
+				'where' => ['tb1.id' => $id ],
+				'join' => [
 					[
 						'user as tb3','tb1.userid_created = tb3.id','inner'
 					],
 					[
-						'article_translate as tb4','tb1.id = tb4.objectid AND tb4.language = \''.$this->currentLanguage().'\' ','inner'
-					]
+						'attribute_translate as tb2','tb1.id = tb2.objectid AND tb2.module = \''.$this->data['module'].'\'   AND tb2.language = \''.$this->currentLanguage().'\' ','inner'
+					],
 				],
-			'where' => ['tb1.id' => $id,'tb1.deleted_at' => 0]
-		]);
+				'group_by' => 'tb1.id',
+				
+			]);
+		
 		$session = session();
 		if(!isset($this->data[$this->data['module']]) || is_array($this->data[$this->data['module']]) == false || count($this->data[$this->data['module']]) == 0){
 			$session->setFlashdata('message-danger', 'Bài Viết không tồn tại');
- 			return redirect()->to(BASE_URL.'backend/article/article/index');
+ 			return redirect()->to(BASE_URL.'backend/attribute/attribute/index');
 		}
 
-		$this->data[$this->data['module']]['description'] = base64_decode($this->data[$this->data['module']]['description']);
-		$this->data[$this->data['module']]['content'] = base64_decode($this->data[$this->data['module']]['content']);
+		
 		
 		if($this->request->getMethod() == 'post'){
 			$validate = $this->validation();
@@ -184,7 +174,7 @@ class Article extends BaseController{
 			 			'data' => $updateLanguage,
 			 		]);
 		 			$session->setFlashdata('message-success', 'Cập Nhật Bài Viết Thành Công!');
- 					return redirect()->to(BASE_URL.'backend/article/article/index');
+ 					return redirect()->to(BASE_URL.'backend/attribute/attribute/index');
 		 		}
 
 	        }else{
@@ -194,7 +184,7 @@ class Article extends BaseController{
 		$this->data['dropdown'] = $this->nestedsetbie->dropdown();
 		$this->data['fixWrapper'] = 'fix-wrapper';
 		$this->data['method'] = 'update';
-		$this->data['template'] = 'backend/article/article/update';
+		$this->data['template'] = 'backend/attribute/attribute/update';
 		return view('backend/dashboard/layout/home', $this->data);
 	}
 
@@ -301,7 +291,7 @@ class Article extends BaseController{
 		}
 		return [
 			'where_in' => $id,
-			'where_in_field' => 'tb2.catalogueid'
+			'where_in_field' => 'tb1.catalogueid'
 		];
 
 	}
@@ -328,7 +318,7 @@ class Article extends BaseController{
 	private function condition_keyword($keyword = ''): string{
 		if(!empty($this->request->getGet('keyword'))){
 			$keyword = $this->request->getGet('keyword');
-			$keyword = '(tb4.title LIKE \'%'.$keyword.'%\')';
+			$keyword = '(tb2.title LIKE \'%'.$keyword.'%\')';
 		}
 		return $keyword;
 	}
@@ -338,11 +328,7 @@ class Article extends BaseController{
 		$store = [
 			'objectid' => $objectid,
 			'title' => validate_input($this->request->getPost('title')),
-			'canonical' => $this->request->getPost('canonical'),
-			'description' => base64_encode($this->request->getPost('description')),
-			'content' => base64_encode($this->request->getPost('content')),
-			'meta_title' => validate_input($this->request->getPost('meta_title')),
-			'meta_description' => validate_input($this->request->getPost('meta_description')),
+			'value' => validate_input($this->request->getPost('value')),
 			'language' => $this->currentLanguage(),
 			'module' => $this->data['module'],
 		];
@@ -366,8 +352,6 @@ class Article extends BaseController{
 		$store = [
  			'catalogueid' => (int)$this->request->getPost('catalogueid'),
  			'catalogue' => json_encode($catalogue),
- 			'image' => $this->request->getPost('image'),
- 			'album' => json_encode($this->request->getPost('album'), TRUE),
  			'publish' => $this->request->getPost('publish'),
  		];
  		if($param['method'] == 'create' && isset($param['method'])){	
@@ -393,7 +377,7 @@ class Article extends BaseController{
 		$i = 3;
 		if(isset($languageList) && is_array($languageList) && count($languageList)){
 			foreach($languageList as $key => $val){
-				$select = $select.'(SELECT COUNT(objectid) FROM article_translate WHERE article_translate.objectid = tb1.id AND  article_translate.language = "'.$val['canonical'].'") as '.$val['canonical'].'_detect, ';
+				$select = $select.'(SELECT COUNT(objectid) FROM attribute_translate WHERE attribute_translate.objectid = tb1.id AND attribute_translate.module = "'.$this->data['module'].'" AND attribute_translate.language = "'.$val['canonical'].'") as '.$val['canonical'].'_detect, ';
 				$i++;
 			}	
 		}
@@ -408,19 +392,15 @@ class Article extends BaseController{
 	private function validation(){
 		$validate = [
 			'title' => 'required',
-			'canonical' => 'required|check_canonical['.$this->data['module'].']',
 			'catalogueid' => 'is_natural_no_zero',
 		];
 		$errorValidate = [
 			'title' => [
 				'required' => 'Bạn phải nhập vào trường tiêu đề'
 			],
-			'canonical' => [
-				'required' => 'Bạn phải nhập giá trị cho trường đường dẫn',
-				'check_canonical' => 'Đường dẫn đã tồn tại, vui lòng chọn đường dẫn khác',
-			],
+			
 			'catalogueid' => [
-				'is_natural_no_zero' => 'Bạn Phải chọn danh mục cha cho bài viết',
+				'is_natural_no_zero' => 'Bạn Phải chọn danh mục cha cho thuộc tính',
 			],
 		];
 		return [

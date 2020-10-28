@@ -11,7 +11,7 @@
          <li>
             <a href="<?php echo base_url('backend/dashboard/dashboard/index') ?>">Home</a>
          </li>
-         <li class="active"><strong>Quản lý Bài Viết</strong></li>
+         <li class="active"><strong>Quản lý thuộc tính</strong></li>
       </ol>
    </div>
 </div>
@@ -20,7 +20,7 @@
         <div class="col-lg-12">
             <div class="ibox float-e-margins">
                 <div class="ibox-title">
-                    <h5>Quản lý Bài Viết </h5>
+                    <h5>Quản lý thuộc tính </h5>
                     <div class="ibox-tools">
                         <a class="collapse-link">
                             <i class="fa fa-chevron-up"></i>
@@ -30,10 +30,6 @@
                         </a>
                         <ul class="dropdown-menu dropdown-user">
                             <li><a href="#" class="delete-all" data-module="<?php echo $module; ?>">Xóa tất cả</a>
-                            </li>
-                            <li><a href="#" class="status" data-value="0" data-field="publish" data-module="<?php echo $module; ?>" title="Cập nhật trạng thái bài viết">Deactive Bài viết</a>
-                            </li> 
-                            <li><a href="#" class="status" data-value="1" data-field="publish" data-module="<?php echo $module; ?>" data-title="Cập nhật trạng thái bài viết">Active Bài viết</a>
                             </li>
                         </ul>
                         <a class="close-link">
