@@ -79,35 +79,6 @@
 						</div>
 					</div>
 				</div>
-
-			
-				
-				<div class="ibox ibox-seo mb20">
-					<div class="ibox-title">
-						<div class="uk-flex uk-flex-middle uk-flex-space-between">
-							<h5>Tối ưu SEO <small class="text-danger">Thiết lập các thẻ mô tả giúp khách hàng dễ dàng tìm thấy bạn.</small></h5>
-						</div>
-					</div>
-					<div class="ibox-content">
-						<div class="row">
-							<div class="col-lg-12">
-								<?php  
-									$metaTitle = (isset($_POST['meta_title'])) ? $_POST['meta_title'] : ((isset($object['meta_title']) && $object['meta_title'] != '') ? $object['meta_title'] : 'Bạn chưa nhập tiêu đề SEO cho bài viết') ;
-									$googleLink = (isset($_POST['canonical'])) ? $_POST['canonical'] : ((isset($object['canonical']) && $object['canonical'] != '') ? BASE_URL.$object['canonical'].HTSUFFIX : BASE_URL.'duong-dan-website'.HTSUFFIX) ;
-									$metaDescription = (isset($_POST['meta_description'])) ? $_POST['meta_description'] : ((isset($object['meta_description']) && $object['meta_description'] != '') ? $object['meta_description'] : 'Bạn Chưa nhập mô tả SEO cho bài viết') ;
-								?>
-								<div class="google">
-									<div class="g-title"><?php echo $metaTitle; ?></div>
-									<div class="g-link"><?php echo $googleLink ?></div>
-									<div class="g-description" id="metaDescription">
-										<?php echo $metaDescription; ?>
-										
-									</div>
-								</div>
-							</div>
-						</div>
-					</div>
-				</div>
 			</div>
 
 			<div class="col-lg-6 clearfix">

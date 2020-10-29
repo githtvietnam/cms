@@ -152,7 +152,7 @@ class Article extends BaseController{
 						'user as tb3','tb1.userid_created = tb3.id','inner'
 					],
 					[
-						'article_translate as tb4','tb1.id = tb4.objectid AND tb4.language = \''.$this->currentLanguage().'\' ','inner'
+						'article_translate as tb4','tb1.id = tb4.objectid AND tb4.module = "article" AND tb4.language = \''.$this->currentLanguage().'\' ','inner'
 					]
 				],
 			'where' => ['tb1.id' => $id,'tb1.deleted_at' => 0]

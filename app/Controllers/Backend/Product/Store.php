@@ -121,7 +121,8 @@ class Store extends BaseController{
 	 						'table' => 'id_general',
 	 						'data' => [
 	 							'objectid' => $this->data['check_code']['objectid'] + 1
-	 						]
+	 						],
+	 						'where' => ['module' => $this->data['module']]
 	 					]);
 
 

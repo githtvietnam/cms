@@ -1,5 +1,25 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <module>
+	
+	<permissions>
+		<title>Slide</title>
+		<item>
+			<param>backend/slide/slide/index</param>
+			<description>Xem</description>
+		</item>
+		<item>
+			<param>backend/slide/slide/create</param>
+			<description>Thêm</description>
+		</item>
+		<item>
+			<param>backend/slide/slide/update</param>
+			<description>Sửa</description>
+		</item>
+		<item>
+			<param>backend/slide/slide/delete</param>
+			<description>Xóa</description>
+		</item>
+	</permissions>
 	<permissions>
 		<title>Nhóm - [Thương hiệu]</title>
 		<item>
@@ -19,6 +39,7 @@
 			<description>Xóa</description>
 		</item>
 	</permissions>
+
 	<permissions>
 		<title>Nhóm - [Sản phẩm]</title>
 		<item>
@@ -92,6 +113,25 @@
 		</item>
 		<item>
 			<param>backend/product/warehouse/delete</param>
+			<description>Xóa</description>
+		</item>
+	</permissions>
+	<permissions>
+		<title>Danh sách - [Sản phẩm]</title>
+		<item>
+			<param>backend/product/product/index</param>
+			<description>Xem</description>
+		</item>
+		<item>
+			<param>backend/product/product/create</param>
+			<description>Thêm</description>
+		</item>
+		<item>
+			<param>backend/product/product/update</param>
+			<description>Sửa</description>
+		</item>
+		<item>
+			<param>backend/product/product/delete</param>
 			<description>Xóa</description>
 		</item>
 	</permissions>

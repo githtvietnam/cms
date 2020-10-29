@@ -120,7 +120,8 @@ class Warehouse extends BaseController{
 	 						'table' => 'id_general',
 	 						'data' => [
 	 							'objectid' => $this->data['check_code']['objectid'] + 1
-	 						]
+	 						],
+	 						'where' => ['module' => $this->data['module']]
 	 					]);
 
 	 					$session->setFlashdata('message-success', 'Tạo Kho hàng Thành Công! Hãy tạo danh mục tiếp theo.');

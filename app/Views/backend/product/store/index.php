@@ -99,8 +99,8 @@
                                     <input type="checkbox" name="checkbox[]" value="<?php echo $val['id']; ?>" class="checkbox-item">
                                     <div for="" class="label-checkboxitem"></div>
                                 </td>
-                                <td class="text-navy text-center va-uppercase" style="color:blue;"><?php echo $val['storeid']; ?></td>
-                                <td class="text-danger" style="color:blue;"><?php echo $val['title']; ?></td>
+                                <td class="text-navy text-center va-uppercase" style="color: blue;width: 130px;"><?php echo $val['storeid']; ?></td>
+                                <td class="text-danger" style="color: blue;width: 200px;"><?php echo $val['title']; ?></td>
                                 <td class="text-primary" style="color:blue;"><?php echo $address; ?></td>
                                 <td class="text-primary text-center"><?php echo $val['phone']; ?></td>
 

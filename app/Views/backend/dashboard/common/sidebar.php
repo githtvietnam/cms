@@ -38,6 +38,7 @@
                     <li><a href="<?php echo base_url('backend/product/brand/brand/index') ?>">QL Thương hiệu</a></li>
                     <li><a href="<?php echo base_url('backend/product/store/index') ?>">QL Cửa hàng</a></li>
                     <li><a href="<?php echo base_url('backend/product/warehouse/index') ?>">QL Kho hàng</a></li>
+                    <li><a href="<?php echo base_url('backend/product/product/index') ?>">QL Sản Phẩm</a></li>
                 </ul>
             </li>
             <li class="<?php echo ( $uriModule == 'article') ? 'active'  : '' ?>">

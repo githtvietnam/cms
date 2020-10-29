@@ -1,6 +1,25 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <module>
 	<permissions>
+		<title>Ngôn Ngữ</title>
+		<item>
+			<param>backend/language/language/index</param>
+			<description>Xem</description>
+		</item>
+		<item>
+			<param>backend/language/language/create</param>
+			<description>Thêm</description>
+		</item>
+		<item>
+			<param>backend/language/language/update</param>
+			<description>Sửa</description>
+		</item>
+		<item>
+			<param>backend/language/language/delete</param>
+			<description>Xóa</description>
+		</item>
+	</permissions>
+	<permissions>
 		<title>Nhóm - [Thành viên]</title>
 		<item>
 			<param>backend/user/catalogue/index</param>
