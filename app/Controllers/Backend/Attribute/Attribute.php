@@ -25,6 +25,16 @@ class Attribute extends BaseController{
  	// 		$session->setFlashdata('message-danger', 'Bạn không có quyền truy cập vào chức năng này!');
  	// 		return redirect()->to(BASE_URL.'backend/dashboard/dashboard/index');
 		// }
+		$query = '(SELECT attribute_translate.title 
+		FROM attribute_translate 
+		INNER JOIN attribute_catalogue 
+		ON attribute_translate.objectid = attribute_catalogue.id  
+		WHERE attribute_translate.module = \''.$this->data['module2'].'\' 
+		AND attribute_translate.language = \''.$this->currentLanguage().'\' 
+		AND tb1.catalogueid = attribute_translate.objectid 
+		GROUP BY attribute_translate.title ) as cat_title,';
+		
+
 
 		helper(['mypagination']);
 		$page = (int)$page;
@@ -33,22 +43,11 @@ class Attribute extends BaseController{
 		$keyword = $this->condition_keyword();
 		$catalogue = $this->condition_catalogue();
 		$config['total_rows'] = $this->AutoloadModel->_get_where([
-			'select' => 'tb1.id, tb2.title',
+			'select' => 'id',
 			'table' => $this->data['module'].' as tb1',
 			'keyword' => $keyword,
 			'where' => $where,
-			'where_in' => $catalogue['where_in'],
-			'where_in_field' => $catalogue['where_in_field'],
-			'join' => [
-					[
-						'user as tb3','tb1.userid_created = tb3.id','inner'
-					],
-					[
-						'attribute_translate as tb2','tb1.id = tb2.objectid AND tb2.module = \''.$this->data['module'].'\'   AND tb2.language = \''.$this->currentLanguage().'\' ','inner'
-					],
-				],
-			'group_by' => 'tb1.id',
-			'count' => TRUE,
+			'count' => TRUE
 		]);
 		if($config['total_rows'] > 0){
 			$config = pagination_config_bt(['url' => 'backend/attribute/attribute/index','perpage' => $perpage], $config);
@@ -62,26 +61,22 @@ class Attribute extends BaseController{
 			$page = ($page > $totalPage)?$totalPage:$page;
 			$page = $page - 1;
 			$languageDetact = $this->detect_language();
-			
 			$this->data['attributeList'] = $this->AutoloadModel->_get_where([
-				'select' => 'tb1.id, tb2.title, tb2.value, tb1.created_at,  tb1.catalogueid, tb1.publish, tb3.fullname as creator,  tb1.catalogue, tb2.objectid, '.((isset($languageDetact['select'])) ? $languageDetact['select'] : ''),
+				'select' => 'tb1.id, tb1.image, tb1.catalogue as cat_id, tb1.catalogueid, tb1.catalogue, tb2.title, tb2.canonical, (SELECT fullname FROM user WHERE user.id = tb1.userid_created) as creator, tb1.userid_updated, tb1.publish, tb1.created_at, tb1.updated_at, '.$query.((isset($languageDetact['select'])) ? $languageDetact['select'] : ''),
 				'table' => $this->data['module'].' as tb1',
+				'join' =>  [
+					[
+						'attribute_translate as tb2','tb1.id = tb2.objectid AND tb2.module = \''.$this->data['module'].'\'   AND tb2.language = \''.$this->currentLanguage().'\' ','inner'
+					],
+					
+				],
 				'where' => $where,
 				'where_in' => $catalogue['where_in'],
 				'where_in_field' => $catalogue['where_in_field'],
 				'keyword' => $keyword,
-				'join' => [
-					[
-						'user as tb3','tb1.userid_created = tb3.id','inner'
-					],
-					[
-						'attribute_translate as tb2','tb1.id = tb2.objectid AND tb2.module = \''.$this->data['module'].'\'   AND tb2.language = \''.$this->currentLanguage().'\' ','inner'
-					],
-				],
 				'limit' => $config['per_page'],
 				'start' => $page * $config['per_page'],
-				'order_by'=> 'tb1.id desc',
-				'group_by' => 'tb1.id'
+				
 			], TRUE);
 
 		}
@@ -110,8 +105,8 @@ class Attribute extends BaseController{
 			 		]);
 
 
-	 				
-	 				if($resultid > 0){
+	 				$flag = $this->create_relationship($resultid);
+	 				if($flag > 0){
 	 					$session->setFlashdata('message-success', 'Tạo Bài Viết Thành Công! Hãy tạo danh mục tiếp theo.');
  						return redirect()->to(BASE_URL.'backend/attribute/attribute/index');
 	 				}else{
@@ -133,26 +128,22 @@ class Attribute extends BaseController{
 	public function update($id = 0){
 		$id = (int)$id;
 		$this->data[$this->data['module']] = $this->AutoloadModel->_get_where([
-				'select' => 'tb1.id, tb2.title, tb2.value,  tb1.created_at,  tb1.catalogueid, tb1.publish, tb3.fullname as creator,  tb1.catalogue, tb2.objectid, ',
-				'table' => $this->data['module'].' as tb1',
-				'where' => ['tb1.id' => $id ],
-				'join' => [
-					[
-						'user as tb3','tb1.userid_created = tb3.id','inner'
-					],
+			'select' => 'tb1.id, tb1.image,, tb1.album, tb2.description, tb1.catalogue as cat_id, tb1.catalogueid, tb1.catalogue, tb2.title, tb2.canonical, tb1.userid_updated, tb1.publish, tb1.created_at, tb1.updated_at',
+
+			'table' => $this->data['module'].' as tb1',
+			'join' =>  [
 					[
 						'attribute_translate as tb2','tb1.id = tb2.objectid AND tb2.module = \''.$this->data['module'].'\'   AND tb2.language = \''.$this->currentLanguage().'\' ','inner'
 					],
+					
 				],
-				'group_by' => 'tb1.id',
-				
-			]);
-		
+			'where' => ['tb1.id' => $id,'tb1.deleted_at' => 0]
+		]);
 		$session = session();
-		if(!isset($this->data[$this->data['module']]) || is_array($this->data[$this->data['module']]) == false || count($this->data[$this->data['module']]) == 0){
-			$session->setFlashdata('message-danger', 'Bài Viết không tồn tại');
- 			return redirect()->to(BASE_URL.'backend/attribute/attribute/index');
-		}
+		// if(!isset($this->data[$this->data['module']]) || is_array($this->data[$this->data['module']]) == false || count($this->data[$this->data['module']]) == 0){
+		// 	$session->setFlashdata('message-danger', 'Bài Viết không tồn tại');
+ 	// 		return redirect()->to(BASE_URL.'backend/article/article/index');
+		// }
 
 		
 		
@@ -173,7 +164,7 @@ class Attribute extends BaseController{
 			 			'where' => ['objectid' => $id],
 			 			'data' => $updateLanguage,
 			 		]);
-		 			$session->setFlashdata('message-success', 'Cập Nhật Bài Viết Thành Công!');
+		 			$session->setFlashdata('message-success', 'Cập Nhật Thuộc Tính Thành Công!');
  					return redirect()->to(BASE_URL.'backend/attribute/attribute/index');
 		 		}
 
@@ -275,7 +266,7 @@ class Attribute extends BaseController{
 				'table' => $this->data['module'].'_catalogue as tb1',
 				'join' =>  [
 					[
-						'article_translate as tb4','tb1.id = tb4.objectid AND tb4.language = \''.$this->currentLanguage().'\' ','inner'
+						'attribute_translate as tb4','tb1.id = tb4.objectid AND tb4.language = \''.$this->currentLanguage().'\' ','inner'
 					],
 									],
 				'where' => ['tb1.id' => $catalogueid],
@@ -318,7 +309,7 @@ class Attribute extends BaseController{
 	private function condition_keyword($keyword = ''): string{
 		if(!empty($this->request->getGet('keyword'))){
 			$keyword = $this->request->getGet('keyword');
-			$keyword = '(tb2.title LIKE \'%'.$keyword.'%\')';
+			$keyword = '(tb4.title LIKE \'%'.$keyword.'%\')';
 		}
 		return $keyword;
 	}
@@ -328,7 +319,8 @@ class Attribute extends BaseController{
 		$store = [
 			'objectid' => $objectid,
 			'title' => validate_input($this->request->getPost('title')),
-			'value' => validate_input($this->request->getPost('value')),
+			'canonical' => $this->request->getPost('canonical'),
+			'description' => $this->request->getPost('description'),
 			'language' => $this->currentLanguage(),
 			'module' => $this->data['module'],
 		];
@@ -352,6 +344,8 @@ class Attribute extends BaseController{
 		$store = [
  			'catalogueid' => (int)$this->request->getPost('catalogueid'),
  			'catalogue' => json_encode($catalogue),
+ 			'image' => $this->request->getPost('image'),
+ 			'album' => json_encode($this->request->getPost('album'), TRUE),
  			'publish' => $this->request->getPost('publish'),
  		];
  		if($param['method'] == 'create' && isset($param['method'])){	
@@ -377,7 +371,7 @@ class Attribute extends BaseController{
 		$i = 3;
 		if(isset($languageList) && is_array($languageList) && count($languageList)){
 			foreach($languageList as $key => $val){
-				$select = $select.'(SELECT COUNT(objectid) FROM attribute_translate WHERE attribute_translate.objectid = tb1.id AND attribute_translate.module = "'.$this->data['module'].'" AND attribute_translate.language = "'.$val['canonical'].'") as '.$val['canonical'].'_detect, ';
+				$select = $select.'(SELECT COUNT(objectid) FROM attribute_translate WHERE attribute_translate.objectid = tb1.id AND  attribute_translate.language = "'.$val['canonical'].'") as '.$val['canonical'].'_detect, ';
 				$i++;
 			}	
 		}
@@ -392,15 +386,19 @@ class Attribute extends BaseController{
 	private function validation(){
 		$validate = [
 			'title' => 'required',
+			'canonical' => 'required|check_canonical['.$this->data['module'].']',
 			'catalogueid' => 'is_natural_no_zero',
 		];
 		$errorValidate = [
 			'title' => [
 				'required' => 'Bạn phải nhập vào trường tiêu đề'
 			],
-			
+			'canonical' => [
+				'required' => 'Bạn phải nhập giá trị cho trường đường dẫn',
+				'check_canonical' => 'Đường dẫn đã tồn tại, vui lòng chọn đường dẫn khác',
+			],
 			'catalogueid' => [
-				'is_natural_no_zero' => 'Bạn Phải chọn danh mục cha cho thuộc tính',
+				'is_natural_no_zero' => 'Bạn Phải chọn danh mục cha cho bài viết',
 			],
 		];
 		return [

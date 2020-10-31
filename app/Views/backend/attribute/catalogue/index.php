@@ -63,7 +63,7 @@
                                         </div>
                                     </div>
                                     <div class="uk-button">
-                                        <a href="<?php echo base_url('backend/attribute/catalogue/create') ?>" class="btn btn-danger btn-sm"><i class="fa fa-plus"></i> Thêm Nhóm Thuộc Tính Mới</a>
+                                        <a href="<?php echo base_url('backend/attribute/catalogue/create') ?>" class="btn btn-danger btn-sm"><i class="fa fa-plus"></i> Thêm Nhóm Thuộc Tính</a>
                                     </div>
                                 </div>
                             </div>
@@ -85,7 +85,6 @@
                             </th>
                             <?php }} ?>
 
-                            <th class="text-center" style="width: 67px;">Vị trí</th>
                             <th style="width:150px;">Người tạo</th>
                             <th style="width:150px;" class="text-center">Ngày tạo</th>
                             <th class="text-center" style="width:88px;">Tình trạng</th>
@@ -105,10 +104,10 @@
                                     <div for="" class="label-checkboxitem"></div>
                                 </td>
                                 <td <?php echo ($val['level'] == 1) ? 'class="text-success text-bold"' : '' ?>>
-                                    <a href="<?php echo base_url('backend/attribute/catalogue/index/?catalogueid='.$val['id'].'') ?>">
+                                    <a href="<?php echo base_url('backend/attribute/attribute/index/?catalogueid='.$val['id'].'') ?>">
                                         <?php echo str_repeat('|----', (($val['level'] > 0)?($val['level'] - 1):0)).$val['title']; ?>
                                         </a>
-                                </td>
+                                    </td>
 
 
                                 <?php if(isset($languageList) && is_array($languageList) && count($languageList)){ ?>
@@ -119,16 +118,13 @@
                                 </a></td>
                                 <?php }} ?>
 
-                                <td class="text-center text-primary">
-                                    <?php echo form_input('order['.$val['id'].']', $val['order'], 'data-module="'.$module.'" data-id="'.$val['id'].'"  class="form-control sort-order" placeholder="Vị trí" style="width:50px;text-align:right;"');?>
-
-                                </td>
+                               
                                 <td class="text-primary"><?php echo $val['creator']; ?></td>
                                 <td class="text-center text-primary"><?php echo gettime($val['created_at'],'Y-d-m') ?></td>
                                 <td class="text-center td-status" data-field="publish" data-module="<?php echo $module; ?>" data-where="id"><?php echo $status; ?></td>
                                 <td class="text-center">
                                     <a type="button" href="<?php echo base_url('backend/attribute/catalogue/update/'.$val['id']) ?>" class="btn btn-primary"><i class="fa fa-edit"></i></a>
-                                    <a type="button" id="<?php echo $val['id'] ?>" level="<?php echo $val['level'] ?>" href="<?php echo base_url('backend/attribute/catalogue/delete/'.$val['id']) ?>" class="btn btn-danger deleteCatalogue"><i class="fa fa-trash"></i></a>
+                                    <a type="button" id="<?php echo $val['id'] ?>;" href="<?php echo base_url('backend/attribute/catalogue/delete/'.$val['id']) ?>" class="btn btn-danger deleteCatalogue"><i class="fa fa-trash"></i></a>
                                 </td>
                             </tr>
                             <?php }}else{ ?>

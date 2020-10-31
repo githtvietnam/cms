@@ -55,11 +55,24 @@
 											
 											<div class="form-row">
 												<label class="control-label text-left">
-													<span>Giá trị <b class="text-danger">(*)</b></span>
+													<span>Mô tả <b class="text-danger">(*)</b></span>
 												</label>
-												<input type="text" name="" value="<?php echo $object['value'] ?>" class="form-control value" placeholder="Nhập vào tên giá trị..." id="value" autocomplete="off" disabled>
+												<input type="text" name="" value="<?php echo $object['description'] ?>" class="form-control description" placeholder="Nhập vào tên giá trị..." id="description" autocomplete="off" disabled>
 											</div>
 											
+									</div>
+								</div>
+								<div class="row">
+									<div class="col-lg-12">
+										<?php  
+											
+											$googleLink = ((isset($object['canonical']) && $object['canonical'] != '') ? BASE_URL.$object['canonical'].HTSUFFIX : BASE_URL.'duong-dan-website'.HTSUFFIX) ;
+											
+										?>
+										<div class="google">
+											<div class="g-link1"><?php echo $googleLink ?></div>
+												
+										</div>
 									</div>
 								</div>
 							</div>
@@ -99,14 +112,63 @@
 										<div class="col-lg-12">
 											<div class="form-row">
 												<label class="control-label text-left">
-													<span>Giá trị <b class="text-danger">(*)</b></span>
+													<span>Mô tả <b class="text-danger">(*)</b></span>
 												</label>
-												<input type="text" name="value" value="<?php echo $dataTrans['value'] ?>" class="form-control value" placeholder="Nhập vào tên giá trị..." id="value" autocomplete="off" >
+												<input type="text" name="description" value="<?php echo $dataTrans['description'] ?>" class="form-control description" placeholder="Nhập vào tên giá trị..." id="description" autocomplete="off" >
 											</div>
 										</div>
 											
 									</div>
 								</div>
+										<div class="ibox-title">
+											<div class="uk-flex uk-flex-middle uk-flex-space-between">
+												
+												
+												<div class="uk-flex uk-flex-middle uk-flex-space-between">
+													<div class="edit">
+														<a href="#" class="edit-seo">Chỉnh sửa đường dẫn</a>
+													</div>
+												</div>
+											</div>
+										</div>
+										<div class="row">
+											<div class="col-lg-12">
+												<?php  
+													
+													$googleLink = (isset($_POST['canonical'])) ? $_POST['canonical'] : ((isset($article['canonical']) && $article['canonical'] != '') ? BASE_URL.$article['canonical'].HTSUFFIX : BASE_URL.'duong-dan-website'.HTSUFFIX) ;
+													
+												?>
+												<div class="google">
+													<div class="g-link"><?php echo $googleLink ?></div>
+													
+												</div>
+											</div>
+										</div>
+										
+										<div class="seo-group hidden">
+										
+										
+											<div class="row mb15">
+												<div class="col-lg-12">
+													<div class="form-row">
+														<div class="uk-flex uk-flex-middle uk-flex-space-between">
+															<label class="control-label ">
+																<span>Đường dẫn <b class="text-danger">(*)</b></span>
+															</label>
+														</div>
+														<div class="outer">
+															<div class="uk-flex uk-flex-middle">
+																<div class="base-url"><?php echo base_url(); ?></div>
+																<?php echo form_input('canonical', htmlspecialchars_decode(html_entity_decode(set_value('canonical', (isset($article['canonical'])) ? $article['canonical'] : ''))), 'class="form-control canonical" placeholder="" autocomplete="off" data-flag="0" ');?>
+																<?php echo form_hidden('original_canonical', htmlspecialchars_decode(html_entity_decode(set_value('canonical', (isset($article['canonical'])) ? $article['canonical'] : ''))), 'class="form-control canonical" placeholder="" autocomplete="off"');?>
+
+															</div>
+														</div>
+													</div>
+												</div>
+											</div>
+										</div>
+									
 							</div>
 						</div>
 				</div>

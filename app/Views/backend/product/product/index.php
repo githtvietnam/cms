@@ -47,13 +47,7 @@
                                         <option value="100">100 bản ghi</option>
                                     </select>
                                     
-                                   
-                                    
-                                </div>
-                            </div>
-                            <div class="toolbox">
-                                <div class="uk-flex uk-flex-middle uk-flex-space-between">
-                                    <div class="uk-search uk-flex uk-flex-middle mr10">
+                                   <div class="uk-search uk-flex uk-flex-middle mr10">
                                         <div class="input-group">
                                             <input type="text" name="keyword" value="<?php echo (isset($_GET['keyword'])) ? $_GET['keyword'] : ''; ?>" placeholder="Nhập Từ khóa bạn muốn tìm kiếm..." class="form-control va-search"> 
                                             <span class="input-group-btn"> 
@@ -61,6 +55,15 @@
                                             </button> 
                                             </span>
                                         </div>
+                                    </div>
+                                    
+                                </div>
+                            </div>
+                            <div class="toolbox">
+                                <div class="uk-flex uk-flex-middle uk-flex-space-between">
+                                    
+                                    <div class="uk-button mr10">
+                                        <button type="button" name="general_system" id="general_system" data-toggle="modal" data-target="#add_data_Modal" class="btn btn-warning m0">Thiết lập cấu hình chung</button>
                                     </div>
                                     <div class="uk-button">
                                         <a href="<?php echo base_url('backend/product/product/create') ?>" class="btn btn-danger btn-sm"><i class="fa fa-plus"></i> Thêm Sản phẩm mới</a>
@@ -91,6 +94,9 @@
                             <th class="text-center" style="width:103px;">Thao tác</th>
                         </tr>
                         </thead>
+                        <script>
+                            var _module = '<?php echo $module ?>';
+                        </script>
                         <tbody>
                             <?php if(isset($productCatalogueList) && is_array($productCatalogueList) && count($productCatalogueList)){ ?>
                             <?php foreach($productCatalogueList as $key => $val){ ?>
@@ -98,6 +104,7 @@
                                 $status = ($val['publish'] == 1) ? '<span class="text-success">Active</span>'  : '<span class="text-danger">Deactive</span>';
 
                             ?>
+
                             <tr id="post-<?php echo $val['id']; ?>" data-id="<?php echo $val['id']; ?>">
                                 <td>
                                     <input type="checkbox" name="checkbox[]" value="<?php echo $val['id']; ?>" class="checkbox-item">
@@ -144,3 +151,84 @@
         </div>
     </div>
 </div>
+<?php if(isset($code) && is_array($code) && count($code)){ ?>
+<div id="add_data_Modal" class="modal fade va-general">  
+      <div class="modal-dialog">  
+           <div class="modal-content">  
+                <div class="modal-header">
+                    <div class="uk-flex uk-flex-space-between uk-flex-middle" >
+                        <h4 class="modal-title">Tạo cấu hình chung cho mã Sản phẩm</h4>  
+                        <button type="button" class="close" data-dismiss="modal">&times;</button>  
+                    </div>  
+                </div>  
+                <div class="modal-body">  
+                    <form method="post" id="insert_general" class="uk-clearfix" data-max-0="<?php echo ((isset($code['num0']) ? $code['num0'] : '')) ?>">  
+                        <div class="uk-grid uk-grid-width-large-1-2 uk-clearfix">
+                            <div class="va-input-general">
+                                <label>Tiền tố</label>  
+                                <input type="text" name="suffix" id="suffix" value="<?php echo ((isset($code['suffix']) ? $code['suffix'] : '')) ?>" placeholder="VD: VA-..." class="form-control va-uppercase" />  
+                            </div>
+                            <div class="va-input-general">
+                                <label>Hậu tố</label>  
+                                <input type="text" name="prefix" id="prefix" value="<?php echo ((isset($code['prefix']) ? $code['prefix'] : '')) ?>" placeholder="VD: ...-STORE" class="form-control va-uppercase" />  
+                            </div>
+                        </div>
+                        <br>
+                        <div class="va-input-general">
+                            <label class="mb10">Kết quả</label>  
+                            <div class="uk-flex uk-flex-middle">
+                                <span class="render_suffix text-danger va-uppercase"><?php echo ((isset($code['suffix']) ? $code['suffix'] : '')) ?></span>
+                                <span>-</span>
+                                <span class="render_num0 text-danger"></span>
+                                <span>-</span>
+                                <span class="render_prefix text-danger va-uppercase"><?php echo ((isset($code['prefix']) ? $code['prefix'] : '')) ?></span>
+                            </div>
+                        </div>
+                        <br>
+                        <input type="submit" name="insert" id="insert" value="Lưu thay đổi" class="btn btn-success  float-right" />  
+                    </form>  
+                </div>   
+           </div>  
+      </div>  
+ </div> 
+<?php }else{ ?>
+<div id="add_data_Modal" class="modal fade va-general">  
+      <div class="modal-dialog">  
+           <div class="modal-content">  
+                <div class="modal-header">
+                    <div class="uk-flex uk-flex-space-between uk-flex-middle" >
+                        <h4 class="modal-title">Tạo cấu hình chung cho mã Sản phẩm</h4>  
+                        <button type="button" class="close" data-dismiss="modal">&times;</button>  
+                    </div>  
+                </div>  
+                <div class="modal-body">  
+                    <form method="post" id="insert_general" class="uk-clearfix" data-max-0="5">  
+                        <div class="uk-grid uk-grid-width-large-1-2 uk-clearfix">
+                            <div class="va-input-general">
+                                <label>Tiền tố</label>  
+                                <input type="text" name="suffix" id="suffix" placeholder="VD: VA-..." class="form-control" />  
+                            </div>
+                            <div class="va-input-general">
+                                <label>Hậu tố</label>  
+                                <input type="text" name="prefix" id="prefix" placeholder="VD: ...-PRODUCT" class="form-control" />  
+                            </div>
+                        </div>
+                        <br>
+                        <div class="va-input-general">
+                            <label class="mb10">Kết quả</label>  
+                            <div class="uk-flex uk-flex-middle">
+                                <span class="render_suffix text-danger va-uppercase">VA</span>
+                                <span class=" text-danger va-uppercase">-</span>
+                                <span class="render_num0 text-danger va-uppercase"></span>
+                                <span class=" text-danger va-uppercase">-</span>
+                                <span class="render_prefix text-danger va-uppercase">PRODUCT</span>
+                            </div>
+                        </div>
+                        <br>
+                        <input type="submit" name="insert" id="insert" value="Lưu thay đổi" class="btn btn-success  float-right" />  
+                    </form>  
+                </div>   
+           </div>  
+      </div>  
+ </div> 
+<?php } ?>

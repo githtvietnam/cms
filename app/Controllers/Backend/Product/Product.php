@@ -24,7 +24,11 @@ class Product extends BaseController{
  			$session->setFlashdata('message-danger', 'Bạn không có quyền truy cập vào chức năng này!');
  			return redirect()->to(BASE_URL.'backend/dashboard/dashboard/index');
 		}
-
+		$this->data['code'] = $this->AutoloadModel->_get_where([
+			'select' => 'id, suffix, prefix, module, num0',
+			'table' => 'id_general',
+			'where' => ['module' => $this->data['module']]
+		]);
 		helper(['mypagination']);
 		$page = (int)$page;
 		$perpage = ($this->request->getGet('perpage')) ? $this->request->getGet('perpage') : 20;
@@ -77,29 +81,48 @@ class Product extends BaseController{
 
 	public function create(){
 		$session = session();
-		if($this->request->getMethod() == 'post'){
-			$validate = $this->validation();
-			if ($this->validate($validate['validate'], $validate['errorValidate'])){
-		 		$insert = $this->store(['method' => 'create']);
-		 		$resultid = $this->AutoloadModel->_insert([
-		 			'table' => $this->data['module'],
-		 			'data' => $insert,
-		 		]);
-		 		if($resultid > 0){
-		 			$storeLanguage = $this->storeLanguage($resultid);
-		 			$insertid = $this->AutoloadModel->_insert([
-			 			'table' => 'product_translate',
-			 			'data' => $storeLanguage,
+		$flag = $this->authentication->check_permission([
+			'routes' => 'backend/product/store/create'
+		]);
+		if($flag == false){
+ 			$session->setFlashdata('message-danger', 'Bạn không có quyền truy cập vào chức năng này!');
+ 			return redirect()->to(BASE_URL.'backend/dashboard/dashboard/index');
+		}
+		$this->data['check_code'] = $this->AutoloadModel->_get_where([
+			'select' => 'code,objectid',
+			'table' => 'id_general',
+			'where' => ['module' => $this->data['module']],
+		]);
+
+		if(!isset($this->data['check_code']) && !is_array($this->data['check_code']) && !count($this->data['check_code'])){
+			$session->setFlashdata('message-danger', 'Bạn chưa tạo phần cấu hình chung cho mã Cửa hàng!');
+ 			return redirect()->to(BASE_URL.'backend/product/store/index');
+		}else{
+			$this->data['productid'] = convert_code($this->data['check_code']['code'], $this->data['module']);
+			if($this->request->getMethod() == 'post'){
+				$validate = $this->validation();
+				if ($this->validate($validate['validate'], $validate['errorValidate'])){
+			 		$insert = $this->store(['method' => 'create']);
+			 		$resultid = $this->AutoloadModel->_insert([
+			 			'table' => $this->data['module'],
+			 			'data' => $insert,
 			 		]);
-		 			$this->nestedsetbie->Get('level ASC, order ASC');
-					$this->nestedsetbie->Recursive(0, $this->nestedsetbie->Set());
-					$this->nestedsetbie->Action();
-		 			$session->setFlashdata('message-success', 'Tạo Nhóm Sản phẩm Thành Công! Hãy tạo danh mục tiếp theo.');
- 					return redirect()->to(BASE_URL.'backend/product/product/create');
-		 		}
-	        }else{
-	        	$this->data['validate'] = $this->validator->listErrors();
-	        }
+			 		if($resultid > 0){
+			 			$storeLanguage = $this->storeLanguage($resultid);
+			 			$insertid = $this->AutoloadModel->_insert([
+				 			'table' => 'product_translate',
+				 			'data' => $storeLanguage,
+				 		]);
+			 			$this->nestedsetbie->Get('level ASC, order ASC');
+						$this->nestedsetbie->Recursive(0, $this->nestedsetbie->Set());
+						$this->nestedsetbie->Action();
+			 			$session->setFlashdata('message-success', 'Tạo Nhóm Sản phẩm Thành Công! Hãy tạo danh mục tiếp theo.');
+	 					return redirect()->to(BASE_URL.'backend/product/product/create');
+			 		}
+		        }else{
+		        	$this->data['validate'] = $this->validator->listErrors();
+		        }
+			}
 		}
 		$this->data['dropdown'] = $this->nestedsetbie->dropdown();
 		$this->data['fixWrapper'] = 'fix-wrapper';

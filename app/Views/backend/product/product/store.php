@@ -31,7 +31,7 @@
 									<label class="control-label text-left">
 										<span>Mã sản phẩm <b class="text-danger">(*)</b></span>
 									</label>
-									<?php echo form_input('keyword', validate_input(set_value('keyword', (isset($product['keyword'])) ? $product['keyword'] : '')), 'class="form-control keyword" placeholder="" id="keyword" autocomplete="off"'); ?>
+									<?php echo form_input('productid', set_value('productid', (isset($store['productid'])) ? $store['productid'] : $productid), 'class="form-control va-uppercase" readonly placeholder="" autocomplete="off"');?>
 								</div>
 							</div>
 						</div>

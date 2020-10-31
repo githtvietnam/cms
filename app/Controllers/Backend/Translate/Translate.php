@@ -195,7 +195,7 @@ class Translate extends BaseController
 			'table' => 'language',
 		],true);
 		$this->data['object'] = $this->AutoloadModel->_get_where([
-			'select' => 'tb2.objectid, tb2.title,  ',
+			'select' => 'tb2.objectid, tb2.title, tb2.description, tb2.canonical  ',
 			'table' => $module.' as tb1',
 			'join' => [
 				[
@@ -209,19 +209,19 @@ class Translate extends BaseController
 			return redirect()->to(BASE_URL.'backend/'.$moduleExtract[0].'/'.((count($moduleExtract) == 1) ? $moduleExtract[0] : $moduleExtract[1]).'/index');
 		}
 		$this->data['dataTrans'] = $this->AutoloadModel->_get_where([
-			'select' => 'tb2.objectid, tb2.title,  ',
+			'select' => 'tb2.objectid, tb2.title, tb2.description, tb2.canonical  ',
 			'table' => $module.' as tb1',
 			'join' => [
-				[
-					$moduleExtract[0].'_translate as tb2','tb1.id = tb2.objectid AND tb2.language = \''.$language.'\' ','inner'
-				]
+					[
+						'attribute_translate as tb2','tb1.id = tb2.objectid AND tb2.module = \''.$module.'\'   AND tb2.language = \''.$language.'\' ','inner'
+					],
 			],
 			'where' => ['tb1.id' => $objectid,'module' => $module]
 		]);
 		if($this->request->getMethod() == 'post'){
 			$validate = $this->validationContact();
 			if ($this->validate($validate['validate'], $validate['errorValidate'])){
-				$dataTrans = $this->storeContact([
+				$dataTrans = $this->storeAttribute([
 		 			'objectid' => $objectid,
 		 			'module' => $module,
 		 			'language' => $language,
@@ -251,7 +251,7 @@ class Translate extends BaseController
 
 
 
-		$this->data['template'] = 'backend/translate/translate/translatePropertyCatalogue';
+		$this->data['template'] = 'backend/translate/translate/translateAttributeCatalogue';
 		return view('backend/dashboard/layout/home', $this->data);
 	}
 	public function translateAttribute($objectid = 0, $module = '', $language = ''){
@@ -264,7 +264,7 @@ class Translate extends BaseController
 			'table' => 'language',
 		],true);
 		$this->data['object'] = $this->AutoloadModel->_get_where([
-			'select' => 'tb2.objectid, tb2.title, tb2.value  ',
+			'select' => 'tb2.objectid, tb2.title, tb2.description, tb2.canonical  ',
 			'table' => $module.' as tb1',
 			'join' => [
 				[
@@ -278,7 +278,7 @@ class Translate extends BaseController
 			return redirect()->to(BASE_URL.'backend/'.$moduleExtract[0].'/'.((count($moduleExtract) == 1) ? $moduleExtract[0] : $moduleExtract[1]).'/index');
 		}
 		$this->data['dataTrans'] = $this->AutoloadModel->_get_where([
-			'select' => 'tb2.objectid, tb2.title, tb2.value ',
+			'select' => 'tb2.objectid, tb2.title, tb2.description, tb2.canonical ',
 			'table' => $module.' as tb1',
 			'join' => [
 				[
@@ -290,7 +290,7 @@ class Translate extends BaseController
 		if($this->request->getMethod() == 'post'){
 			$validate = $this->validationContact();
 			if ($this->validate($validate['validate'], $validate['errorValidate'])){
-				$dataTrans = $this->storeProperty([
+				$dataTrans = $this->storeAttribute([
 		 			'objectid' => $objectid,
 		 			'module' => $module,
 		 			'language' => $language,
@@ -348,11 +348,12 @@ class Translate extends BaseController
 
 		return $store;
 	}
-	private function storeProperty($param = []){
+	private function storeAttribute($param = []){
 		helper(['text']);
 		$store = [
 			'title' => $this->request->getPost('title'),
-			'value' => $this->request->getPost('value'),
+			'description' => $this->request->getPost('description'),
+			'canonical' => $this->request->getPost('canonical'),
 			'language' => $param['language'],
 			'module' => $param['module'],
 			'objectid' => $param['objectid'],

@@ -18,7 +18,7 @@ class Catalogue extends BaseController{
 	public function index($page = 1){
 		$session = session();
 		// $flag = $this->authentication->check_permission([
-		// 	'routes' => 'backend/attribute/catalogue/index'
+		// 	'routes' => 'backend/article/catalogue/index'
 		// ]);
 		// if($flag == false){
  	// 		$this->session->setFlashdata('message-danger', 'Bạn không có quyền truy cập vào chức năng này!');
@@ -50,12 +50,13 @@ class Catalogue extends BaseController{
 
 			$languageDetact = $this->detect_language();
 			$this->data['attributeCatalogueList'] = $this->AutoloadModel->_get_where([
-				'select' => 'tb1.id, tb2.title, tb1.lft, tb1.rgt, tb1.level, (SELECT fullname FROM user WHERE user.id = tb1.userid_created) as creator, tb1.publish, tb1.order, tb1.created_at, tb1.updated_at,'.((isset($languageDetact['select'])) ? $languageDetact['select'] : ''),
+				'select' => 'tb1.id, tb2.title, tb1.lft, tb1.rgt, tb1.level, tb2.canonical, (SELECT fullname FROM user WHERE user.id = tb1.userid_created) as creator, tb1.userid_updated, tb1.publish, tb1.order, tb1.created_at, tb1.updated_at,'.((isset($languageDetact['select'])) ? $languageDetact['select'] : ''),
 				'table' => $this->data['module'].' as tb1',
 				'join' =>  [
 					[
 						'attribute_translate as tb2','tb1.id = tb2.objectid AND tb2.module = \''.$this->data['module'].'\'   AND tb2.language = \''.$this->currentLanguage().'\' ','inner'
 					],
+					
 				],
 				'where' => $where,
 				'keyword' => $keyword,
@@ -81,6 +82,7 @@ class Catalogue extends BaseController{
 		 			'table' => $this->data['module'],
 		 			'data' => $insert,
 		 		]);
+
 		 		if($resultid > 0){
 		 			$storeLanguage = $this->storeLanguage($resultid);
 		 			$insertid = $this->AutoloadModel->_insert([
@@ -110,7 +112,7 @@ class Catalogue extends BaseController{
 	public function update($id = 0){
 		$id = (int)$id;
 		$this->data[$this->data['module']] = $this->AutoloadModel->_get_where([
-			'select' => 'tb1.id, tb2.title, tb1.parentid, tb1.publish',
+			'select' => 'tb1.id, tb2.title, tb2.canonical, tb2.description, tb1.parentid, tb1.publish',
 
 			'table' => $this->data['module'].' as tb1',
 			'join' =>  [
@@ -120,6 +122,8 @@ class Catalogue extends BaseController{
 				],
 			'where' => ['tb1.id' => $id,'tb1.deleted_at' => 0]
 		]);
+
+		
 		$session = session();
 		if(!isset($this->data[$this->data['module']]) || is_array($this->data[$this->data['module']]) == false || count($this->data[$this->data['module']]) == 0){
 			$session->setFlashdata('message-danger', 'Nhóm thuộc tính không tồn tại');
@@ -140,7 +144,7 @@ class Catalogue extends BaseController{
 		 		if($flag > 0){
 		 			$flag = $this->AutoloadModel->_update([
 			 			'table' => 'attribute_translate',
-			 			'where' => ['objectid' => $id],
+			 			'where' => ['objectid' => $id, 'module' => $this->data['module']],
 			 			'data' => $updateLanguage
 			 		]);
 
@@ -148,7 +152,7 @@ class Catalogue extends BaseController{
 					$this->nestedsetbie->Recursive(0, $this->nestedsetbie->Set());
 					$this->nestedsetbie->Action();
 
-		 			$session->setFlashdata('message-success', 'Cập Nhật Nhóm Thuộc Tính Thành Công!');
+		 			$session->setFlashdata('message-success', 'Cập Nhật Nhóm Bài Viết Thành Công!');
  					return redirect()->to(BASE_URL.'backend/attribute/catalogue/index');
 		 		}
 
@@ -185,26 +189,26 @@ class Catalogue extends BaseController{
 		// if($this->request->getPost('delete')){
 		// 	$_id = $this->request->getPost('id');
 		
-			// $flag = $this->AutoloadModel->_update([
-			// 	'table' => $this->data['module'],
-			// 	'data' => ['deleted_at' => 1],
-			// 	'where' => [
-			// 		'lft >=' => $this->data[$this->data['module']]['lft'],
-			// 		'rgt <=' => $this->data[$this->data['module']]['rgt'],
-			// 	]
-			// ]);
+		// 	// $flag = $this->AutoloadModel->_update([
+		// 	// 	'table' => $this->data['module'],
+		// 	// 	'data' => ['deleted_at' => 1],
+		// 	// 	'where' => [
+		// 	// 		'lft >=' => $this->data[$this->data['module']]['lft'],
+		// 	// 		'rgt <=' => $this->data[$this->data['module']]['rgt'],
+		// 	// 	]
+		// 	// ]);
 
-			// $session = session();
-			// if($flag > 0){
-			// 	$this->nestedsetbie->Get('level ASC, order ASC');
-			// 	$this->nestedsetbie->Recursive(0, $this->nestedsetbie->Set());
-			// 	$this->nestedsetbie->Action();
-	 	// 		$session->setFlashdata('message-success', 'Xóa bản ghi thành công!');
-			// }else{
-			// 	$session->setFlashdata('message-danger', 'Có vấn đề xảy ra, vui lòng thử lại!');
-			// }
-			// return redirect()->to(BASE_URL.'backend/article/catalogue/index');
-		//}
+		// 	// $session = session();
+		// 	// if($flag > 0){
+		// 	// 	$this->nestedsetbie->Get('level ASC, order ASC');
+		// 	// 	$this->nestedsetbie->Recursive(0, $this->nestedsetbie->Set());
+		// 	// 	$this->nestedsetbie->Action();
+	 // 	// 		$session->setFlashdata('message-success', 'Xóa bản ghi thành công!');
+		// 	// }else{
+		// 	// 	$session->setFlashdata('message-danger', 'Có vấn đề xảy ra, vui lòng thử lại!');
+		// 	// }
+		// 	// return redirect()->to(BASE_URL.'backend/article/catalogue/index');
+		// }
 
 		$this->data['template'] = 'backend/attribute/catalogue/delete';
 		return view('backend/dashboard/layout/home', $this->data);
@@ -241,6 +245,8 @@ class Catalogue extends BaseController{
 		$store = [
 			'objectid' => $objectid,
 			'title' => validate_input($this->request->getPost('title')),
+			'canonical' => $this->request->getPost('canonical'),
+			'description' => $this->request->getPost('description'),
 			'language' => $this->currentLanguage(),
 			'module' => $this->data['module'],
 		];
@@ -252,6 +258,7 @@ class Catalogue extends BaseController{
 		$store = [
  			'parentid' => (int)$this->request->getPost('parentid'),
  			'publish' => $this->request->getPost('publish'),
+ 			
  		];
  		if($param['method'] == 'create' && isset($param['method'])){	
  			$store['created_at'] = $this->currentTime;
@@ -277,7 +284,7 @@ class Catalogue extends BaseController{
 		$i = 3;
 		if(isset($languageList) && is_array($languageList) && count($languageList)){
 			foreach($languageList as $key => $val){
-				$select = $select.'(SELECT COUNT(objectid) FROM attribute_translate WHERE attribute_translate.objectid = tb1.id AND attribute_translate.module = "'.$this->data['module'].'" AND attribute_translate.language = "'.$val['canonical'].'") as '.$val['canonical'].'_detect, ';
+				$select = $select.'(SELECT COUNT(objectid) FROM attribute_translate WHERE attribute_translate.objectid = tb1.id AND attribute_translate.language = "'.$val['canonical'].'") as '.$val['canonical'].'_detect, ';
 				$i++;
 			}	
 		}
@@ -292,13 +299,16 @@ class Catalogue extends BaseController{
 	private function validation(){
 		$validate = [
 			'title' => 'required',
-			
+			'canonical' => 'required|check_canonical['.$this->data['module'].']',
 		];
 		$errorValidate = [
 			'title' => [
 				'required' => 'Bạn phải nhập vào trường tiêu đề'
 			],
-			
+			'canonical' => [
+				'required' => 'Bạn phải nhập giá trị cho trường đường dẫn',
+				'check_canonical' => 'Đường dẫn đã tồn tại, vui lòng chọn đường dẫn khác',
+			],
 		];
 		return [
 			'validate' => $validate,

@@ -3,10 +3,11 @@
     $baseController = new App\Controllers\BaseController();
     $language = $baseController->currentLanguage();
     $languageList = get_list_language(['currentLanguage' => $language]);
+    // pre($attributeList);
 ?>
 <div class="row wrapper border-bottom white-bg page-heading">
    <div class="col-lg-8">
-      <h2>Quản Lý Thuộc Tính</h2>
+      <h2>Quản Lý thuộc tính</h2>
       <ol class="breadcrumb" style="margin-bottom:10px;">
          <li>
             <a href="<?php echo base_url('backend/dashboard/dashboard/index') ?>">Home</a>
@@ -20,7 +21,7 @@
         <div class="col-lg-12">
             <div class="ibox float-e-margins">
                 <div class="ibox-title">
-                    <h5>Quản lý Bài Viết </h5>
+                    <h5>Quản lý thuộc tính </h5>
                     <div class="ibox-tools">
                         <a class="collapse-link">
                             <i class="fa fa-chevron-up"></i>
@@ -30,6 +31,10 @@
                         </a>
                         <ul class="dropdown-menu dropdown-user">
                             <li><a href="#" class="delete-all" data-module="<?php echo $module; ?>">Xóa tất cả</a>
+                            </li>
+                            <li><a href="#" class="status" data-value="0" data-field="publish" data-module="<?php echo $module; ?>" title="Cập nhật trạng thái thuộc tính">Deactive thuộc tính</a>
+                            </li> 
+                            <li><a href="#" class="status" data-value="1" data-field="publish" data-module="<?php echo $module; ?>" data-title="Cập nhật trạng thái thuộc tính">Active thuộc tính</a>
                             </li>
                         </ul>
                         <a class="close-link">
@@ -70,7 +75,7 @@
                                         </div>
                                     </div>
                                     <div class="uk-button">
-                                        <a href="<?php echo base_url('backend/attribute/attribute/create') ?>" class="btn btn-danger btn-sm"><i class="fa fa-plus"></i> Thêm Thuộc Tính Mới</a>
+                                        <a href="<?php echo base_url('backend/attribute/attribute/create') ?>" class="btn btn-danger btn-sm"><i class="fa fa-plus"></i> Thêm thuộc tính mới</a>
                                     </div>
                                 </div>
                             </div>
@@ -84,8 +89,8 @@
                                 <input type="checkbox" id="checkbox-all">
                                 <label for="check-all" class="labelCheckAll"></label>
                             </th>
-                            <th >Tên thuộc tính</th>
-                            <th >Giá trị thuộc tính</th>
+                            <th >Thông tin thuộc tính</th>
+                            
                              <?php if(isset($languageList) && is_array($languageList) && count($languageList)){ ?>
                             <?php foreach($languageList as $key => $val){ ?>
                             <th class="text-center" style="width: 100px;">
@@ -104,6 +109,7 @@
                             <?php foreach($attributeList as $key => $val){ ?>
 
                             <?php  
+                                $image = getthumb($val['image'], true);
                                 $catalogue = json_decode($val['catalogue'], TRUE);
                                 $cat_list = [];
                                 if(isset($catalogue) && is_array($catalogue) && count($catalogue)){
@@ -123,13 +129,24 @@
                                     <input type="checkbox" name="checkbox[]" value="<?php echo $val['id']; ?>" class="checkbox-item">
                                     <div for="" class="label-checkboxitem"></div>
                                 </td>
-                                <td> 
-                                    </div><?php echo $val['title']; ?></div>
-                                </td>
-                                <td> 
-                                    </div><?php echo $val['value']; ?></div>
-                                </td>
                                 
+                                <td> 
+                                    <div class="uk-flex uk-flex-middle">
+                                        <div class="image mr5">
+                                            <span class="image-post img-cover"><img src="<?php echo $image; ?>" alt="<?php echo $val['cat_title']; ?>" /></span>
+                                        </div>
+                                        <div class="main-info">
+                                            <div class="title"><a class="maintitle" href="<?php echo site_url('backend/attribute/attribute/update/'.$val['id']); ?>" title=""><?php echo $val['title']; ?> </a></div>
+                                            <div class="catalogue" style="font-size:10px">
+                                                <span style="color:#f00000;">Nhóm hiển thị: </span>
+                                                <a class="" style="color:#333;" href="<?php echo site_url('backend/attribute/attribute/index?catalogueid='.$val['cat_id']); ?>" title=""><?php echo $val['cat_title'] ?>,</a> 
+                                                <?php if(isset($cat_list) && is_array($cat_list) && count($cat_list)){ foreach($cat_list as $keyCat => $valCat){ ?>
+                                                    <a class="" style="color:#333;" href="<?php echo site_url('backend/attribute/attribute/index?catalogueid='.$valCat['id']); ?>" title=""><?php echo $valCat['title'] ?></a><?php echo ($keyCat + 1 < count($cat_list)) ? ',' : '' ?> 
+                                                <?php }} ?>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </td>
 
                                 <?php if(isset($languageList) && is_array($languageList) && count($languageList)){ ?>
                                 <?php foreach($languageList as $keyLanguage => $valLanguage){ ?>
@@ -138,7 +155,7 @@
 
                                 </a></td>
                                 <?php }} ?>
-                              
+                                
                                 <td class="text-primary"><?php echo $val['creator']; ?></td>
                                 <td class="text-center text-primary"><?php echo gettime($val['created_at'],'Y-d-m') ?></td>
                                 <td class="text-center td-status" data-field="publish" data-module="<?php echo $module; ?>" data-where="id"><?php echo $status; ?></td>
