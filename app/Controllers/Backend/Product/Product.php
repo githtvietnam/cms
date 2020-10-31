@@ -11,7 +11,7 @@ class Product extends BaseController{
 	public function __construct(){
 		$this->data = [];
 		$this->data['module'] = 'product';
-		$this->nestedsetbie = new Nestedsetbie(['table' => $this->data['module'],'language' => $this->currentLanguage()]);
+		$this->nestedsetbie = new Nestedsetbie(['table' => $this->data['module'].'_catalogue','language' => $this->currentLanguage()]);
 
 	}
 
@@ -111,7 +111,7 @@ class Product extends BaseController{
 	public function update($id = 0){
 		$id = (int)$id;
 		$this->data[$this->data['module']] = $this->AutoloadModel->_get_where([
-			'select' => 'tb1.id, tb2.title, tb2.canonical, tb2.description, tb2.content, tb2.meta_title, tb2.meta_description, tb1.parentid, tb1.image, tb1.album, tb1.publish',
+			'select' => 'tb1.id, tb2.title, tb2.canonical, tb2.description, tb2.content, tb2.meta_title, tb2.meta_description, tb1.image, tb1.album, tb1.publish',
 
 			'table' => $this->data['module'].' as tb1',
 			'join' =>  [
