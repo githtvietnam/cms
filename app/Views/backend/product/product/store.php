@@ -5,6 +5,7 @@
 				<?php echo  (!empty($validate) && isset($validate)) ? '<div class="alert alert-danger">'.$validate.'</div>'  : '' ?>
 			</div><!-- /.box-body -->
 		</div>
+
 		<div class="row">
 			<div class="col-lg-8 clearfix">
 				<div class="ibox mb20">
@@ -36,12 +37,56 @@
 							</div>
 						</div>
 						<div class="row mb15">
+							<div class="col-lg-4">
+								<div class="form-row">
+									<label class="control-label text-left">
+										<span>Giá tiền</span>
+									</label>
+									<?php echo form_input('title', validate_input(set_value('title', (isset($product['title'])) ? $product['title'] : '')), 'class="form-control title" placeholder="" id="title" autocomplete="off"', $type = 'number'); ?>
+								</div>
+							</div>
+							<div class="col-lg-4">
+								<div class="form-row">
+									<label class="control-label text-left">
+										<span>Cửa hàng</span>
+									</label>
+									<?php 
+										$store = get_data(['select' => 'storeid, title','table' => 'store','order_by' => 'title asc']);
+										$store = convert_array([
+											'data' => $store,
+											'field' => 'storeid',
+											'value' => 'title',
+											'text' => 'Cửa hàng',
+										]);
+									?>
+									<?php echo form_dropdown('storeid', $store, set_value('storeid', (isset($product['storeid'])) ? $product['storeid'] : 0), 'class="form-control m-b store select2"  id="store"');?>
+								</div>
+							</div>
+							<div class="col-lg-4">
+								<div class="form-row">
+									<label class="control-label text-left">
+										<span>Kho hàng</span>
+									</label>
+									<?php 
+										$warehouse = get_data(['select' => 'warehouseid, title','table' => 'warehouse','order_by' => 'title asc']);
+										$warehouse = convert_array([
+											'data' => $warehouse,
+											'field' => 'warehouseid',
+											'value' => 'title',
+											'text' => 'Kho hàng',
+										]);
+									?>
+									<?php echo form_dropdown('warehouseid', $warehouse, set_value('warehouseid', (isset($product['warehouseid'])) ? $product['warehouseid'] : 0), 'class="form-control m-b warehouse select2"  id="warehouse"');?>
+								</div>
+							</div>
+						</div>
+						<div class="row mb15">
 							<div class="col-lg-12">
 								<div class="form-row">
 									<label class="control-label text-left">
-										<span>Slogan</span>
+										<span>Lựa chọn khuyến mại</span>
 									</label>
-									<?php echo form_input('slogan', validate_input(set_value('slogan', (isset($product['slogan'])) ? $product['slogan'] : '')), 'class="form-control slogan" placeholder="" id="slogan" autocomplete="off"'); ?>
+									<?php echo form_dropdown('cityid', [], set_value('cityid', (isset($user['cityid'])) ? $user['cityid'] : 0), 'class="form-control m-b city select2"  id="city"');?>
 								</div>
 							</div>
 						</div>
@@ -264,7 +309,8 @@
 									<small class="text-danger">Chọn [Root] Nếu không có Thương hiệu</small>
 								</div>
 								<div class="form-row">
-									<?php echo form_dropdown('catalogueid', $dropdown, set_value('catalogueid', (isset($product['catalogueid'])) ? $product['catalogueid'] : ''), 'class="form-control m-b select2"');?>
+									<?php array_unshift($export_brand, "[Root]"); ?>
+									<?php echo form_dropdown('brandid', $export_brand, set_value('brandid', (isset($product['brandid'])) ? $product['brandid'] : ''), 'class="form-control m-b select2"');?>
 								</div>
 								<script>
 									var catalogue = '<?php echo (isset($_POST['catalogue'])) ? json_encode($_POST['catalogue']) : ((isset($product['catalogue']) && $product['catalogue'] != null) ? $product['catalogue'] : '');  ?>';	
@@ -273,15 +319,18 @@
 										<label class="control-label text-left">
 											<span>Thuộc tính</span>
 										</label>
-										
+										<script>
+											var attribute = '<?php echo (isset($_POST['attribute'])) ? json_encode($_POST['attribute']) : ((isset($product['attribute']) && $product['attribute'] != null) ? $product['attribute'] : '');  ?>';	
+										</script>
 										<div class="form-row">
-											<?php echo form_dropdown('catalogue[]', '', NULL, 'class="form-control selectMultiple" multiple="multiple" data-title="Nhập 2 kí tự để tìm kiếm..."  style="width: 100%;" data-join="'.$module.'_translate" data-module="'.$module.'_catalogue" data-select="title"'); ?>
+											<?php echo form_dropdown('attribute[]', '', NULL, 'class="form-control selectMultiple" multiple="multiple" data-title="Nhập 2 kí tự để tìm kiếm..."  style="width: 100%;" data-join="attribute_translate" data-module="attribute" data-select="title"'); ?>
 										</div>
 									</div>
 							</div>
 						</div>
 					</div>
 				</div>
+
 
 				<div class="ibox mb20">
 					<div class="ibox-title uk-flex-space-between uk-flex uk-flex-middle">

@@ -98,6 +98,7 @@ class Product extends BaseController{
 			$session->setFlashdata('message-danger', 'Bạn chưa tạo phần cấu hình chung cho mã Cửa hàng!');
  			return redirect()->to(BASE_URL.'backend/product/store/index');
 		}else{
+			$this->data['export_brand'] = $this->export_brand();
 			$this->data['productid'] = convert_code($this->data['check_code']['code'], $this->data['module']);
 			if($this->request->getMethod() == 'post'){
 				$validate = $this->validation();
@@ -320,7 +321,28 @@ class Product extends BaseController{
 		return [
 			'select' => $select,
 		];
+	}
 
+	private function export_brand(){
+		$brand = $this->AutoloadModel->_get_where([
+			'select' => 'tb2.keyword, tb2.title',
+			'table' => 'brand as tb1',
+			'join' =>  [
+				[
+					'brand_translate as tb2','tb1.id = tb2.objectid AND tb2.module = "brand" AND tb2.language = \''.$this->currentLanguage().'\' ','inner'
+				],
+			],
+			'where' => [
+				'tb1.deleted_at' => 0,
+				'tb1.publish' => 1
+			]
+		],TRUE);
+		$new_array= [];
+		foreach ($brand as $key => $value) {
+			$new_array[$value['keyword']] = $value['title'];
+		}
+
+		return $new_array;
 	}
 
 	private function validation(){
