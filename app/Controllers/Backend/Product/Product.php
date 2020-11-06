@@ -282,10 +282,33 @@ class Product extends BaseController{
 
 	private function store($param = []){
 		helper(['text']);
+		$catalogue = $this->request->getPost('catalogue');
+		$attributeid = $this->request->getPost('attributeid');
+		if(isset($catalogue) && is_array($catalogue) && count($catalogue)){
+			foreach($catalogue as $key => $val){
+				if($val == (int)$this->request->getPost('catalogueid')){
+					unset($catalogue[$key]);
+				}
+			}
+		}
+		if(isset($catalogue) && is_array($catalogue) && count($catalogue)){
+			$catalogue = array_values($catalogue);
+		}
+		if(isset($attributeid) && is_array($attributeid) && count($attributeid)){
+			$attributeid = array_values($attributeid);
+		}
+
 		$store = [
- 			'parentid' => (int)$this->request->getPost('parentid'),
+ 			'catalogueid' => (int)$this->request->getPost('catalogueid'),
+ 			'catalogue' => json_encode($catalogue),
  			'image' => $this->request->getPost('image'),
- 			'album' => json_encode($this->request->getPost('album')),
+ 			'productid' => $this->request->getPost('productid'),
+ 			'brandid' => $this->request->getPost('brandid'),
+ 			'attributeid' => json_encode($attributeid),
+ 			'promotionid' => $this->request->getPost('promotionid'),
+ 			'storeid' => $this->request->getPost('storeid'),
+ 			'warehouseid' => $this->request->getPost('warehouseid'),
+ 			'album' => json_encode($this->request->getPost('album'), TRUE),
  			'publish' => $this->request->getPost('publish'),
  		];
  		if($param['method'] == 'create' && isset($param['method'])){	
@@ -325,7 +348,7 @@ class Product extends BaseController{
 
 	private function export_brand(){
 		$brand = $this->AutoloadModel->_get_where([
-			'select' => 'tb2.keyword, tb2.title',
+			'select' => 'tb2.id, tb2.title',
 			'table' => 'brand as tb1',
 			'join' =>  [
 				[
@@ -339,7 +362,7 @@ class Product extends BaseController{
 		],TRUE);
 		$new_array= [];
 		foreach ($brand as $key => $value) {
-			$new_array[$value['keyword']] = $value['title'];
+			$new_array[$value['id']] = $value['title'];
 		}
 
 		return $new_array;
@@ -349,14 +372,18 @@ class Product extends BaseController{
 		$validate = [
 			'title' => 'required',
 			'canonical' => 'required|check_canonical['.$this->data['module'].']',
+			'catalogueid' => 'is_natural_no_zero',
 		];
 		$errorValidate = [
 			'title' => [
-				'required' => 'Bạn phải nhập vào trường tiêu đề'
+				'required' => 'Bạn phải nhập tên Sản phẩm!'
 			],
 			'canonical' => [
-				'required' => 'Bạn phải nhập giá trị cho trường đường dẫn',
-				'check_canonical' => 'Đường dẫn đã tồn tại, vui lòng chọn đường dẫn khác',
+				'required' => 'Bạn phải nhập giá trị cho trường đường dẫn!',
+				'check_canonical' => 'Đường dẫn đã tồn tại, vui lòng chọn đường dẫn khác!',
+			],
+			'catalogueid' => [
+				'is_natural_no_zero' => 'Bạn Phải chọn danh mục cha cho Sản phẩm!',
 			],
 		];
 		return [
@@ -364,5 +391,6 @@ class Product extends BaseController{
 			'errorValidate' => $errorValidate,
 		];
 	}
+
 
 }

@@ -50,6 +50,13 @@ class Translate extends BaseController
 			],
 			'where' => ['tb1.id' => $objectid]
 		]);
+
+		$this->data['router'] = $this->AutoloadModel->_get_where([
+			'select' => 'view,',
+			'table' => 'router',
+			'where' => ['module' => $module]
+		]);
+		// pre($this->data['router']);
 		if($module == 'brand' && $this->data['translate'] != []){
 			$this->data['translate'] = array_merge($this->data['translate'], $this->AutoloadModel->_get_where([
 				'select' => 'tb2.slogan',
@@ -84,19 +91,37 @@ class Translate extends BaseController
 		 		if($module == 'brand'){
 					$store['slogan'] = $this->request->getPost('slogan') ;
 				}	
-		 		// pre($store);
 				if(isset($this->data['translate']) && is_array($this->data['translate']) && count($this->data['translate'])){
 					$flag = $this->AutoloadModel->_update([
 			 			'table' => $moduleExtract[0].'_translate',
 			 			'where' => ['objectid' => $objectid,'language' => $language],
 			 			'data' => $store,
 			 		]);
+			 		if($this->data['translate'] != $store['canonical']){
+			 			$this->AutoloadModel->_update([
+				 			'table' => 'router',
+				 			'where' => ['objectid' => $objectid,'language' => $language,'module' => $module],
+				 			'data' => [
+				 				'canonical' => $store['canonical']
+				 			],
+				 		]);
+			 		}
 				}else{
 					$flag = $this->AutoloadModel->_insert([
 			 			'table' => $moduleExtract[0].'_translate',
 			 			'data' => $store,
 			 		]);
-					
+					$this->AutoloadModel->_insert([
+			 			'table' => 'router',
+			 			'where' => ['objectid' => $objectid,'language' => $language,'module' => $module],
+			 			'data' => [
+			 				'canonical' => $store['canonical'],
+			 				'module' => $module,
+			 				'objectid' => $objectid,
+			 				'language' => $language,
+			 				'view' => $this->data['router']['view']
+			 			],
+			 		]);
 				}
 		 		if($flag > 0){
 		 			$session->setFlashdata('message-success', 'Tạo Bản Dịch Thành Công! Hãy tạo danh mục tiếp theo.');

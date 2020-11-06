@@ -111,6 +111,25 @@ class Dashboard extends BaseController{
 
 	}
 
+	public function update_canonical(){
+		$post['id'] = $this->request->getPost('id');
+		$post['module'] = $this->request->getPost('module');
+		$module = explode('_', $post['module']);
+
+		$data = $this->AutoloadModel->_get_where([
+			'select' => 'title',
+			'table' => $module[0].'_translate',
+			'where' => [
+				'objectid' => $post['id'],
+				'module' => $module[0].'_catalogue',
+				'language' => $this->currentLanguage()
+			]
+		]);
+		$data = '/'.slug($data['title']).'/';
+		echo($data); die();
+
+	}
+
 
 	public function update_field(){
 		$post['id'] = $this->request->getPost('id');

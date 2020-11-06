@@ -23,7 +23,7 @@
 									<label class="control-label text-left">
 										<span>Tiêu đề danh mục <b class="text-danger">(*)</b></span>
 									</label>
-									<?php echo form_input('title', validate_input(set_value('title', (isset($article_catalogue['title'])) ? $article_catalogue['title'] : '')), 'class="form-control title" placeholder="" id="title" autocomplete="off"'); ?>
+									<?php echo form_input('title', validate_input(set_value('title', (isset($article_catalogue['title'])) ? $article_catalogue['title'] : '')), 'class="form-control title"  placeholder="" id="title" autocomplete="off"'); ?>
 								</div>
 							</div>
 						</div>
@@ -189,7 +189,6 @@
 												<div class="base-url"><?php echo base_url(); ?></div>
 												<?php echo form_input('canonical', htmlspecialchars_decode(html_entity_decode(set_value('canonical', (isset($article_catalogue['canonical'])) ? $article_catalogue['canonical'] : ''))), 'class="form-control canonical" placeholder="" autocomplete="off" data-flag="0" ');?>
 												<?php echo form_hidden('original_canonical', htmlspecialchars_decode(html_entity_decode(set_value('canonical', (isset($article_catalogue['canonical'])) ? $article_catalogue['canonical'] : ''))), 'class="form-control canonical" placeholder="" autocomplete="off"');?>
-
 											</div>
 										</div>
 									</div>
@@ -215,7 +214,7 @@
 									<small class="text-danger">Chọn [Root] Nếu không có danh mục cha</small>
 								</div>
 								<div class="form-row">
-									<?php echo form_dropdown('parentid', $dropdown, set_value('parentid', (isset($article_catalogue['parentid'])) ? $article_catalogue['parentid'] : ''), 'class="form-control m-b select2"');?>
+									<?php echo form_dropdown('parentid', $dropdown, set_value('parentid', (isset($article_catalogue['parentid'])) ? $article_catalogue['parentid'] : ''), 'class="form-control m-b get_catalogue select2" data-module="article_catalogue"'); ?>
 								</div>
 							</div>
 						</div>

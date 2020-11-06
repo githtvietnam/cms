@@ -13,7 +13,21 @@ if(!function_exists('translate')){
 	}
 }
 
+if(!function_exists('view_cells')){
+	function view_cells(string $module = ''){
+		$module = explode('_',  $module);
+		$new_module = [];
+		foreach ($module as $key => $value) {
+			$new_module[] = ucwords($value);
+		}
+		$view =  '\App\Controllers\Backend\\';
+		foreach ($new_module as $key => $value) {
+			$view = $view.$value.((isset($new_module[$key + 1])) ? '\\' : '').((!isset($new_module[$key + 1])) ? '::index' : '');
+		}
 
+		return $view;
+	}
+}
 
 
 if(!function_exists('gettime')){

@@ -96,22 +96,38 @@ $(document).ready(function(){
 	$(document).on('keyup', '.title', function(){
 		let _this = $(this);
 		let metaTitle = _this.val();
+		let data = get_catalogue();
+		let link = data + metaTitle;
 		let totalCharacter = metaTitle.length;
 		if(totalCharacter > 70){
 			$('.meta-title').addClass('input-error');
 		}else{
 			$('.meta-title').removeClass('input-error');
 		}
-		let slugTitle = slug(metaTitle);
+		let slugTitle = slug(link);
 		if($('.meta-title').val() == ''){
 			$('.g-title').text(metaTitle);
 		}
+		console.log(data);
 		let canonical = $('.canonical');
 		if(canonical.attr('data-flag') == 0){
 			canonical.val(slugTitle);
 			$('.g-link').text(BASE_URL + slugTitle + '.html');
 		}
 	});
+
+	$(document).on('change', '.get_catalogue', function(){
+		let _this = $(this);
+		let val = $('.title').val();
+		let text = _this.find('option:selected').text();
+		let text_after = text.replace("|-----", "");
+		text_after = slug(text_after);
+		val = slug(val);
+		text_after = text_after+'/';
+		let new_text = text_after+val
+		$('.canonical').val(new_text)
+		$('.g-link').text(BASE_URL + new_text + '.html');
+	})
 	
 	$(document).on('keyup','.canonical', function(){
 		let _this = $(this);
@@ -232,6 +248,8 @@ $(document).ready(function(){
 		return false;
 	});
 
+
+
 	$(document).on('click','.status', function(){
 		let _this = $(this);
 		let param = {
@@ -323,6 +341,23 @@ function get_location(param){
 		});
 }
 
+function get_catalogue(){
+	let data ='';
+	let id = $('.get_catalogue').val();
+	if(id == 0 || id == undefined){
+		return data;
+	}else{
+		let text = $('.get_catalogue :selected').text();
+		let text_after = text.replace("|-----", "");
+		text_after = slug(text_after);
+		text_after = text_after+'/';
+		return text_after
+	}
+
+
+}
+
+
 /* CHECKBOX */
 function check(object){
 	if(object.hasClass('checked')){
@@ -342,7 +377,6 @@ function check_setting(){
 		}
 	}
 }
-
 
 function checkall(_this){
 	let table = _this.parents('table');
@@ -435,7 +469,7 @@ function cnvVi(str) {
 	str = str.replace(/ù|ú|ụ|ủ|ũ|ư|ừ|ứ|ự|ử|ữ/g, "u");
 	str = str.replace(/ỳ|ý|ỵ|ỷ|ỹ/g, "y");
 	str = str.replace(/đ/g, "d");
-	str = str.replace(/!|@|%|\^|\*|\(|\)|\+|\=|\<|\>|\?|\/|,|\.|\:|\;|\'| |\"|\&|\#|\[|\]|~|$|_/g, "-");
+	str = str.replace(/!|@|%|\^|\*|\(|\)|\+|\=|\<|\>|\?|,|\.|\:|\;|\'| |\"|\&|\#|\[|\]|~|$|_/g, "-");
 	str = str.replace(/-+-/g, "-");
 	str = str.replace(/^\-+|\-+$/g, "");
 	return str;
@@ -450,8 +484,6 @@ function replace(Str=''){
 }
 
 function get_select2(object){
-
-
 	let module = object.attr('data-module');
 	let select = object.attr('data-select');
 	let join = object.attr('data-join');

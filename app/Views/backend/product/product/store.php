@@ -42,7 +42,7 @@
 									<label class="control-label text-left">
 										<span>Giá tiền</span>
 									</label>
-									<?php echo form_input('title', validate_input(set_value('title', (isset($product['title'])) ? $product['title'] : '')), 'class="form-control title" placeholder="" id="title" autocomplete="off"', $type = 'number'); ?>
+									<?php echo form_input('price', validate_input(set_value('price', (isset($product['price'])) ? $product['price'] : '')), 'class="form-control price" placeholder="" id="price" autocomplete="off"', $type = 'number'); ?>
 								</div>
 							</div>
 							<div class="col-lg-4">
@@ -86,7 +86,11 @@
 									<label class="control-label text-left">
 										<span>Lựa chọn khuyến mại</span>
 									</label>
-									<?php echo form_dropdown('cityid', [], set_value('cityid', (isset($user['cityid'])) ? $user['cityid'] : 0), 'class="form-control m-b city select2"  id="city"');?>
+									<?php 
+										$promotion = [];
+									?>
+									<?php array_unshift($promotion, "[Root]"); ?>
+									<?php echo form_dropdown('promotionid', $promotion, set_value('promotionid', (isset($product['promotionid'])) ? $product['promotionid'] : ''), 'class="form-control m-b select2"');?>
 								</div>
 							</div>
 						</div>
@@ -320,10 +324,10 @@
 											<span>Thuộc tính</span>
 										</label>
 										<script>
-											var attribute = '<?php echo (isset($_POST['attribute'])) ? json_encode($_POST['attribute']) : ((isset($product['attribute']) && $product['attribute'] != null) ? $product['attribute'] : '');  ?>';	
+											var attributeid = '<?php echo (isset($_POST['attributeid'])) ? json_encode($_POST['attributeid']) : ((isset($product['attributeid']) && $product['attributeid'] != null) ? $product['attributeid'] : '');  ?>';	
 										</script>
 										<div class="form-row">
-											<?php echo form_dropdown('attribute[]', '', NULL, 'class="form-control selectMultiple" multiple="multiple" data-title="Nhập 2 kí tự để tìm kiếm..."  style="width: 100%;" data-join="attribute_translate" data-module="attribute" data-select="title"'); ?>
+											<?php echo form_dropdown('attributeid[]', '', NULL, 'class="form-control selectMultiple" multiple="multiple" data-title="Nhập 2 kí tự để tìm kiếm..."  style="width: 100%;" data-join="attribute_translate" data-module="attribute" data-select="title"'); ?>
 										</div>
 									</div>
 							</div>

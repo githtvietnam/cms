@@ -27,6 +27,5 @@ if(!function_exists('rewrite_url')){
 	}
 }
 
-
 ?>
 

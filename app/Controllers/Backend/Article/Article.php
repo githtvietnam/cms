@@ -110,11 +110,23 @@ class Article extends BaseController{
 		 		]);
 
 		 		if($resultid > 0){
-
+					$view = view_cells($this->data['module']);
 		 			$storeLanguage = $this->storeLanguage($resultid);
 		 			$insertid = $this->AutoloadModel->_insert([
 			 			'table' => 'article_translate',
 			 			'data' => $storeLanguage,
+			 		]);
+
+			 		$data = [
+						'canonical' => $this->request->getPost('canonical'),  
+						'module' => $this->data['module'],
+						'objectid' => $resultid,  
+						'language' => $this->currentLanguage(),  
+						'view' => $view
+					];
+					$insertRouter = $this->AutoloadModel->_insert([
+			 			'table' => 'router',
+			 			'data' => $data,
 			 		]);
 
 
@@ -183,6 +195,15 @@ class Article extends BaseController{
 			 			'where' => ['objectid' => $id],
 			 			'data' => $updateLanguage,
 			 		]);
+			 		if($updateLanguage['canonical'] != $this->data[$this->data['module']]['canonical']){
+			 			$this->AutoloadModel->_update([
+				 			'table' => 'router',
+				 			'where' => ['objectid' => $id, 'module' => $this->data['module'], 'language' => $this->currentLanguage()],
+				 			'data' => [
+				 				'canonical' => $updateLanguage['canonical']
+				 			]
+				 		]);
+			 		}
 		 			$session->setFlashdata('message-success', 'Cập Nhật Bài Viết Thành Công!');
  					return redirect()->to(BASE_URL.'backend/article/article/index');
 		 		}

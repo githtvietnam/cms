@@ -71,10 +71,10 @@ class Catalogue extends BaseController{
 	}
 
 	public function create(){
-
 		$session = session();
 		if($this->request->getMethod() == 'post'){
 			$validate = $this->validation();
+			
 			if ($this->validate($validate['validate'], $validate['errorValidate'])){
 		 		$insert = $this->store(['method' => 'create']);
 		 		$resultid = $this->AutoloadModel->_insert([
@@ -84,9 +84,21 @@ class Catalogue extends BaseController{
 
 		 		if($resultid > 0){
 		 			$storeLanguage = $this->storeLanguage($resultid);
+					$view = view_cells($this->data['module']);
 		 			$insertid = $this->AutoloadModel->_insert([
 			 			'table' => 'article_translate',
 			 			'data' => $storeLanguage,
+			 		]);
+			 		$data = [
+						'canonical' => $this->request->getPost('canonical'),  
+						'module' => $this->data['module'],
+						'objectid' => $resultid,  
+						'language' => $this->currentLanguage(),  
+						'view' => $view
+					];
+					$insertRouter = $this->AutoloadModel->_insert([
+			 			'table' => 'router',
+			 			'data' => $data,
 			 		]);
 
 		 			$this->nestedsetbie->Get('level ASC, order ASC');
@@ -147,6 +159,16 @@ class Catalogue extends BaseController{
 			 			'where' => ['objectid' => $id],
 			 			'data' => $updateLanguage
 			 		]);
+
+			 		if($updateLanguage['canonical'] != $this->data[$this->data['module']]['canonical']){
+			 			$this->AutoloadModel->_update([
+				 			'table' => 'router',
+				 			'where' => ['objectid' => $id, 'module' => $this->data['module'], 'language' => $this->currentLanguage()],
+				 			'data' => [
+				 				'canonical' => $updateLanguage['canonical']
+				 			]
+				 		]);
+			 		}
 
 		 			$this->nestedsetbie->Get('level ASC, order ASC');
 					$this->nestedsetbie->Recursive(0, $this->nestedsetbie->Set());
