@@ -84,22 +84,11 @@ class Catalogue extends BaseController{
 
 		 		if($resultid > 0){
 		 			$storeLanguage = $this->storeLanguage($resultid);
-					$view = view_cells($this->data['module']);
 		 			$insertid = $this->AutoloadModel->_insert([
 			 			'table' => 'article_translate',
 			 			'data' => $storeLanguage,
 			 		]);
-			 		$data = [
-						'canonical' => $this->request->getPost('canonical'),  
-						'module' => $this->data['module'],
-						'objectid' => $resultid,  
-						'language' => $this->currentLanguage(),  
-						'view' => $view
-					];
-					$insertRouter = $this->AutoloadModel->_insert([
-			 			'table' => 'router',
-			 			'data' => $data,
-			 		]);
+			 		$this->insert_router(['method' => 'create','id' => $resultid]);
 
 		 			$this->nestedsetbie->Get('level ASC, order ASC');
 					$this->nestedsetbie->Recursive(0, $this->nestedsetbie->Set());
@@ -161,13 +150,7 @@ class Catalogue extends BaseController{
 			 		]);
 
 			 		if($updateLanguage['canonical'] != $this->data[$this->data['module']]['canonical']){
-			 			$this->AutoloadModel->_update([
-				 			'table' => 'router',
-				 			'where' => ['objectid' => $id, 'module' => $this->data['module'], 'language' => $this->currentLanguage()],
-				 			'data' => [
-				 				'canonical' => $updateLanguage['canonical']
-				 			]
-				 		]);
+			 			$this->insert_router(['method' => 'update','id' => $id]);
 			 		}
 
 		 			$this->nestedsetbie->Get('level ASC, order ASC');
@@ -297,6 +280,33 @@ class Catalogue extends BaseController{
  		return $store;
 	}
 	
+
+	private function insert_router($param = []){
+		helper(['text']);
+		$view = view_cells($this->data['module']);
+		$data = [
+			'canonical' => $this->request->getPost('canonical'),  
+			'module' => $this->data['module'],
+			'objectid' => $param['id'],  
+			'language' => $this->currentLanguage(),  
+			'view' => $view
+		];
+ 		if($param['method'] == 'create' && isset($param['method'])){	
+ 			$insertRouter = $this->AutoloadModel->_insert([
+	 			'table' => 'router',
+	 			'data' => $data,
+	 		]);
+ 		}else{
+ 			$this->AutoloadModel->_update([
+	 			'table' => 'router',
+	 			'where' => ['objectid' => $param['id'], 'module' => $this->data['module'], 'language' => $this->currentLanguage()],
+	 			'data' => [
+	 				'canonical' => $data['canonical']
+	 			]
+	 		]);
+ 		}
+ 		return true;
+	}
 
 	private function detect_language(){
 		$languageList = $this->AutoloadModel->_get_where([

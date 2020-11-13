@@ -19,98 +19,18 @@
 					</div>
 					<div class="ibox-content">
 						<div class="row mb15">
-							<div class="col-lg-6">
+							<div class="col-lg-12">
 								<div class="form-row">
 									<label class="control-label text-left">
-										<span>Tên Sản phẩm <b class="text-danger">(*)</b></span>
+										<span>Tiêu đề Sản phẩm <b class="text-danger">(*)</b></span>
 									</label>
 									<?php echo form_input('title', validate_input(set_value('title', (isset($product['title'])) ? $product['title'] : '')), 'class="form-control title" placeholder="" id="title" autocomplete="off"'); ?>
 								</div>
 							</div>
-							<div class="col-lg-6">
-								<div class="form-row">
-									<label class="control-label text-left">
-										<span>Mã sản phẩm <b class="text-danger">(*)</b></span>
-									</label>
-									<?php echo form_input('productid', set_value('productid', (isset($store['productid'])) ? $store['productid'] : $productid), 'class="form-control va-uppercase" readonly placeholder="" autocomplete="off"');?>
-								</div>
-							</div>
+							
 						</div>
 						<div class="row mb15">
-							<div class="col-lg-4">
-								<div class="form-row">
-									<label class="control-label text-left">
-										<span>Giá tiền</span>
-									</label>
-									<?php echo form_input('price', validate_input(set_value('price', (isset($product['price'])) ? $product['price'] : '')), 'class="form-control price" placeholder="" id="price" autocomplete="off"', $type = 'number'); ?>
-								</div>
-							</div>
-							<div class="col-lg-4">
-								<div class="form-row">
-									<label class="control-label text-left">
-										<span>Cửa hàng</span>
-									</label>
-									<?php 
-										$store = get_data(['select' => 'storeid, title','table' => 'store','order_by' => 'title asc']);
-										$store = convert_array([
-											'data' => $store,
-											'field' => 'storeid',
-											'value' => 'title',
-											'text' => 'Cửa hàng',
-										]);
-									?>
-									<?php echo form_dropdown('storeid', $store, set_value('storeid', (isset($product['storeid'])) ? $product['storeid'] : 0), 'class="form-control m-b store select2"  id="store"');?>
-								</div>
-							</div>
-							<div class="col-lg-4">
-								<div class="form-row">
-									<label class="control-label text-left">
-										<span>Kho hàng</span>
-									</label>
-									<?php 
-										$warehouse = get_data(['select' => 'warehouseid, title','table' => 'warehouse','order_by' => 'title asc']);
-										$warehouse = convert_array([
-											'data' => $warehouse,
-											'field' => 'warehouseid',
-											'value' => 'title',
-											'text' => 'Kho hàng',
-										]);
-									?>
-									<?php echo form_dropdown('warehouseid', $warehouse, set_value('warehouseid', (isset($product['warehouseid'])) ? $product['warehouseid'] : 0), 'class="form-control m-b warehouse select2"  id="warehouse"');?>
-								</div>
-							</div>
-						</div>
-						<div class="row mb15">
-							<div class="col-lg-12">
-								<div class="form-row">
-									<label class="control-label text-left">
-										<span>Lựa chọn khuyến mại</span>
-									</label>
-									<?php 
-										$promotion = [];
-									?>
-									<?php array_unshift($promotion, "[Root]"); ?>
-									<?php echo form_dropdown('promotionid', $promotion, set_value('promotionid', (isset($product['promotionid'])) ? $product['promotionid'] : ''), 'class="form-control m-b select2"');?>
-								</div>
-							</div>
-						</div>
-						<div class="row mb15">
-							<div class="col-lg-12">
-								<div class="form-row form-description">
-									<div class="uk-flex uk-flex-middle uk-flex-space-between">
-										<label class="control-label text-left">
-											<span>Mô tả ngắn</span>
-										</label>
-										<a href="" title="" data-target="description" class="uploadMultiImage">Upload hình ảnh</a>
-									</div>
-									<?php echo form_textarea('description', htmlspecialchars_decode(html_entity_decode(set_value('description', (isset($product['description'])) ? $product['description'] : ''))), 'class="form-control ck-editor" id="description" placeholder="" autocomplete="off"');?>
-
-								</div>
-							</div>
-						</div>
-
-						<div class="row mb15">
-							<div class="col-lg-12">
+							<div class="col-lg-12 mb15">
 								<div class="form-row">
 									<div class="uk-flex uk-flex-middle uk-flex-space-between">
 										<label class="control-label text-left">
@@ -119,24 +39,27 @@
 										<a href="" title="" data-target="content" class="uploadMultiImage">Upload hình ảnh</a>
 									</div>
 									<?php echo form_textarea('content', htmlspecialchars_decode(html_entity_decode(set_value('content', (isset($product['content'])) ? $product['content'] : ''))), 'class="form-control ck-editor" id="content" placeholder="" autocomplete="off"');?>
-
-
+								</div>
+							</div>
+							<div class="col-lg-12">	
+								<div class="uk-flex uk-flex-middle uk-flex-space-between">
+									<label class="control-label text-left ">
+										<span>Nội dung mở rộng</span>
+									</label>
+									<a href="" title="" class="add-attr" onclick="return false;">Thêm nội dung +</a>
 								</div>
 							</div>
 						</div>
+						<div class="row attr-more">
+						</div>
 					</div>
 				</div>
-
 				<div class="ibox mb20 album">
 					<div class="ibox-title">
 						<div class="uk-flex uk-flex-middle uk-flex-space-between">
 							<h5>Album Ảnh </h5>
 
 							<div class="uk-flex uk-flex-middle uk-flex-space-between">
-								<!-- <form class="js_upload_now" action="" method="post" enctype="multipart/form-data">
-									<input data-result="" class="m-r " type="file" name="a" multiple>
-									<input type="submit" name="abx" value="Add">
-								</form> -->
 								<div class="edit">
 									<a onclick="BrowseServerAlbum(this);return false;" href="" title="" class="upload-picture">Chọn hình</a>
 								</div>
@@ -184,7 +107,87 @@
 						</div>
 					</div>
 				</div>
-				
+				<div class="ibox mb20 block-general-product">
+					<div class="ibox-title uk-flex uk-flex-middle uk-flex-space-between">
+						<h5>Thông tin Chung</h5>
+						<div class="ibox-tools">
+							<button type="submit" name="create" value="create" class="btn btn-primary block full-width m-b">Lưu</button>
+						</div>
+					</div>
+					<div class="ibox-content">
+						<div class="row">
+							<div class="col-lg-6">
+								<div class="form-row">
+									<label class="control-label text-left">
+										<span>Giá Sản phẩm <b class="text-danger">(*)</b></span>
+									</label>
+									<?php echo form_input('price', validate_input(set_value('price', (isset($product['price'])) ? $product['price'] : '')), 'class="form-control price int" placeholder="" id="price" autocomplete="off"'); ?>
+								</div>
+							</div>
+							<div class="col-lg-6 m-b">
+								<label class="control-label ">
+									<span>Giá khuyến mại</span>
+								</label>
+								<?php echo form_input('promotion_price', set_value('promotion_price', (isset($product['promotion_price'])) ? $product['promotion_price'] : ''), 'class="form-control price int" placeholder="" id="promotion_price" autocomplete="off"'); ?>
+							</div>
+						</div>
+						<div class="row">
+							<div class="col-lg-4 mb15">
+								<label class="control-label ">
+									<span>BarCode</span>
+								</label>
+								<?php echo form_input('bar_code', set_value('bar_code', (isset($product['bar_code'])) ? $product['bar_code'] : ''), 'class="form-control" placeholder="VD:UPC,ISBN" id="bar_code" autocomplete="off"'); ?>
+							</div>
+							<div class="col-lg-4 mb15">
+								<label class="control-label ">
+									<span>Model</span>
+								</label>
+								<?php echo form_input('model', set_value('model', (isset($product['model'])) ? $product['model'] : ''), 'class="form-control" placeholder="UA50NU7400KXXV" id="model" autocomplete="off"'); ?>
+							</div>
+							<div class="col-lg-4 mb15">
+								<label class="control-label ">
+									<span>Xuất xứ</span>
+								</label>
+								<?php echo form_input('made_in', set_value('made_in', (isset($product['made_in'])) ? $product['made_in'] : ''), 'class="form-control" placeholder="Việt Nam" id="made_in" autocomplete="off"'); ?>
+							</div>
+							<div class="col-lg-6 mb15">
+								<label class="control-label">
+									<span class="label-title">Mã sản phẩm <b class="text-danger">(*)</b></span>
+								</label>
+								<script>
+									var productid = '<?php echo isset($store['productid']) ? $store['productid'] : $productid ?>'
+								</script>
+								<?php echo form_input('productid', set_value('productid', (isset($store['productid'])) ? $store['productid'] : $productid), 'class="form-control va-uppercase productid" readonly placeholder="" autocomplete="off"');?>
+							</div>
+							<div class="col-lg-6 mb15">
+								<label class="control-label">
+									<span class="label-title"><b class="text-danger">Chỉnh sửa mã sản phẩm</b></span>
+								</label>
+								<div class="form-checkbox">
+									<div>
+										<input type="checkbox" id="toogle_readonly" name="toogle_readonly">
+	  									<label for="toogle_readonly">Cho phép chỉnh sửa Mã sản phẩm</label>
+									</div>
+									<div>
+	  									<input type="checkbox" id="id_auto" name="id_auto">
+	  									<label for="id_auto">Cho phép tự động tạo Mã sản phẩm</label>
+									</div>
+								</div>
+							</div>
+							<div class="col-lg-12 mb15">
+								<div class="uk-flex-space-between uk-flex-middle uk-flex">
+									<label class="control-label ">
+										<span>Thương hiệu</span>
+									</label>
+									<button type="button" name="add_brand" id="add_brand" data-toggle="modal" data-target="#product_add_brand" class="btn">Tạo thương hiệu mới</button>
+									
+								</div>
+								<?php array_unshift($export_brand, "[Root]"); ?>
+								<?php echo form_dropdown('brandid', $export_brand, set_value('brandid', (isset($product['brandid'])) ? $product['brandid'] : ''), 'class="form-control m-b brand_select select2"');?>
+							</div>
+						</div>
+					</div>
+				</div>
 				<div class="ibox ibox-seo mb20">
 					<div class="ibox-title">
 						<div class="uk-flex uk-flex-middle uk-flex-space-between">
@@ -266,10 +269,8 @@
 						</div>
 					
 					</div>
-					
 				</div>
 				<button type="submit" name="create" value="create" class="btn btn-primary block m-b pull-right">Lưu</button>
-				
 			</div>
 			<div class="col-lg-4">
 				<div class="ibox mb20">
@@ -283,76 +284,24 @@
 									<small class="text-danger">Chọn [Root] Nếu không có danh mục cha</small>
 								</div>
 								<div class="form-row">
-									<?php echo form_dropdown('catalogueid', $dropdown, set_value('catalogueid', (isset($product['catalogueid'])) ? $product['catalogueid'] : ''), 'class="form-control m-b select2"');?>
+									<?php echo form_dropdown('catalogueid', $dropdown, set_value('catalogueid', (isset($product['catalogueid'])) ? $product['catalogueid'] : ''), 'class="form-control m-b select2 get_catalogue"');?>
 								</div>
 								<script>
 									var catalogue = '<?php echo (isset($_POST['catalogue'])) ? json_encode($_POST['catalogue']) : ((isset($product['catalogue']) && $product['catalogue'] != null) ? $product['catalogue'] : '');  ?>';	
 								</script>
 								<div class="form-row mt20">
-										<label class="control-label text-left">
-											<span>Danh mục phụ</span>
-										</label>
-										
-										<div class="form-row">
-											<?php echo form_dropdown('catalogue[]', '', NULL, 'class="form-control selectMultiple" multiple="multiple" data-title="Nhập 2 kí tự để tìm kiếm..."  style="width: 100%;" data-join="'.$module.'_translate" data-module="'.$module.'_catalogue" data-select="title"'); ?>
-										</div>
+									<label class="control-label text-left">
+										<span>Danh mục phụ</span>
+									</label>
+									
+									<div class="form-row">
+										<?php echo form_dropdown('catalogue[]', '', NULL, 'class="form-control selectMultiple" multiple="multiple" data-title="Nhập 2 kí tự để tìm kiếm..."  style="width: 100%;" data-join="'.$module.'_translate" data-module="'.$module.'_catalogue" data-select="title"'); ?>
 									</div>
-							</div>
-						</div>
-					</div>
-				</div>
-
-				<div class="ibox mb20">
-					<div class="ibox-title">
-						<h5>Lựa chọn Thông tin cho Sản phẩm</h5>
-					</div>
-					<div class="ibox-content">
-						<div class="row">
-							<div class="col-lg-12">
-								<div class="form-row mb10">
-									<small class="text-danger">Chọn [Root] Nếu không có Thương hiệu</small>
-								</div>
-								<div class="form-row">
-									<?php array_unshift($export_brand, "[Root]"); ?>
-									<?php echo form_dropdown('brandid', $export_brand, set_value('brandid', (isset($product['brandid'])) ? $product['brandid'] : ''), 'class="form-control m-b select2"');?>
-								</div>
-								<script>
-									var catalogue = '<?php echo (isset($_POST['catalogue'])) ? json_encode($_POST['catalogue']) : ((isset($product['catalogue']) && $product['catalogue'] != null) ? $product['catalogue'] : '');  ?>';	
-								</script>
-								<div class="form-row mt20">
-										<label class="control-label text-left">
-											<span>Thuộc tính</span>
-										</label>
-										<script>
-											var attributeid = '<?php echo (isset($_POST['attributeid'])) ? json_encode($_POST['attributeid']) : ((isset($product['attributeid']) && $product['attributeid'] != null) ? $product['attributeid'] : '');  ?>';	
-										</script>
-										<div class="form-row">
-											<?php echo form_dropdown('attributeid[]', '', NULL, 'class="form-control selectMultiple" multiple="multiple" data-title="Nhập 2 kí tự để tìm kiếm..."  style="width: 100%;" data-join="attribute_translate" data-module="attribute" data-select="title"'); ?>
-										</div>
-									</div>
-							</div>
-						</div>
-					</div>
-				</div>
-
-
-				<div class="ibox mb20">
-					<div class="ibox-title uk-flex-space-between uk-flex uk-flex-middle">
-						<h5 class="choose-image" style="cursor: pointer;margin:0;">Ảnh đại diện</h5>
-						<a href="" title="" data-target="image" class="uploadImage">Upload hình ảnh</a>
-					</div>
-					<div class="ibox-content">
-						<div class="row">
-							<div class="col-lg-12">
-								<div class="form-row">
-									<div class="avatar" style="cursor: pointer;"><img src="<?php echo (isset($_POST['image'])) ? $_POST['image'] : ((isset($product['image']) && $product['image'] != '') ? $product['image'] : 'public/not-found.png') ?>" class="img-thumbnail" alt=""></div>
-									<?php echo form_input('image', htmlspecialchars_decode(html_entity_decode(set_value('image', (isset($product['image'])) ? $product['image'] : ''))), 'class="form-control " placeholder="Đường dẫn của ảnh"  id="imageTxt"  autocomplete="off" style="display:none;" ');?>
 								</div>
 							</div>
 						</div>
 					</div>
 				</div>
-				
 				<div class="ibox mb20">
 					<div class="ibox-title">
 						<h5>Hiển thị </h5>
@@ -389,3 +338,38 @@
 	</div>
 </form>
 
+
+<div id="product_add_brand" class="modal fade">  
+      <div class="modal-dialog">  
+           <div class="modal-content">  
+                <div class="modal-header">
+                    <div class="uk-flex uk-flex-space-between uk-flex-middle" >
+                       <h4 class="modal-title">Tạo Thương hiệu mới cho Sản phẩm</h4>  
+                       <button type="button" class="close" data-dismiss="modal">&times;</button>  
+                    </div>  
+                </div>  
+                <div class="modal-body">  
+                    <form method="post" id="insert_form"> 
+                    	<div class="uk-flex uk-flex-middle ">
+                    		<div class="brand-avatar">
+                    			<div class="form-row">
+									<div class="avatar" style="cursor: pointer;"><img src="public/not-found.png" class="img-thumbnail" alt=""></div>
+									<?php echo form_input('brand_img', htmlspecialchars_decode(html_entity_decode(set_value('image'))), 'class="form-control " placeholder="Đường dẫn của ảnh"  id="brand_img"  autocomplete="off" style="display:none;" ');?>
+								</div>
+                    		</div>
+                    		<div class="brand-content">
+                    			<label>Tiêu đề Thương hiệu</label>  
+		                        <input type="text" name="brand_title" id="brand_title" class="form-control" />  
+		                        <input type="hidden" name="brand_canonical" id="brand_canonical" class="form-control" />  
+		                        <br />  
+		                        <label>Nhãn hiệu</label>  
+		                        <input type="text" name="keyword" id="keyword" class="form-control" />  
+		                        <br />  
+		                        <input type="submit" name="insert" id="insert" value="Thêm mới" class="btn btn-success " /> 
+                    		</div>
+                    	</div>
+                    </form>  
+                </div>  
+           </div>  
+      </div>  
+ </div> 

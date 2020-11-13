@@ -97,7 +97,6 @@ class Menu extends BaseController{
 			if ($this->validate($validate['validate'], $validate['errorValidate'])){
 				$menu = $this->request->getPost('menu');
 				$catalogueid = $this->request->getPost('parentid');
- 				// pre($catalogueid);
 
 				if(isset($menu) && is_array($menu) && count($menu)){
 					$_insert = [];

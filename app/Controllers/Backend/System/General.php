@@ -73,7 +73,6 @@ class General extends BaseController{
 
 		if($this->request->getMethod() == 'post'){
 			$config  = $this->request->getPost('config');
-	 		// pre($config);
 			if(isset($config) && is_array($config) && count($config)){
 				$delete = $this->AutoloadModel->_delete([
 					'table' => 'system_translate',

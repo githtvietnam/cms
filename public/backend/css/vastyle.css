@@ -329,3 +329,32 @@ input[type=number]::-webkit-outer-spin-button {
     appearance: none;
     margin: 0; 
 }
+
+#add_brand{
+	background-color: transparent;
+	color: blue;
+	padding: 0
+}
+
+#add_brand:hover{
+	text-decoration: underline;
+}
+
+.label-title{
+	color:#1a1a1a;
+	font-weight: 600;
+}
+input[type=checkbox], input[type=radio]{
+	cursor: pointer;
+}
+
+.brand-avatar{
+	width: 30%;
+	margin-right: 30px
+}
+.brand-content{
+	width:70%;
+}
+.brand-content input{
+	width: 100%
+}

@@ -110,25 +110,12 @@ class Article extends BaseController{
 		 		]);
 
 		 		if($resultid > 0){
-					$view = view_cells($this->data['module']);
 		 			$storeLanguage = $this->storeLanguage($resultid);
 		 			$insertid = $this->AutoloadModel->_insert([
 			 			'table' => 'article_translate',
 			 			'data' => $storeLanguage,
 			 		]);
-
-			 		$data = [
-						'canonical' => $this->request->getPost('canonical'),  
-						'module' => $this->data['module'],
-						'objectid' => $resultid,  
-						'language' => $this->currentLanguage(),  
-						'view' => $view
-					];
-					$insertRouter = $this->AutoloadModel->_insert([
-			 			'table' => 'router',
-			 			'data' => $data,
-			 		]);
-
+		 			$this->insert_router(['method' => 'create','id' => $resultid]);
 
 	 				$flag = $this->create_relationship($resultid);
 	 				if($flag > 0){
@@ -196,13 +183,8 @@ class Article extends BaseController{
 			 			'data' => $updateLanguage,
 			 		]);
 			 		if($updateLanguage['canonical'] != $this->data[$this->data['module']]['canonical']){
-			 			$this->AutoloadModel->_update([
-				 			'table' => 'router',
-				 			'where' => ['objectid' => $id, 'module' => $this->data['module'], 'language' => $this->currentLanguage()],
-				 			'data' => [
-				 				'canonical' => $updateLanguage['canonical']
-				 			]
-				 		]);
+		 				$this->insert_router(['method' => 'update','id' => $id]);
+			 			
 			 		}
 		 			$session->setFlashdata('message-success', 'Cập Nhật Bài Viết Thành Công!');
  					return redirect()->to(BASE_URL.'backend/article/article/index');
@@ -400,6 +382,33 @@ class Article extends BaseController{
  			$store['userid_updated'] = $this->auth['id'];
  		}
  		return $store;
+	}
+
+	private function insert_router($param = []){
+		helper(['text']);
+		$view = view_cells($this->data['module']);
+		$data = [
+			'canonical' => $this->request->getPost('canonical'),  
+			'module' => $this->data['module'],
+			'objectid' => $param['id'],  
+			'language' => $this->currentLanguage(),  
+			'view' => $view
+		];
+ 		if($param['method'] == 'create' && isset($param['method'])){	
+ 			$insertRouter = $this->AutoloadModel->_insert([
+	 			'table' => 'router',
+	 			'data' => $data,
+	 		]);
+ 		}else{
+ 			$this->AutoloadModel->_update([
+	 			'table' => 'router',
+	 			'where' => ['objectid' => $param['id'], 'module' => $this->data['module'], 'language' => $this->currentLanguage()],
+	 			'data' => [
+	 				'canonical' => $data['canonical']
+	 			]
+	 		]);
+ 		}
+ 		return true;
 	}
 
 	private function detect_language(){

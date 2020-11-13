@@ -56,23 +56,33 @@ class Product extends BaseController{
 			$page = ($page > $totalPage)?$totalPage:$page;
 			$page = $page - 1;
 
-
+			$catalogue = $this->condition_catalogue();
 			$languageDetact = $this->detect_language();
-			$this->data['productCatalogueList'] = $this->AutoloadModel->_get_where([
-				'select' => 'tb1.id, tb2.title, tb1.lft, tb1.rgt, tb1.level, tb2.canonical, (SELECT fullname FROM user WHERE user.id = tb1.userid_created) as creator, tb1.userid_updated, tb1.publish, tb1.order, tb1.created_at, tb1.updated_at,'.((isset($languageDetact['select'])) ? $languageDetact['select'] : ''),
+			$this->data['productList'] = $this->AutoloadModel->_get_where([
+				'select' => 'tb1.id,  tb2.catalogueid, tb1.publish, tb1.order, tb1.userid_created, tb1.userid_updated, tb1.created_at,  tb1.image, tb1.updated_at, tb3.fullname as creator, tb4.title as cat_title, tb4.id as cat_id, tb1.catalogue, tb2.objectid, (SELECT title FROM product_translate INNER JOIN product ON product_translate.objectid = product.id  AND product_translate.module = \''.$this->data['module'].'\' AND product_translate.language = \''.$this->currentLanguage().'\' WHERE tb1.id = product_translate.objectid GROUP BY product.id ) as product_title, '.((isset($languageDetact['select'])) ? $languageDetact['select'] : ''),
 				'table' => $this->data['module'].' as tb1',
-				'join' =>  [
-					[
-						'product_translate as tb2','tb1.id = tb2.objectid AND tb2.module = \''.$this->data['module'].'\'   AND tb2.language = \''.$this->currentLanguage().'\' ','inner'
-					],
-				],
 				'where' => $where,
+				'where_in' => $catalogue['where_in'],
+				'where_in_field' => $catalogue['where_in_field'],
 				'keyword' => $keyword,
+				'join' => [
+					[
+						'object_relationship as tb2', 'tb1.id = tb2.objectid AND tb2.module = \''.$this->data['module'].'\' ', 'inner'
+					],
+					[
+						'user as tb3','tb1.userid_created = tb3.id','inner'
+					],
+					[
+						'product_translate as tb4','tb1.catalogueid = tb4.objectid  AND tb4.language = \''.$this->currentLanguage().'\' ','inner'
+					],
+					
+				],
 				'limit' => $config['per_page'],
 				'start' => $page * $config['per_page'],
-				'order_by'=> 'lft asc'
+				'order_by'=> 'tb1.id desc',
+				'group_by' => 'tb1.id'
 			], TRUE);
-			// pre($this->data['productCatalogueList']);
+			// pre($this->data['productList']);
 		}
 
 		$this->data['template'] = 'backend/product/product/index';
@@ -95,14 +105,17 @@ class Product extends BaseController{
 		]);
 
 		if(!isset($this->data['check_code']) && !is_array($this->data['check_code']) && !count($this->data['check_code'])){
-			$session->setFlashdata('message-danger', 'Bạn chưa tạo phần cấu hình chung cho mã Cửa hàng!');
+			$session->setFlashdata('message-danger', 'Bạn chưa tạo phần cấu hình chung cho mã Sản phẩm!');
  			return redirect()->to(BASE_URL.'backend/product/store/index');
 		}else{
+
 			$this->data['export_brand'] = $this->export_brand();
 			$this->data['productid'] = convert_code($this->data['check_code']['code'], $this->data['module']);
 			if($this->request->getMethod() == 'post'){
+
 				$validate = $this->validation();
-				if ($this->validate($validate['validate'], $validate['errorValidate'])){
+				if($this->validate($validate['validate'], $validate['errorValidate'])){
+					$sub_content = $this->request->getPost('sub_content');
 			 		$insert = $this->store(['method' => 'create']);
 			 		$resultid = $this->AutoloadModel->_insert([
 			 			'table' => $this->data['module'],
@@ -110,10 +123,22 @@ class Product extends BaseController{
 			 		]);
 			 		if($resultid > 0){
 			 			$storeLanguage = $this->storeLanguage($resultid);
+			 			$storeLanguage = $this->convert_content($sub_content, $storeLanguage);
 			 			$insertid = $this->AutoloadModel->_insert([
 				 			'table' => 'product_translate',
 				 			'data' => $storeLanguage,
 				 		]);
+
+				 		$this->AutoloadModel->_update([
+	 						'table' => 'id_general',
+	 						'data' => [
+	 							'objectid' => $this->data['check_code']['objectid'] + 1
+	 						],
+	 						'where' => ['module' => $this->data['module']]
+	 					]);
+
+		 				$this->insert_router(['method' => 'create','id' => $resultid]);
+
 			 			$this->nestedsetbie->Get('level ASC, order ASC');
 						$this->nestedsetbie->Recursive(0, $this->nestedsetbie->Set());
 						$this->nestedsetbie->Action();
@@ -125,8 +150,9 @@ class Product extends BaseController{
 		        }
 			}
 		}
-		$this->data['dropdown'] = $this->nestedsetbie->dropdown();
+
 		$this->data['fixWrapper'] = 'fix-wrapper';
+		$this->data['dropdown'] = $this->nestedsetbie->dropdown();
 		$this->data['method'] = 'create';
 		$this->data['template'] = 'backend/product/product/create';
 		return view('backend/dashboard/layout/home', $this->data);
@@ -171,7 +197,7 @@ class Product extends BaseController{
 			 			'where' => ['objectid' => $id, 'module' => $this->data['module']],
 			 			'data' => $updateLanguage
 			 		]);
-
+		 			$this->insert_router(['method' => 'update','id' => $flag]);
 		 			$this->nestedsetbie->Get('level ASC, order ASC');
 					$this->nestedsetbie->Recursive(0, $this->nestedsetbie->Set());
 					$this->nestedsetbie->Action();
@@ -184,8 +210,9 @@ class Product extends BaseController{
 	        	$this->data['validate'] = $this->validator->listErrors();
 	        }
 		}
-		$this->data['dropdown'] = $this->nestedsetbie->dropdown();
+		
 		$this->data['fixWrapper'] = 'fix-wrapper';
+		$this->data['dropdown'] = $this->nestedsetbie->dropdown();
 		$this->data['method'] = 'update';
 		$this->data['template'] = 'backend/product/product/update';
 		return view('backend/dashboard/layout/home', $this->data);
@@ -270,7 +297,7 @@ class Product extends BaseController{
 			'objectid' => $objectid,
 			'title' => validate_input($this->request->getPost('title')),
 			'canonical' => $this->request->getPost('canonical'),
-			'description' => base64_encode($this->request->getPost('description')),
+			'made_in' => $this->request->getPost('made_in'),
 			'content' => base64_encode($this->request->getPost('content')),
 			'meta_title' => validate_input($this->request->getPost('meta_title')),
 			'meta_description' => validate_input($this->request->getPost('meta_description')),
@@ -301,15 +328,14 @@ class Product extends BaseController{
 		$store = [
  			'catalogueid' => (int)$this->request->getPost('catalogueid'),
  			'catalogue' => json_encode($catalogue),
- 			'image' => $this->request->getPost('image'),
  			'productid' => $this->request->getPost('productid'),
  			'brandid' => $this->request->getPost('brandid'),
- 			'attributeid' => json_encode($attributeid),
- 			'promotionid' => $this->request->getPost('promotionid'),
- 			'storeid' => $this->request->getPost('storeid'),
- 			'warehouseid' => $this->request->getPost('warehouseid'),
  			'album' => json_encode($this->request->getPost('album'), TRUE),
  			'publish' => $this->request->getPost('publish'),
+ 			'price' => $this->request->getPost('price'),
+ 			'price_promotion' => $this->request->getPost('promotion_price'),
+ 			'bar_code' => $this->request->getPost('bar_code'),
+ 			'model' => $this->request->getPost('model'),
  		];
  		if($param['method'] == 'create' && isset($param['method'])){	
  			$store['created_at'] = $this->currentTime;
@@ -322,6 +348,32 @@ class Product extends BaseController{
  		return $store;
 	}
 	
+	private function insert_router($param = []){
+		helper(['text']);
+		$view = view_cells($this->data['module']);
+		$data = [
+			'canonical' => $this->request->getPost('canonical'),  
+			'module' => $this->data['module'],
+			'objectid' => $param['id'],  
+			'language' => $this->currentLanguage(),  
+			'view' => $view
+		];
+ 		if($param['method'] == 'create' && isset($param['method'])){	
+ 			$insertRouter = $this->AutoloadModel->_insert([
+	 			'table' => 'router',
+	 			'data' => $data,
+	 		]);
+ 		}else{
+ 			$this->AutoloadModel->_update([
+	 			'table' => 'router',
+	 			'where' => ['objectid' => $param['id'], 'module' => $this->data['module'], 'language' => $this->currentLanguage()],
+	 			'data' => [
+	 				'canonical' => $data['canonical']
+	 			]
+	 		]);
+ 		}
+ 		return true;
+	}
 
 	private function detect_language(){
 		$languageList = $this->AutoloadModel->_get_where([
@@ -346,6 +398,24 @@ class Product extends BaseController{
 		];
 	}
 
+	private function convert_content($content = [], $store = []){
+		$count_1 = 0;
+		$count_2 = 0;
+		foreach ($content['title'] as $key => $value) {
+ 			$title[] = $content['title'][$count_1];
+ 			$count_1++;
+ 		}
+ 		foreach ($content['title'] as $key => $value) {
+ 			$description[] = $content['description'][$count_2];
+ 			$count_2++;
+ 		}
+ 		$title = base64_encode(json_encode($title));
+ 		$description = base64_encode(json_encode($description));
+ 		$store['sub_title'] = $title;
+ 		$store['sub_content'] = $description;
+		return $store;
+	}
+
 	private function export_brand(){
 		$brand = $this->AutoloadModel->_get_where([
 			'select' => 'tb2.id, tb2.title',
@@ -368,15 +438,54 @@ class Product extends BaseController{
 		return $new_array;
 	}
 
+	public function condition_catalogue(){
+		$catalogueid = $this->request->getGet('catalogueid');
+		$id = [];	
+		if($catalogueid > 0){
+			$catalogue = $this->AutoloadModel->_get_where([
+				'select' => 'tb1.id, tb1.lft, tb1.rgt, tb4.title',
+				'table' => $this->data['module'].'_catalogue as tb1',
+				'join' =>  [
+					[
+						'product_translate as tb4','tb1.id = tb4.objectid AND tb4.language = \''.$this->currentLanguage().'\' ','inner'
+					],
+									],
+				'where' => ['tb1.id' => $catalogueid],
+			]);
+
+			$catalogueChildren = $this->AutoloadModel->_get_where([
+				'select' => 'id',
+				'table' => $this->data['module'].'_catalogue',
+				'where' => ['lft >=' => $catalogue['lft'],'rgt <=' => $catalogue['rgt']],
+			], TRUE);
+
+			$id = array_column($catalogueChildren, 'id');
+		}
+		return [
+			'where_in' => $id,
+			'where_in_field' => 'tb2.catalogueid'
+		];
+
+	}
+
 	private function validation(){
 		$validate = [
 			'title' => 'required',
+			'price' => 'required',
+			'productid' => 'required|check_id['.$this->data['module'].']',
 			'canonical' => 'required|check_canonical['.$this->data['module'].']',
 			'catalogueid' => 'is_natural_no_zero',
 		];
 		$errorValidate = [
 			'title' => [
 				'required' => 'Bạn phải nhập tên Sản phẩm!'
+			],
+			'productid' => [
+				'required' => 'Bạn phải nhập mã Sản phẩm!',
+				'check_id' => 'Mã sản phẩm đã tồn tại, vui lòng chọn mã sản phẩm khác!',
+			],
+			'price' => [
+				'required' => 'Bạn phải nhập giá Sản phẩm!'
 			],
 			'canonical' => [
 				'required' => 'Bạn phải nhập giá trị cho trường đường dẫn!',
@@ -386,6 +495,7 @@ class Product extends BaseController{
 				'is_natural_no_zero' => 'Bạn Phải chọn danh mục cha cho Sản phẩm!',
 			],
 		];
+
 		return [
 			'validate' => $validate,
 			'errorValidate' => $errorValidate,

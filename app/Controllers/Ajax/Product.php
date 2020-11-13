@@ -55,4 +55,46 @@ class Product extends BaseController{
 		die();		
 	}
 
+	public function add_brand(){
+		$param['title'] = $this->request->getPost('title');
+		$param['canonical'] = $this->request->getPost('canonical');
+		$param['img'] = $this->request->getPost('img');
+		$param['keyword'] = $this->request->getPost('keyword');
+
+		$flag = $this->AutoloadModel->_insert([
+			'table' => 'brand',
+			'data' => [
+				'image' => $param['img'],
+				'created_at' => $this->currentTime,
+				'deleted_at' => 0,
+				'publish' => 1,
+				'userid_created' => $this->auth['id']
+			]
+		]);
+
+		if($flag > 0){
+			$insert = $this->AutoloadModel->_insert([
+				'table' => 'brand_translate',
+				'data' => [
+					'module' => 'brand',
+					'objectid'=> $flag,
+					'language' => $this->currentLanguage(),
+					'canonical' => $param['canonical'],
+					'title' => $param['title'],
+					'keyword' => $param['keyword'],
+					'created_at' => $this->currentTime,
+					'deleted_at' => 0,
+					'userid_created' => $this->auth['id']
+				]
+			]);
+		}
+		
+		$param['data'] = [
+			'title' => $param['title'],
+			'value' => $flag,
+		];
+		echo json_encode($param['data']);
+		die();		
+	}
+
 }

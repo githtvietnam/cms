@@ -214,7 +214,7 @@
 									<small class="text-danger">Chọn [Root] Nếu không có danh mục cha</small>
 								</div>
 								<div class="form-row">
-									<?php echo form_dropdown('parentid', $dropdown, set_value('parentid', (isset($product_catalogue['parentid'])) ? $product_catalogue['parentid'] : ''), 'class="form-control m-b select2"');?>
+									<?php echo form_dropdown('parentid', $dropdown, set_value('parentid', (isset($product_catalogue['parentid'])) ? $product_catalogue['parentid'] : ''), 'class="form-control m-b select2 get_catalogue"');?>
 								</div>
 							</div>
 						</div>

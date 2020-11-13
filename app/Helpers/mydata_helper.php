@@ -98,10 +98,6 @@ if (! function_exists('count_object')){
 if (! function_exists('convert_code')){
 	function convert_code($code = '', $module =''){
 		$model = new AutoloadModel();
-		// $flag = $model->_get_where([
-			
-		// ]);
-
 
 		$code_Explode = explode('-',  $code );
 		$code = (int)'1'.$code_Explode[1];

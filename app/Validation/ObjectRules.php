@@ -36,6 +36,24 @@ class ObjectRules {
 		return true;
  	}
 
+ 	public function check_id(string $productid = '', string $module = ''): bool{
+		$originalId = $this->request->getPost('productid');
+		$modulExtract = explode('_', $module);
+		$count = 0;
+		if($originalId != $productid){
+			$count = $this->AutoloadModel->_get_where([
+				'select' => 'objectid',
+				'table' => $modulExtract[0].'_translate',
+				'where' => ['productid' => $productid],
+				'count' => TRUE
+			]);
+		}
+		if($count > 0){
+			return false;
+		}
+		return true;
+ 	}
+
 
 }
 

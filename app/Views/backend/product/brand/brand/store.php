@@ -240,14 +240,14 @@
 									var catalogue = '<?php echo (isset($_POST['catalogue'])) ? json_encode($_POST['catalogue']) : ((isset($brand['catalogue']) && $brand['catalogue'] != null) ? $brand['catalogue'] : '');  ?>';	
 								</script>
 								<div class="form-row mt20">
-										<label class="control-label text-left">
-											<span>Danh mục phụ</span>
-										</label>
-										
-										<div class="form-row">
-											<?php echo form_dropdown('catalogue[]', '', NULL, 'class="form-control selectMultiple" multiple="multiple" data-title="Nhập 2 kí tự để tìm kiếm..."  style="width: 100%;" data-join="'.$module.'_translate" data-module="'.$module.'_catalogue" data-select="title"'); ?>
-										</div>
+									<label class="control-label text-left">
+										<span>Danh mục phụ</span>
+									</label>
+									
+									<div class="form-row">
+										<?php echo form_dropdown('catalogue[]', '', NULL, 'class="form-control selectMultiple" multiple="multiple" data-title="Nhập 2 kí tự để tìm kiếm..."  style="width: 100%;" data-join="'.$module.'_translate" data-module="'.$module.'_catalogue" data-select="title"'); ?>
 									</div>
+								</div>
 							</div>
 						</div>
 					</div>
