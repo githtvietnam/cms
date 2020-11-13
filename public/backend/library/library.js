@@ -61,7 +61,6 @@ $(document).ready(function(){
 			let select = _this.attr('data-select');		
 			let module = _this.attr('data-module');
 			let join = _this.attr('data-join');
-			console.log(join);
 			setTimeout(function(){
 				if(catalogue != ''){
 					$.post('ajax/dashboard/pre_select2', {
@@ -92,6 +91,37 @@ $(document).ready(function(){
 		$('.seo-group').toggleClass('hidden');
 		return false;
 	});
+
+	$(document).on('click','.float, .int',function(){
+		let data = $(this).val();
+		if(data == 0){
+			$(this).val('');
+		}
+	});
+	$(document).on('keydown','.float, .int',function(e){
+		let data = $(this).val();
+		if(data == 0){
+			let unicode=e.keyCode || e.which;
+			if(unicode != 190){
+				$(this).val('');
+			}
+		}
+	});
+
+	$(document).on('change keyup blur','.int',function(){
+		let data = $(this).val();
+		if(data == '' ){
+			$(this).val('0');
+			return false;
+		}
+		data = data.replace(/\./gi, "");
+		$(this).val(addCommas(data));
+		data = data.replace(/\./gi, "");
+		if(isNaN(data)){
+			$(this).val('0');
+			return false;
+		}
+	});
 	
 	$(document).on('keyup', '.title', function(){
 		let _this = $(this);
@@ -108,7 +138,6 @@ $(document).ready(function(){
 		if($('.meta-title').val() == ''){
 			$('.g-title').text(metaTitle);
 		}
-		console.log(data);
 		let canonical = $('.canonical');
 		if(canonical.attr('data-flag') == 0){
 			canonical.val(slugTitle);
@@ -481,6 +510,18 @@ function replace(Str=''){
 		Str = Str.replace(/\./gi, "");
 		return Str;
 	}
+}
+
+function addCommas(nStr){
+	nStr = String(nStr);
+	nStr = nStr.replace(/\./gi, "");
+	let str ='';
+	for (i = nStr.length; i > 0; i -= 3){
+		a = ( (i-3) < 0 ) ? 0 : (i-3); 
+		str= nStr.slice(a,i) + '.' + str; 
+	}
+	str= str.slice(0,str.length-1); 
+	return str;
 }
 
 function get_select2(object){
