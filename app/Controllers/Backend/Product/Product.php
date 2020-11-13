@@ -59,7 +59,7 @@ class Product extends BaseController{
 			$catalogue = $this->condition_catalogue();
 			$languageDetact = $this->detect_language();
 			$this->data['productList'] = $this->AutoloadModel->_get_where([
-				'select' => 'tb1.id,  tb2.catalogueid, tb1.publish, tb1.order, tb1.userid_created, tb1.userid_updated, tb1.created_at,  tb1.image, tb1.updated_at, tb3.fullname as creator, tb4.title as cat_title, tb4.id as cat_id, tb1.catalogue, tb2.objectid, (SELECT title FROM product_translate INNER JOIN product ON product_translate.objectid = product.id  AND product_translate.module = \''.$this->data['module'].'\' AND product_translate.language = \''.$this->currentLanguage().'\' WHERE tb1.id = product_translate.objectid GROUP BY product.id ) as product_title, '.((isset($languageDetact['select'])) ? $languageDetact['select'] : ''),
+				'select' => 'tb1.id, tb1.price,tb1.order, tb1.price_promotion, tb1.bar_code, tb1.model, tb1.brandid, tb1.album,  tb2.catalogueid, tb1.publish, tb3.title as product_title, tb1.catalogue, tb2.objectid, tb3.content, tb3.sub_title, tb3.sub_content, tb3.canonical, tb3.meta_title, tb3.meta_description, tb3.made_in, (SELECT title FROM product_translate INNER JOIN product ON product_translate.objectid = product.catalogueid AND product_translate.module = "product_catalogue" AND product_translate.language = \''.$this->currentLanguage().'\' WHERE tb1.catalogueid = product_translate.objectid GROUP BY product.id ) as cat_title, (SELECT objectid FROM product_translate INNER JOIN product ON product_translate.objectid = product.catalogueid AND product_translate.module = "product_catalogue" AND product_translate.language = \''.$this->currentLanguage().'\' WHERE tb1.catalogueid = product_translate.objectid GROUP BY product.id ) as cat_id, '.((isset($languageDetact['select'])) ? $languageDetact['select'] : ''),
 				'table' => $this->data['module'].' as tb1',
 				'where' => $where,
 				'where_in' => $catalogue['where_in'],
@@ -70,10 +70,7 @@ class Product extends BaseController{
 						'object_relationship as tb2', 'tb1.id = tb2.objectid AND tb2.module = \''.$this->data['module'].'\' ', 'inner'
 					],
 					[
-						'user as tb3','tb1.userid_created = tb3.id','inner'
-					],
-					[
-						'product_translate as tb4','tb1.catalogueid = tb4.objectid  AND tb4.language = \''.$this->currentLanguage().'\' ','inner'
+						'product_translate as tb3','tb1.id = tb3.objectid AND tb3.module = "product" AND tb3.language = \''.$this->currentLanguage().'\' ','inner'
 					],
 					
 				],
@@ -84,7 +81,7 @@ class Product extends BaseController{
 			], TRUE);
 			// pre($this->data['productList']);
 		}
-
+		$this->data['dropdown'] = $this->nestedsetbie->dropdown();
 		$this->data['template'] = 'backend/product/product/index';
 		return view('backend/dashboard/layout/home', $this->data);
 	}
@@ -138,6 +135,7 @@ class Product extends BaseController{
 	 					]);
 
 		 				$this->insert_router(['method' => 'create','id' => $resultid]);
+	 					$flag = $this->create_relationship($resultid);
 
 			 			$this->nestedsetbie->Get('level ASC, order ASC');
 						$this->nestedsetbie->Recursive(0, $this->nestedsetbie->Set());
@@ -281,6 +279,35 @@ class Product extends BaseController{
 		}
 
 		return $where;
+	}
+
+	private function create_relationship($objectid = 0, $catalogue = []){
+		if($this->request->getPost('catalogue') != ''){
+			$catalogue = $this->request->getPost('catalogue');
+		}
+		$catalogueid = $this->request->getPost('catalogueid');
+		$relationshipId = 	array_unique(array_merge($catalogue, [$catalogueid]));
+
+		$insert = [];
+		if(isset($relationshipId) && is_array($relationshipId) && count($relationshipId)){
+			foreach($relationshipId as $key => $val){
+				$insert[] = array(
+					'objectid' => $objectid,
+					'catalogueid' => $val,
+					'module' => $this->data['module'],
+				);
+			}
+		}
+
+		if(isset($insert) && is_array($insert) && count($insert)){
+			$flag = $this->AutoloadModel->_create_batch([
+				'data' => $insert,
+				'table' => 'object_relationship'
+			]);
+		}
+
+		return $flag;
+
 	}
 
 	private function condition_keyword($keyword = ''): string{
@@ -443,11 +470,11 @@ class Product extends BaseController{
 		$id = [];	
 		if($catalogueid > 0){
 			$catalogue = $this->AutoloadModel->_get_where([
-				'select' => 'tb1.id, tb1.lft, tb1.rgt, tb4.title',
+				'select' => 'tb1.id, tb1.lft, tb1.rgt, tb3.title',
 				'table' => $this->data['module'].'_catalogue as tb1',
 				'join' =>  [
 					[
-						'product_translate as tb4','tb1.id = tb4.objectid AND tb4.language = \''.$this->currentLanguage().'\' ','inner'
+						'product_translate as tb3','tb1.id = tb3.objectid AND tb3.language = \''.$this->currentLanguage().'\' ','inner'
 					],
 									],
 				'where' => ['tb1.id' => $catalogueid],

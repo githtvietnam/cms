@@ -29,6 +29,14 @@ if(!function_exists('view_cells')){
 	}
 }
 
+if(!function_exists('get_first_img')){
+	function get_first_img(string $album = ''){
+		$image = json_decode($album);
+		$image = $image[0];
+		return $image;
+	}
+}
+
 
 if(!function_exists('gettime')){
 	function gettime($time, $type = 'H:i - d/m/Y'){
