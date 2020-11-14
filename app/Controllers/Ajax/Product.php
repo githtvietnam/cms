@@ -13,6 +13,32 @@ class Product extends BaseController{
 		
 	}
 
+	public function delete_all(){
+		$id = $this->request->getPost('id');
+		$module = $this->request->getPost('module');
+		$flag = $this->AutoloadModel->_update([
+			'table' => $module,
+			'data' => ['deleted_at' => 1],
+			'where_in' => $id,
+			'where_in_field' => 'id',
+		]);
+		echo $flag;die();
+	}
+
+	public function update_price(){
+		$id = $this->request->getPost('id');
+		$val = $this->request->getPost('val');
+		$field = $this->request->getPost('field');
+		$flag = $this->AutoloadModel->_update([
+			'table' => 'product',
+			'data' => [$field => $val],
+			'where' => [
+				'id' => $id
+			]
+		]);
+		echo $flag;die();
+	}
+
 	public function general_id(){
 		$param['suffix'] = $this->request->getPost('suffix');
 		$param['data_0'] = $this->request->getPost('data_0');

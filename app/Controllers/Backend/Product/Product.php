@@ -140,7 +140,7 @@ class Product extends BaseController{
 			 			$this->nestedsetbie->Get('level ASC, order ASC');
 						$this->nestedsetbie->Recursive(0, $this->nestedsetbie->Set());
 						$this->nestedsetbie->Action();
-			 			$session->setFlashdata('message-success', 'Tạo Nhóm Sản phẩm Thành Công! Hãy tạo danh mục tiếp theo.');
+			 			$session->setFlashdata('message-success', 'Tạo Sản phẩm Thành Công! Hãy tạo danh mục tiếp theo.');
 	 					return redirect()->to(BASE_URL.'backend/product/product/create');
 			 		}
 		        }else{
@@ -158,8 +158,9 @@ class Product extends BaseController{
 
 	public function update($id = 0){
 		$id = (int)$id;
+		$this->data['export_brand'] = $this->export_brand();
 		$this->data[$this->data['module']] = $this->AutoloadModel->_get_where([
-			'select' => 'tb1.id, tb2.title, tb2.canonical, tb2.description, tb2.content, tb2.meta_title, tb2.meta_description, tb1.image, tb1.album, tb1.publish',
+			'select' => 'tb1.id, tb1.catalogue, tb1.bar_code, tb1.brandid, tb1.catalogueid, tb1.model, tb1.price_promotion, tb1.price, tb1.productid, tb1.id, tb1.id, tb1.id, tb2.title, tb2.objectid, tb2.sub_title, tb2.sub_content, tb2.canonical,  tb2.content, tb2.meta_title, tb2.meta_description, tb1.album, tb1.publish',
 
 			'table' => $this->data['module'].' as tb1',
 			'join' =>  [
@@ -169,20 +170,25 @@ class Product extends BaseController{
 				],
 			'where' => ['tb1.id' => $id,'tb1.deleted_at' => 0]
 		]);
+		// pre($this->data[$this->data['module']]);
 
-		$this->data[$this->data['module']]['description'] = base64_decode($this->data[$this->data['module']]['description']);
 		$this->data[$this->data['module']]['content'] = base64_decode($this->data[$this->data['module']]['content']);
+		$this->data[$this->data['module']]['sub_title'] = json_decode(base64_decode($this->data[$this->data['module']]['sub_title']));
+		$this->data[$this->data['module']]['sub_content'] = json_decode(base64_decode($this->data[$this->data['module']]['sub_content']));
+		// pre($this->data[$this->data['module']]);
 		$session = session();
 		if(!isset($this->data[$this->data['module']]) || is_array($this->data[$this->data['module']]) == false || count($this->data[$this->data['module']]) == 0){
-			$session->setFlashdata('message-danger', 'Nhóm Sản phẩm không tồn tại');
+			$session->setFlashdata('message-danger', 'Sản phẩm không tồn tại');
  			return redirect()->to(BASE_URL.'backend/product/product/index');
 		}
 
 		if($this->request->getMethod() == 'post'){
 			$validate = $this->validation();
 			if ($this->validate($validate['validate'], $validate['errorValidate'])){
+				$sub_content = $this->request->getPost('sub_content');
 		 		$update = $this->store(['method' => 'update']);
 		 		$updateLanguage = $this->storeLanguage($id);
+		 		$updateLanguage = $this->convert_content($sub_content, $updateLanguage);
 		 		$flag = $this->AutoloadModel->_update([
 		 			'table' => $this->data['module'],
 		 			'where' => ['id' => $id],
@@ -200,7 +206,7 @@ class Product extends BaseController{
 					$this->nestedsetbie->Recursive(0, $this->nestedsetbie->Set());
 					$this->nestedsetbie->Action();
 
-		 			$session->setFlashdata('message-success', 'Cập Nhật Nhóm Sản phẩm Thành Công!');
+		 			$session->setFlashdata('message-success', 'Cập Nhật Sản phẩm Thành Công!');
  					return redirect()->to(BASE_URL.'backend/product/product/index');
 		 		}
 
@@ -220,7 +226,7 @@ class Product extends BaseController{
 
 		$id = (int)$id;
 		$this->data[$this->data['module']] = $this->AutoloadModel->_get_where([
-			'select' => 'tb1.id, tb2.title, tb1.lft, tb1.rgt',
+			'select' => 'tb1.id, tb2.title',
 			'table' => $this->data['module'].' as tb1',
 			'join' =>  [
 					[
@@ -231,7 +237,7 @@ class Product extends BaseController{
 		]);
 		$session = session();
 		if(!isset($this->data[$this->data['module']]) || is_array($this->data[$this->data['module']]) == false || count($this->data[$this->data['module']]) == 0){
-			$session->setFlashdata('message-danger', 'Nhóm Sản phẩm không tồn tại');
+			$session->setFlashdata('message-danger', 'Sản phẩm không tồn tại');
  			return redirect()->to(BASE_URL.'backend/product/product/index');
 		}
 
@@ -242,8 +248,7 @@ class Product extends BaseController{
 				'table' => $this->data['module'],
 				'data' => ['deleted_at' => 1],
 				'where' => [
-					'lft >=' => $this->data[$this->data['module']]['lft'],
-					'rgt <=' => $this->data[$this->data['module']]['rgt'],
+					'id' => $_id
 				]
 			]);
 
@@ -313,7 +318,7 @@ class Product extends BaseController{
 	private function condition_keyword($keyword = ''): string{
 		if(!empty($this->request->getGet('keyword'))){
 			$keyword = $this->request->getGet('keyword');
-			$keyword = '(tb2.title LIKE \'%'.$keyword.'%\')';
+			$keyword = '(title LIKE \'%'.$keyword.'%\')';
 		}
 		return $keyword;
 	}

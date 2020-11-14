@@ -317,7 +317,7 @@ $(document).ready(function(){
 										let text = (param.value == 1) ? '<span class="text-success">Active</span>' : '<span class="text-danger">Deactive</span>';
 										$('#post-'+id[i]).find('.td-status').html(text);			
 									}
-									swal("Xóa thành công!", "Các bản ghi đã được xóa khỏi danh sách.", "success");
+									swal("Thành công!", "Thao tác thực hiện thành công!", "success");
 								}
 						});
 				} else {

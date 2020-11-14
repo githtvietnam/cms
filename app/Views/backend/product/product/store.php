@@ -51,6 +51,28 @@
 							</div>
 						</div>
 						<div class="row attr-more">
+							<?php if(isset($product['sub_title']) && is_array($product['sub_title']) && count($product['sub_title'])){ ?>
+							<?php foreach ($product['sub_title'] as $key => $value) {?>
+								<?php $id = slug($value) ?>
+								<div class="col-lg-12 m-b desc-more">
+									<div class="row m-b">
+										<div class="col-lg-8">
+											<input type="text" name="sub_content[title][]" class="form-control" value="<?php echo $value ?>" placeholder="Tiêu đề">
+										</div>
+										<div class="col-lg-4">
+											<div class="uk-flex uk-flex-middle uk-flex-space-between">
+												<a href="" title="" data-target="<?php echo $id ?>" class="uploadMultiImage">Upload hình ảnh</a>
+												<button class="btn btn-danger delete-attr" type="button"><i class="fa fa-trash"></i></button>
+											</div>
+										</div>
+									</div>
+									<div class="row">
+										<div class="col-lg-12" >
+											<textarea name="sub_content[description][]" class="form-control ck-editor" id="<?php echo $id ?>" placeholder="Mô tả"><?php echo $product['sub_content'][$key] ?></textarea>
+										</div>
+									</div>
+								</div>
+							<?php }} ?>
 						</div>
 					</div>
 				</div>
@@ -58,7 +80,6 @@
 					<div class="ibox-title">
 						<div class="uk-flex uk-flex-middle uk-flex-space-between">
 							<h5>Album Ảnh </h5>
-
 							<div class="uk-flex uk-flex-middle uk-flex-space-between">
 								<div class="edit">
 									<a onclick="BrowseServerAlbum(this);return false;" href="" title="" class="upload-picture">Chọn hình</a>
@@ -155,9 +176,9 @@
 									<span class="label-title">Mã sản phẩm <b class="text-danger">(*)</b></span>
 								</label>
 								<script>
-									var productid = '<?php echo isset($store['productid']) ? $store['productid'] : $productid ?>'
+									var productid = '<?php echo isset($product['productid']) ? $product['productid'] : $productid ?>'
 								</script>
-								<?php echo form_input('productid', set_value('productid', (isset($store['productid'])) ? $store['productid'] : $productid), 'class="form-control va-uppercase productid" readonly placeholder="" autocomplete="off"');?>
+								<?php echo form_input('productid', set_value('productid', (isset($product['productid'])) ? $product['productid'] : $productid), 'class="form-control va-uppercase productid" readonly placeholder="" autocomplete="off"');?>
 							</div>
 							<div class="col-lg-6 mb15">
 								<label class="control-label">

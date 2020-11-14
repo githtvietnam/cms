@@ -227,15 +227,15 @@ class Article extends BaseController{
 		}
 
 		if($this->request->getPost('delete')){
-			// $_id = $this->request->getPost('id');
+			$_id = $this->request->getPost('id');
 		
-			// $flag = $this->AutoloadModel->_update([
-			// 	'table' => $this->data['module'],
-			// 	'data' => ['deleted_at' => 1],
-			// 	'where' => [
-			// 		'id' => $_id
-			// 	]
-			// ]);
+			$flag = $this->AutoloadModel->_update([
+				'table' => $this->data['module'],
+				'data' => ['deleted_at' => 1],
+				'where' => [
+					'id' => $_id
+				]
+			]);
 
 			$session = session();
 			if($flag > 0){
