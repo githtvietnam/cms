@@ -79,7 +79,6 @@ class Product extends BaseController{
 				'order_by'=> 'tb1.id desc',
 				'group_by' => 'tb1.id'
 			], TRUE);
-			// pre($this->data['productList']);
 		}
 		$this->data['dropdown'] = $this->nestedsetbie->dropdown();
 		$this->data['template'] = 'backend/product/product/index';
@@ -196,12 +195,12 @@ class Product extends BaseController{
 		 		]);
 
 		 		if($flag > 0){
-		 			$flag = $this->AutoloadModel->_update([
+		 			$this->AutoloadModel->_update([
 			 			'table' => 'product_translate',
 			 			'where' => ['objectid' => $id, 'module' => $this->data['module']],
 			 			'data' => $updateLanguage
 			 		]);
-		 			$this->insert_router(['method' => 'update','id' => $flag]);
+		 			$this->insert_router(['method' => 'update','id' => $id]);
 		 			$this->nestedsetbie->Get('level ASC, order ASC');
 					$this->nestedsetbie->Recursive(0, $this->nestedsetbie->Set());
 					$this->nestedsetbie->Action();
@@ -411,7 +410,7 @@ class Product extends BaseController{
 		$languageList = $this->AutoloadModel->_get_where([
 			'select' => 'id, canonical',
 			'table' => 'language',
-			'where' => ['publish' => 1,'deleted_at' => 0,'canonical !=' =>  $this->currentLanguage()]
+			'where' => ['publish' => 1,'deleted_at' => 0,'canonical !=' => $this->currentLanguage()]
 		], TRUE);
 
 		
@@ -419,7 +418,7 @@ class Product extends BaseController{
 		$i = 3;
 		if(isset($languageList) && is_array($languageList) && count($languageList)){
 			foreach($languageList as $key => $val){
-				$select = $select.'(SELECT COUNT(objectid) FROM product_translate WHERE product_translate.objectid = tb1.id AND product_translate.module = "product_catalogue" AND product_translate.language = "'.$val['canonical'].'") as '.$val['canonical'].'_detect, ';
+				$select = $select.'(SELECT COUNT(objectid) FROM product_translate WHERE product_translate.objectid = tb1.id AND product_translate.module = "product" AND product_translate.language = "'.$val['canonical'].'") as '.$val['canonical'].'_detect, ';
 				$i++;
 			}	
 		}
