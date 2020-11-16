@@ -358,3 +358,14 @@ input[type=checkbox], input[type=radio]{
 .brand-content input{
 	width: 100%
 }
+
+#toogle_readonly{
+	position: absolute;
+    width: 17px;
+    height: 17px;
+    border: 0;
+    right: 8px;
+    top: 8px;
+    cursor: pointer;
+	user-select: none;
+}

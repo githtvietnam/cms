@@ -8,6 +8,10 @@ $(document).on('click','.add-attr',function(){
 	render_attr();
 })
 
+$(document).on('click','.ibox-title.ui-sortable-handle',function(){
+	console.log(1)
+})
+
 $(document).on('click','.delete-all', function(){
 	let id = [];
 	let _this = $(this);
@@ -54,6 +58,10 @@ $(document).on('click','.delete-all', function(){
 	return false;
 });
 
+
+$(document).ready(function(){
+	WinMove();
+});
 
 
 $(document).on('click','.delete-attr',function(){
@@ -164,27 +172,58 @@ $(document).on('change' ,'.index_update_price' ,function(){
 	});	
 })
 
+
 function render_attr(){
 	let html ='';
 	var id = 'title_' + count;
-	html = html + '<div class="col-lg-12 m-b desc-more">'
-	html = html + '<div class="row m-b">'
-	html = html + '<div class="col-lg-8">'
-	html = html + '<input type="text" name="sub_content[title][]" class="form-control" placeholder="Tiêu đề">'
-	html = html + '</div>'
-	html = html + '<div class="col-lg-4">'
-	html = html + '<div class="uk-flex uk-flex-middle uk-flex-space-between">'
-	html = html + '<a href="" title="" data-target="'+id+'" class="uploadMultiImage">Upload hình ảnh</a>'
-	html = html + '<button class="btn btn-danger delete-attr" type="button"><i class="fa fa-trash"></i></button>'
-	html = html + '</div>'
-	html = html + '</div>'
-	html = html + '</div>'
-	html = html + '<div class="row">'
-	html = html + '<div class="col-lg-12" >'
-	html = html + '<textarea name="sub_content[description][]" class="form-control ck-editor" id="'+id+'" placeholder="Mô tả"></textarea>'
-	html = html + '</div>'
-	html = html + '</div>'
-	html = html + '</div>';
+
+	html = html + '<div class="ibox desc-more" style="opacity: 1;">';
+        html = html + '<div class="ibox-title ui-sortable-handle">';
+        	html = html + '<div class="uk-flex uk-flex-middle">';
+                html = html + '<div class="col-lg-8">';
+					html = html + '<input type="text" name="sub_content[title][]" class="form-control" value="" placeholder="Tiêu đề">';
+				html = html + '</div>';
+				html = html + '<div class="col-lg-4">';
+					html = html + '<div class="uk-flex uk-flex-middle uk-flex-space-between">';
+						html = html + '<a href="" title="" data-target="'+id+'" class="uploadMultiImage">Upload hình ảnh</a>';
+		                html = html + '<div class="ibox-tools">';
+		                    html = html + '<a class="collapse-link ui-sortable">';
+		                        html = html + '<i class="fa fa-chevron-up"></i>';
+		                    html = html + '</a>';
+		                    html = html + '<a class="close-link">';
+		                        html = html + '<i class="fa fa-times"></i>';
+		                    html = html + '</a>';
+		                html = html + '</div>';
+					html = html + '</div>';
+				html = html + '</div>';
+        		
+        	html = html + '</div>';
+        html = html + '</div>';
+        html = html + '<div class="ibox-content" style="">';
+        	html = html + '<div class="row">';
+                html = html + '<div class="col-lg-12" >';
+                	html = html + '<textarea name="sub_content[description][]" class="form-control ck-editor" id="'+id+'" placeholder="Mô tả"></textarea>';
+				html = html + '</div>';
+			html = html + '</div>	';
+        html = html + '</div>';
+    html = html + '</div>';
+
 	$('.attr-more').prepend(html);
 	ckeditor5(id);
+}
+
+// Dragable panels
+function WinMove() {
+    var element = "[class*=col]";
+    var handle = ".ibox-title";
+    var connect = "[class*=col]";
+    $(element).sortable(
+        {
+            handle: handle,
+            connectWith: connect,
+            tolerance: 'pointer',
+            forcePlaceholderSize: true,
+            opacity: 0.8
+        })
+        .disableSelection();
 }

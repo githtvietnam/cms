@@ -27,11 +27,23 @@
 									<?php echo form_input('title', validate_input(set_value('title', (isset($product['title'])) ? $product['title'] : '')), 'class="form-control title" placeholder="" id="title" autocomplete="off"'); ?>
 								</div>
 							</div>
-							
 						</div>
 						<div class="row mb15">
-							<div class="col-lg-12 mb15">
-								<div class="form-row">
+							<div class="col-lg-12">
+								<div class="form-row form-description">
+									<div class="uk-flex uk-flex-middle uk-flex-space-between">
+										<label class="control-label text-left">
+											<span>Mô tả ngắn</span>
+										</label>
+										<a href="" title="" data-target="description" class="uploadMultiImage">Upload hình ảnh</a>
+									</div>
+									<?php echo form_textarea('description', htmlspecialchars_decode(html_entity_decode(set_value('description', (isset($product['description'])) ? $product['description'] : ''))), 'class="form-control ck-editor" id="description" placeholder="" autocomplete="off"');?>
+								</div>
+							</div>
+						</div>
+						<div class="row">
+							<div class="col-lg-12	">
+								<div class="form-row mb15">
 									<div class="uk-flex uk-flex-middle uk-flex-space-between">
 										<label class="control-label text-left">
 											<span>Nội dung</span>
@@ -40,8 +52,6 @@
 									</div>
 									<?php echo form_textarea('content', htmlspecialchars_decode(html_entity_decode(set_value('content', (isset($product['content'])) ? $product['content'] : ''))), 'class="form-control ck-editor" id="content" placeholder="" autocomplete="off"');?>
 								</div>
-							</div>
-							<div class="col-lg-12">	
 								<div class="uk-flex uk-flex-middle uk-flex-space-between">
 									<label class="control-label text-left ">
 										<span>Nội dung mở rộng</span>
@@ -49,31 +59,49 @@
 									<a href="" title="" class="add-attr" onclick="return false;">Thêm nội dung +</a>
 								</div>
 							</div>
+							
 						</div>
-						<div class="row attr-more">
-							<?php if(isset($product['sub_title']) && is_array($product['sub_title']) && count($product['sub_title'])){ ?>
+						
+					</div>
+				</div>
+				<div class="ibox">
+					<div class="row" id="sortable-view">
+					    <div class="col-lg-12 ui-sortable attr-more">
+					    	<?php if(isset($product['sub_title']) && is_array($product['sub_title']) && count($product['sub_title'])){ ?>
 							<?php foreach ($product['sub_title'] as $key => $value) {?>
 								<?php $id = slug($value) ?>
-								<div class="col-lg-12 m-b desc-more">
-									<div class="row m-b">
-										<div class="col-lg-8">
-											<input type="text" name="sub_content[title][]" class="form-control" value="<?php echo $value ?>" placeholder="Tiêu đề">
-										</div>
-										<div class="col-lg-4">
-											<div class="uk-flex uk-flex-middle uk-flex-space-between">
-												<a href="" title="" data-target="<?php echo $id ?>" class="uploadMultiImage">Upload hình ảnh</a>
-												<button class="btn btn-danger delete-attr" type="button"><i class="fa fa-trash"></i></button>
+						        <div class="ibox desc-more" style="opacity: 1;">
+						            <div class="ibox-title ui-sortable-handle">
+						            	<div class="uk-flex uk-flex-middle">
+							                <div class="col-lg-8">
+												<input type="text" name="sub_content[title][]" class="form-control" value="<?php echo $value ?>" placeholder="Tiêu đề">
 											</div>
-										</div>
-									</div>
-									<div class="row">
-										<div class="col-lg-12" >
-											<textarea name="sub_content[description][]" class="form-control ck-editor" id="<?php echo $id ?>" placeholder="Mô tả"><?php echo $product['sub_content'][$key] ?></textarea>
-										</div>
-									</div>
-								</div>
-							<?php }} ?>
-						</div>
+											<div class="col-lg-4">
+												<div class="uk-flex uk-flex-middle uk-flex-space-between">
+													<a href="" title="" data-target="<?php echo $id ?>" class="uploadMultiImage">Upload hình ảnh</a>
+									                <div class="ibox-tools">
+									                    <a class="collapse-link ui-sortable">
+									                        <i class="fa fa-chevron-up"></i>
+									                    </a>
+									                    <a class="close-link">
+									                        <i class="fa fa-times"></i>
+									                    </a>
+									                </div>
+												</div>
+											</div>
+						            		
+						            	</div>
+						            </div>
+						            <div class="ibox-content" style="">
+						            	<div class="row">
+							                <div class="col-lg-12" >
+							                	<textarea name="sub_content[description][]" class="form-control ck-editor" id="<?php echo $id ?>" placeholder="Mô tả"><?php echo $product['sub_content'][$key] ?></textarea>
+											</div>
+										</div>	
+						            </div>
+						        </div>
+					        <?php }} ?>
+					    </div>
 					</div>
 				</div>
 				<div class="ibox mb20 album">
@@ -171,31 +199,20 @@
 								</label>
 								<?php echo form_input('made_in', set_value('made_in', (isset($product['made_in'])) ? $product['made_in'] : ''), 'class="form-control" placeholder="Việt Nam" id="made_in" autocomplete="off"'); ?>
 							</div>
-							<div class="col-lg-6 mb15">
-								<label class="control-label">
+							<div class="col-lg-6 mb15 ">
+								<label class="control-label ">
 									<span class="label-title">Mã sản phẩm <b class="text-danger">(*)</b></span>
 								</label>
 								<script>
 									var productid = '<?php echo isset($product['productid']) ? $product['productid'] : $productid ?>'
 								</script>
-								<?php echo form_input('productid', set_value('productid', (isset($product['productid'])) ? $product['productid'] : $productid), 'class="form-control va-uppercase productid" readonly placeholder="" autocomplete="off"');?>
-							</div>
-							<div class="col-lg-6 mb15">
-								<label class="control-label">
-									<span class="label-title"><b class="text-danger">Chỉnh sửa mã sản phẩm</b></span>
-								</label>
-								<div class="form-checkbox">
-									<div>
-										<input type="checkbox" id="toogle_readonly" name="toogle_readonly">
-	  									<label for="toogle_readonly">Cho phép chỉnh sửa Mã sản phẩm</label>
-									</div>
-									<div>
-	  									<input type="checkbox" id="id_auto" name="id_auto">
-	  									<label for="id_auto">Cho phép tự động tạo Mã sản phẩm</label>
-									</div>
+								<div class="dd-item">
+									<?php echo form_input('productid', set_value('productid', (isset($product['productid'])) ? $product['productid'] : $productid), 'class="form-control va-uppercase productid" readonly placeholder="" autocomplete="off"');?>
+									<input type="checkbox" id="toogle_readonly" name="toogle_readonly">
+									
 								</div>
 							</div>
-							<div class="col-lg-12 mb15">
+							<div class="col-lg-6 mb15">
 								<div class="uk-flex-space-between uk-flex-middle uk-flex">
 									<label class="control-label ">
 										<span>Thương hiệu</span>

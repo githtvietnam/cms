@@ -12,10 +12,10 @@
         <ul class="nav metismenu" id="side-menu">
             <li class="nav-header">
                 <div class="dropdown profile-element"> <span>
-                    <img alt="image" class="img-circle" src="<?php echo $user['image']; ?>" style="max-width:48px;height:48px;" />
+                    <img alt="image" class="img-circle" src="<?php echo $user['image']; ?>" style="min-width:48px;height:48px;" />
                      </span>
                     <a data-toggle="dropdown" class="dropdown-toggle" href="<?php echo site_url('profile') ?>">
-                    <span class="clear"> <span class="block m-t-xs"> <strong class="font-bold"><?php echo $user['fullname'] ?></strong>
+                    <span class="clear"> <span class="block m-t-xs"> <strong class="font-bold" style="color:#fff"><?php echo $user['fullname'] ?></strong>
                      </span> <span class="text-muted text-xs block">Art Director <b class="caret"></b></span> </span> </a>
                     <ul class="dropdown-menu animated fadeInRight m-t-xs">
                         <li><a href="profile.html">Profile</a></li>

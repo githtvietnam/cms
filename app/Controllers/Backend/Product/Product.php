@@ -159,7 +159,7 @@ class Product extends BaseController{
 		$id = (int)$id;
 		$this->data['export_brand'] = $this->export_brand();
 		$this->data[$this->data['module']] = $this->AutoloadModel->_get_where([
-			'select' => 'tb1.id, tb1.catalogue, tb1.bar_code, tb1.brandid, tb1.catalogueid, tb1.model, tb1.price_promotion, tb1.price, tb1.productid, tb1.id, tb1.id, tb1.id, tb2.title, tb2.objectid, tb2.sub_title, tb2.sub_content, tb2.canonical,  tb2.content, tb2.meta_title, tb2.meta_description, tb1.album, tb1.publish',
+			'select' => 'tb1.id, tb1.catalogue, tb1.bar_code, tb1.brandid, tb1.catalogueid, tb1.model, tb1.price_promotion, tb1.price, tb1.productid, tb1.id, tb1.id, tb1.id, tb2.title, tb2.objectid, tb2.sub_title, tb2.sub_content,tb2.description, tb2.canonical,  tb2.content, tb2.meta_title, tb2.meta_description, tb1.album, tb1.publish',
 
 			'table' => $this->data['module'].' as tb1',
 			'join' =>  [
@@ -172,6 +172,7 @@ class Product extends BaseController{
 		// pre($this->data[$this->data['module']]);
 
 		$this->data[$this->data['module']]['content'] = base64_decode($this->data[$this->data['module']]['content']);
+		$this->data[$this->data['module']]['description'] = base64_decode($this->data[$this->data['module']]['description']);
 		$this->data[$this->data['module']]['sub_title'] = json_decode(base64_decode($this->data[$this->data['module']]['sub_title']));
 		$this->data[$this->data['module']]['sub_content'] = json_decode(base64_decode($this->data[$this->data['module']]['sub_content']));
 		// pre($this->data[$this->data['module']]);
@@ -330,6 +331,7 @@ class Product extends BaseController{
 			'canonical' => $this->request->getPost('canonical'),
 			'made_in' => $this->request->getPost('made_in'),
 			'content' => base64_encode($this->request->getPost('content')),
+			'description' => base64_encode($this->request->getPost('description')),
 			'meta_title' => validate_input($this->request->getPost('meta_title')),
 			'meta_description' => validate_input($this->request->getPost('meta_description')),
 			'language' => $this->currentLanguage(),
