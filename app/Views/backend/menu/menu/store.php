@@ -76,13 +76,10 @@
                     <div class="panel-body va-panel-body">
                         <div class="panel-group" id="accordion">
                             <?php 
-                            // pre($object);
                                 if(isset($object) && is_array($object) && count($object)){
                                     foreach ($object as $key => $value) {
-                                        
                                         $object_menu = object_menu($value[0]['module'],$value[0]['translate'], $languageABC);
 
-                                        // pre($object_menu);
                             ?>
                                 <div class="panel panel-default va-general" data-id="#<?php echo $value[0]['module'] ?>">
                                     <a data-toggle="collapse" data-parent="#accordion" href="#<?php echo $value[0]['module'] ?>_collapse" aria-expanded="true" class="collapsed va-collapse panel-heading va-panel-heading">

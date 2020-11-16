@@ -239,13 +239,19 @@ class Menu extends BaseController{
 		}
 
 		foreach ($configbieList as $key => $value) {
-			foreach ($configbieList[$key] as $keyChild => $valChild) {
+			if($value == []){
+
+				$configbieList[$key][$key]['name'] =  $configbie['article']['title'];
+				$configbieList[$key][$key]['translate'] =  $configbie['article']['translate'];
+				$configbieList[$key][$key]['module'] =  'article';
+
+			}else{
+				foreach ($configbieList[$key] as $keyChild => $valChild) {
 					$configbieList[$key][$keyChild]['name'] =  $configbie[$value[$keyChild]['module']]['title'];
 					$configbieList[$key][$keyChild]['translate'] =  $configbie[$value[$keyChild]['module']]['translate'];
-
+				}
 			}
 		}
-		// pre($configbieList);
 
 		$this->data['languageABC'] = $language;
 		$this->data['object'] = $configbieList;

@@ -146,7 +146,7 @@ class Translate extends BaseController
 		$this->data['module'] = $module;
 		$moduleExtract = explode('_', $module);
 		$this->data['object'] = $this->AutoloadModel->_get_where([
-			'select' => 'tb1.id, tb2.title, tb2.content, tb2.sub_title, tb2.sub_content, tb2.made_in',
+			'select' => 'tb1.id, tb2.title, tb2.content, tb2.sub_title, tb2.sub_content, tb2.made_in, tb2.description',
 			'table' => $module.' as tb1',
 			'join' => [
 				[
@@ -172,8 +172,10 @@ class Translate extends BaseController
 			],
 			'where' => ['tb1.id' => $objectid]
 		]);
-		$this->data['translate']['sub_title'] = json_decode(base64_decode($this->data['translate']['sub_title']));
-		$this->data['translate']['sub_content'] = json_decode(base64_decode($this->data['translate']['sub_content']));
+		if(isset($this->data['translate']) && is_array($this->data['translate']) && count($this->data['translate'])){
+			$this->data['translate']['sub_title'] = json_decode(base64_decode($this->data['translate']['sub_title']));
+			$this->data['translate']['sub_content'] = json_decode(base64_decode($this->data['translate']['sub_content']));
+		}
 		$this->data['router'] = $this->AutoloadModel->_get_where([
 			'select' => 'view,',
 			'table' => 'router',
@@ -193,6 +195,7 @@ class Translate extends BaseController
 		 			'meta_title' => $this->request->getPost('meta_title'),
 		 			'meta_description' => $this->request->getPost('meta_description'),
 		 			'content' => base64_encode(json_encode(validate_input($this->request->getPost('content')))),
+		 			'description' => base64_encode(json_encode(validate_input($this->request->getPost('description')))),
 		 			'sub_title' => base64_encode(json_encode($sub_content['title'])),
 		 			'sub_content' => base64_encode(json_encode($sub_content['description'])),
 		 		];
