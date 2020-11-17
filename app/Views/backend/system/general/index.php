@@ -173,7 +173,7 @@
                                                     </div>
                                                     <select class="form-control" style="width: 100%;" name="<?php echo 'config['.$key.'_'.$keyVal.']'; ?>" id="<?php echo 'config['.$key.'_'.$keyVal.']'; ?>">
                                                         <?php foreach ($val['select'] as $keySelect => $valSelect) { ?>
-                                                            <option value="<?php echo $keySelect ?>" <?php echo ($keySelect == $temp[$keyword] ? 'selected' :'') ?>><?php echo $valSelect ?></option>
+                                                            <option value="<?php echo $keySelect ?>" <?php echo (isset($temp[$keyword]) ? ($keySelect == $temp[$keyword] ? 'selected' :'') : '') ?>><?php echo $valSelect ?></option>
                                                         <?php } ?>
                                                     </select>
 
@@ -181,7 +181,6 @@
                                             </div>
                                         </div>
                                     <?php } ?>
-
                                     <?php 
                                         if($val['type'] == 'select2'){
                                     ?>

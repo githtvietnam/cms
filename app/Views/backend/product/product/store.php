@@ -1,3 +1,14 @@
+<?php  
+    helper('form', 'data');
+    $baseController = new App\Controllers\BaseController();
+    $language = $baseController->currentLanguage();
+    $get_catalogue = check_type_canonical($language);
+    if($get_catalogue['content'] == 'silo'){
+    	$class = 'get_catalogue';
+    }else{
+    	$class = '';
+    }
+?>
 <form method="post" action="" >
 	<div class="wrapper wrapper-content animated fadeInRight">
 		<div class="row">
@@ -71,8 +82,8 @@
 							<?php foreach ($product['sub_title'] as $key => $value) {?>
 								<?php $id = slug($value) ?>
 						        <div class="ibox desc-more" style="opacity: 1;">
-						            <div class="ibox-title ui-sortable-handle">
-						            	<div class="uk-flex uk-flex-middle">
+						            <div class="ibox-title ui-sortable-handle ">
+						            	<div class="uk-flex uk-flex-middle row">
 							                <div class="col-lg-8">
 												<input type="text" name="sub_content[title][]" class="form-control" value="<?php echo $value ?>" placeholder="Tiêu đề">
 											</div>
@@ -177,7 +188,7 @@
 								<label class="control-label ">
 									<span>Giá khuyến mại</span>
 								</label>
-								<?php echo form_input('promotion_price', set_value('promotion_price', (isset($product['promotion_price'])) ? $product['promotion_price'] : ''), 'class="form-control price int" placeholder="" id="promotion_price" autocomplete="off"'); ?>
+								<?php echo form_input('promotion_price', set_value('promotion_price', (isset($product['price_promotion'])) ? $product['price_promotion'] : ''), 'class="form-control price int" placeholder="" id="promotion_price" autocomplete="off"'); ?>
 							</div>
 						</div>
 						<div class="row">
@@ -322,7 +333,7 @@
 									<small class="text-danger">Chọn [Root] Nếu không có danh mục cha</small>
 								</div>
 								<div class="form-row">
-									<?php echo form_dropdown('catalogueid', $dropdown, set_value('catalogueid', (isset($product['catalogueid'])) ? $product['catalogueid'] : ''), 'class="form-control m-b select2 get_catalogue"');?>
+									<?php echo form_dropdown('catalogueid', $dropdown, set_value('catalogueid', (isset($product['catalogueid'])) ? $product['catalogueid'] : ''), 'class="form-control m-b select2 '.$class.'"');?>
 								</div>
 								<script>
 									var catalogue = '<?php echo (isset($_POST['catalogue'])) ? json_encode($_POST['catalogue']) : ((isset($product['catalogue']) && $product['catalogue'] != null) ? $product['catalogue'] : '');  ?>';	

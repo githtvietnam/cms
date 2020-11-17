@@ -117,8 +117,9 @@ class ConfigBie{
 			'label' => 'Cấu hình website',
 			'description' => 'Cài đặt đầy đủ Cấu hình của website. Trạng thái website, index google, ...',
 			'value' => array(
-				'status' => array('type' => 'select', 'label' => 'Trạng thái website','select' => array(0 => 'Mở cửa Website', 1 => 'Đóng cửa website')),
-				'index' => array('type' => 'select2', 'label' => 'Index Google','select' => array(0 => 'Có', 1 => 'Không')),
+				'status' => array('type' => 'select2', 'label' => 'Trạng thái website','select' => array(0 => 'Mở cửa Website', 1 => 'Đóng cửa website')),
+				'index' => array('type' => 'select2', 'label' => 'Index Google','select' => array(1 => 'Có', 0 => 'Không')),
+				'canonical' => array('type' => 'select2', 'label' => 'Đường dẫn','select' => array('normal' => 'Normal', 'silo' => 'Silo')),
 			),
 		);
 

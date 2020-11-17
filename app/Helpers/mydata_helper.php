@@ -18,6 +18,23 @@ if (! function_exists('get_data')){
 	 	return $object;
 	}
 }
+
+if (! function_exists('check_type_canonical')){
+	function check_type_canonical($language = ''){
+		$model = new AutoloadModel();
+
+	 	$object = $model->_get_where([
+            'select' => 'content',
+            'table' => 'system_translate',
+            'where' => [
+            	'language' => $language,
+            	'keyword' => 'website_canonical'
+            ],
+        ]);
+	 	return $object;
+	}
+}
+
 if (! function_exists('separateArray')){
 	function separateArray($param= [], $target=[]){
 		$data=[];

@@ -33,12 +33,11 @@
             <li class="<?php echo ( $uriModule == 'product') ? 'active'  : '' ?>">
                 <a href="index.html"><i class="fa fa-desktop"></i> <span class="nav-label">QL Sản Phẩm</span> <span class="fa arrow"></span></a>
                 <ul class="nav nav-second-level">
-                   
-                    <li class="<?php echo ( $uriModule_name == 'catalogue') ? 'active'  : '' ?>"><a href="<?php echo base_url('backend/product/catalogue/index') ?>">QL Nhóm Sản Phẩm</a></li>
+                    <li class="<?php echo ( $uriModule_name == 'product') ? 'active'  : '' ?>"><a href="<?php echo base_url('backend/product/product/index') ?>">QL Sản Phẩm</a></li>
                     <li class="<?php echo ( $uriModule_name == 'brand') ? 'active'  : '' ?>"><a href="<?php echo base_url('backend/product/brand/brand/index') ?>">QL Thương Hiệu</a></li>
                     <li class="<?php echo ( $uriModule_name == 'store') ? 'active'  : '' ?>"><a href="<?php echo base_url('backend/product/store/index') ?>">QL Cửa Hàng</a></li>
                     <li class="<?php echo ( $uriModule_name == 'warehouse') ? 'active'  : '' ?>"><a href="<?php echo base_url('backend/product/warehouse/index') ?>">QL Kho Hàng</a></li>
-                    <li class="<?php echo ( $uriModule_name == 'product') ? 'active'  : '' ?>"><a href="<?php echo base_url('backend/product/product/index') ?>">QL Sản Phẩm</a></li>
+                    
                 </ul>
             </li>
             <li class="<?php echo ( $uriModule == 'article') ? 'active'  : '' ?>">

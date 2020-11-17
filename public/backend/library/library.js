@@ -143,18 +143,25 @@ $(document).ready(function(){
 			$('.g-link').text(BASE_URL + slugTitle + '.html');
 		}
 	});
-
+	
 	$(document).on('change', '.get_catalogue', function(){
 		let _this = $(this);
 		let val = $('.title').val();
-		let text = _this.find('option:selected').text();
-		let text_after = text.replace("|-----", "");
-		text_after = slug(text_after);
-		val = slug(val);
-		text_after = text_after+'/';
-		let new_text = text_after+val
-		$('.canonical').val(new_text)
-		$('.g-link').text(BASE_URL + new_text + '.html');
+
+		if(_this.val() == 0){
+			val = slug(val);
+			$('.canonical').val(val)
+			$('.g-link').text(BASE_URL + val + '.html');
+		}else{
+			let text = _this.find('option:selected').text();
+			let text_after = text.replace("|-----", "");
+			text_after = slug(text_after);
+			val = slug(val);
+			text_after = text_after+'/';
+			let new_text = text_after+val
+			$('.canonical').val(new_text)
+			$('.g-link').text(BASE_URL + new_text + '.html');
+		}
 	})
 	
 	$(document).on('keyup','.canonical', function(){

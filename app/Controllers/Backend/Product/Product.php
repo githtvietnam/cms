@@ -169,7 +169,6 @@ class Product extends BaseController{
 				],
 			'where' => ['tb1.id' => $id,'tb1.deleted_at' => 0]
 		]);
-		// pre($this->data[$this->data['module']]);
 
 		$this->data[$this->data['module']]['content'] = base64_decode($this->data[$this->data['module']]['content']);
 		$this->data[$this->data['module']]['description'] = base64_decode($this->data[$this->data['module']]['description']);

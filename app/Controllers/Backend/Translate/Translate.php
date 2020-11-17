@@ -163,7 +163,7 @@ class Translate extends BaseController
 			return redirect()->to(BASE_URL.'backend/'.$moduleExtract[0].'/'.((count($moduleExtract) == 1) ? $moduleExtract[0] : $moduleExtract[1]).'/index');
 		}
 		$this->data['translate'] = $this->AutoloadModel->_get_where([
-			'select' => 'tb1.id, tb2.title, tb2.canonical, tb2.sub_title, tb2.content,tb2.sub_content, tb2.meta_title, tb2.meta_description, tb2.made_in',
+			'select' => 'tb1.id, tb2.title, tb2.canonical, tb2.sub_title, tb2.content,tb2.sub_content, tb2.meta_title, tb2.meta_description, tb2.made_in,tb2.description',
 			'table' => $module.' as tb1',
 			'join' => [
 				[

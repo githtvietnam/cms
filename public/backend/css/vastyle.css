@@ -2,7 +2,9 @@
 	color: #23282d;
 	font-size: 20px
 }
-
+.ml20{
+	margin-left: 20px;
+}
 
 ul.tabs-content,
 ul.tabs{
@@ -369,3 +371,4 @@ input[type=checkbox], input[type=radio]{
     cursor: pointer;
 	user-select: none;
 }
+

@@ -56,7 +56,6 @@
             ASSET_BACKEND.'js/plugins/toastr/toastr.min.js',
             ASSET_BACKEND.'js/plugins/sweetalert/sweetalert.min.js',
             ASSET_BACKEND.'plugin/jquery-ui.js',
-            ASSET_BACKEND.'plugin/toastr.min.js',
             ASSET_BACKEND.'plugin/ckfinder/ckfinder.js',
             ASSET_BACKEND.'plugin/ckeditor5/build/ckeditor.js',
             ASSET_BACKEND.'library/ckfinder.js',

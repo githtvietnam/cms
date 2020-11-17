@@ -144,6 +144,7 @@ $('#insert_form').on("submit", function(event) {
 		function(data){
 			let json = JSON.parse(data);
 			$('#insert_form')[0].reset();
+            $('#product_add_brand .brand-avatar img').attr('src', 'public/not-found.png');
             $('#product_add_brand').modal('hide');
             $('.brand_select').append('<option value=' + json.value + '>' + json.title + '</option>')
 		});	
@@ -214,16 +215,15 @@ function render_attr(){
 
 // Dragable panels
 function WinMove() {
-    var element = "[class*=col]";
+    var element = ".attr-more";
     var handle = ".ibox-title";
-    var connect = "[class*=col]";
-    $(element).sortable(
-        {
-            handle: handle,
-            connectWith: connect,
-            tolerance: 'pointer',
-            forcePlaceholderSize: true,
-            opacity: 0.8
-        })
-        .disableSelection();
+    var connect = ".attr-more";
+    $(element).sortable({
+        handle: handle,
+        connectWith: connect,
+        tolerance: 'pointer',
+        forcePlaceholderSize: true,
+        opacity: 0.8
+    })
+    .disableSelection();
 }
