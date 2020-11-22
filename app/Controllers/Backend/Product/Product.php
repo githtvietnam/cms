@@ -46,6 +46,7 @@ class Product extends BaseController{
 			'where' => $where,
 			'count' => TRUE
 		]);
+
 		if($config['total_rows'] > 0){
 			$config = pagination_config_bt(['url' => 'backend/product/product/index','perpage' => $perpage], $config);
 
@@ -59,7 +60,7 @@ class Product extends BaseController{
 			$catalogue = $this->condition_catalogue();
 			$languageDetact = $this->detect_language();
 			$this->data['productList'] = $this->AutoloadModel->_get_where([
-				'select' => 'tb1.id, tb1.price,tb1.order, tb1.price_promotion, tb1.bar_code, tb1.model, tb1.brandid, tb1.album,  tb2.catalogueid, tb1.publish, tb3.title as product_title, tb1.catalogue, tb2.objectid, tb3.content, tb3.sub_title, tb3.sub_content, tb3.canonical, tb3.meta_title, tb3.meta_description, tb3.made_in, (SELECT title FROM product_translate INNER JOIN product ON product_translate.objectid = product.catalogueid AND product_translate.module = "product_catalogue" AND product_translate.language = \''.$this->currentLanguage().'\' WHERE tb1.catalogueid = product_translate.objectid GROUP BY product.id ) as cat_title, (SELECT objectid FROM product_translate INNER JOIN product ON product_translate.objectid = product.catalogueid AND product_translate.module = "product_catalogue" AND product_translate.language = \''.$this->currentLanguage().'\' WHERE tb1.catalogueid = product_translate.objectid GROUP BY product.id ) as cat_id, '.((isset($languageDetact['select'])) ? $languageDetact['select'] : ''),
+				'select' => 'tb1.id, tb1.catalogueid as cat_id, tb1.price,tb1.order, tb1.price_promotion, tb1.bar_code, tb1.model, tb1.brandid, tb1.album,  tb2.catalogueid, tb1.publish, tb3.title as product_title, tb1.catalogue, tb2.objectid, tb3.content, tb3.sub_title, tb3.sub_content, tb3.canonical, tb3.meta_title, tb3.meta_description, tb3.made_in, tb4.title as cat_title ,'.((isset($languageDetact['select'])) ? $languageDetact['select'] : ''),
 				'table' => $this->data['module'].' as tb1',
 				'where' => $where,
 				'where_in' => $catalogue['where_in'],
@@ -72,6 +73,9 @@ class Product extends BaseController{
 					[
 						'product_translate as tb3','tb1.id = tb3.objectid AND tb3.module = "product" AND tb3.language = \''.$this->currentLanguage().'\' ','inner'
 					],
+					[
+						'product_translate as tb4','tb1.catalogueid = tb4.objectid AND tb4.module = "product_catalogue" AND tb3.language = \''.$this->currentLanguage().'\' ','inner'
+					],
 					
 				],
 				'limit' => $config['per_page'],
@@ -80,6 +84,8 @@ class Product extends BaseController{
 				'group_by' => 'tb1.id'
 			], TRUE);
 		}
+		// pre($this->data['productList']);
+
 		$this->data['dropdown'] = $this->nestedsetbie->dropdown();
 		$this->data['template'] = 'backend/product/product/index';
 		return view('backend/dashboard/layout/home', $this->data);
@@ -108,10 +114,10 @@ class Product extends BaseController{
 			$this->data['export_brand'] = $this->export_brand();
 			$this->data['productid'] = convert_code($this->data['check_code']['code'], $this->data['module']);
 			if($this->request->getMethod() == 'post'){
-
 				$validate = $this->validation();
 				if($this->validate($validate['validate'], $validate['errorValidate'])){
 					$sub_content = $this->request->getPost('sub_content');
+					$wholesale = $this->request->getPost('wholesale');
 			 		$insert = $this->store(['method' => 'create']);
 			 		$resultid = $this->AutoloadModel->_insert([
 			 			'table' => $this->data['module'],
@@ -124,6 +130,7 @@ class Product extends BaseController{
 				 			'table' => 'product_translate',
 				 			'data' => $storeLanguage,
 				 		]);
+						insert_wholesale($wholesale, $this->data['module'],'create', $resultid);
 
 				 		$this->AutoloadModel->_update([
 	 						'table' => 'id_general',
@@ -159,16 +166,32 @@ class Product extends BaseController{
 		$id = (int)$id;
 		$this->data['export_brand'] = $this->export_brand();
 		$this->data[$this->data['module']] = $this->AutoloadModel->_get_where([
-			'select' => 'tb1.id, tb1.catalogue, tb1.bar_code, tb1.brandid, tb1.catalogueid, tb1.model, tb1.price_promotion, tb1.price, tb1.productid, tb1.id, tb1.id, tb1.id, tb2.title, tb2.objectid, tb2.sub_title, tb2.sub_content,tb2.description, tb2.canonical,  tb2.content, tb2.meta_title, tb2.meta_description, tb1.album, tb1.publish',
-
+			'select' => 'tb1.id, tb1.catalogue, tb1.bar_code, tb1.brandid, tb1.catalogueid, tb1.model, tb1.price_promotion, tb1.price, tb1.productid, tb1.id, tb1.id, tb1.id, tb2.title, tb2.objectid, tb2.sub_title, tb2.sub_content,tb2.description, tb2.canonical,  tb2.content, tb2.meta_title, tb2.meta_description, tb1.album, tb1.publish,  tb3.number_start, tb3.number_end, tb3.price as price_wholesale',
 			'table' => $this->data['module'].' as tb1',
 			'join' =>  [
 					[
 						'product_translate as tb2','tb1.id = tb2.objectid AND tb2.module = \''.$this->data['module'].'\' AND tb2.language = \''.$this->currentLanguage().'\' ','inner'
+					],
+					[
+						'wholesale as tb3','tb1.id = tb3.objectid AND tb3.module = \''.$this->data['module'].'\'','inner'
 					]
 				],
 			'where' => ['tb1.id' => $id,'tb1.deleted_at' => 0]
 		]);
+
+		$this->data['wholesale'] = [
+			'number_start' => json_decode($this->data[$this->data['module']]['number_start']),
+			'number_end' => json_decode($this->data[$this->data['module']]['number_end']),
+			'price_wholesale' => json_decode($this->data[$this->data['module']]['price_wholesale']),
+		];
+		$this->data['wholesale_list'] = [];
+		foreach ($this->data['wholesale'] as $key => $value) {
+			foreach ($value as $keyChild => $valChild) {
+				$this->data['wholesale_list'][$keyChild][$key] = $valChild;
+			}
+		}
+
+		// pre($this->data['wholesale_list']);
 
 		$this->data[$this->data['module']]['content'] = base64_decode($this->data[$this->data['module']]['content']);
 		$this->data[$this->data['module']]['description'] = base64_decode($this->data[$this->data['module']]['description']);
@@ -185,6 +208,8 @@ class Product extends BaseController{
 			$validate = $this->validation();
 			if ($this->validate($validate['validate'], $validate['errorValidate'])){
 				$sub_content = $this->request->getPost('sub_content');
+				$wholesale = $this->request->getPost('wholesale');
+
 		 		$update = $this->store(['method' => 'update']);
 		 		$updateLanguage = $this->storeLanguage($id);
 		 		$updateLanguage = $this->convert_content($sub_content, $updateLanguage);
@@ -200,6 +225,8 @@ class Product extends BaseController{
 			 			'where' => ['objectid' => $id, 'module' => $this->data['module']],
 			 			'data' => $updateLanguage
 			 		]);
+					insert_wholesale($wholesale, $this->data['module'],'update', $id);
+
 		 			$this->insert_router(['method' => 'update','id' => $id]);
 		 			$this->nestedsetbie->Get('level ASC, order ASC');
 					$this->nestedsetbie->Recursive(0, $this->nestedsetbie->Set());
@@ -433,19 +460,23 @@ class Product extends BaseController{
 	private function convert_content($content = [], $store = []){
 		$count_1 = 0;
 		$count_2 = 0;
-		foreach ($content['title'] as $key => $value) {
- 			$title[] = $content['title'][$count_1];
- 			$count_1++;
- 		}
- 		foreach ($content['title'] as $key => $value) {
- 			$description[] = $content['description'][$count_2];
- 			$count_2++;
- 		}
- 		$title = base64_encode(json_encode($title));
- 		$description = base64_encode(json_encode($description));
- 		$store['sub_title'] = $title;
- 		$store['sub_content'] = $description;
-		return $store;
+		if($content != []){
+			foreach ($content['title'] as $key => $value) {
+	 			$title[] = $content['title'][$count_1];
+	 			$count_1++;
+	 		}
+	 		foreach ($content['title'] as $key => $value) {
+	 			$description[] = $content['description'][$count_2];
+	 			$count_2++;
+	 		}
+	 		$title = base64_encode(json_encode($title));
+	 		$description = base64_encode(json_encode($description));
+	 		$store['sub_title'] = $title;
+	 		$store['sub_content'] = $description;
+			return $store;
+		}else{
+			return $store;
+		}
 	}
 
 	private function export_brand(){

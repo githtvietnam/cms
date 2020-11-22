@@ -90,7 +90,7 @@ class Article extends BaseController{
 				'order_by'=> 'tb1.id desc',
 				'group_by' => 'tb1.id'
 			], TRUE);
-
+			// pre($this->data['articleList'] );
 		}
 		$this->data['dropdown'] = $this->nestedsetbie->dropdown();
 		$this->data['template'] = 'backend/article/article/index';

@@ -1,6 +1,54 @@
 var count = 0;
 
+$(document).on('click','.btn_wholesale',function(){
+	let _this = $(this);
+	let wholesale = [];
+	let accept = false;
+	let dem = $('.wholesale_desc').length;
 
+	if(dem == 0){
+		$('.wholesale_more').append(render_wholesale(dem + 1, 1));
+	}else{
+		$('.number_start, .number_end').each(function () {
+			if($(this).val() == ''){
+				accept = false;
+			}else{
+				accept = true;
+			}
+		})
+		if(accept == false){
+			return false;
+		}else{
+			let before_end = parseInt($('#numberend_'+(dem)+'').val());
+			$('.wholesale_more').append(render_wholesale(dem + 1));
+			$('#numberstart_'+(dem+1)).val(before_end + 1);
+		}
+	}
+	return false;
+})
+
+$(document).on('click','.wholesale_del',function(){
+	let _this = $(this);
+	_this.parents('.wholesale_desc').remove();
+	return false;
+})
+
+$(document).on('change','.number_end',function(){
+	let _this = $(this);
+	let start = _this.parents('.wholesale_desc').find('.number_start').val();
+	let id = _this.attr('id')
+	id = id.split("_")
+	id[1] = parseInt(id[1])
+	let end = parseInt(_this.val())
+	if(end <= start){
+		_this.val('');
+	}
+	if($('#numberstart_'+(id[1]+1)+'').length != 0){
+		console.log(1)
+		$('#numberstart_'+(id[1]+1)+'').val(end + 1);
+	}
+	return false;
+})
 
 $(document).on('click','.add-attr',function(){
 	let _this = $(this);
@@ -212,6 +260,39 @@ function render_attr(){
 	$('.attr-more').prepend(html);
 	ckeditor5(id);
 }
+
+function render_wholesale(dem = '', $number = ''){
+	let html ='';
+	html = html + '<div class="wholesale_desc mb15">';
+		html = html + '<div class="uk-flex uk-flex-middle uk-flex-space-between">';
+			html = html + '<div class="va-flex-row">';
+				html = html + '<div class="form-row">';
+					html = html + '<label class="control-label text-left">';
+						html = html + '<span>Số lượng từ</span>';
+					html = html + '</label>';
+					html = html + '<input type="number" name="wholesale[number_start][]" value="'+$number+'" class="form-control number_start" placeholder="" id="numberstart_'+dem+'" autocomplete="off">';
+				html = html + '</div>';
+			html = html + '</div>';
+			html = html + '<div class="va-flex-row">';
+				html = html + '<label class="control-label ">';
+					html = html + '<span>Đến</span>';
+				html = html + '</label>';
+				html = html + '<input type="number" name="wholesale[number_end][]" value="" class="form-control number_end" placeholder="" id="numberend_'+dem+'" autocomplete="off">';
+			html = html + '</div>';
+			html = html + '<div class="va-flex-row">';
+				html = html + '<label class="control-label ">';
+					html = html + '<span>Giá mới</span>';
+				html = html + '</label>';
+				html = html + '<input type="text" name="wholesale[wholesale_price][]" value="" class="form-control wholesale_price int price" placeholder="" id="wholesaleprice_'+dem+'" autocomplete="off">';
+			html = html + '</div>';
+			html = html + '<div class="va-flex-row">';
+				html = html + '<button class="btn btn-danger wholesale_del" type="button"><i class="fa fa-trash"></i></button>';
+			html = html + '</div>';
+		html = html + '</div>';
+	html = html + '</div>';
+	return html;
+}
+
 
 // Dragable panels
 function WinMove() {

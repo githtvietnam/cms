@@ -28,7 +28,7 @@ class BaseController extends Controller
 	 *
 	 * @var array
 	 */
-	protected $helpers = ['form','url','myauthentication','mystring','mydata','nestedtset', 'myurl'];
+	protected $helpers = ['form','url','myauthentication','mystring','mydata','nestedtset', 'myurl', 'myinsert'];
 	public $currentTime;
 	public $AutoloadModel;
 	protected $auth;
