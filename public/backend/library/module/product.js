@@ -1,4 +1,123 @@
 var count = 0;
+attribute_cat = JSON.parse(attribute_cat)
+
+
+
+$(document).ready(function(){
+    $('.tagsinput').tagsinput({
+        tagClass: 'label label-primary',
+        confirmKeys: [13, 188],
+        cancelConfirmKeysOnEmpty: false,
+    });
+
+    selectMultipe($('.selectAttribute'));
+
+
+    if($('.selectAttribute').length){
+    	$('.selectAttribute').each(function(){
+    		let _this = $(this);
+    		let index = _this.parents('tr').find('td:first').attr('data-index');
+    		let data = eval('get_data' + index);
+    		getDataMultiple(_this, data);
+    	})
+    }
+});
+
+
+
+
+
+$(document).on('click','.block-attribute input[name="checkbox[]"]', function(){
+	let val = $(this).parents('td').find('input[name="checkbox_val[]"]').val();
+	if(val==1){
+	    $(this).parents('td').find('input[name="checkbox_val[]"]').val(0);
+	}else{
+	    $(this).parents('td').find('input[name="checkbox_val[]"]').val(1);
+	}
+});
+
+$(document).on('change','.block-attribute input[name="checkbox[]"]', function(){
+    let check = $('input[name="checkbox[]"]:checked').length;
+	if(check > 3){
+		toastr.warning('Chọn nhiều nhất 3 thuộc tính của phiên bản!','');
+		$(this).prop('checked', false);
+		$(this).parents('td').html('<input type="checkbox" name="checkbox[]" value="" class="checkbox-item"><div for="" class="label-checkboxitem"></div>');
+	}
+	get_vesion()
+});
+
+$(document).on('change','.tagsinput', function(){
+	get_vesion()
+});
+
+$(document).on('change','.selectAttribute', function(){
+	get_vesion()
+});
+
+$(document).on('click','.add_version', function(){
+	let _this = $(this);
+	_this.parents('.block-version').find('.ibox-content').show();
+	_this.parents('.block-version').find('.show_attribute').append(render_attribute(attribute_cat));
+	check_attribute();
+	$('.trigger-select2').each(function(key, index){
+		$('.trigger-select2').select2();
+	});
+	$countAttr = $('.block-attribute table tbody').find('tr').length;
+	$countCat = attribute_cat.length;
+	if(parseInt($countAttr) >= 3){
+		$('.add_version').hide()
+	}else{
+		$('.add_version').show()
+	}
+	return false;
+});
+
+$(document).on('change','select[name="attribute_catalogue[]"]', function(){
+	let _this = $(this);
+	check_attribute(_this);
+	let catalogueid = _this.val();
+	let index = _this.parents('tr').find('td:first').attr('data-index');
+	if(catalogueid == 'root'){
+		_this.parents('tr').find('td:eq(2)').html('<input type="text" disabled class="input_disable">');
+	}else if(catalogueid == 'color'){
+		_this.parents('tr').find('td:eq(2)').html(render_color(index));
+	}else{
+		_this.parents('tr').find('td:eq(2)').html(render_select2(catalogueid, ' AND catalogueid = '+catalogueid, index));
+	}
+
+	$('.selectAttribute').each(function(key, index){
+		selectMultipe($(this));
+	});
+
+	$('.tagsinput').tagsinput({
+        tagClass: 'label label-primary',
+        confirmKeys: [13, 188],
+        cancelConfirmKeysOnEmpty: false,
+    });
+});
+
+
+
+$(document).on('click','.block-attribute .delete-attribute', function(){
+	let _this = $(this);
+	_this.parents('tr').remove();
+	let val= _this.parents('tr').find('select[name="attribute_catalogue[]"] option:checked').val();
+	$('.block-attribute select[name="attribute_catalogue[]"]').find("option[value="+val+ "]").prop('disabled',false);
+	$('.block-attribute select[name="attribute_catalogue[]"]').select2("destroy").select2();
+	get_vesion();
+	check_attribute();
+	let pos = attribute_catalogue.indexOf(val);
+	attribute_catalogue.splice(pos, 1);
+	$countAttr = $('.block-attribute table tbody').find('tr').length;
+	$countCat = attribute_cat.length;
+	if(parseInt($countAttr) >= 3){
+		$('.add_version').hide()
+	}else{
+		$('.add_version').show()
+	}
+	
+});
+
 
 $(document).on('click','.btn_wholesale',function(){
 	let _this = $(this);
@@ -17,6 +136,10 @@ $(document).on('click','.btn_wholesale',function(){
 			}
 		})
 		if(accept == false){
+			toastr.options.closeButton = true;
+		    toastr.options.preventDuplicates = true;
+		    toastr.options.progressBar = true;
+		    toastr.warning('Bạn vui lòng nhập vào 2 trường số lượng để tiếp tục!','Xảy ra lỗi!');
 			return false;
 		}else{
 			let before_end = parseInt($('#numberend_'+(dem)+'').val());
@@ -44,7 +167,6 @@ $(document).on('change','.number_end',function(){
 		_this.val('');
 	}
 	if($('#numberstart_'+(id[1]+1)+'').length != 0){
-		console.log(1)
 		$('#numberstart_'+(id[1]+1)+'').val(end + 1);
 	}
 	return false;
@@ -57,7 +179,6 @@ $(document).on('click','.add-attr',function(){
 })
 
 $(document).on('click','.ibox-title.ui-sortable-handle',function(){
-	console.log(1)
 })
 
 $(document).on('click','.delete-all', function(){
@@ -199,10 +320,41 @@ $('#insert_form').on("submit", function(event) {
     }
 });
 
+$('#attribute_form').on("submit", function(event) {
+    event.preventDefault();
+    let title = $('#modal_attribute_title').val();
+    let val = $('.catalogueid_modal').val();
+    if (title == "") {
+        alert("Vui lòng nhập vào trường Tiêu đề Thuộc tính!");
+    } else if (val == 'root') {
+        alert("Vui lòng chọn nhóm thuộc tính!");
+    } else {
+        let form_URL = 'ajax/product/add_attribute';
+    	$.post(form_URL, {
+			title : title, val: val
+		},
+		function(data){
+			let json = JSON.parse(data);
+			if(json == 1){
+				toastr.options.closeButton = true;
+			    toastr.options.preventDuplicates = true;
+			    toastr.options.progressBar = true;
+			    toastr.warning('Thuộc tính bạn tạo đã tồn tại!','Xin vui lòng thử lại!');
+			}
+            $('.catalogueid_modal').val('root').trigger('change');
+			$('#attribute_form')[0].reset();
+            $('#product_add_attribute').modal('hide');
+		});	
+    }
+});
 
 
 $(document).on('click' ,'.update_price' ,function(){
 	let _this = $(this);
+	$('.index_update_price').hide();
+	$('.view_price').show();
+
+
 	_this.find('.view_price').hide();
 	_this.find('input').show();
 })
@@ -217,10 +369,29 @@ $(document).on('change' ,'.index_update_price' ,function(){
 		val : val, id: id, field: field
 	},
 	function(data){
-		
+		let json = JSON.parse(data);
+		_this.hide();
+		_this.siblings('.view_price').show();
+		_this.siblings('.view_price').html(json.val);
 	});	
 })
 
+function check_attribute(_this=''){
+	attribute_catalogue = new Array();
+	$('.block-attribute select[name="attribute_catalogue[]"]').each(function() {
+		let val = $(this).find('option:selected').val();
+		if(val != 0){
+			attribute_catalogue.push(val);
+		}
+	});
+	$('.block-attribute select[name="attribute_catalogue[]"]').find("option").removeAttr("disabled");
+	for(let i = 0; i < attribute_catalogue.length; i++) {
+		$('.block-attribute select[name="attribute_catalogue[]"]').find("option[value="+ attribute_catalogue[i] + "]").prop('disabled', !$('#one').prop('disabled'));
+    	$('.block-attribute select[name="attribute_catalogue[]"]').select2();
+    }
+	$('.block-attribute select[name="attribute_catalogue[]"]').find("option:selected").removeAttr("disabled");
+	
+}
 
 function render_attr(){
 	let html ='';
@@ -286,13 +457,159 @@ function render_wholesale(dem = '', $number = ''){
 				html = html + '<input type="text" name="wholesale[wholesale_price][]" value="" class="form-control wholesale_price int price" placeholder="" id="wholesaleprice_'+dem+'" autocomplete="off">';
 			html = html + '</div>';
 			html = html + '<div class="va-flex-row">';
-				html = html + '<button class="btn btn-danger wholesale_del" type="button"><i class="fa fa-trash"></i></button>';
+				html = html + '<a type="button" class="btn btn-default wholesale_del" ><i class="fa fa-trash"></i></a>';
 			html = html + '</div>';
 		html = html + '</div>';
 	html = html + '</div>';
 	return html;
 }
 
+function render_attribute(data = []){
+	let index = $('.block-attribute tbody tr').length;
+	let html ='';
+	html = html + '<tr >';
+		html = html + '<td data-index="'+index+'">';
+			html = html + '<input type="checkbox" name="checkbox[]" class="checkbox-item">';
+			html = html + '<div for="" class="label-checkboxitem"></div>';
+		html = html + '</td>';
+		html = html + '<td>';
+			html = html + '<select name="attribute_catalogue[]" class="form-control select2 trigger-select2" style="width:100%" >';
+				html = html + '<option value="root">-- Chọn thuộc tính --</option>';
+				for (let i = 0; i < data.length; i++) {
+					html = html + '<option value="'+data[i].value+'">'+data[i].title+'</option>';
+				}
+			html = html + '</select>';
+		html = html + '</td>';
+		html = html + '<td>';
+			html = html + '<div class="form-row">';
+				html = html + '<input type="text" disabled class="input_disable">';
+			html = html + '</div>';
+		html = html + '<td>';
+			html = html + '<a type="button" class="btn btn-default delete-attribute" data-id=""><i class="fa fa-trash"></i></a>';
+		html = html + '</td>';
+	html = html + '</tr>';
+	return html;
+}
+
+function render_color(index = ''){
+	let html ='';
+		html = html + '<input name="attribute['+index+'][]" class="tagsinput form-control" type="text" value=""/>'
+	return html;
+}
+
+function render_version(title='', price ='',code='', attribute1='', attribute2='', attribute3=''){
+	let html = '<tr>';
+		html = html + '<td>';
+			html = html+'<input type="text" name="attribute1[]" value="'+attribute1+'" class="hidden">';
+			html = html+'<input type="text" name="attribute2[]" value="'+attribute2+'" class="hidden">';
+			html = html+'<input type="text" name="attribute3[]" value="'+attribute3+'" class="hidden">';
+			html = html + '<div class="img_version img-scaledown" style="cursor: pointer;">';
+				html = html + '<img src="public/select-img.png" class="img_version_select" alt="">';
+			html = html + '</div>';
+			html = html + '<input type="text" name="img_version[]" value="" class="form-control hide_img_version input_img_version" placeholder="Đường dẫn của ảnh" autocomplete="off" style="display:none;">';
+		html = html + '</td>';
+		html = html + '<td>';
+			html = html + '<input type="text" name="title_version[]" readonly="" value="'+title+'" class="form-control" autocomplete="off">';
+		html = html + '</td>';
+		html = html + '<td>';
+			html = html + '<input type="text" name="price_version[]" value="'+addCommas(price)+'" class="form-control int" autocomplete="off">';
+		html = html + '</td>';
+		html = html + '<td>';
+			html = html + '<input type="text" name="code_version[]" value="'+code+'" class="form-control" autocomplete="off">';
+		html = html + '</td>';
+		html = html+'<td><a href="" class="product_edit">Chỉnh sửa</a></td>';
+	html = html + '</tr>';
+	return html;
+}
+
+function render_select2(catalogueid = '', condition = '' , index = ''){
+	html = '<select name="attribute['+index+'][]" class="form-control selectAttribute" data-condition="'+condition+'" multiple="multiple" data-title="Nhập 2 kí tự để tìm kiếm..." style="width: 100%;" data-join="attribute_translate" data-catalogueid="'+catalogueid+'" data-module="attribute" data-select="title"></select>';
+	return html;
+}
+
+function get_vesion(){
+	let price = $('input[name="price"]').val();
+	let code_main = $('input[name="productid"]').val();
+	let attribute = new Array();
+	let attributeid = new Array();
+	let color = new Array();
+	let colorid = new Array();
+	$('.block-attribute table tbody tr').each(function (key, value){
+		if($(this).find('select[name="attribute_catalogue[]"]').length){
+			if($(this).find('input[name="checkbox[]"]:checked').length){
+				let index = $(this).find('td:first').attr('data-index');
+				if($(this).find('select[name="attribute['+index+'][]"] option:selected').length){
+					attribute[key] = new Array();
+					attributeid[key] = new Array();
+				}
+				if($(this).find('.bootstrap-tagsinput span.tag.label').length){
+					color[key] = new Array();
+					colorid[key] = new Array();
+				}
+				$(this).find('.bootstrap-tagsinput span.tag.label').each(function (){
+					color[key].push($(this).text());
+					colorid[key].push($(this).text());
+				});
+				$(this).find('select[name="attribute['+index+'][]"] option:selected').each(function (){
+					attribute[key].push($(this).text());
+					attributeid[key].push($(this).val());
+				});
+				
+			}
+		}
+	});
+
+	if(color.length != 0){
+		if(attribute.length == 0){
+			attribute[0] = color[0];
+			attributeid[0] = colorid[0];
+		}else{
+			let count = attribute.length;
+			attribute[count + 1] = color[0];
+			attributeid[count + 1] = colorid[0];
+		}
+	}
+
+	let attribute1 = [];
+	let attributeid1 = [];
+
+	attribute.forEach(function(item, index, array) {
+	  	if(typeof item != "undefined" ){
+	  		attribute1.push(item);
+	  		attributeid1.push(attributeid[index]);
+		}
+	});
+	$('.block-version .ibox-content>table tbody').html('');
+	$('.block-attribute').siblings('table').hide();
+	let index=1;
+	for (var i in attribute1[0]){
+		if(typeof attribute1[1] != "undefined"){
+			for(var j in attribute1[1]){
+				if(typeof attribute1[2] != "undefined"){
+			    	for(var k in attribute1[2]){
+			    		let title = attribute1[0][i]+'/'+attribute1[1][j]+'/'+attribute1[2][k];
+			    		code= code_main+'-'+index;
+			    		index = index +1;
+			    		$('.block-version .ibox-content>table tbody').append(render_version(title, price, code,attributeid1[0][i], attributeid1[1][j], attributeid1[2][k] ));
+						$('.block-version .ibox-content table').show();
+			    	}
+				}else{
+					let title= attribute1[0][i]+'/'+attribute1[1][j];
+			    	code= code_main+'-'+index;
+			    	index = index +1;
+			    	$('.block-version .ibox-content>table tbody').append(render_version(title, price, code,attributeid1[0][i], attributeid1[1][j] ));
+					$('.block-version .ibox-content table').show();
+				}
+		    }
+		}else{
+			let title= attribute1[0][i];
+		    code= code_main+'-'+index;
+		    index = index +1;
+	    	$('.block-version .ibox-content>table tbody').append(render_version(title, price,code,attributeid1[0][i],'' ));
+			$('.block-version .ibox-content table').show();
+		}
+	}
+}
 
 // Dragable panels
 function WinMove() {
@@ -308,3 +625,4 @@ function WinMove() {
     })
     .disableSelection();
 }
+

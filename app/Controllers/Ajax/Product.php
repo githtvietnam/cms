@@ -13,6 +13,92 @@ class Product extends BaseController{
 		
 	}
 
+	public function get_select2(){
+		$param['module'] = $this->request->getPost('module');
+		$param['keyword'] = $this->request->getPost('locationVal');
+		$param['select'] = $this->request->getPost('select');
+		$param['join'] = $this->request->getPost('join');
+		$param['catalogueid'] = $this->request->getPost('catalogueid');
+		if (isset($param['join']) && $param['join'] != '')
+			{
+				$object = $this->AutoloadModel->_get_where([
+					'select' => 'tb1.id, tb2.'.$param['select'].'',
+					'table' => $param['module'].' as tb1',
+					'join' => [
+							[
+								$param['join'].' as tb2', 'tb1.id = tb2.objectid AND tb2.module = \''.$param['module'].'\'  AND tb2.language = \''.$this->currentLanguage().'\' ','inner'
+							],
+						],
+					'where' => [
+						'tb1.catalogueid' => $param['catalogueid']
+					],
+					'keyword' => '('.$param['select'].' LIKE \'%'.$param['keyword'].'%\')',
+					'order_by' => ''.$param['select'].' asc'
+				], TRUE);
+			}else{
+				$object = $this->AutoloadModel->_get_where([
+					'select' => 'id, '.$param['select'],
+					'table' => $param['module'],
+					'where' => [
+						'catalogueid' => $param['catalogueid']
+					],
+					'keyword' => '('.$param['select'].' LIKE \'%'.$param['keyword'].'%\')',
+					'order_by' => ''.$param['select'].' asc'
+				], TRUE);
+			}
+		
+
+		$temp = [];
+		if(isset($object) && is_array($object) && count($object)){
+			foreach($object as $index => $val){
+				$temp[] = array(
+					'id'=> $val['id'],
+					'text' => $val[$param['select']],
+				);
+			}
+		}
+
+		echo json_encode(array('items' => $temp));die();
+
+	}
+
+	public function pre_select2(){
+		$param['value'] = json_decode($this->request->getPost('value'));
+		$param['module'] = $this->request->getPost('module');
+		$param['select'] = $this->request->getPost('select');
+		$param['join'] = $this->request->getPost('join');
+		$param['catalogueid'] = $this->request->getPost('catalogueid');
+		pre($param);
+		$object = [];
+		if($param['value'] != ''){
+			$object = $this->AutoloadModel->_get_where([
+				'select' => 'tb1.id, tb2.'.$param['select'].'',
+				'table' => $param['module'].' as tb1',
+				'join' => [
+						[
+							$param['join'].' as tb2', 'tb1.id = tb2.objectid AND tb2.module = \''.$param['module'].'\'  AND tb2.language = \''.$this->currentLanguage().'\' ','inner'
+						],
+					],
+				'where' =>[
+					'tb1.catalogueid' => $param['catalogueid']
+				],
+				'where_in' => $param['value'],
+				'where_in_field' => 'tb2.objectid',
+				'order_by' => ''.$param['select'].' asc'
+			], TRUE);
+		}
+		$temp = [];
+		if(isset($object) && is_array($object) && count($object)){
+			foreach($object as $index => $val){
+				$temp[] = array(
+					'id'=> $val['id'],
+					'text' => $val[$param['select']],
+				);
+			}
+		}
+		echo json_encode(array('items' => $temp));die();
+	}
+
 	public function delete_all(){
 		$id = $this->request->getPost('id');
 		$module = $this->request->getPost('module');
@@ -36,7 +122,13 @@ class Product extends BaseController{
 				'id' => $id
 			]
 		]);
-		echo $flag;die();
+
+		$param['data'] = [
+			'id' => $id,
+			'val' => $val,
+			'field' => $field
+		];
+		echo json_encode($param['data']);die();
 	}
 
 	public function general_id(){
@@ -121,6 +213,48 @@ class Product extends BaseController{
 		];
 		echo json_encode($param['data']);
 		die();		
+	}
+
+	public function add_attribute(){
+		$param['title'] = $this->request->getPost('title');
+		$param['val'] = $this->request->getPost('val');
+
+		$count = check_attribute(slug($param['title']), 'attribute');
+		if($count == 0){
+			$flag = $this->AutoloadModel->_insert([
+				'table' => 'attribute',
+				'data' => [
+					'catalogueid' => $param['val'],
+					'created_at' => $this->currentTime,
+					'deleted_at' => 0,
+					'publish' => 1,
+					'userid_created' => $this->auth['id']
+				]
+			]);
+
+			if($flag > 0){
+				$insert = $this->AutoloadModel->_insert([
+					'table' => 'attribute_translate',
+					'data' => [
+						'module' => 'attribute',
+						'objectid'=> $flag,
+						'language' => $this->currentLanguage(),
+						'canonical' => slug($param['title']),
+						'title' => $param['title'],
+						'userid_created' => $this->auth['id']
+					]
+				]);
+			}
+			
+			$param['data'] = [
+				'title' => $param['title'],
+				'value' => $flag,
+			];
+			echo json_encode($param['data']);
+			die();		
+		}else{
+			echo 1;die();
+		}
 	}
 
 }

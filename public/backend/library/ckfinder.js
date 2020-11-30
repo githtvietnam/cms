@@ -7,6 +7,9 @@ $(document).ready(function(){
 	$(document).on('click','.img-thumbnail', function(){
 		BrowseServerPreview($(this));
 	});
+    $(document).on('click','.img_version_select', function(){
+        BrowseServerProduct($(this));
+    });
     $(document).on('click','.va-img-click', function(){
         BrowseServerInput($(this));
     });
@@ -115,6 +118,37 @@ function BrowseServerAlbum(object, type){
     }
     finder.popup();
 }
+
+function BrowseServerProduct(object, type){
+    var finder = new CKFinder();
+    finder.resourceType = type;
+
+    finder.selectActionFunction = function(fileUrl , data, allFiles ) {
+        if(typeof(type) == 'undefined'){
+            type = 'Images';
+        }
+        
+
+        var files = allFiles;
+        console.log(files)
+        let album  = [];
+        for(var i = 0 ; i < files.length; i++){
+            fileUrl =  files[i].url.replace(BASE_URL, "/");
+            album.push(fileUrl);
+            if(i == 0){
+                object.attr('src', fileUrl);
+            }
+        }
+        var myJSON = JSON.stringify(album);
+
+        object.siblings('.input_img_version').val(myJSON);
+        // $('.click-to-upload').hide();
+        // $('.upload-list').show();
+    }
+    finder.popup();
+}
+
+
 function BrowseServerPreview  (object, type){
 	if(typeof(type) == 'undefined'){
 		type = 'Images';

@@ -55,7 +55,6 @@ $(document).ready(function(){
 	}
 
 	if($('.selectMultiple').length){
-
 		$('.selectMultiple').each(function(){
 			let _this = $(this);
 			let select = _this.attr('data-select');		
@@ -528,6 +527,66 @@ function addCommas(nStr){
 	}
 	str= str.slice(0,str.length-1); 
 	return str;
+}
+
+function selectMultipe(object, select="title"){
+	let condition =  object.attr('data-condition');
+	let title = object.attr('data-title');
+	let module = object.attr('data-module');
+	let key = object.attr('data-key');
+	object.select2({
+		minimumInputLength: 2,
+		placeholder: title,
+			ajax: {
+				url: 'ajax/dashboard/get_multiple',
+				type: 'POST',
+				dataType: 'json',
+				deley: 250,
+				data: function (params) {
+					return {
+						locationVal: params.term,
+						module:module,key:key, select:select, condition:condition,
+					};
+				},
+				processResults: function (data) {
+					// console.log(data);
+					return {
+						results: $.map(data, function(obj, i){
+							// console.log(obj);
+							return obj
+						})
+					}
+					
+				},
+				cache: true,
+			}
+	});
+}
+
+function getDataMultiple(object, data, select="title"){
+	let condition =  object.attr('data-condition');
+	let title = object.attr('data-title');
+	let module = object.attr('data-module');
+	let key = object.attr('data-key');
+	
+	setTimeout(function(){
+		if(catalogue != ''){
+			$.post('ajax/dashboard/getDataMultiple', {
+				condition: condition, title: title, module: module, select: select,key:key, data : data},
+				function(data){
+					let json = JSON.parse(data);
+					console.log(json)
+					if(json !='undefined' && json.length){
+						for(let i = 0; i< json.length; i++){
+							var option = new Option(json[i].title, json[i].id, true, true);
+							object.append(option).trigger('change');
+						}
+					}
+				});
+		}
+	}, 10);
+
+	get_select2(object);
 }
 
 function get_select2(object){

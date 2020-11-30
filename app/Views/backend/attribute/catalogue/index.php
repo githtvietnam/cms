@@ -103,9 +103,9 @@
                                     <input type="checkbox" name="checkbox[]" value="<?php echo $val['id']; ?>" class="checkbox-item">
                                     <div for="" class="label-checkboxitem"></div>
                                 </td>
-                                <td <?php echo ($val['level'] == 1) ? 'class="text-success text-bold"' : '' ?>>
+                                <td class="text-success text-bold">
                                     <a href="<?php echo base_url('backend/attribute/attribute/index/?catalogueid='.$val['id'].'') ?>">
-                                        <?php echo str_repeat('|----', (($val['level'] > 0)?($val['level'] - 1):0)).$val['title']; ?>
+                                        <?php echo $val['title']; ?>
                                         </a>
                                     </td>
 

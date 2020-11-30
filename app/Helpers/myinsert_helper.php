@@ -28,12 +28,12 @@ if (! function_exists('insert_wholesale')){
 		];
 		if($method =='create'){
 			$flag = $model->_insert([
-				'table' => 'wholesale',
+				'table' => 'product_wholesale',
 				'data' => $store
 			]);
 		}else{
 			$flag = $model->_update([
-				'table' => 'wholesale',
+				'table' => 'product_wholesale',
 				'data' => $store,
 				'where' => [
 					'objectid' => $id,
@@ -44,6 +44,48 @@ if (! function_exists('insert_wholesale')){
 
 	 	return $flag;
 	}
+}
+
+if (! function_exists('insert_version')){
+	function insert_version(array $param = [], $objectid = '', $language = '', $method = ''){
+		$model = new AutoloadModel();
+		$new_array = [];
+		$insert = [];
+		if($method == 'update'){
+			$delete = $model->_delete([
+				'table' => 'product_version',
+				'where' => ['objectid' => $objectid,'language' => $language]
+			]);
+		}
+		$attribute['attribute_catalogue'] = array_shift($param);
+		$attribute['attribute'] = array_shift($param);
+		foreach ($attribute as $key => $value) {
+			foreach ($value as $keyChild => $valChild) {
+				$new_attribute[$key][] = $attribute[$key][$keyChild];
+			}
+		}
+		foreach ($param as $key => $value) {
+			foreach ($value as $keyChild => $valChild) {
+				$new_array[$keyChild][$key] = $param[$key][$keyChild];
+			}
+		}
+
+		
+		foreach ($new_array as $key => $value) {
+			$insert[] = [
+				'objectid' => $objectid,
+				'language' => $language,
+				'content' => json_encode($new_array[$key]),
+				'attribute' => json_encode($new_attribute['attribute']),
+				'attribute_catalogue' => json_encode($new_attribute['attribute_catalogue']),
+			];
+		}
+
+		$flag =	$model->_create_batch([
+			'table' => 'product_version',
+			'data' => $insert,
+		]);
+	}	
 }
 
 

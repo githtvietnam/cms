@@ -167,119 +167,16 @@
 						</div>
 					</div>
 				</div>
-				<div class="ibox mb20 block-general-product">
-					<div class="ibox-title uk-flex uk-flex-middle uk-flex-space-between">
-						<h5>Thông tin Chung</h5>
-						<div class="ibox-tools">
-							<button type="submit" name="create" value="create" class="btn btn-primary block full-width m-b">Lưu</button>
-						</div>
-					</div>
-					<div class="ibox-content">
-						<div class="row">
-							<div class="col-lg-6">
-								<div class="form-row">
-									<label class="control-label text-left">
-										<span>Giá Sản phẩm <b class="text-danger">(*)</b></span>
-									</label>
-									<?php echo form_input('price', validate_input(set_value('price', (isset($product['price'])) ? $product['price'] : '')), 'class="form-control price int" placeholder="" id="price" autocomplete="off"'); ?>
-								</div>
-							</div>
-							<div class="col-lg-6 m-b">
-								<label class="control-label ">
-									<span>Giá khuyến mại</span>
-								</label>
-								<?php echo form_input('promotion_price', set_value('promotion_price', (isset($product['price_promotion'])) ? $product['price_promotion'] : ''), 'class="form-control price int" placeholder="" id="promotion_price" autocomplete="off"'); ?>
-							</div>
-						</div>
-						<div class="row">
-							<div class="col-lg-4 mb15">
-								<label class="control-label ">
-									<span>BarCode</span>
-								</label>
-								<?php echo form_input('bar_code', set_value('bar_code', (isset($product['bar_code'])) ? $product['bar_code'] : ''), 'class="form-control" placeholder="VD:UPC,ISBN" id="bar_code" autocomplete="off"'); ?>
-							</div>
-							<div class="col-lg-4 mb15">
-								<label class="control-label ">
-									<span>Model</span>
-								</label>
-								<?php echo form_input('model', set_value('model', (isset($product['model'])) ? $product['model'] : ''), 'class="form-control" placeholder="UA50NU7400KXXV" id="model" autocomplete="off"'); ?>
-							</div>
-							<div class="col-lg-4 mb15">
-								<label class="control-label ">
-									<span>Xuất xứ</span>
-								</label>
-								<?php echo form_input('made_in', set_value('made_in', (isset($product['made_in'])) ? $product['made_in'] : ''), 'class="form-control" placeholder="Việt Nam" id="made_in" autocomplete="off"'); ?>
-							</div>
-							<div class="col-lg-6 mb15 ">
-								<label class="control-label ">
-									<span class="label-title">Mã sản phẩm <b class="text-danger">(*)</b></span>
-								</label>
-								<script>
-									var productid = '<?php echo isset($product['productid']) ? $product['productid'] : $productid ?>'
-								</script>
-								<div class="dd-item">
-									<?php echo form_input('productid', set_value('productid', (isset($product['productid'])) ? $product['productid'] : $productid), 'class="form-control va-uppercase productid" readonly placeholder="" autocomplete="off"');?>
-									<input type="checkbox" id="toogle_readonly" name="toogle_readonly">
-									
-								</div>
-							</div>
-							<div class="col-lg-6 mb15">
-								<div class="uk-flex-space-between uk-flex-middle uk-flex">
-									<label class="control-label ">
-										<span>Thương hiệu</span>
-									</label>
-									<button type="button" name="add_brand" id="add_brand" data-toggle="modal" data-target="#product_add_brand" class="btn">Tạo thương hiệu mới</button>
-									
-								</div>
-								<?php array_unshift($export_brand, "[Root]"); ?>
-								<?php echo form_dropdown('brandid', $export_brand, set_value('brandid', (isset($product['brandid'])) ? $product['brandid'] : ''), 'class="form-control m-b brand_select select2"');?>
-							</div>
-						</div>
-					</div>
-				</div>
-				<div class="ibox mb20 block-general-product">
-					<div class="ibox-title uk-flex uk-flex-middle uk-flex-space-between">
-						<h5>Giá bán buôn</h5>
-						<div class="ibox-tools">
-							<button class="btn btn_wholesale btn-success block full-width m-b">Thêm giá mới</button>
-						</div>
-					</div>
-					<div class="ibox-content wholesale_more ">
-						<?php 
-							if(isset($wholesale_list) && is_array($wholesale_list) && count($wholesale_list)){ 
-							$count = 1;
-						?>
-							<?php foreach ($wholesale_list as $key => $value) { ?>
-								<div class="wholesale_desc mb15">
-									<div class="uk-flex uk-flex-middle uk-flex-space-between">
-										<div class="va-flex-row">
-											<div class="form-row">
-												<label class="control-label text-left">
-													<span>Số lượng từ</span>
-												</label>
-												<input type="number" name="wholesale[number_start][]" value="<?php echo $value['number_start'] ?>" class="form-control number_start" placeholder=""  autocomplete="off" id="numberstart_<?php echo $count ?>">
-											</div>
-										</div>
-										<div class="va-flex-row">
-											<label class="control-label ">
-												<span>Đến</span>
-											</label>
-											<input type="number" name="wholesale[number_end][]" value="<?php echo $value['number_end'] ?>" class="form-control number_end" placeholder=""  autocomplete="off" id="numberend_<?php echo $count ?>">
-										</div>
-										<div class="va-flex-row">
-											<label class="control-label ">
-												<span>Giá mới</span>
-											</label>
-											<input type="text" name="wholesale[wholesale_price][]" value="<?php echo $value['price_wholesale'] ?>" class="form-control wholesale_price int" placeholder=""  autocomplete="off" id="wholesale_<?php echo $count ?>">
-										</div>
-										<div class="va-flex-row">
-											<button class="btn btn-danger wholesale_del" type="button"><i class="fa fa-trash"></i></button>
-										</div>
-									</div>
-								</div>
-						<?php $count++; }} ?>
-					</div>
-				</div>
+
+				<!-- Thông tin chung của sản phẩm -->
+
+				<?php echo view('backend/product/product/common/general_info') ?>
+
+				<!-- Thông tin giá bán buôn của sản phẩm -->
+				<?php echo view('backend/product/product/common/wholesale') ?>
+
+				<!-- Thông tin phần thuộc tính của sản phẩm -->
+				<?php echo view('backend/product/product/common/attribute_product') ?>
 				<div class="ibox ibox-seo mb20">
 					<div class="ibox-title">
 						<div class="uk-flex uk-flex-middle uk-flex-space-between">
@@ -465,3 +362,67 @@
            </div>  
       </div>  
  </div> 
+
+ <div id="product_add_attribute" class="modal inmodal fade">  
+      <div class="modal-dialog modal-xl">  
+           <div class="modal-content">
+				<div class="modal-header">
+					<button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">×</span><span class="sr-only">Close</span></button>
+					<h4 class="modal-title">Thêm mới thuộc tính</h4>
+					<small class="font-bold text-danger">Cập nhật đầy đủ thông tin người dùng giúp việc quản lý dễ dàng hơn</small>
+				</div>
+				<div class="modal-body p-md">
+					<form method="post" id="attribute_form"> 
+						<div class="row">
+							<div class="box-body error hidden">
+								<div class="alert alert-danger"></div>
+							</div>
+						</div>
+						<div class="form-group">
+							<div class="row">
+							<label class="col-md-4">
+								<div class=" control-label">
+									<span class="m-r">Tên thuộc tính <b class="text-danger">(*)</b></span>
+								</div>
+							</label>
+							<div class="col-md-8">
+								<input type="text" name="title" value="" id="modal_attribute_title" class="form-control " placeholder="" autocomplete="off">
+							</div>
+							</div>
+						</div>
+						
+						<div class="form-group">
+							<div class="row">
+								<label class="col-md-4">
+									<div class=" control-label">
+										<span class="m-r">Nhóm thuộc tính <b class="text-danger">(*)</b></span>
+									</div>
+								</label>
+								<div class="col-md-8">
+									<select name="catalogueid_modal" class="form-control input-sm perpage  catalogueid_modal select2" style="width:100%" >
+										<?php 
+											if(isset($attribute_catalogue) && is_array($attribute_catalogue) && count($attribute_catalogue)){
+												array_unshift($attribute_catalogue,[
+													'title' => '---Chọn nhóm thuộc tính---',
+													'objectid' => 'root'
+												]);
+												foreach ($attribute_catalogue as $key => $value) {
+										 ?>
+											<option value="<?php echo $value['objectid'] ?>"><?php echo $value['title'] ?></option>
+										<?php }} ?>
+									</select>
+								</div>
+							</div>
+						</div>
+						<div class="modal-footer">
+							<button type="button" class="btn btn-white" data-dismiss="modal">Close</button>
+							<button type="submit" class="btn btn-primary">Thêm mới</button>
+						</div>
+					</form>
+				</div>
+
+				
+			</div> 
+      </div>  
+ </div> 
+

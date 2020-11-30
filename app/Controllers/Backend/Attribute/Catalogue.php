@@ -1,18 +1,14 @@
 <?php 
 namespace App\Controllers\Backend\Attribute;
 use App\Controllers\BaseController;
-use App\Libraries\Nestedsetbie;
 
 class Catalogue extends BaseController{
 	protected $data;
-	public $nestedsetbie;
 	
 	
 	public function __construct(){
 		$this->data = [];
 		$this->data['module'] = 'attribute_catalogue';
-		$this->nestedsetbie = new Nestedsetbie(['table' => $this->data['module'],'language' => $this->currentLanguage()]);
-
 	}
 
 	public function index($page = 1){
@@ -50,7 +46,7 @@ class Catalogue extends BaseController{
 
 			$languageDetact = $this->detect_language();
 			$this->data['attributeCatalogueList'] = $this->AutoloadModel->_get_where([
-				'select' => 'tb1.id, tb2.title, tb1.lft, tb1.rgt, tb1.level, tb2.canonical, (SELECT fullname FROM user WHERE user.id = tb1.userid_created) as creator, tb1.userid_updated, tb1.publish, tb1.order, tb1.created_at, tb1.updated_at,'.((isset($languageDetact['select'])) ? $languageDetact['select'] : ''),
+				'select' => 'tb1.id, tb2.title, tb2.canonical, (SELECT fullname FROM user WHERE user.id = tb1.userid_created) as creator, tb1.userid_updated, tb1.publish, tb1.order, tb1.created_at, tb1.updated_at,'.((isset($languageDetact['select'])) ? $languageDetact['select'] : ''),
 				'table' => $this->data['module'].' as tb1',
 				'join' =>  [
 					[
@@ -90,10 +86,6 @@ class Catalogue extends BaseController{
 			 			'data' => $storeLanguage,
 			 		]);
 
-		 			$this->nestedsetbie->Get('level ASC, order ASC');
-					$this->nestedsetbie->Recursive(0, $this->nestedsetbie->Set());
-					$this->nestedsetbie->Action();
-
 		 			$session->setFlashdata('message-success', 'Tạo Nhóm Bài Viết Thành Công! Hãy tạo danh mục tiếp theo.');
  					return redirect()->to(BASE_URL.'backend/attribute/catalogue/index');
 		 		}
@@ -102,7 +94,7 @@ class Catalogue extends BaseController{
 	        	$this->data['validate'] = $this->validator->listErrors();
 	        }
 		}
-		$this->data['dropdown'] = $this->nestedsetbie->dropdown();
+		
 		$this->data['fixWrapper'] = 'fix-wrapper';
 		$this->data['method'] = 'create';
 		$this->data['template'] = 'backend/attribute/catalogue/create';
@@ -148,10 +140,6 @@ class Catalogue extends BaseController{
 			 			'data' => $updateLanguage
 			 		]);
 
-		 			$this->nestedsetbie->Get('level ASC, order ASC');
-					$this->nestedsetbie->Recursive(0, $this->nestedsetbie->Set());
-					$this->nestedsetbie->Action();
-
 		 			$session->setFlashdata('message-success', 'Cập Nhật Nhóm Bài Viết Thành Công!');
  					return redirect()->to(BASE_URL.'backend/attribute/catalogue/index');
 		 		}
@@ -160,57 +148,9 @@ class Catalogue extends BaseController{
 	        	$this->data['validate'] = $this->validator->listErrors();
 	        }
 		}
-		$this->data['dropdown'] = $this->nestedsetbie->dropdown();
 		$this->data['fixWrapper'] = 'fix-wrapper';
 		$this->data['method'] = 'update';
 		$this->data['template'] = 'backend/attribute/catalogue/update';
-		return view('backend/dashboard/layout/home', $this->data);
-	}
-
-	public function delete($id = 0){
-
-		$id = (int)$id;
-		// $this->data[$this->data['module']] = $this->AutoloadModel->_get_where([
-		// 	'select' => 'tb1.id, tb2.title, tb1.lft, tb1.rgt',
-		// 	'table' => $this->data['module'].' as tb1',
-		// 	'join' =>  [
-		// 			[
-		// 				'article_translate as tb2','tb1.id = tb2.objectid AND tb2.language = \''.$this->currentLanguage().'\' ','inner'
-		// 			]
-		// 		],
-		// 	'where' => ['tb1.id' => $id,'tb1.deleted_at' => 0]
-		// ]);
-		// $session = session();
-		// if(!isset($this->data[$this->data['module']]) || is_array($this->data[$this->data['module']]) == false || count($this->data[$this->data['module']]) == 0){
-		// 	$session->setFlashdata('message-danger', 'Nhóm Bài Viết không tồn tại');
- 	// 		return redirect()->to(BASE_URL.'backend/article/catalogue/index');
-		// }
-
-		// if($this->request->getPost('delete')){
-		// 	$_id = $this->request->getPost('id');
-		
-		// 	// $flag = $this->AutoloadModel->_update([
-		// 	// 	'table' => $this->data['module'],
-		// 	// 	'data' => ['deleted_at' => 1],
-		// 	// 	'where' => [
-		// 	// 		'lft >=' => $this->data[$this->data['module']]['lft'],
-		// 	// 		'rgt <=' => $this->data[$this->data['module']]['rgt'],
-		// 	// 	]
-		// 	// ]);
-
-		// 	// $session = session();
-		// 	// if($flag > 0){
-		// 	// 	$this->nestedsetbie->Get('level ASC, order ASC');
-		// 	// 	$this->nestedsetbie->Recursive(0, $this->nestedsetbie->Set());
-		// 	// 	$this->nestedsetbie->Action();
-	 // 	// 		$session->setFlashdata('message-success', 'Xóa bản ghi thành công!');
-		// 	// }else{
-		// 	// 	$session->setFlashdata('message-danger', 'Có vấn đề xảy ra, vui lòng thử lại!');
-		// 	// }
-		// 	// return redirect()->to(BASE_URL.'backend/article/catalogue/index');
-		// }
-
-		$this->data['template'] = 'backend/attribute/catalogue/delete';
 		return view('backend/dashboard/layout/home', $this->data);
 	}
 
@@ -256,7 +196,6 @@ class Catalogue extends BaseController{
 	private function store($param = []){
 		helper(['text']);
 		$store = [
- 			'parentid' => (int)$this->request->getPost('parentid'),
  			'publish' => $this->request->getPost('publish'),
  			
  		];

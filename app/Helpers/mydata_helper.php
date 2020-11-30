@@ -35,6 +35,38 @@ if (! function_exists('check_type_canonical')){
 	}
 }
 
+if (! function_exists('get_attribute_catalogue')){
+	function get_attribute_catalogue($language){
+		$model = new AutoloadModel();
+
+	 	$catalogue = $model->_get_where([
+            'select' => ' title, canonical, objectid',
+            'table' => 'attribute_translate',
+            'where' => [
+            	'language' => $language,
+            	'module' => 'attribute_catalogue'
+            ],
+        ], TRUE);
+	 	return $catalogue;
+	}
+}
+
+if (! function_exists('get_attribute')){
+	function get_attribute($language){
+		$model = new AutoloadModel();
+	 	$data = $model->_get_where([
+            'select' => 'tb1.id, tb1.catalogueid, tb2.title, tb2.canonical',
+            'table' => 'attribute as tb1',
+           	'join' => [
+           		[
+           			'attribute_translate as tb2','tb1.id = tb2.objectid AND tb2.language = \''.$language.'\' AND tb2.module = "attribute"','inner'
+           		]
+           	]
+        ], TRUE);
+	 	return $data;
+	}
+}
+
 if (! function_exists('separateArray')){
 	function separateArray($param= [], $target=[]){
 		$data=[];
@@ -204,6 +236,21 @@ if (! function_exists('check_id_exist')){
 		$count = $model->_get_where([
 			'table' => 'id_general',
 			'where' => ['module' => $module],
+			'count' => TRUE
+		], TRUE);
+
+		return $count;
+	}
+}
+
+
+if (! function_exists('check_attribute')){
+	function check_attribute($canonical = '', $module = ''){
+		$model = new AutoloadModel();
+		$moduleExplode = explode('_',  $module);
+		$count = $model->_get_where([
+			'table' => 'attribute_translate',
+			'where' => ['module' => $module, 'canonical' => $canonical],
 			'count' => TRUE
 		], TRUE);
 

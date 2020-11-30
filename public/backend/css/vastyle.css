@@ -5,7 +5,9 @@
 .ml20{
 	margin-left: 20px;
 }
-
+.mr50{
+	margin-right: 55px
+}
 ul.tabs-content,
 ul.tabs{
 	margin: 0px;
@@ -331,13 +333,13 @@ input[type=number]::-webkit-outer-spin-button {
     appearance: none;
     margin: 0; 
 }
-
+#add_attribute,
 #add_brand{
 	background-color: transparent;
 	color: blue;
 	padding: 0
 }
-
+#add_attribute:hover,
 #add_brand:hover{
 	text-decoration: underline;
 }
@@ -372,3 +374,61 @@ input[type=checkbox], input[type=radio]{
 	user-select: none;
 }
 
+.bootstrap-tagsinput{
+	width:100%;
+}
+
+.maintitle{
+	display: -webkit-box;
+	-webkit-line-clamp: 2;
+	 -webkit-box-orient: vertical;
+	 overflow: hidden;
+	 text-overflow: ellipsis;
+}
+
+.view_price{
+	cursor: pointer;
+}
+.float-left{
+	float: left
+}
+
+.row-attribute{
+	width: 100%;
+	height: 32px;
+	padding: 0 8px;
+	border: 1px solid #c4cdd5;
+	line-height: 2;
+}
+
+.inputTags-list{
+	white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+	
+}
+.input_disable{
+	height: 32px;
+	width: 100%;
+	border-radius: 0;
+	border: 1px solid #c4cdd5;
+	
+}
+
+button[disabled], html input[disabled] {
+    cursor: no-drop;
+}
+
+.block-version .bootstrap-tagsinput{
+	border-radius: 0;
+    border: 1px solid #c4cdd5;
+}
+
+.block-version .label-primary{
+	border-radius: 0;
+    background-color: #e4e4e4;
+    border: 1px solid #aaa;
+    color: #676a6c;
+    font-size: 12px;
+    display: inline-block;
+}

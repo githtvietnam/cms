@@ -94,6 +94,81 @@ class Dashboard extends BaseController{
 
 	}
 
+	public function get_multiple(){
+		$param['key'] = $this->request->getPost('key');
+		$param['module'] = $this->request->getPost('module');
+		$param['keyword'] = $this->request->getPost('locationVal');
+		$param['select'] = $this->request->getPost('select');
+		$param['condition'] = $this->request->getPost('condition');
+		if (isset($param['condition']) && $param['condition'] != '')
+			{
+				$object = $this->AutoloadModel->_get_where([
+					'select' => 'tb1.id, tb2.'.$param['select'].'',
+					'table' => $param['module'].' as tb1',
+					'join' => [
+							[
+								$param['module'].'_translate as tb2', 'tb1.id = tb2.objectid AND tb2.module = \''.$param['module'].'\' '.$param['condition'].'  AND tb2.language = \''.$this->currentLanguage().'\' ','inner'
+							],
+						],
+					'keyword' => '('.$param['select'].' LIKE \'%'.$param['keyword'].'%\')',
+					'order_by' => ''.$param['select'].' asc'
+				], TRUE);
+			}else{
+				$object = $this->AutoloadModel->_get_where([
+					'select' => 'id, '.$param['select'],
+					'table' => $param['module'],
+					'keyword' => '('.$param['select'].' LIKE \'%'.$param['keyword'].'%\')',
+					'order_by' => ''.$param['select'].' asc'
+				], TRUE);
+			}
+		
+
+		$temp = [];
+		if(isset($object) && is_array($object) && count($object)){
+			foreach($object as $index => $val){
+				$temp[] = array(
+					'id'=> $val['id'],
+					'text' => $val[$param['select']],
+				);
+			}
+		}
+
+		echo json_encode(array('items' => $temp));die();
+
+	}
+
+	public function getDataMultiple(){
+		$param['key'] = $this->request->getPost('key');
+		$param['module'] = $this->request->getPost('module');
+		$param['data'] = json_decode($this->request->getPost('data'));
+		$param['keyword'] = $this->request->getPost('locationVal');
+		$param['select'] = $this->request->getPost('select');
+		$param['condition'] = $this->request->getPost('condition');
+		if (isset($param['condition']) && $param['condition'] != '')
+			{
+
+				foreach ($param['data'] as $key => $value) {
+					$object[] = $this->AutoloadModel->_get_where([
+						'select' => 'tb1.id, tb2.'.$param['select'].'',
+						'table' => $param['module'].' as tb1',
+						'join' => [
+							[
+								$param['module'].'_translate as tb2', 'tb2.objectid = \''.$value.'\' AND tb2.module = \''.$param['module'].'\' '.$param['condition'].'  AND tb2.language = \''.$this->currentLanguage().'\' ','inner'
+							],
+						],
+						'where' => [
+							'tb1.id' => $value
+						],
+						'keyword' => '('.$param['select'].' LIKE \'%'.$param['keyword'].'%\')',
+						'order_by' => ''.$param['select'].' asc'
+					]);
+				}
+			}
+
+		echo json_encode($object);die();
+
+	}
+
 	public function update_by_field(){
 		$post['id'] = $this->request->getPost('id');
 		$post['module'] = $this->request->getPost('module');

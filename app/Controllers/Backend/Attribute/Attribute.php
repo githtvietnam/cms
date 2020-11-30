@@ -321,6 +321,8 @@ class Attribute extends BaseController{
 			'title' => validate_input($this->request->getPost('title')),
 			'canonical' => $this->request->getPost('canonical'),
 			'description' => $this->request->getPost('description'),
+			'meta_description' => $this->request->getPost('meta_description'),
+			'meta_title' => $this->request->getPost('meta_title'),
 			'language' => $this->currentLanguage(),
 			'module' => $this->data['module'],
 		];
@@ -329,23 +331,8 @@ class Attribute extends BaseController{
 
 	private function store($param = []){
 		helper(['text']);
-		$catalogue = $this->request->getPost('catalogue');
-		if(isset($catalogue) && is_array($catalogue) && count($catalogue)){
-			foreach($catalogue as $key => $val){
-				if($val == (int)$this->request->getPost('catalogueid')){
-					unset($catalogue[$key]);
-				}
-			}
-		}
-		if(isset($catalogue) && is_array($catalogue) && count($catalogue)){
-			$catalogue = array_values($catalogue);
-		}
-
 		$store = [
  			'catalogueid' => (int)$this->request->getPost('catalogueid'),
- 			'catalogue' => json_encode($catalogue),
- 			'image' => $this->request->getPost('image'),
- 			'album' => json_encode($this->request->getPost('album'), TRUE),
  			'publish' => $this->request->getPost('publish'),
  		];
  		if($param['method'] == 'create' && isset($param['method'])){	

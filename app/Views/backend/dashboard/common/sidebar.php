@@ -30,10 +30,11 @@
            <li class="landing_link">
                 <a  href="<?php echo base_url('backend/dashboard/dashboard/index') ?>"><i class="fa fa-star"></i> <span class="nav-label">Dashboard</span> <span class="label label-warning pull-right">NEW</span></a>
             </li>
-            <li class="<?php echo ( $uriModule == 'product') ? 'active'  : '' ?>">
+            <li class="<?php echo ( $uriModule == 'product' || $uriModule == 'attribute') ? 'active'  : '' ?>">
                 <a href="index.html"><i class="fa fa-desktop"></i> <span class="nav-label">QL Sản Phẩm</span> <span class="fa arrow"></span></a>
                 <ul class="nav nav-second-level">
                     <li class="<?php echo ( $uriModule_name == 'product') ? 'active'  : '' ?>"><a href="<?php echo base_url('backend/product/product/index') ?>">QL Sản Phẩm</a></li>
+                    <li class="<?php echo ( $uriModule_name == 'attribute') ? 'active'  : '' ?>"><a href="<?php echo base_url('backend/attribute/attribute/index') ?>">QL Thuộc Tính</a></li>
                     <li class="<?php echo ( $uriModule_name == 'brand') ? 'active'  : '' ?>"><a href="<?php echo base_url('backend/product/brand/brand/index') ?>">QL Thương Hiệu</a></li>
                     <li class="<?php echo ( $uriModule_name == 'store') ? 'active'  : '' ?>"><a href="<?php echo base_url('backend/product/store/index') ?>">QL Cửa Hàng</a></li>
                     <li class="<?php echo ( $uriModule_name == 'warehouse') ? 'active'  : '' ?>"><a href="<?php echo base_url('backend/product/warehouse/index') ?>">QL Kho Hàng</a></li>
@@ -45,14 +46,6 @@
                 <ul class="nav nav-second-level">
                     <li class="<?php echo ( $uriModule_name == 'catalogue') ? 'active'  : '' ?>"><a href="<?php echo base_url('backend/article/catalogue/index') ?>"><?php echo translate('cms_lang.sidebar.sb_article_catalogue', $language) ?></a></li>
                     <li class="<?php echo ( $uriModule_name == 'article') ? 'active'  : '' ?>"><a href="<?php echo base_url('backend/article/article/index') ?>"><?php echo translate('cms_lang.sidebar.sb_article', $language) ?></a></li>
-                </ul>
-            </li>
-            <li class="<?php echo ( $uriModule == 'attribute') ? 'active'  : '' ?>">
-                <a href="<?php echo base_url('backend/attribute/atribute/index') ?>"><i class="fa fa-cogs" aria-hidden="true"></i><span class="nav-label">QL Thuộc Tính</span><span class="fa arrow"></span></a>
-                <ul class="nav nav-second-level">
-                    <li class="<?php echo ( $uriModule_name == 'catalogue') ? 'active'  : '' ?>"><a href="<?php echo base_url('backend/attribute/catalogue/index') ?>">QL Nhóm Thuộc Tính</a></li>
-                    
-                    <li class="<?php echo ( $uriModule_name == 'attribute') ? 'active'  : '' ?>"><a href="<?php echo base_url('backend/attribute/attribute/index') ?>">QL Thuộc Tính</a></li>
                 </ul>
             </li>
             <li class="<?php echo ( $uriModule == 'user') ? 'active'  : '' ?>">

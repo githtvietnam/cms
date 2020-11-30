@@ -23,7 +23,7 @@
                     <div class="uk-flex uk-flex-middle">
                         <h5 class="mb0 ">Quản lý Sản Phẩm </h5>
                         <div class="uk-button ml20">
-                            <a href="<?php echo base_url('backend/product/brand/catalogue/index') ?>" class="btn btn-success btn-sm"><i class="fa fa-plus"></i> QL Nhóm Sản phẩm</a>
+                            <a href="<?php echo base_url('backend/product/catalogue/index') ?>" class="btn btn-success btn-sm"><i class="fa fa-plus"></i> QL Nhóm Sản phẩm</a>
                         </div>
                     </div>
                     <div class="ibox-tools">
@@ -140,7 +140,7 @@
                                 <td> 
                                     <div class="uk-flex uk-flex-middle">
                                         <div class="image mr5">
-                                            <span class="image-post img-cover"><img src="<?php echo $image; ?>" alt="<?php echo $val['product_title']; ?>" /></span>
+                                            <span class="image-post img-cover"><img src="<?php echo ((isset($image) ? $image : 'public/not-found.png')); ?>" alt="<?php echo $val['product_title']; ?>" /></span>
                                         </div>
                                         <div class="main-info">
                                             <div class="title"><a class="maintitle" href="<?php echo site_url('backend/product/product/update/'.$val['id']); ?>" title=""><?php echo $val['product_title']; ?></a></div>

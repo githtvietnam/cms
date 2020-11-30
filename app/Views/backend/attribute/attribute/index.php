@@ -21,7 +21,12 @@
         <div class="col-lg-12">
             <div class="ibox float-e-margins">
                 <div class="ibox-title">
-                    <h5>Quản lý thuộc tính </h5>
+                    <div class="uk-flex uk-flex-middle">
+                        <h5 class="mb0">Quản lý thuộc tính </h5>
+                        <div class="uk-button ml20">
+                            <a href="<?php echo base_url('backend/attribute/catalogue/index') ?>" class="btn btn-success btn-sm"><i class="fa fa-plus"></i> QL Nhóm Thuộc tính</a>
+                        </div>
+                    </div>
                     <div class="ibox-tools">
                         <a class="collapse-link">
                             <i class="fa fa-chevron-up"></i>
@@ -109,16 +114,7 @@
                             <?php foreach($attributeList as $key => $val){ ?>
 
                             <?php  
-                                $image = getthumb($val['image'], true);
-                                $catalogue = json_decode($val['catalogue'], TRUE);
                                 $cat_list = [];
-                                if(isset($catalogue) && is_array($catalogue) && count($catalogue)){
-                                    $cat_list = get_catalogue_object([
-                                        'module' => $module,
-                                        'catalogue' => $catalogue,
-                                    ]);
-                                }
-                                
                             ?>
                             <?php  
                                 $status = ($val['publish'] == 1) ? '<span class="text-success">Active</span>'  : '<span class="text-danger">Deactive</span>';
@@ -132,17 +128,11 @@
                                 
                                 <td> 
                                     <div class="uk-flex uk-flex-middle">
-                                        <div class="image mr5">
-                                            <span class="image-post img-cover"><img src="<?php echo $image; ?>" alt="<?php echo $val['cat_title']; ?>" /></span>
-                                        </div>
                                         <div class="main-info">
                                             <div class="title"><a class="maintitle" href="<?php echo site_url('backend/attribute/attribute/update/'.$val['id']); ?>" title=""><?php echo $val['title']; ?> </a></div>
                                             <div class="catalogue" style="font-size:10px">
                                                 <span style="color:#f00000;">Nhóm hiển thị: </span>
-                                                <a class="" style="color:#333;" href="<?php echo site_url('backend/attribute/attribute/index?catalogueid='.$val['cat_id']); ?>" title=""><?php echo $val['cat_title'] ?>,</a> 
-                                                <?php if(isset($cat_list) && is_array($cat_list) && count($cat_list)){ foreach($cat_list as $keyCat => $valCat){ ?>
-                                                    <a class="" style="color:#333;" href="<?php echo site_url('backend/attribute/attribute/index?catalogueid='.$valCat['id']); ?>" title=""><?php echo $valCat['title'] ?></a><?php echo ($keyCat + 1 < count($cat_list)) ? ',' : '' ?> 
-                                                <?php }} ?>
+                                                <a class="" style="color:#333;" href="<?php echo site_url('backend/attribute/attribute/index?catalogueid='.$val['cat_id']); ?>" title=""><?php echo $val['cat_title'] ?>
                                             </div>
                                         </div>
                                     </div>

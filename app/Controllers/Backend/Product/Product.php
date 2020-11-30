@@ -100,6 +100,7 @@ class Product extends BaseController{
  			$session->setFlashdata('message-danger', 'Bạn không có quyền truy cập vào chức năng này!');
  			return redirect()->to(BASE_URL.'backend/dashboard/dashboard/index');
 		}
+		$this->data['attribute_catalogue'] = get_attribute_catalogue($this->currentLanguage());
 		$this->data['check_code'] = $this->AutoloadModel->_get_where([
 			'select' => 'code,objectid',
 			'table' => 'id_general',
@@ -114,6 +115,8 @@ class Product extends BaseController{
 			$this->data['export_brand'] = $this->export_brand();
 			$this->data['productid'] = convert_code($this->data['check_code']['code'], $this->data['module']);
 			if($this->request->getMethod() == 'post'){
+
+
 				$validate = $this->validation();
 				if($this->validate($validate['validate'], $validate['errorValidate'])){
 					$sub_content = $this->request->getPost('sub_content');
@@ -126,11 +129,8 @@ class Product extends BaseController{
 			 		if($resultid > 0){
 			 			$storeLanguage = $this->storeLanguage($resultid);
 			 			$storeLanguage = $this->convert_content($sub_content, $storeLanguage);
-			 			$insertid = $this->AutoloadModel->_insert([
-				 			'table' => 'product_translate',
-				 			'data' => $storeLanguage,
-				 		]);
-						insert_wholesale($wholesale, $this->data['module'],'create', $resultid);
+
+						$this->version($resultid, 'create');
 
 				 		$this->AutoloadModel->_update([
 	 						'table' => 'id_general',
@@ -165,33 +165,38 @@ class Product extends BaseController{
 	public function update($id = 0){
 		$id = (int)$id;
 		$this->data['export_brand'] = $this->export_brand();
+		$this->data['attribute_catalogue'] = get_attribute_catalogue($this->currentLanguage());
 		$this->data[$this->data['module']] = $this->AutoloadModel->_get_where([
-			'select' => 'tb1.id, tb1.catalogue, tb1.bar_code, tb1.brandid, tb1.catalogueid, tb1.model, tb1.price_promotion, tb1.price, tb1.productid, tb1.id, tb1.id, tb1.id, tb2.title, tb2.objectid, tb2.sub_title, tb2.sub_content,tb2.description, tb2.canonical,  tb2.content, tb2.meta_title, tb2.meta_description, tb1.album, tb1.publish,  tb3.number_start, tb3.number_end, tb3.price as price_wholesale',
+			'select' => 'tb1.id, tb1.catalogue, tb1.bar_code, tb1.brandid, tb1.catalogueid, tb1.model, tb1.price_promotion, tb1.price, tb1.productid, tb1.id, tb1.id, tb1.id, tb2.title, tb2.objectid, tb2.sub_title, tb2.sub_content, tb2.description, tb2.canonical,  tb2.content, tb2.meta_title, tb2.meta_description, tb1.album, tb1.publish',
 			'table' => $this->data['module'].' as tb1',
 			'join' =>  [
 					[
 						'product_translate as tb2','tb1.id = tb2.objectid AND tb2.module = \''.$this->data['module'].'\' AND tb2.language = \''.$this->currentLanguage().'\' ','inner'
-					],
-					[
-						'wholesale as tb3','tb1.id = tb3.objectid AND tb3.module = \''.$this->data['module'].'\'','inner'
 					]
 				],
 			'where' => ['tb1.id' => $id,'tb1.deleted_at' => 0]
 		]);
-
-		$this->data['wholesale'] = [
-			'number_start' => json_decode($this->data[$this->data['module']]['number_start']),
-			'number_end' => json_decode($this->data[$this->data['module']]['number_end']),
-			'price_wholesale' => json_decode($this->data[$this->data['module']]['price_wholesale']),
-		];
-		$this->data['wholesale_list'] = [];
-		foreach ($this->data['wholesale'] as $key => $value) {
-			foreach ($value as $keyChild => $valChild) {
-				$this->data['wholesale_list'][$keyChild][$key] = $valChild;
+		$this->data['getWholesale'] = $this->AutoloadModel->_get_where([
+			'select' => 'number_start, number_end, price',
+			'table' => 'product_wholesale',
+			'where' => ['objectid' => $id]
+		]);
+		$this->data['version'] = $this->get_data_version($id);
+		// pre($this->data['version']);
+		if(isset($this->data['getWholesale']) && is_array($this->data['getWholesale']) && count($this->data['getWholesale'])){
+			$this->data['wholesale'] = [
+				'number_start' => json_decode($this->data['getWholesale']['number_start']),
+				'number_end' => json_decode($this->data['getWholesale']['number_end']),
+				'price_wholesale' => json_decode($this->data['getWholesale']['price']),
+			];
+			$this->data['wholesale_list'] = [];
+			foreach ($this->data['wholesale'] as $key => $value) {
+				foreach ($value as $keyChild => $valChild) {
+					$this->data['wholesale_list'][$keyChild][$key] = $valChild;
+				}
 			}
 		}
 
-		// pre($this->data['wholesale_list']);
 
 		$this->data[$this->data['module']]['content'] = base64_decode($this->data[$this->data['module']]['content']);
 		$this->data[$this->data['module']]['description'] = base64_decode($this->data[$this->data['module']]['description']);
@@ -209,7 +214,6 @@ class Product extends BaseController{
 			if ($this->validate($validate['validate'], $validate['errorValidate'])){
 				$sub_content = $this->request->getPost('sub_content');
 				$wholesale = $this->request->getPost('wholesale');
-
 		 		$update = $this->store(['method' => 'update']);
 		 		$updateLanguage = $this->storeLanguage($id);
 		 		$updateLanguage = $this->convert_content($sub_content, $updateLanguage);
@@ -225,8 +229,10 @@ class Product extends BaseController{
 			 			'where' => ['objectid' => $id, 'module' => $this->data['module']],
 			 			'data' => $updateLanguage
 			 		]);
-					insert_wholesale($wholesale, $this->data['module'],'update', $id);
-
+			 		if($wholesale != []){
+						insert_wholesale($wholesale, $this->data['module'],'update', $id);
+			 		}
+					$this->version($id, 'update');
 		 			$this->insert_router(['method' => 'update','id' => $id]);
 		 			$this->nestedsetbie->Get('level ASC, order ASC');
 					$this->nestedsetbie->Recursive(0, $this->nestedsetbie->Set());
@@ -499,6 +505,40 @@ class Product extends BaseController{
 		}
 
 		return $new_array;
+	}
+
+	private function version($id = '', $method = ''){
+		$get = [
+			'attribute_catalogue' => $this->request->getPost('attribute_catalogue'),
+			'attribute' => $this->request->getPost('attribute'),
+			'attribute1' => $this->request->getPost('attribute1'),
+			'attribute2' => $this->request->getPost('attribute2'),
+			'attribute3' => $this->request->getPost('attribute3'),
+			'img_version' => $this->request->getPost('img_version'),
+			'title_version' => $this->request->getPost('title_version'),
+			'price_version' => $this->request->getPost('price_version'),
+			'code_version' => $this->request->getPost('code_version'),
+		];
+		prE($get);
+		if($get['attribute1'] != []){
+			$flag = insert_version($get , $id, $this->currentLanguage(), $method);
+		}
+
+		return $flag;
+	}
+
+	private function get_data_version($id = ''){
+		$flag = $this->AutoloadModel->_get_where([
+			'select' => 'id, objectid, content, attribute, attribute_catalogue',
+			'table' => 'product_version',
+			'where' => ['objectid' => $id]
+		],TRUE);
+		foreach ($flag as $key => $value) {
+			
+			$flag[$key]['content'] = json_decode($flag[$key]['content'], TRUE);
+		}
+
+		return $flag;
 	}
 
 	public function condition_catalogue(){

@@ -45,7 +45,7 @@
                     <form action="" method="">
                         <div class="uk-flex uk-flex-middle uk-flex-space-between mb20">
                             <div class="perpage">
-                                <div class="uk-flex uk-flex-middle mb10">
+                                <div class="uk-flex uk-flex-middle ">
                                     <select name="perpage" class="form-control input-sm perpage filter mr10">
                                         <option value="20">20 bản ghi</option>
                                         <option value="30">30 bản ghi</option>
