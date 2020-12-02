@@ -8,7 +8,8 @@ $(document).ready(function(){
 		BrowseServerPreview($(this));
 	});
     $(document).on('click','.img_version_select', function(){
-        BrowseServerProduct($(this));
+        let id = $(this).attr('data-target')
+        BrowseServerProduct($(this), id);
     });
     $(document).on('click','.va-img-click', function(){
         BrowseServerInput($(this));
@@ -118,8 +119,62 @@ function BrowseServerAlbum(object, type){
     }
     finder.popup();
 }
+function BrowseServerAlbumModal(object, id , type){
+    var finder = new CKFinder();
+    finder.resourceType = type;
+    finder.selectActionFunction = function(fileUrl , data, allFiles ) {
+        if(typeof(type) == 'undefined'){
+            type = 'Images';
+        }
+        
 
-function BrowseServerProduct(object, type){
+        var files = allFiles;
+        var li = '';
+        let album  = [];
+        for(var i = 0 ; i < files.length; i++){
+            fileUrl =  files[i].url.replace(BASE_URL, "/");
+            album.push(fileUrl);
+            li = li + '<li class="ui-state-default">';
+                li = li + '<div class="thumb">';
+                    li = li + '<span class="image img-scaledown img-model">';
+                        li = li + '<img src="'+fileUrl+'" alt="">'; 
+                    li = li + '</span>';
+                    li = li + '<div class="overlay"></div><div class="delete-image del_img_modal" data-id="#'+id+'"><i class="fa fa-trash" aria-hidden="true"></i></div>';
+                li = li + '</div>';
+            li = li + '</li>';
+        }
+        object.parents('.modal').siblings('table').find('tr').each(function (key, value){
+            let check_id = $(this).find('img').attr('data-target')
+            if(check_id == '#'+id){
+                $(this).find('img').attr('src', album[0])
+            }
+        })
+
+        var myJSON = JSON.stringify(album);
+        object.parents('.modal').find('.sort-modal').append(li);
+        object.parents('.modal').find('.click-to-upload').hide();
+        object.parents('.modal').find('.upload-list').show();
+        let val = object.parents('.modal').find('.input_img_version').val();
+        let value = value_handling(val)
+        if(value != ''){
+            myJSON = myJSON.split('[')
+        }
+
+        object.parents('.modal').find('.input_img_version').val(value +((value == "") ? '' : ',')+ ((value == "") ? myJSON : myJSON[1]));
+    }
+    finder.popup();
+}
+
+function value_handling(value){
+    if(value != []){
+        let end = value.split("]");
+        let result = end[0];
+        return result;
+    }
+    return "";
+}
+
+function BrowseServerProduct(object,id , type){
     var finder = new CKFinder();
     finder.resourceType = type;
 
@@ -128,9 +183,9 @@ function BrowseServerProduct(object, type){
             type = 'Images';
         }
         
-
+        let target = object.attr('data-target')
+        var li = '';
         var files = allFiles;
-        console.log(files)
         let album  = [];
         for(var i = 0 ; i < files.length; i++){
             fileUrl =  files[i].url.replace(BASE_URL, "/");
@@ -138,12 +193,28 @@ function BrowseServerProduct(object, type){
             if(i == 0){
                 object.attr('src', fileUrl);
             }
+            li = li + '<li class="ui-state-default">';
+                li = li + '<div class="thumb">';
+                    li = li + '<span class="image img-scaledown img-model">';
+                        li = li + '<img src="'+fileUrl+'" alt="">'; 
+                    li = li + '</span>';
+                    li = li + '<div class="overlay"></div><div class="delete-image del_img_modal" data-id="#'+id+'"><i class="fa fa-trash" aria-hidden="true"></i></div>';
+                li = li + '</div>';
+            li = li + '</li>';
         }
+        object.parents('.table').find('tr').each(function (key, value){
+            let check_id = $(this).find('img').attr('data-target')
+            if(check_id == '#'+id){
+                $(this).find('img').attr('src', album[0])
+            }
+        })
         var myJSON = JSON.stringify(album);
-
-        object.siblings('.input_img_version').val(myJSON);
-        // $('.click-to-upload').hide();
-        // $('.upload-list').show();
+        object.parents('.table').siblings(target).find('.sort-modal').append(li);
+        object.parents('.table').siblings(target).find('.upload-list').show();
+        object.parents('.table').siblings(target).find('.click-to-upload').hide();
+        let val = object.parents('.table').siblings(target).find('.input_img_version').val();
+        let value = value_handling(val)
+        object.parents('.table').siblings(target).find('.input_img_version').val(value + myJSON);
     }
     finder.popup();
 }

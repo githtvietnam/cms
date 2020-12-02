@@ -516,10 +516,11 @@ class Product extends BaseController{
 			'attribute3' => $this->request->getPost('attribute3'),
 			'img_version' => $this->request->getPost('img_version'),
 			'title_version' => $this->request->getPost('title_version'),
+			'barcode_version' => $this->request->getPost('barcode_version'),
+			'model_version' => $this->request->getPost('model_version'),
 			'price_version' => $this->request->getPost('price_version'),
 			'code_version' => $this->request->getPost('code_version'),
 		];
-		prE($get);
 		if($get['attribute1'] != []){
 			$flag = insert_version($get , $id, $this->currentLanguage(), $method);
 		}

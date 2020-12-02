@@ -3,6 +3,8 @@ $(document).ready(function(){
 	$( function() {
 		$( "#sortable" ).sortable();
 		$( "#sortable" ).disableSelection();
+		$( ".sort-modal" ).sortable();
+		$( ".sort-modal" ).disableSelection();
 	});
 	
 	$(document).on('click','.ui-state-default .thumb .fa-trash', function(){
@@ -575,11 +577,10 @@ function getDataMultiple(object, data, select="title"){
 				condition: condition, title: title, module: module, select: select,key:key, data : data},
 				function(data){
 					let json = JSON.parse(data);
-					console.log(json)
 					if(json !='undefined' && json.length){
 						for(let i = 0; i< json.length; i++){
 							var option = new Option(json[i].title, json[i].id, true, true);
-							object.append(option).trigger('change');
+							object.append(option);
 						}
 					}
 				});

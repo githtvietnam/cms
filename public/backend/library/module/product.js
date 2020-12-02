@@ -1,13 +1,13 @@
 var count = 0;
 attribute_cat = JSON.parse(attribute_cat)
 
-
+// Run on web load
 
 $(document).ready(function(){
     $('.tagsinput').tagsinput({
         tagClass: 'label label-primary',
         confirmKeys: [13, 188],
-        cancelConfirmKeysOnEmpty: false,
+        cancelConfirmKeysOnEmpty: true,
     });
 
     selectMultipe($('.selectAttribute'));
@@ -23,12 +23,103 @@ $(document).ready(function(){
     }
 });
 
+$(document).ready(function(){
+	WinMove();
+});
+
+// ===================================================== JQuery Gia ban buon san pham ==============================================================
 
 
+$(document).on('click','.btn_wholesale',function(){
+	let _this = $(this);
+	let wholesale = [];
+	let accept = false;
+	let dem = $('.wholesale_desc').length;
+
+	if(dem == 0){
+		$('.wholesale_more').append(render_wholesale(dem + 1, 1));
+	}else{
+		$('.number_start, .number_end').each(function () {
+			if($(this).val() == ''){
+				accept = false;
+			}else{
+				accept = true;
+			}
+		})
+		if(accept == false){
+			toastr.options.closeButton = true;
+		    toastr.options.preventDuplicates = true;
+		    toastr.options.progressBar = true;
+		    toastr.warning('Bạn vui lòng nhập vào 2 trường số lượng để tiếp tục!','Xảy ra lỗi!');
+			return false;
+		}else{
+			let before_end = parseInt($('#numberend_'+(dem)+'').val());
+			$('.wholesale_more').append(render_wholesale(dem + 1));
+			$('#numberstart_'+(dem+1)).val(before_end + 1);
+		}
+	}
+	return false;
+})
+
+$(document).on('click','.wholesale_del',function(){
+	let _this = $(this);
+	_this.parents('.wholesale_desc').remove();
+	return false;
+})
+
+$(document).on('change','.number_end',function(){
+	let _this = $(this);
+	let start = _this.parents('.wholesale_desc').find('.number_start').val();
+	let id = _this.attr('id')
+	id = id.split("_")
+	id[1] = parseInt(id[1])
+	let end = parseInt(_this.val())
+	if(end <= start){
+		_this.val('');
+	}
+	if($('#numberstart_'+(id[1]+1)+'').length != 0){
+		$('#numberstart_'+(id[1]+1)+'').val(end + 1);
+	}
+	return false;
+})
+
+$(document).on('click','.add-attr',function(){
+	let _this = $(this);
+	count++;
+	render_attr();
+})
+
+
+$(document).on('click','.del_img_modal',function(){
+    let _this = $(this);
+    let id = _this.attr('data-id');
+    console.log(id)
+	let data = [];
+    $(id).find('img').each(function(){
+    	data.push($(this).attr('src'));
+    })
+    let text = '';
+    for (var i = 0; i < data.length; i++) {
+    	if(i == 0){
+    		text = '["'+data[i]+'"'+((i+1 == data.length) ? ']' : ',');
+    	}
+    	if(i >= 1){
+    		text = text + '"'+ data[i] + '"'+((i+1 == data.length) ? ']' : ',');
+    	}
+    }
+    $(id).find('.input_img_version').val(text)
+    if(text == ''){
+    	$(id).find('.click-to-upload').show()
+    }
+})
+
+
+// ===================================================== JQuery phien ban san pham =================================================================
 
 
 $(document).on('click','.block-attribute input[name="checkbox[]"]', function(){
 	let val = $(this).parents('td').find('input[name="checkbox_val[]"]').val();
+	console.log(val)
 	if(val==1){
 	    $(this).parents('td').find('input[name="checkbox_val[]"]').val(0);
 	}else{
@@ -36,8 +127,13 @@ $(document).on('click','.block-attribute input[name="checkbox[]"]', function(){
 	}
 });
 
+$(document).on('change','.input_img_version', function(){
+	console.log(1)
+});
+
 $(document).on('change','.block-attribute input[name="checkbox[]"]', function(){
     let check = $('input[name="checkbox[]"]:checked').length;
+    console.log(check)
 	if(check > 3){
 		toastr.warning('Chọn nhiều nhất 3 thuộc tính của phiên bản!','');
 		$(this).prop('checked', false);
@@ -119,67 +215,8 @@ $(document).on('click','.block-attribute .delete-attribute', function(){
 });
 
 
-$(document).on('click','.btn_wholesale',function(){
-	let _this = $(this);
-	let wholesale = [];
-	let accept = false;
-	let dem = $('.wholesale_desc').length;
+// ===================================================== JQuery Thao tac san pham ==============================================================
 
-	if(dem == 0){
-		$('.wholesale_more').append(render_wholesale(dem + 1, 1));
-	}else{
-		$('.number_start, .number_end').each(function () {
-			if($(this).val() == ''){
-				accept = false;
-			}else{
-				accept = true;
-			}
-		})
-		if(accept == false){
-			toastr.options.closeButton = true;
-		    toastr.options.preventDuplicates = true;
-		    toastr.options.progressBar = true;
-		    toastr.warning('Bạn vui lòng nhập vào 2 trường số lượng để tiếp tục!','Xảy ra lỗi!');
-			return false;
-		}else{
-			let before_end = parseInt($('#numberend_'+(dem)+'').val());
-			$('.wholesale_more').append(render_wholesale(dem + 1));
-			$('#numberstart_'+(dem+1)).val(before_end + 1);
-		}
-	}
-	return false;
-})
-
-$(document).on('click','.wholesale_del',function(){
-	let _this = $(this);
-	_this.parents('.wholesale_desc').remove();
-	return false;
-})
-
-$(document).on('change','.number_end',function(){
-	let _this = $(this);
-	let start = _this.parents('.wholesale_desc').find('.number_start').val();
-	let id = _this.attr('id')
-	id = id.split("_")
-	id[1] = parseInt(id[1])
-	let end = parseInt(_this.val())
-	if(end <= start){
-		_this.val('');
-	}
-	if($('#numberstart_'+(id[1]+1)+'').length != 0){
-		$('#numberstart_'+(id[1]+1)+'').val(end + 1);
-	}
-	return false;
-})
-
-$(document).on('click','.add-attr',function(){
-	let _this = $(this);
-	count++;
-	render_attr();
-})
-
-$(document).on('click','.ibox-title.ui-sortable-handle',function(){
-})
 
 $(document).on('click','.delete-all', function(){
 	let id = [];
@@ -225,11 +262,6 @@ $(document).on('click','.delete-all', function(){
 		return false;
 	}
 	return false;
-});
-
-
-$(document).ready(function(){
-	WinMove();
 });
 
 
@@ -470,6 +502,7 @@ function render_attribute(data = []){
 	html = html + '<tr >';
 		html = html + '<td data-index="'+index+'">';
 			html = html + '<input type="checkbox" name="checkbox[]" class="checkbox-item">';
+			html = html + '<input type="text" name="checkbox_val[]"  class="hidden">';
 			html = html + '<div for="" class="label-checkboxitem"></div>';
 		html = html + '</td>';
 		html = html + '<td>';
@@ -504,7 +537,7 @@ function render_version(title='', price ='',code='', attribute1='', attribute2='
 			html = html+'<input type="text" name="attribute2[]" value="'+attribute2+'" class="hidden">';
 			html = html+'<input type="text" name="attribute3[]" value="'+attribute3+'" class="hidden">';
 			html = html + '<div class="img_version img-scaledown" style="cursor: pointer;">';
-				html = html + '<img src="public/select-img.png" class="img_version_select" alt="">';
+				html = html + '<img src="public/select-img.png" class="img_version_select" alt="" data-target="#'+code+'">';
 			html = html + '</div>';
 			html = html + '<input type="text" name="img_version[]" value="" class="form-control hide_img_version input_img_version" placeholder="Đường dẫn của ảnh" autocomplete="off" style="display:none;">';
 		html = html + '</td>';
@@ -517,7 +550,73 @@ function render_version(title='', price ='',code='', attribute1='', attribute2='
 		html = html + '<td>';
 			html = html + '<input type="text" name="code_version[]" value="'+code+'" class="form-control" autocomplete="off">';
 		html = html + '</td>';
-		html = html+'<td><a href="" class="product_edit">Chỉnh sửa</a></td>';
+		html = html+'<td><button type="button" class=" product_edit" data-toggle="modal" data-target="#'+code+'" >Chỉnh sửa</button></td>';
+		html = html +'<div class="modal fade" id="'+code+'">';
+		  	html = html +'<div class="modal-dialog" role="document">';
+			    html = html +'<div class="modal-content">';
+			      	html = html +'<div class="modal-header ">';
+			      		html = html +'<div class="uk-flex uk-flex-middle uk-flex-space-between">';
+				        	html = html +'<h5 class="modal-title" id="exampleModalLabel">Chỉnh sửa chi tiết phiên bản sản phẩm</h5>';
+					       html = html +' <button type="button" class="close" data-dismiss="modal" aria-label="Close">';
+					          	html = html +'<span aria-hidden="true">&times;</span>';
+					        html = html +'</button>';
+			      		html = html + '</div>';
+			      	html = html + '</div>';
+			      	html = html + '<div class="modal-body">';
+			      		html = html + '<div class="row mb15">';
+			      			html = html + '<div class="col-lg-6">';
+			      				html = html + '<div class="form-row">';
+			      					html = html + '<label class="control-label ">';
+										html = html + '<span>BarCode</span>';
+									html = html + '</label>';
+									html = html + '<input type="text" name="barcode_version[]" value="" class="form-control" autocomplete="off">';
+			      				html = html + '</div>';
+			      			html = html + '</div>';
+			      			html = html + '<div class="col-lg-6">';
+			      				html = html + '<div class="form-row">';
+			      					html = html + '<label class="control-label ">';
+										html = html + '<span>Model</span>';
+									html = html + '</label>';
+									html = html + '<input type="text" name="model_version[]" value="" class="form-control" autocomplete="off">';
+			      				html = html + '</div>';
+			      			html = html + '</div>';
+			      		html = html +'</div>	';
+			      		html = html +'<div class="row">';
+			      			html = html +'<div class="col-lg-12">';
+			      				html = html +'<div class="form-row">';
+			      					
+									html = html +'<div class="uk-flex uk-flex-middle uk-flex-space-between">';
+										html = html +'<label class="control-label ">';
+											html = html +'<span>Album sản phẩm</span>';
+										html = html +'</label>';
+										html = html +'<div class="uk-flex uk-flex-middle uk-flex-space-between">';
+											html = html +'<div class="edit">';
+												html = html +'<a onclick="BrowseServerAlbumModal($(this),'+code+');return false;" href="" title="" class="upload-picture">Chọn hình</a>';
+											html = html + '</div>';
+										html = html + '</div>';
+									html = html + '</div>';
+									
+									html = html + '<div class="click-to-upload" style="display:none">';
+										html = html + '<div class="icon">';
+											html = html + '<a type="button" class="upload-picture" onclick="BrowseServerAlbumModal($(this), '+code+');return false;">';
+												html = html +'<svg style="width:80px;height:80px;fill: #d3dbe2;margin-bottom: 10px;" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 80 80"><path d="M80 57.6l-4-18.7v-23.9c0-1.1-.9-2-2-2h-3.5l-1.1-5.4c-.3-1.1-1.4-1.8-2.4-1.6l-32.6 7h-27.4c-1.1 0-2 .9-2 2v4.3l-3.4.7c-1.1.2-1.8 1.3-1.5 2.4l5 23.4v20.2c0 1.1.9 2 2 2h2.7l.9 4.4c.2.9 1 1.6 2 1.6h.4l27.9-6h33c1.1 0 2-.9 2-2v-5.5l2.4-.5c1.1-.2 1.8-1.3 1.6-2.4zm-75-21.5l-3-14.1 3-.6v14.7zm62.4-28.1l1.1 5h-24.5l23.4-5zm-54.8 64l-.8-4h19.6l-18.8 4zm37.7-6h-43.3v-51h67v51h-23.7zm25.7-7.5v-9.9l2 9.4-2 .5zm-52-21.5c-2.8 0-5-2.2-5-5s2.2-5 5-5 5 2.2 5 5-2.2 5-5 5zm0-8c-1.7 0-3 1.3-3 3s1.3 3 3 3 3-1.3 3-3-1.3-3-3-3zm-13-10v43h59v-43h-59zm57 2v24.1l-12.8-12.8c-3-3-7.9-3-11 0l-13.3 13.2-.1-.1c-1.1-1.1-2.5-1.7-4.1-1.7-1.5 0-3 .6-4.1 1.7l-9.6 9.8v-34.2h55zm-55 39v-2l11.1-11.2c1.4-1.4 3.9-1.4 5.3 0l9.7 9.7c-5.2 1.3-9 2.4-9.4 2.5l-3.7 1h-13zm55 0h-34.2c7.1-2 23.2-5.9 33-5.9l1.2-.1v6zm-1.3-7.9c-7.2 0-17.4 2-25.3 3.9l-9.1-9.1 13.3-13.3c2.2-2.2 5.9-2.2 8.1 0l14.3 14.3v4.1l-1.3.1z"></path></svg>';
+											html = html +'<a>';
+										html = html +'</div>';
+										html = html +'<div class="small-text">Sử dụng nút <b>Chọn hình</b> để thêm hình.</div>';
+									html = html +'</div>';
+									html = html +'<div class="upload-list" style="padding:5px;">';
+										html = html +'<div class="row">';
+											html = html +'<ul class="clearfix sortui sort-modal"></ul>';
+											html = html +'<input type="text" name="img_version[]" value="" class="form-control hide_img_version input_img_version" placeholder="Đường dẫn của ảnh" id="img_version" autocomplete="off" style="display:none;">';
+										html = html +'</div>';
+									html = html +'</div>';
+			      				html = html +'</div>';
+			      			html = html +'</div>';
+			      		html = html +'</div>';
+			      	html = html +'</div>';
+		    	html = html +'</div>';
+		  	html = html +'</div>';
+		html = html +'</div>';
 	html = html + '</tr>';
 	return html;
 }
@@ -558,6 +657,9 @@ function get_vesion(){
 			}
 		}
 	});
+		$('.block-version .ibox-content>table tbody').html('');
+		$('.block-attribute').siblings('table').hide();
+
 
 	if(color.length != 0){
 		if(attribute.length == 0){
@@ -579,8 +681,7 @@ function get_vesion(){
 	  		attributeid1.push(attributeid[index]);
 		}
 	});
-	$('.block-version .ibox-content>table tbody').html('');
-	$('.block-attribute').siblings('table').hide();
+	
 	let index=1;
 	for (var i in attribute1[0]){
 		if(typeof attribute1[1] != "undefined"){

@@ -69,6 +69,9 @@ if (! function_exists('insert_version')){
 				$new_array[$keyChild][$key] = $param[$key][$keyChild];
 			}
 		}
+		foreach ($new_array as $key => $value) {
+			$new_array[$key]['img_version'] = validate_input($value['img_version']);
+		}
 
 		
 		foreach ($new_array as $key => $value) {

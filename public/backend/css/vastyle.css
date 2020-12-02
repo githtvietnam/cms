@@ -432,3 +432,69 @@ button[disabled], html input[disabled] {
     font-size: 12px;
     display: inline-block;
 }
+
+.img-model img{
+	width: 100% !important;
+	height: 100% !important;
+}
+
+.sort-modal {
+	list-style:none;
+	padding-left:0;
+	margin-top:16px;
+}
+
+.sort-modal .thumb{
+	background: #fafbfc;
+    border: 1px solid #e3e3e3;
+	height:120px;
+}
+
+.sort-modal .thumb{
+	position: relative;
+}
+.sort-modal .delete-image{
+	display: none;
+	position: absolute;
+	bottom:5px;
+	text-align: center;
+	color:#fff;
+	width: 100%;
+	font-size: 15px;
+}
+.sort-modal .overlay{
+	/* transition: height 2s ease 3s; */
+	display: none;
+	position: absolute;
+	top:0px;
+	height:100%;
+	width: 100%;
+	background: #2c3e50;
+	opacity: 0.7;
+}
+.sort-modal .thumb:hover .overlay{
+	
+	display: block;
+}
+.sort-modal .thumb:hover .delete-image{
+
+	display: block;
+}
+
+.sort-modal .thumb .delete-image:hover{
+	cursor: pointer;
+}
+
+.product_edit{
+	background-color: transparent;
+    color: blue;
+    padding: 0;
+    border: 0;
+    text-align: center;
+    width: 100%;
+    outline: 0
+}
+
+.product_edit:hover{
+	text-decoration: underline;
+}
