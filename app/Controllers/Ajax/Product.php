@@ -111,6 +111,21 @@ class Product extends BaseController{
 		echo $flag;die();
 	}
 
+	public function render_data_detail(){
+		$param['id'] = $this->request->getPost('id');
+		$param['barcode'] = $this->request->getPost('barcode');
+		$param['model'] = $this->request->getPost('model');
+		$param['img'] = $this->request->getPost('img');
+		echo json_encode($param);die();
+	}
+	public function render_input_version(){
+		$param['id'] = $this->request->getPost('id');
+		$param['barcode'] = $this->request->getPost('barcode');
+		$param['model'] = $this->request->getPost('model');
+		echo json_encode($param);die();
+	}
+
+
 	public function update_price(){
 		$id = $this->request->getPost('id');
 		$val = $this->request->getPost('val');

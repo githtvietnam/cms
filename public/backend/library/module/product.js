@@ -116,6 +116,70 @@ $(document).on('click','.del_img_modal',function(){
 
 // ===================================================== JQuery phien ban san pham =================================================================
 
+$('#render_input_version').on("submit", function(event) {
+    event.preventDefault();
+    let _this = $(this)
+    let barcode = $('.modal_barcode_version').val();
+    let model = $('.modal_model_version').val();
+    let id = _this.attr('data-id');
+   
+    let form_URL = 'ajax/product/render_input_version';
+	$.post(form_URL, {
+		id : id, barcode: barcode, model: model
+	},
+	function(data){
+		let json = JSON.parse(data);
+		console.log(json)
+		$(id).find('.barcode_version').val(json.barcode)
+		$(id).find('.model_version').val(json.model)
+		$('#openModalDetail').modal('hide');
+	});	
+});
+
+$(document).on('click','.product_edit', function(){
+	$('#openModalDetail .upload-list ul li').remove()
+	let _this = $(this);
+	let id = _this.attr('data-id');
+	let barcode = _this.parents('tr').find('.barcode_version').val();
+	let model = _this.parents('tr').find('.model_version').val();
+	let img = _this.parents('tr').find('.input_img_version').val();
+	let form_URL = 'ajax/product/render_data_detail';
+	$.post(form_URL, {
+		id : id, barcode: barcode, model: model, img: img
+	},
+	function(data){
+		let json = JSON.parse(data);
+		$('.modal_barcode_version').val(json.barcode);
+		$('.modal_model_version').val(json.model);
+		$('.modal_version .submit_version').attr('data-id', json.id)
+		$('.modal_version .upload-picture').attr('data-id', json.id)
+		if(json.img != [] && json.img != undefined){
+			let render_img = JSON.parse(json.img)
+			
+			for(var i = 0 ; i < render_img.length; i++){
+            fileUrl =  render_img[i];
+            let li = '';
+            li = li + '<li class="ui-state-default">';
+                li = li + '<div class="thumb">';
+                    li = li + '<span class="image img-scaledown">';
+                        li = li + '<img src="'+fileUrl+'" alt="">'; 
+                        li = li + '<input type="hidden" value="'+fileUrl+'" name="album[]">';
+                    li = li + '</span>';
+                    li = li + '<div class="overlay"></div><div class="delete-image"><i class="fa fa-trash" aria-hidden="true"></i></div>';
+                li = li + '</div>';
+            li = li + '</li>';
+
+			$('#openModalDetail .click-to-upload').hide();
+        	$('#openModalDetail .upload-list ul').append(li);
+            $('#openModalDetail .upload-list').show();
+	        }
+		}else{
+			$('#openModalDetail .click-to-upload').show();
+            $('#openModalDetail .upload-list').hide();
+		}
+	})
+});	
+
 
 $(document).on('click','.block-attribute input[name="checkbox[]"]', function(){
 	let val = $(this).parents('td').find('input[name="checkbox_val[]"]').val();
@@ -531,11 +595,13 @@ function render_color(index = ''){
 }
 
 function render_version(title='', price ='',code='', attribute1='', attribute2='', attribute3=''){
-	let html = '<tr>';
+	let html = '<tr id="'+code+'">';
 		html = html + '<td>';
 			html = html+'<input type="text" name="attribute1[]" value="'+attribute1+'" class="hidden">';
 			html = html+'<input type="text" name="attribute2[]" value="'+attribute2+'" class="hidden">';
 			html = html+'<input type="text" name="attribute3[]" value="'+attribute3+'" class="hidden">';
+			html = html+'<input type="text" name="barcode_version[]"  value="" class="hidden barcode_version">';
+			html = html+'<input type="text" name="model_version[]" value="" class="hidden model_version">';
 			html = html + '<div class="img_version img-scaledown" style="cursor: pointer;">';
 				html = html + '<img src="public/select-img.png" class="img_version_select" alt="" data-target="#'+code+'">';
 			html = html + '</div>';
@@ -550,73 +616,7 @@ function render_version(title='', price ='',code='', attribute1='', attribute2='
 		html = html + '<td>';
 			html = html + '<input type="text" name="code_version[]" value="'+code+'" class="form-control" autocomplete="off">';
 		html = html + '</td>';
-		html = html+'<td><button type="button" class=" product_edit" data-toggle="modal" data-target="#'+code+'" >Chỉnh sửa</button></td>';
-		html = html +'<div class="modal fade" id="'+code+'">';
-		  	html = html +'<div class="modal-dialog" role="document">';
-			    html = html +'<div class="modal-content">';
-			      	html = html +'<div class="modal-header ">';
-			      		html = html +'<div class="uk-flex uk-flex-middle uk-flex-space-between">';
-				        	html = html +'<h5 class="modal-title" id="exampleModalLabel">Chỉnh sửa chi tiết phiên bản sản phẩm</h5>';
-					       html = html +' <button type="button" class="close" data-dismiss="modal" aria-label="Close">';
-					          	html = html +'<span aria-hidden="true">&times;</span>';
-					        html = html +'</button>';
-			      		html = html + '</div>';
-			      	html = html + '</div>';
-			      	html = html + '<div class="modal-body">';
-			      		html = html + '<div class="row mb15">';
-			      			html = html + '<div class="col-lg-6">';
-			      				html = html + '<div class="form-row">';
-			      					html = html + '<label class="control-label ">';
-										html = html + '<span>BarCode</span>';
-									html = html + '</label>';
-									html = html + '<input type="text" name="barcode_version[]" value="" class="form-control" autocomplete="off">';
-			      				html = html + '</div>';
-			      			html = html + '</div>';
-			      			html = html + '<div class="col-lg-6">';
-			      				html = html + '<div class="form-row">';
-			      					html = html + '<label class="control-label ">';
-										html = html + '<span>Model</span>';
-									html = html + '</label>';
-									html = html + '<input type="text" name="model_version[]" value="" class="form-control" autocomplete="off">';
-			      				html = html + '</div>';
-			      			html = html + '</div>';
-			      		html = html +'</div>	';
-			      		html = html +'<div class="row">';
-			      			html = html +'<div class="col-lg-12">';
-			      				html = html +'<div class="form-row">';
-			      					
-									html = html +'<div class="uk-flex uk-flex-middle uk-flex-space-between">';
-										html = html +'<label class="control-label ">';
-											html = html +'<span>Album sản phẩm</span>';
-										html = html +'</label>';
-										html = html +'<div class="uk-flex uk-flex-middle uk-flex-space-between">';
-											html = html +'<div class="edit">';
-												html = html +'<a onclick="BrowseServerAlbumModal($(this),'+code+');return false;" href="" title="" class="upload-picture">Chọn hình</a>';
-											html = html + '</div>';
-										html = html + '</div>';
-									html = html + '</div>';
-									
-									html = html + '<div class="click-to-upload" style="display:none">';
-										html = html + '<div class="icon">';
-											html = html + '<a type="button" class="upload-picture" onclick="BrowseServerAlbumModal($(this), '+code+');return false;">';
-												html = html +'<svg style="width:80px;height:80px;fill: #d3dbe2;margin-bottom: 10px;" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 80 80"><path d="M80 57.6l-4-18.7v-23.9c0-1.1-.9-2-2-2h-3.5l-1.1-5.4c-.3-1.1-1.4-1.8-2.4-1.6l-32.6 7h-27.4c-1.1 0-2 .9-2 2v4.3l-3.4.7c-1.1.2-1.8 1.3-1.5 2.4l5 23.4v20.2c0 1.1.9 2 2 2h2.7l.9 4.4c.2.9 1 1.6 2 1.6h.4l27.9-6h33c1.1 0 2-.9 2-2v-5.5l2.4-.5c1.1-.2 1.8-1.3 1.6-2.4zm-75-21.5l-3-14.1 3-.6v14.7zm62.4-28.1l1.1 5h-24.5l23.4-5zm-54.8 64l-.8-4h19.6l-18.8 4zm37.7-6h-43.3v-51h67v51h-23.7zm25.7-7.5v-9.9l2 9.4-2 .5zm-52-21.5c-2.8 0-5-2.2-5-5s2.2-5 5-5 5 2.2 5 5-2.2 5-5 5zm0-8c-1.7 0-3 1.3-3 3s1.3 3 3 3 3-1.3 3-3-1.3-3-3-3zm-13-10v43h59v-43h-59zm57 2v24.1l-12.8-12.8c-3-3-7.9-3-11 0l-13.3 13.2-.1-.1c-1.1-1.1-2.5-1.7-4.1-1.7-1.5 0-3 .6-4.1 1.7l-9.6 9.8v-34.2h55zm-55 39v-2l11.1-11.2c1.4-1.4 3.9-1.4 5.3 0l9.7 9.7c-5.2 1.3-9 2.4-9.4 2.5l-3.7 1h-13zm55 0h-34.2c7.1-2 23.2-5.9 33-5.9l1.2-.1v6zm-1.3-7.9c-7.2 0-17.4 2-25.3 3.9l-9.1-9.1 13.3-13.3c2.2-2.2 5.9-2.2 8.1 0l14.3 14.3v4.1l-1.3.1z"></path></svg>';
-											html = html +'<a>';
-										html = html +'</div>';
-										html = html +'<div class="small-text">Sử dụng nút <b>Chọn hình</b> để thêm hình.</div>';
-									html = html +'</div>';
-									html = html +'<div class="upload-list" style="padding:5px;">';
-										html = html +'<div class="row">';
-											html = html +'<ul class="clearfix sortui sort-modal"></ul>';
-											html = html +'<input type="text" name="img_version[]" value="" class="form-control hide_img_version input_img_version" placeholder="Đường dẫn của ảnh" id="img_version" autocomplete="off" style="display:none;">';
-										html = html +'</div>';
-									html = html +'</div>';
-			      				html = html +'</div>';
-			      			html = html +'</div>';
-			      		html = html +'</div>';
-			      	html = html +'</div>';
-		    	html = html +'</div>';
-		  	html = html +'</div>';
-		html = html +'</div>';
+		html = html+'<td><button type="button" class=" product_edit" data-toggle="modal" data-id="#'+code+'" data-target="#openModalDetail" >Chỉnh sửa</button></td>';
 	html = html + '</tr>';
 	return html;
 }
@@ -627,6 +627,7 @@ function render_select2(catalogueid = '', condition = '' , index = ''){
 }
 
 function get_vesion(){
+
 	let price = $('input[name="price"]').val();
 	let code_main = $('input[name="productid"]').val();
 	let attribute = new Array();
@@ -657,8 +658,9 @@ function get_vesion(){
 			}
 		}
 	});
-		$('.block-version .ibox-content>table tbody').html('');
-		$('.block-attribute').siblings('table').hide();
+	// $('.modal_version').remove();
+	$('.block-version .ibox-content>table tbody').html('');
+	$('.block-attribute').siblings('table').hide();
 
 
 	if(color.length != 0){
