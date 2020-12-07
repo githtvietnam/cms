@@ -193,7 +193,7 @@ function BrowseServerProduct(object,id , type){
             }
         }
         var myJSON = JSON.stringify(album);
-        let val = object.siblings('.input_img_version').val();
+        let val = object.parents('tr').find('.input_img_version').val();
         let value  = "";
         if(val != undefined){
             let value = value_handling(val)
@@ -201,7 +201,7 @@ function BrowseServerProduct(object,id , type){
         if(value != ''){
             myJSON = myJSON.split('[')
         }
-        object.siblings('.input_img_version').val(value + ((value == "") ? '' : ',')+ ((value == "") ? myJSON : myJSON[1]));
+        object.parents('tr').find('.input_img_version').val(value + ((value == "") ? '' : ',')+ ((value == "") ? myJSON : myJSON[1]));
     }
     finder.popup();
 }

@@ -1,5 +1,8 @@
 var count = 0;
-attribute_cat = JSON.parse(attribute_cat)
+if(attribute_cat != ''){
+	attribute_cat = JSON.parse(attribute_cat)
+
+}
 
 // Run on web load
 
@@ -7,7 +10,7 @@ $(document).ready(function(){
     $('.tagsinput').tagsinput({
         tagClass: 'label label-primary',
         confirmKeys: [13, 188],
-        cancelConfirmKeysOnEmpty: true,
+        cancelConfirmKeysOnEmpty: false,
     });
 
     selectMultipe($('.selectAttribute'));
@@ -183,7 +186,6 @@ $(document).on('click','.product_edit', function(){
 
 $(document).on('click','.block-attribute input[name="checkbox[]"]', function(){
 	let val = $(this).parents('td').find('input[name="checkbox_val[]"]').val();
-	console.log(val)
 	if(val==1){
 	    $(this).parents('td').find('input[name="checkbox_val[]"]').val(0);
 	}else{
@@ -197,21 +199,52 @@ $(document).on('change','.input_img_version', function(){
 
 $(document).on('change','.block-attribute input[name="checkbox[]"]', function(){
     let check = $('input[name="checkbox[]"]:checked').length;
-    console.log(check)
+    let data = [];
 	if(check > 3){
 		toastr.warning('Chọn nhiều nhất 3 thuộc tính của phiên bản!','');
 		$(this).prop('checked', false);
 		$(this).parents('td').html('<input type="checkbox" name="checkbox[]" value="" class="checkbox-item"><div for="" class="label-checkboxitem"></div>');
+	}else{
+		$('.select_attribute tr input[name="checkbox[]"]:checked').each(function(){
+			data.push($(this).parents('tr').find('.trigger-select2').val())
+		})
+		JSON.stringify(data)
+		$('.checked_value').val(data)
 	}
 	get_vesion()
 });
 
-$(document).on('change','.tagsinput', function(){
+$(document).on('keyup','.bootstrap-tagsinput input', function(){
 	get_vesion()
 });
 
+$(document).on('click','[data-role=remove]', function(){
+	console.log(1)
+	get_vesion()
+});
+
+
 $(document).on('change','.selectAttribute', function(){
 	get_vesion()
+});
+
+$(document).on('click','.version_setting', function(){
+
+	let _this = $(this);
+	_this.parents('.block-version').find('.ibox-content').show();
+	_this.parents('.block-version').find('.show_attribute').append(render_attribute(attribute_cat));
+	check_attribute();
+	$('.trigger-select2').each(function(key, index){
+		$('.trigger-select2').select2();
+	});
+	$countAttr = $('.block-attribute table tbody').find('tr').length;
+	$countCat = attribute_cat.length;
+	if(parseInt($countAttr) >= 1){
+		$('.version_setting').hide()
+	}else{
+		$('.version_setting').show()
+	}
+	return false;
 });
 
 $(document).on('click','.add_version', function(){
@@ -224,7 +257,8 @@ $(document).on('click','.add_version', function(){
 	});
 	$countAttr = $('.block-attribute table tbody').find('tr').length;
 	$countCat = attribute_cat.length;
-	if(parseInt($countAttr) >= 3){
+	console.log($countCat)
+	if(parseInt($countAttr) >= $countCat){
 		$('.add_version').hide()
 	}else{
 		$('.add_version').show()
@@ -260,6 +294,7 @@ $(document).on('change','select[name="attribute_catalogue[]"]', function(){
 
 $(document).on('click','.block-attribute .delete-attribute', function(){
 	let _this = $(this);
+    let data = [];
 	_this.parents('tr').remove();
 	let val= _this.parents('tr').find('select[name="attribute_catalogue[]"] option:checked').val();
 	$('.block-attribute select[name="attribute_catalogue[]"]').find("option[value="+val+ "]").prop('disabled',false);
@@ -275,6 +310,12 @@ $(document).on('click','.block-attribute .delete-attribute', function(){
 	}else{
 		$('.add_version').show()
 	}
+
+	$('.select_attribute tr input[name="checkbox[]"]:checked').each(function(){
+		data.push($(this).parents('tr').find('.trigger-select2').val())
+	})
+	JSON.stringify(data)
+	$('.checked_value').val(data)
 	
 });
 
@@ -627,7 +668,6 @@ function render_select2(catalogueid = '', condition = '' , index = ''){
 }
 
 function get_vesion(){
-
 	let price = $('input[name="price"]').val();
 	let code_main = $('input[name="productid"]').val();
 	let attribute = new Array();

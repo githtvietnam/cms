@@ -502,3 +502,18 @@ button[disabled], html input[disabled] {
 .product_edit:hover{
 	text-decoration: underline;
 }
+.wholesale_del{
+	margin-top: 20px
+}
+
+.add_version{
+	background-color: #e4e4e4;
+    border: 1px solid #aaa;
+    color: #676a6c;
+}
+
+.add_version:hover{
+	background: #ccc;
+    color: #676a6c;
+    border: 1px solid #aaa;
+}

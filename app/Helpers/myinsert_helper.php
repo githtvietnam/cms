@@ -57,36 +57,94 @@ if (! function_exists('insert_version')){
 				'where' => ['objectid' => $objectid,'language' => $language]
 			]);
 		}
-		$attribute['attribute_catalogue'] = array_shift($param);
-		$attribute['attribute'] = array_shift($param);
-		foreach ($attribute as $key => $value) {
-			foreach ($value as $keyChild => $valChild) {
-				$new_attribute[$key][] = $attribute[$key][$keyChild];
+
+		if($param != []){
+			$attribute['attribute_catalogue'] = array_shift($param);
+			$attribute['attribute'] = array_shift($param);
+			foreach ($attribute as $key => $value) {
+				foreach ($value as $keyChild => $valChild) {
+					$new_attribute[$key][] = $attribute[$key][$keyChild];
+				}
 			}
+			foreach ($param as $key => $value) {
+				foreach ($value as $keyChild => $valChild) {
+					$new_array[$keyChild][$key] = $param[$key][$keyChild];
+				}
+			}
+			foreach ($new_array as $key => $value) {
+				$new_array[$key]['img_version'] = validate_input($value['img_version']);
+			}
+
+			
+			foreach ($new_array as $key => $value) {
+				$insert[] = [
+					'objectid' => $objectid,
+					'language' => $language,
+					'content' => json_encode($new_array[$key]),
+					'checked' => $new_array[0]['checked'],
+					'attribute' => json_encode($new_attribute['attribute']),
+					'attribute_catalogue' => json_encode($new_attribute['attribute_catalogue']),
+				];
+			}
+
+			$flag =	$model->_create_batch([
+				'table' => 'product_version',
+				'data' => $insert,
+			]);
 		}
+	}	
+}
+
+if (! function_exists('insert_attribute')){
+	function insert_attribute(array $param = [], $id = '', $language = '', $catalogueid = ''){
+		$model = new AutoloadModel();
+		$data = [];
+		$new_array = [];
 		foreach ($param as $key => $value) {
 			foreach ($value as $keyChild => $valChild) {
-				$new_array[$keyChild][$key] = $param[$key][$keyChild];
+				$data[$param['attribute_catalogue'][$keyChild]] = $param['attribute'][$keyChild];
 			}
 		}
-		foreach ($new_array as $key => $value) {
-			$new_array[$key]['img_version'] = validate_input($value['img_version']);
-		}
 
+		// Explode color -> array
 		
-		foreach ($new_array as $key => $value) {
-			$insert[] = [
-				'objectid' => $objectid,
-				'language' => $language,
-				'content' => json_encode($new_array[$key]),
-				'attribute' => json_encode($new_attribute['attribute']),
-				'attribute_catalogue' => json_encode($new_attribute['attribute_catalogue']),
-			];
+		foreach ($data as $key => $value) {
+			if($key == 'color'){
+				$color_explode = explode(",", $value[0]);
+				$data[$key] = $color_explode;
+			}
 		}
 
-		$flag =	$model->_create_batch([
-			'table' => 'product_version',
+		// // Tao mang moi: id => []
+		
+		foreach ($data as $key => $value) {
+			$new_array[$id] = $data;
+		}
+
+		$attr = $model->_get_where([
+			'select' => 'attribute',
+			'table' => 'product_translate',
+			'where' => [
+				'language' => $language,
+				'module' => 'product_catalogue',
+				'objectid' => $catalogueid
+			]
+		]);
+		$attr = json_decode($attr['attribute'] , TRUE);
+		$new_array = $attr + $new_array;
+		$new_array = json_encode($new_array);
+		// Nhap vao CSDL table: product_transalte
+		$insert = [
+			'attribute' => $new_array
+		];
+		$flag = $model->_update([
+			'table' => 'product_translate',
 			'data' => $insert,
+			'where' => [
+				'language' => $language,
+				'module' => 'product_catalogue',
+				'objectid' => $catalogueid
+			]
 		]);
 	}	
 }

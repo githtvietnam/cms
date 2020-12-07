@@ -4,12 +4,15 @@
 		$list_attribute['value'] = json_decode($version[0]['attribute']);
 	}
 ?>
+<script>
+	var count_catalogue = '<?php echo ((isset($attribute_catalogue)) ? count($attribute_catalogue) : '') ?>'
+</script>
 <div class="ibox mb20 block-version" data-countattribute_catalogue="2">	
 	<div class="ibox-title" style="padding-bottom: 15px;">
 		<div class="uk-flex uk-flex-middle uk-flex-space-between">
 			<h5 class="mb0">Sản phẩm có nhiều phiên bản <span class="text-danger">(Chọn tối đa 3)</span></h5>
 			<div class="ibox-tools">
-				<button class="btn add_version btn-success  full-width m-b m0" style="<?php echo isset($list_attribute['catalogue']) ? ((count($list_attribute['catalogue']) >= 3) ? 'display: none;' : '') : ''; ?>">Thêm Phiên bản</button>
+				<button class="btn version_setting btn-success full-width m-b m0" style="<?php echo isset($list_attribute['catalogue']) ? ((count($list_attribute['catalogue']) >= 1) ? 'display: none;' : '') : ''; ?>">Thêm phiên bản</button>
 			</div>
 		</div>
 	</div>
@@ -28,13 +31,13 @@
 		array_unshift($select_catalogue, $color);
 
 		$encode_catalogue = json_encode($select_catalogue);
-		// prE($version)
 	?>
 	
 	<script>
 		var attribute_cat = '<?php echo $encode_catalogue ?>';
 	</script>
-	<div class="ibox-content" <?php echo (isset($version) ? '' : 'style="display: none;"') ?>>
+	<div class="ibox-content" <?php echo ((isset($version) && is_array($version) && count($version)) ? '' : 'style="display: none;"') ?>>
+		<input type="text" name="checked[]" value="<?php echo isset($version[0]['checked']) ? $version[0]['checked'] : '' ?>" class="hidden checked_value">
 		<div class="row block-attribute">
 			<div class="col-lg-12">
 				<table class="show_attribute table">
@@ -49,13 +52,14 @@
 					<tbody class="select_attribute">
 						<?php 
 							if(isset($version) && is_array($version) && count($version)){
-								$index = 1;
+								$checked = explode(",", $version[0]['checked']);
+								$index = 0;
 								foreach ($list_attribute as $key => $value) {
 									foreach ($value as $keyChild => $valChild) {
 										$list[$keyChild][$key] = $list_attribute[$key][$keyChild];
 									}
 								}
-								
+
 								$catalogue_list = [
 									'title' => '-- Chọn thuộc tính --',
 									'value' => 'root'
@@ -68,14 +72,13 @@
 								$dropdown_attr = $list_attribute['catalogue'];
 								foreach ($list as $key => $value) {
 						 ?>
-						<tr class="bg-active">
+						<tr class="<?php echo ((($value['catalogue'] == $checked[0]) || ($value['catalogue'] == $checked[1]) || ($value['catalogue'] == $checked[2])) ? 'bg-active' : '') ?>">
 							<td data-index="<?php echo $index; ?>">
-								<input type="checkbox" name="checkbox[]" checked="" value="1" class="checkbox-item">
+								<input type="checkbox" name="checkbox[]" <?php echo ((($value['catalogue'] == $checked[0]) || ($value['catalogue'] == $checked[1]) || ($value['catalogue'] == $checked[2])) ? 'checked=""' : '') ?> value="1" class="checkbox-item">
 								<input type="text" name="checkbox_val[]" value="1" class="hidden">
-								<div for="" class="label-checkboxitem checked"></div>
+								<div for="" class="label-checkboxitem <?php echo ((($value['catalogue'] == $checked[0]) || ($value['catalogue'] == $checked[1]) || ($value['catalogue'] == $checked[2])) ? 'checked' : '') ?>"></div>
 							</td>
 							<td>
-								
 								<?php echo form_dropdown('attribute_catalogue[]', $catList, set_value('attribute_catalogue[]', (isset($value['catalogue'])) ? $value['catalogue'] : ''), 'class="form-control select2 trigger-select2"');?>
 								
 							</td>
@@ -99,14 +102,20 @@
 					</tbody>
 				</table>
 			</div>
+
 			<div class="col-lg-12">
 				<div class="uk-flex uk-flex-middle uk-flex-space-between">
-					<button type="button" name="add_attribute" id="add_attribute" data-toggle="modal" data-target="#product_add_attribute" class="btn mt20 mb20">Tạo thuộc tính cho sản phẩm</button>
+					<div class="ibox-tools">
+						<button class="btn add_version  full-width m-b m0" style="<?php echo isset($list_attribute['catalogue']) ? ((count($list_attribute['catalogue']) >= (count($attribute_catalogue)+1) ) ? 'display: none;' : '') : ''; ?>">Thêm Phiên bản</button>
+					</div>
+					<div class="uk-flex uk-flex-middle uk-flex-space-between">
+						<button type="button" name="add_attribute" id="add_attribute" data-toggle="modal" data-target="#product_add_attribute" class="btn mt20 mb20">Tạo thuộc tính cho sản phẩm</button>
+					</div>
 				</div>
 			</div>
 		</div>
 
-		<table class="table <?php echo isset($version) ? 'show' : '' ?>" style="display: block !important;">
+		<table class="table <?php echo isset($version) ? 'show' : '' ?>" style="display: none">
 			<thead>
 				<tr>
 					<th></th>

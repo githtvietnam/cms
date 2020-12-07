@@ -122,14 +122,16 @@ class Product extends BaseController{
 					$sub_content = $this->request->getPost('sub_content');
 					$wholesale = $this->request->getPost('wholesale');
 			 		$insert = $this->store(['method' => 'create']);
+
 			 		$resultid = $this->AutoloadModel->_insert([
 			 			'table' => $this->data['module'],
 			 			'data' => $insert,
 			 		]);
+		 			$this->insert_attribute($resultid, $insert['catalogueid'], $this->currentLanguage());
+
 			 		if($resultid > 0){
 			 			$storeLanguage = $this->storeLanguage($resultid);
 			 			$storeLanguage = $this->convert_content($sub_content, $storeLanguage);
-
 						$this->version($resultid, 'create');
 
 				 		$this->AutoloadModel->_update([
@@ -182,7 +184,6 @@ class Product extends BaseController{
 			'where' => ['objectid' => $id]
 		]);
 		$this->data['version'] = $this->get_data_version($id);
-		// pre($this->data['version']);
 		if(isset($this->data['getWholesale']) && is_array($this->data['getWholesale']) && count($this->data['getWholesale'])){
 			$this->data['wholesale'] = [
 				'number_start' => json_decode($this->data['getWholesale']['number_start']),
@@ -223,6 +224,7 @@ class Product extends BaseController{
 		 			'data' => $update
 		 		]);
 
+		 		$this->insert_attribute($id,$update['catalogueid'], $this->currentLanguage());
 		 		if($flag > 0){
 		 			$this->AutoloadModel->_update([
 			 			'table' => 'product_translate',
@@ -514,6 +516,7 @@ class Product extends BaseController{
 			'attribute1' => $this->request->getPost('attribute1'),
 			'attribute2' => $this->request->getPost('attribute2'),
 			'attribute3' => $this->request->getPost('attribute3'),
+			'checked' => $this->request->getPost('checked'),
 			'img_version' => $this->request->getPost('img_version'),
 			'title_version' => $this->request->getPost('title_version'),
 			'barcode_version' => $this->request->getPost('barcode_version'),
@@ -523,14 +526,28 @@ class Product extends BaseController{
 		];
 		if($get['attribute1'] != []){
 			$flag = insert_version($get , $id, $this->currentLanguage(), $method);
+		}else{
+			$flag = insert_version([] , $id, $this->currentLanguage(), $method);
 		}
+
+		return $flag;
+	}
+
+	private function insert_attribute($id = '', $catalogueid = '', $language = ''){
+		$insert = [
+			'attribute_catalogue' => $this->request->getPost('attribute_catalogue'),
+			'attribute' => $this->request->getPost('attribute'),
+		];
+		// prE($insert);
+		
+		$flag = insert_attribute($insert , $id, $language, $catalogueid);
 
 		return $flag;
 	}
 
 	private function get_data_version($id = ''){
 		$flag = $this->AutoloadModel->_get_where([
-			'select' => 'id, objectid, content, attribute, attribute_catalogue',
+			'select' => 'id, objectid, content, attribute, attribute_catalogue, checked',
 			'table' => 'product_version',
 			'where' => ['objectid' => $id]
 		],TRUE);

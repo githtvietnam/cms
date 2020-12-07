@@ -4,6 +4,10 @@
     $language = $baseController->currentLanguage();
     $languageList = get_list_language(['currentLanguage' => $language]);
 ?>
+<script>
+    var attribute_cat = '';
+</script>
+
 <div class="row wrapper border-bottom white-bg page-heading">
    <div class="col-lg-8">
       <h2>Quản Lý Sản Phẩm</h2>

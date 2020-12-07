@@ -34,6 +34,9 @@
 							<input type="text" name="wholesale[wholesale_price][]" value="<?php echo $value['price_wholesale'] ?>" class="form-control wholesale_price int" placeholder=""  autocomplete="off" id="wholesale_<?php echo $count ?>">
 						</div>
 						<div class="va-flex-row">
+							<label class="control-label ">
+								<span>Xóa</span>
+							</label>
 							<a type="button" class="btn btn-default wholesale_del" ><i class="fa fa-trash"></i></a>
 						</div>
 					</div>
