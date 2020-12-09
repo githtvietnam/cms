@@ -19,6 +19,46 @@ class Dashboard extends BaseController{
 		echo $flag;die();
 	}
 
+	public function get_catalogue(){
+		$id = $this->request->getPost('id');
+		$module = $this->request->getPost('module');
+		$module_explode = explode('_', $module);
+
+
+		$data = $this->AutoloadModel->_get_where([
+			'select' => 'id,lft, rgt, level',
+			'table' => $module_explode[0].'_catalogue',
+			'where' => [
+				'id' => $id
+			]
+		]);
+		$breadcum = $this->AutoloadModel->_get_where([
+			'select' => 'tb1.id, tb2.title',
+			'table' => $module_explode[0].'_catalogue as tb1',
+			'join' => [
+				[
+					$module_explode[0].'_translate as tb2','tb1.id = tb2.objectid AND tb2.module= \''.$module_explode[0].'_catalogue \' AND tb2.language = \''.$this->currentLanguage().'\'', 'inner'
+				]
+			],
+			'where' => [
+				'tb1.lft <=' => $data['lft'],
+				'tb1.rgt >=' => $data['rgt']
+			],
+			'order_by' => 'tb1.lft ASC , tb1.rgt DESC'
+		],TRUE);
+		$text = '';
+		foreach ($breadcum as $key => $value) {
+			$length = count($breadcum);
+			$title = slug($value['title']);
+			if($key == 0){
+				$text = $title;
+			}else if($key > 0 && $key < $length){
+				$text = $text.'/'.$title;
+			}
+		}
+		echo $text;die();
+	}
+
 	public function pre_select2(){
 		$param['value'] = json_decode($this->request->getPost('value'));
 		$param['module'] = $this->request->getPost('module');

@@ -115,11 +115,17 @@ if (! function_exists('insert_attribute')){
 			}
 		}
 
-		// // Tao mang moi: id => []
-		
+		// Tao mang moi catalogue => attribute => id
+
 		foreach ($data as $key => $value) {
-			$new_array[$id] = $data;
+			foreach ($value as $keyChild => $valChild) {
+				// pre($valChild);
+				$new_array[$key][$valChild] = $id;
+			}
 		}
+		// pre($new_array);
+
+		// // Tao mang moi: id => []
 
 		$attr = $model->_get_where([
 			'select' => 'attribute',
@@ -131,8 +137,27 @@ if (! function_exists('insert_attribute')){
 			]
 		]);
 		$attr = json_decode($attr['attribute'] , TRUE);
-		$new_array = $attr + $new_array;
-		$new_array = json_encode($new_array);
+
+		foreach ($new_array as $key => $value) {
+			if(isset($attr[$key]) && count($attr[$key]) && is_array($attr[$key])){
+				foreach ($value as $keyChild => $valChild) {
+					if(isset($attr[$key][$keyChild]) && $attr[$key][$keyChild] != ''){
+						$val_attr_explode = explode(',', $attr[$key][$keyChild]);
+						foreach ($val_attr_explode as $keyattr => $valattr) {
+							if($valattr != $valChild){
+								$attr[$key][$keyChild] = $attr[$key][$keyChild].','.$valChild;
+							}
+						}
+					}else{
+						$attr[$key][$keyChild] = $valChild;
+					}
+				}
+			}else{
+				$attr[$key] = $value;
+			}
+		}
+
+		$new_array = json_encode($attr);
 		// Nhap vao CSDL table: product_transalte
 		$insert = [
 			'attribute' => $new_array

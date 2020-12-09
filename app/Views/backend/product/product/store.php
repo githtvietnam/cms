@@ -273,7 +273,7 @@
 									<small class="text-danger">Chọn [Root] Nếu không có danh mục cha</small>
 								</div>
 								<div class="form-row">
-									<?php echo form_dropdown('catalogueid', $dropdown, set_value('catalogueid', (isset($product['catalogueid'])) ? $product['catalogueid'] : ''), 'class="form-control m-b select2 '.$class.'"');?>
+									<?php echo form_dropdown('catalogueid', $dropdown, set_value('catalogueid', (isset($product['catalogueid'])) ? $product['catalogueid'] : ''), 'data-module= "'.$module.'" class="form-control m-b select2 '.$class.'"');?>
 								</div>
 								<script>
 									var catalogue = '<?php echo (isset($_POST['catalogue'])) ? json_encode($_POST['catalogue']) : ((isset($product['catalogue']) && $product['catalogue'] != null) ? $product['catalogue'] : '');  ?>';	

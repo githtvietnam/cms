@@ -257,7 +257,6 @@ $(document).on('click','.add_version', function(){
 	});
 	$countAttr = $('.block-attribute table tbody').find('tr').length;
 	$countCat = attribute_cat.length;
-	console.log($countCat)
 	if(parseInt($countAttr) >= $countCat){
 		$('.add_version').hide()
 	}else{
@@ -304,9 +303,13 @@ $(document).on('click','.block-attribute .delete-attribute', function(){
 	let pos = attribute_catalogue.indexOf(val);
 	attribute_catalogue.splice(pos, 1);
 	$countAttr = $('.block-attribute table tbody').find('tr').length;
+	console.log($countAttr)
 	$countCat = attribute_cat.length;
-	if(parseInt($countAttr) >= 3){
+	if(parseInt($countAttr) >= $countCat){
 		$('.add_version').hide()
+	}else if(parseInt($countAttr) == 0){
+		$('.version_setting').show()
+		$('.block-version .ibox-content').hide();
 	}else{
 		$('.add_version').show()
 	}

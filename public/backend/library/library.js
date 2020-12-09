@@ -126,42 +126,37 @@ $(document).ready(function(){
 	$(document).on('keyup', '.title', function(){
 		let _this = $(this);
 		let metaTitle = _this.val();
-		let data = get_catalogue();
-		let link = data + metaTitle;
+		get_catalogue(metaTitle);
 		let totalCharacter = metaTitle.length;
 		if(totalCharacter > 70){
 			$('.meta-title').addClass('input-error');
 		}else{
 			$('.meta-title').removeClass('input-error');
 		}
-		let slugTitle = slug(link);
 		if($('.meta-title').val() == ''){
 			$('.g-title').text(metaTitle);
-		}
-		let canonical = $('.canonical');
-		if(canonical.attr('data-flag') == 0){
-			canonical.val(slugTitle);
-			$('.g-link').text(BASE_URL + slugTitle + '.html');
 		}
 	});
 	
 	$(document).on('change', '.get_catalogue', function(){
 		let _this = $(this);
 		let val = $('.title').val();
-
+		let id = _this.val();
+		let module = _this.attr('data-module')
 		if(_this.val() == 0){
 			val = slug(val);
 			$('.canonical').val(val)
 			$('.g-link').text(BASE_URL + val + '.html');
 		}else{
-			let text = _this.find('option:selected').text();
-			let text_after = text.replace("|-----", "");
-			text_after = slug(text_after);
-			val = slug(val);
-			text_after = text_after+'/';
-			let new_text = text_after+val
-			$('.canonical').val(new_text)
-			$('.g-link').text(BASE_URL + new_text + '.html');
+			$.post('ajax/dashboard/get_catalogue', {
+				id: id, module: module
+			},
+			function(data){
+				val = slug(val)
+				let new_text = data+'/'+val
+				$('.canonical').val(new_text)
+				$('.g-link').text(BASE_URL + new_text + '.html');
+			});
 		}
 	})
 	
@@ -377,17 +372,24 @@ function get_location(param){
 		});
 }
 
-function get_catalogue(){
+function get_catalogue(val = ''){
 	let data ='';
 	let id = $('.get_catalogue').val();
+	let module = $('.get_catalogue').attr('data-module');
+	let canonical = $('.canonical');
+		
 	if(id == 0 || id == undefined){
 		return data;
 	}else{
-		let text = $('.get_catalogue :selected').text();
-		let text_after = text.replace("|-----", "");
-		text_after = slug(text_after);
-		text_after = text_after+'/';
-		return text_after
+		$.post('ajax/dashboard/get_catalogue', {
+			id: id, module: module
+		},
+		function(data){
+			val = slug(val)
+			let new_text = data+'/'+val
+			$('.canonical').val(new_text)
+			$('.g-link').text(BASE_URL + new_text + '.html');
+		});
 	}
 
 
@@ -403,16 +405,7 @@ function check(object){
 	}
 }
 
-function check_setting(){
-	if($('.checkbox-item').length) {
-		if($('.checkbox-item:checked').length > 0) {
-			$('.fa-cog').addClass('text-pink');
-		}
-		else{
-			$('.fa-cog').removeClass('text-pink');
-		}
-	}
-}
+
 
 function checkall(_this){
 	let table = _this.parents('table');
@@ -440,6 +433,17 @@ function check_item_all(_this){
 		else{
 			table.find('#checkbox-all').prop('checked', false);
 			table.find('.labelCheckAll').removeClass('checked');
+		}
+	}
+}
+
+function check_setting(){
+	if($('.checkbox-item').length) {
+		if($('.checkbox-item:checked').length > 0) {
+			$('.fa-cog').addClass('text-pink');
+		}
+		else{
+			$('.fa-cog').removeClass('text-pink');
 		}
 	}
 }
@@ -505,7 +509,7 @@ function cnvVi(str) {
 	str = str.replace(/ù|ú|ụ|ủ|ũ|ư|ừ|ứ|ự|ử|ữ/g, "u");
 	str = str.replace(/ỳ|ý|ỵ|ỷ|ỹ/g, "y");
 	str = str.replace(/đ/g, "d");
-	str = str.replace(/!|@|%|\^|\*|\(|\)|\+|\=|\<|\>|\?|,|\.|\:|\;|\'| |\"|\&|\#|\[|\]|~|$|_/g, "-");
+	str = str.replace(/!|@|%|\^|\*|\(|\)|\+|\=|\<|\>|\?|,|\.|\:|\;|\'| |\"|\&|\#|\[|\]|\\|\/|~|$|_/g, "-");
 	str = str.replace(/-+-/g, "-");
 	str = str.replace(/^\-+|\-+$/g, "");
 	return str;
