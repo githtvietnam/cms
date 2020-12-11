@@ -5,7 +5,7 @@
                 <div class="row-footer">
                     <div class="img-logo-ft">
                         <a href="" class="img-scaledown">
-                            <img src="resources/img/logo/logo-50-white.webp" alt="">
+                            <img src="public/frontend/resources/img/logo/logo_white.png" alt="">
                         </a>
                     </div>
                     <div class="phone-agent mb10 white">

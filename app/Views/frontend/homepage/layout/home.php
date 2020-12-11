@@ -31,26 +31,24 @@
 		<meta name="twitter:image" content="https://gleehome.com.vn/" />
 
 
-		<link href="resources/fonts/font-awesome-4.7.0/css/font-awesome.min.css" rel="stylesheet" />
-		<link href="resources/uikit/css/uikit.modify.css" rel="stylesheet" />
-		<link href="resources/library/css/reset.css" rel="stylesheet" />
-		<link href="resources/library/css/library.css" rel="stylesheet" />
-		<link rel="stylesheet" href="resources/plugins/OwlCarousel2-2.3.4/dist/assets/owl.carousel.min.css">
-		<link rel="stylesheet" href="resources/plugins/OwlCarousel2-2.3.4/dist/assets/owl.theme.default.min.css">
-
+		<link href="public/frontend/resources/fonts/font-awesome-4.7.0/css/font-awesome.min.css" rel="stylesheet" />
+		<link href="public/frontend/resources/uikit/css/uikit.modify.css" rel="stylesheet" />
+		<link href="public/frontend/resources/library/css/general.css" rel="stylesheet" />
+		<link href="public/frontend/resources/library/css/carousel.css" rel="stylesheet" />
 
 		<?php echo view('frontend/homepage/common/head') ?>
-		<link href="resources/style.css" rel="stylesheet" />
-		<script src="resources/library/js/jquery.js"></script>
-		<script src="resources/uikit/js/uikit.min.js"></script>
+		<link href="public/frontend/resources/style.css" rel="stylesheet" />
+		<script src="public/frontend/resources/library/js/jquery.js"></script>
+		<script src="public/frontend/resources/uikit/js/uikit.min.js"></script>
 	</head>
 	<body>
 		<?php echo view('frontend/homepage/common/header') ?>
 		<?php echo view((isset($template)) ? $template : '') ?>
 		<?php echo view('frontend/homepage/common/footer') ?>
 		<?php echo view('frontend/homepage/common/offcanvas') ?>
-
-		<script src="resources/function.js"></script>
-		<script src="resources/plugins.js"></script>
+		<script src="public/frontend/resources/plugins/OwlCarousel2-2.3.4/dist/owl.carousel.min.js"></script>
+		<script src="public/frontend/resources/plugins/jquery-nice-select-1.1.0/js/jquery.nice-select.js"></script>
+		<script src="public/frontend/resources/function.js"></script>
+		<script src="public/frontend/resources/plugins.js"></script>
 	</body>
 </html>

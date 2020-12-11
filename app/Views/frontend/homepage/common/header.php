@@ -6,7 +6,7 @@
 			<div class="uk-flex uk-flex-space-between uk-flex-middle">
 				<div class="hd-logo">
 					<a href="" class="img-cover">
-						<img src="resources/img/logo/logo-home.webp" alt="">
+						<img src="public/frontend/resources/img/logo/logo.png" alt="">
 					</a>
 				</div>
 				<div class="hd-contact-us">
@@ -83,7 +83,7 @@
 		<a class="moblie-menu-btn skin-1" href="#offcanvas" class="offcanvas" data-uk-offcanvas="{target:'#offcanvas'}">
 			<span>Menu</span>
 		</a>
-		<div class="logo"><a href="" title="Logo"><img src="resources/img/logo/logo-50-white.webp" alt="Logo"></a></div>
+		<div class="logo"><a href="" title="Logo"><img src="public/frontend/resources/img/logo/logo-50-white.webp" alt="Logo"></a></div>
 		<a class="mobile-hotline" href="tel: 09823 65 824" title="Hotline">
 			<span class="label">Hotline: </span>
 			<span class="value">09823 65 824</span>
