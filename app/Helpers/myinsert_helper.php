@@ -143,9 +143,13 @@ if (! function_exists('insert_attribute')){
 				foreach ($value as $keyChild => $valChild) {
 					if(isset($attr[$key][$keyChild]) && $attr[$key][$keyChild] != ''){
 						$val_attr_explode = explode(',', $attr[$key][$keyChild]);
+						$count = count($val_attr_explode);
 						foreach ($val_attr_explode as $keyattr => $valattr) {
 							if($valattr != $valChild){
-								$attr[$key][$keyChild] = $attr[$key][$keyChild].','.$valChild;
+								$str = strpos($attr[$key][$keyChild], (string)$valChild);
+								if($str == ''){
+									$attr[$key][$keyChild] = $attr[$key][$keyChild].','.$valChild;
+								}
 							}
 						}
 					}else{
@@ -156,7 +160,7 @@ if (! function_exists('insert_attribute')){
 				$attr[$key] = $value;
 			}
 		}
-
+		// pre($attr);
 		$new_array = json_encode($attr);
 		// Nhap vao CSDL table: product_transalte
 		$insert = [

@@ -136,6 +136,7 @@ $(document).ready(function(){
 		if($('.meta-title').val() == ''){
 			$('.g-title').text(metaTitle);
 		}
+
 	});
 	
 	$(document).on('change', '.get_catalogue', function(){
@@ -377,9 +378,10 @@ function get_catalogue(val = ''){
 	let id = $('.get_catalogue').val();
 	let module = $('.get_catalogue').attr('data-module');
 	let canonical = $('.canonical');
-		
 	if(id == 0 || id == undefined){
-		return data;
+		val = slug(val)
+		$('.g-link').text(BASE_URL + val + '.html');
+		$('.canonical').val(val)
 	}else{
 		$.post('ajax/dashboard/get_catalogue', {
 			id: id, module: module
@@ -389,6 +391,7 @@ function get_catalogue(val = ''){
 			let new_text = data+'/'+val
 			$('.canonical').val(new_text)
 			$('.g-link').text(BASE_URL + new_text + '.html');
+			
 		});
 	}
 

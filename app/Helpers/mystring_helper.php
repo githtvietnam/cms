@@ -20,7 +20,7 @@ if(!function_exists('view_cells')){
 		foreach ($module as $key => $value) {
 			$new_module[] = ucwords($value);
 		}
-		$view =  '\App\Controllers\Backend\\';
+		$view =  '\App\Controllers\Frontend\\';
 		foreach ($new_module as $key => $value) {
 			$view = $view.$value.((isset($new_module[$key + 1])) ? '\\' : '').((!isset($new_module[$key + 1])) ? '::index' : '');
 		}
