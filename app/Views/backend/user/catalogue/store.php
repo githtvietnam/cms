@@ -28,9 +28,10 @@
 							$folder = scandir($dir);	
 							$permission = (isset($_POST['permission'])) ? $_POST['permission'] : '';
 							if($permission == ''){
-								$permission = json_decode($user_catalogue['permission'], TRUE);
+								if(isset($user_catalogue) && is_array($user_catalogue) && count($user_catalogue)){
+									$permission = json_decode($user_catalogue['permission'], TRUE);
+								}
 							}
-							 //pre($permission);
 
 						?>
 						<?php if(isset($folder) && is_array($folder) && count($folder)){ ?>
@@ -55,7 +56,7 @@
 									<?php foreach($valPermission['item'] as $keyItem => $valItem){ ?>
 									<div class="i-checks">
 										<label class="uk-flex uk-flex-middle">
-											<input style="margin-top:0;margin-right:10px" name="permission[]" <?php echo (isset($permission) && in_array($valItem['param'], $permission)) ? 'checked' : '' ?> type="checkbox" value="<?php echo $valItem['param']; ?>">
+											<input style="margin-top:0;margin-right:10px" name="permission[]" <?php echo (($permission != '')  && in_array($valItem['param'], $permission)) ? 'checked' : '' ?> type="checkbox" value="<?php echo $valItem['param']; ?>">
 											<span><?php echo $valItem['description']; ?></span>
 										</label>
 									</div>

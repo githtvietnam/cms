@@ -77,7 +77,7 @@
                                 <label for="check-all" class="labelCheckAll"></label>
                             </th>
                             <th >Tiêu đề nhóm</th>
-
+                            <th class="text-center" >Module chính</th>
                             <?php if(isset($languageList) && is_array($languageList) && count($languageList)){ ?>
                             <?php foreach($languageList as $key => $val){ ?>
                             <th class="text-center" style="width: 100px;">
@@ -85,7 +85,6 @@
                             </th>
                             <?php }} ?>
 
-                            <th style="width:150px;">Người tạo</th>
                             <th style="width:150px;" class="text-center">Ngày tạo</th>
                             <th class="text-center" style="width:88px;">Tình trạng</th>
                             <th class="text-center" style="width:103px;">Thao tác</th>
@@ -106,8 +105,9 @@
                                 <td class="text-success text-bold">
                                     <a href="<?php echo base_url('backend/attribute/attribute/index/?catalogueid='.$val['id'].'') ?>">
                                         <?php echo $val['title']; ?>
-                                        </a>
-                                    </td>
+                                    </a>
+                                </td>
+                                <td class="text-center text-primary"><?php echo $val['module_primary'] ?></td>
 
 
                                 <?php if(isset($languageList) && is_array($languageList) && count($languageList)){ ?>
@@ -119,7 +119,6 @@
                                 <?php }} ?>
 
                                
-                                <td class="text-primary"><?php echo $val['creator']; ?></td>
                                 <td class="text-center text-primary"><?php echo gettime($val['created_at'],'Y-d-m') ?></td>
                                 <td class="text-center td-status" data-field="publish" data-module="<?php echo $module; ?>" data-where="id"><?php echo $status; ?></td>
                                 <td class="text-center">

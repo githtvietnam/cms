@@ -10,8 +10,7 @@ class Home extends FrontendController{
 	}
 
 	public function index(){
-
-
+		
 		$this->data['template'] = 'frontend/homepage/home/index';
 		return view('frontend/homepage/layout/home', $this->data);
 	}

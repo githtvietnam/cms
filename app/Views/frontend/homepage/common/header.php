@@ -1,81 +1,63 @@
 <!-- PC HEADER -->
-
-<header class="pc-header uk-visible-large">
-	<div class="uk-container uk-container-center">
-		<section class="hd-contact pt20 pb20">
-			<div class="uk-flex uk-flex-space-between uk-flex-middle">
+<!-- uk-visible-large -->
+<header class="pc-header  uk-visible-large " >
+	<div class="hd-upper">
+		<div class="uk-container uk-container-center">
+			<div class="hd-hotline">
+				Hotline: 
+				<span> 0903 230 230 / 0888 532 439 / 024.35770809</span>
+			</div>
+		</div>
+	</div>
+	<div class="hd-middle">
+		<div class="uk-container uk-container-center">
+			<div class="uk-flex uk-flex-middle uk-flex-space-between">
 				<div class="hd-logo">
-					<a href="" class="img-cover">
-						<img src="public/frontend/resources/img/logo/logo.png" alt="">
+					<a href="">
+						<img src="public/frontend/resources/img/logo/kim-lien-travel-logo.png" alt="">
 					</a>
 				</div>
-				<div class="hd-contact-us">
-					<div class="uk-flex uk-flex-middle">
-						<div class="hd-phone">
-							<a href="" title="" class="uk-flex uk-flex-middle">
-								
-								<i class="fa fa-volume-control-phone" aria-hidden="true"></i>
-								<span>
-
-									(123) 345-6789
-								</span>
-							</a>
-						</div>
-						<div class="hd-address">
-							<div class="uk-flex">
-
-								<i class="fa fa-map-marker" aria-hidden="true"></i>
-								<div class="address">
-									518-520 5th Ave,
-									New York, USA
+				<div class="hd-menu ">
+					<nav id="main-nav">
+						<ul class="uk-navbar-nav uk-clearfix main-menu">
+							<li><a href="">trang chủ</a></li>
+							<li>
+								<a href="">giới thiệu</a>
+								<div class="dropdown-menu">
+									<ul class="uk-list submenu">
+										<li><a href="" title="">Về Kim Liên Travel</a></li>
+										<li><a href="" title="">Thành Tích - Giải Thưởng</a></li>
+										<li><a href="" title="">Chính Sách</a></li>
+										<li><a href="" title="">Quy Định Đặt Tour</a></li>
+										<li><a href="" title="">Liên Hệ</a></li>
+									</ul>
 								</div>
-							</div>
-						</div>
-						<div class="hd-email">
-							<a href="" title="" class="uk-flex uk-flex-middle">
-								<i class="fa fa-envelope-o" aria-hidden="true"></i>
-								<span>
-
-									support@tangibledesign.net
-								</span>
-							</a>
-						</div>
-					</div>
+							</li>
+							<li><a href="">tour trong nước</a></li>
+							<li><a href="">tour nước ngoài</a></li>
+							<li>
+								<a href="">Cẩm nang & tin tức</a>
+								<div class="dropdown-menu">
+									<ul class="uk-list submenu">
+										<li><a href="" title="">Tin Kim Liên</a></li>
+										<li><a href="" title="">Thông Tin Du Lịch</a></li>
+										<li><a href="" title="">Khám Phá & Trải Nghiệm</a></li>
+										<li><a href="" title="">Cẩm Nang Du Lịch</a></li>
+									</ul>
+								</div>
+							</li>
+						</ul>
+					</nav>
 				</div>
-				<div class="hd-social ">
-					<div class="hg-login mb20">
-						<div class="btn-key-color">
-							<button class="white text-normal">
-								Login/ Register	
-
-							</button>
-						</div>
-					</div>
-					<div class="uk-flex uk-flex-middle">
-						<a href="" class="mr20">
-							<i class="fa fa-facebook" aria-hidden="true"></i>
-						</a>
-						<a href="" class="mr20">
-							<i class="fa fa-twitter" aria-hidden="true"></i>
-						</a>
-						<a href="" class="mr20">
-							<i class="fa fa-linkedin" aria-hidden="true"></i>
-						</a>
-						<a href="" class="mr20">
-							<i class="fa fa-instagram" aria-hidden="true"></i>
-						</a>
-					</div>
+				<div class="hd-cart">
+					<a href=""><img src="public/frontend/resources/img/icon/icon-cart.png" alt="">
+					<span class="quantity">0</span></a>
 				</div>
 			</div>
-		</section>
+		</div>
 	</div>
+</header><!-- .header -->
 
-	
-</header>
-		
-
-
-<!-- pc header -->
 
 <!-- MOBILE HEADER -->
 <header class="mobile-header uk-hidden-large">
@@ -83,20 +65,17 @@
 		<a class="moblie-menu-btn skin-1" href="#offcanvas" class="offcanvas" data-uk-offcanvas="{target:'#offcanvas'}">
 			<span>Menu</span>
 		</a>
-		<div class="logo"><a href="" title="Logo"><img src="public/frontend/resources/img/logo/logo-50-white.webp" alt="Logo"></a></div>
-		<a class="mobile-hotline" href="tel: 09823 65 824" title="Hotline">
-			<span class="label">Hotline: </span>
-			<span class="value">09823 65 824</span>
-		</a>
-	</section><!-- .upper -->
+		<div class="logo"><a href="" title="Logo"><img src="public/frontend/resources/img/logo-hd.png" alt=""></a></div>
+	</section>
+	<!-- .upper -->
 	<section class="lower">
 		<div class="mobile-search">
 			<form action="" method="" class="uk-form form">
 				<input type="text" name="" class="uk-width-1-1 input-text" placeholder="Bạn muốn tìm gì hôm nay?" />
-				<button type="submit" name="" value="" class="btn-submit"><i class="ion ion-ios-search"></i></button>
+				<button type="submit" name="" value="" class="btn-submit"><i class="fa fa-search" aria-hidden="true"></i></button>
 			</form>
 		</div>
-
 	</section>
-</header><!-- .mobile-header -->
+</header>
+<!-- .mobile-header -->
 

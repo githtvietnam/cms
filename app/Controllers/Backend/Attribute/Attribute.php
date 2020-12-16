@@ -62,7 +62,7 @@ class Attribute extends BaseController{
 			$page = $page - 1;
 			$languageDetact = $this->detect_language();
 			$this->data['attributeList'] = $this->AutoloadModel->_get_where([
-				'select' => 'tb1.id, tb1.image, tb1.catalogue as cat_id, tb1.catalogueid, tb1.catalogue, tb2.title, tb2.canonical, (SELECT fullname FROM user WHERE user.id = tb1.userid_created) as creator, tb1.userid_updated, tb1.publish, tb1.created_at, tb1.updated_at, '.$query.((isset($languageDetact['select'])) ? $languageDetact['select'] : ''),
+				'select' => 'tb1.id, tb1.image, tb1.catalogue as cat_id, tb1.catalogueid, tb2.module_primary, tb1.catalogue, tb2.title, tb2.canonical,  tb1.userid_updated, tb1.publish, tb1.created_at, tb1.updated_at, '.$query.((isset($languageDetact['select'])) ? $languageDetact['select'] : ''),
 				'table' => $this->data['module'].' as tb1',
 				'join' =>  [
 					[
@@ -320,6 +320,7 @@ class Attribute extends BaseController{
 			'objectid' => $objectid,
 			'title' => validate_input($this->request->getPost('title')),
 			'canonical' => $this->request->getPost('canonical'),
+			'module_primary' => $this->request->getPost('module_primary'),
 			'description' => $this->request->getPost('description'),
 			'meta_description' => $this->request->getPost('meta_description'),
 			'meta_title' => $this->request->getPost('meta_title'),

@@ -18,12 +18,27 @@
 					</div>
 					<div class="ibox-content">
 						<div class="row mb15">
-							<div class="col-lg-12">
+							<div class="col-lg-6">
 								<div class="form-row">
 									<label class="control-label text-left">
 										<span>Tiêu đề danh mục <b class="text-danger">(*)</b></span>
 									</label>
 									<?php echo form_input('title', validate_input(set_value('title', (isset($attribute_catalogue['title'])) ? $attribute_catalogue['title'] : '')), 'class="form-control title" placeholder="" id="title" autocomplete="off"'); ?>
+								</div>
+							</div>
+							<div class="col-lg-6">
+								<div class="form-row">
+									<label class="control-label text-left">
+										<span>Chọn thuộc tính cho module<b class="text-danger">(*)</b></span>
+									</label>
+									<?php 
+										$module_primary = [
+                                            0 => '-- Chọn Module',
+                                            'product' => 'Sản phẩm',
+                                            'tour' => 'Chuyến du lịch',
+                                         ];
+									 ?>
+									<?php echo form_dropdown('module_primary', $module_primary, set_value('module_primary', (isset($attribute_catalogue['module_primary'])) ? $attribute_catalogue['module_primary'] : -1),'class="form-control mr20  perpage filter" style="width:100%"');  ?>
 								</div>
 							</div>
 						</div>

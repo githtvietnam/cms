@@ -19,6 +19,13 @@
 			<description>Xem bản dịch</description>
 		</item>
 	</permissions>
+	<!-- <permissions>
+		<title>Quản lý - Widget</title>
+		<item>
+			<param>backend/widget/widget/index</param>
+			<description>Xem</description>
+		</item>
+	</permissions> -->
 	<permissions>
 		<title>General System</title>
 		<item>

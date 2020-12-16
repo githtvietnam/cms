@@ -26,6 +26,7 @@
 									<?php echo form_input('title', validate_input(set_value('title', (isset($attribute['title'])) ? $attribute['title'] : '')), 'class="form-control title" placeholder="" id="title" autocomplete="off"'); ?>
 								</div>
 							</div>
+							
 						</div>
 						<div class="row mb15">
 							<div class="col-lg-12">
@@ -139,9 +140,10 @@
 									<small class="text-danger">Chọn [Root] Nếu không có danh mục cha</small>
 								</div>
 								<div class="form-row">
-									<?php echo form_dropdown('catalogueid', $dropdown, set_value('catalogueid', (isset($attribute['catalogueid'])) ? $attribute['catalogueid'] : ''), 'class="form-control m-b select2"');?>
+									<?php echo form_dropdown('catalogueid', $dropdown, set_value('catalogueid', (isset($attribute['catalogueid'])) ? $attribute['catalogueid'] : ''), 'class="form-control m-b select2 get_module_primary"');?>
 								</div>
 							</div>
+							<input type="hidden" class="module_primary" name="module_primary" value="<?php echo (isset($attribute['module_primary'])) ? $attribute['module_primary'] : ((isset($_POST['meta_title'])) ? $_POST['meta_title'] : '')?>" >
 						</div>
 					</div>
 				</div>

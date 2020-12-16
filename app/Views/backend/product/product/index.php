@@ -7,6 +7,9 @@
 <script>
     var attribute_cat = '';
 </script>
+<script>
+    var _module = '<?php echo $module ?>';
+</script>
 
 <div class="row wrapper border-bottom white-bg page-heading">
    <div class="col-lg-8">

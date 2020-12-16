@@ -46,7 +46,7 @@ class Catalogue extends BaseController{
 
 			$languageDetact = $this->detect_language();
 			$this->data['attributeCatalogueList'] = $this->AutoloadModel->_get_where([
-				'select' => 'tb1.id, tb2.title, tb2.canonical, (SELECT fullname FROM user WHERE user.id = tb1.userid_created) as creator, tb1.userid_updated, tb1.publish, tb1.order, tb1.created_at, tb1.updated_at,'.((isset($languageDetact['select'])) ? $languageDetact['select'] : ''),
+				'select' => 'tb1.id, tb2.title, tb2.canonical,tb2.module_primary,  tb1.userid_updated, tb1.publish, tb1.order, tb1.created_at, tb1.updated_at,'.((isset($languageDetact['select'])) ? $languageDetact['select'] : ''),
 				'table' => $this->data['module'].' as tb1',
 				'join' =>  [
 					[
@@ -60,7 +60,7 @@ class Catalogue extends BaseController{
 				'start' => $page * $config['per_page'],
 				'order_by'=> 'lft asc'
 			], TRUE);
-
+			// pre($this->data['attributeCatalogueList']);
 		}
 
 		$this->data['template'] = 'backend/attribute/catalogue/index';
@@ -187,6 +187,7 @@ class Catalogue extends BaseController{
 			'title' => validate_input($this->request->getPost('title')),
 			'canonical' => $this->request->getPost('canonical'),
 			'description' => $this->request->getPost('description'),
+			'module_primary' => $this->request->getPost('module_primary'),
 			'language' => $this->currentLanguage(),
 			'module' => $this->data['module'],
 		];

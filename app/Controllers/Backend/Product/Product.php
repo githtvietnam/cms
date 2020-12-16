@@ -100,7 +100,7 @@ class Product extends BaseController{
  			$session->setFlashdata('message-danger', 'Bạn không có quyền truy cập vào chức năng này!');
  			return redirect()->to(BASE_URL.'backend/dashboard/dashboard/index');
 		}
-		$this->data['attribute_catalogue'] = get_attribute_catalogue($this->currentLanguage());
+		$this->data['attribute_catalogue'] = get_attribute_catalogue($this->currentLanguage(), $this->data['module']);
 		$this->data['check_code'] = $this->AutoloadModel->_get_where([
 			'select' => 'code,objectid',
 			'table' => 'id_general',
@@ -133,7 +133,10 @@ class Product extends BaseController{
 			 			$storeLanguage = $this->storeLanguage($resultid);
 			 			$storeLanguage = $this->convert_content($sub_content, $storeLanguage);
 						$this->version($resultid, 'create');
-
+						$this->AutoloadModel->_insert([
+							'table' => 'product_translate',
+							'data' => $storeLanguage 
+						]);
 				 		$this->AutoloadModel->_update([
 	 						'table' => 'id_general',
 	 						'data' => [
@@ -167,7 +170,7 @@ class Product extends BaseController{
 	public function update($id = 0){
 		$id = (int)$id;
 		$this->data['export_brand'] = $this->export_brand();
-		$this->data['attribute_catalogue'] = get_attribute_catalogue($this->currentLanguage());
+		$this->data['attribute_catalogue'] = get_attribute_catalogue($this->currentLanguage(), $this->data['module']);
 		$this->data[$this->data['module']] = $this->AutoloadModel->_get_where([
 			'select' => 'tb1.id, tb1.catalogue, tb1.bar_code, tb1.brandid, tb1.catalogueid, tb1.model, tb1.price_promotion, tb1.price, tb1.productid, tb1.id, tb1.id, tb1.id, tb2.title, tb2.objectid, tb2.sub_title, tb2.sub_content, tb2.description, tb2.canonical,  tb2.content, tb2.meta_title, tb2.meta_description, tb1.album, tb1.publish',
 			'table' => $this->data['module'].' as tb1',
@@ -525,9 +528,9 @@ class Product extends BaseController{
 			'code_version' => $this->request->getPost('code_version'),
 		];
 		if($get['attribute1'] != []){
-			$flag = insert_version($get , $id, $this->currentLanguage(), $method);
+			$flag = insert_version($get , $id, $this->currentLanguage(), $method, $this->data['module']);
 		}else{
-			$flag = insert_version([] , $id, $this->currentLanguage(), $method);
+			$flag = insert_version([] , $id, $this->currentLanguage(), $method, $this->data['module']);
 		}
 
 		return $flag;
@@ -540,9 +543,11 @@ class Product extends BaseController{
 		];
 		// prE($insert);
 		
-		$flag = insert_attribute($insert , $id, $language, $catalogueid);
+		if($insert['attribute_catalogue'] != [] && $insert['attribute'] != []){
+			$flag = insert_attribute($insert , $id, $language, $catalogueid, $this->data['module']);
+		}
 
-		return $flag;
+		return true;
 	}
 
 	private function get_data_version($id = ''){

@@ -7,6 +7,21 @@ class Dashboard extends BaseController{
 		
 	}
 
+	public function get_module_primary(){
+		$val = $this->request->getPost('val');
+		
+		$flag = $this->AutoloadModel->_get_where([
+			'select' => 'module_primary',
+			'table' => 'attribute_translate',
+			'where' => [
+				'module' => 'attribute_catalogue',
+				'objectid' => $val,
+				'language' => $this->currentLanguage()
+			]
+		]);
+		echo json_encode($flag);die();
+	}
+
 	public function delete_all(){
 		$id = $this->request->getPost('id');
 		$module = $this->request->getPost('module');

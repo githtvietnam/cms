@@ -10,7 +10,7 @@
 		<meta http-equiv="refresh" content="1800" />
 
 		<!-- GOOGLE -->
-		<title>Vanh Shoes</title>
+		<title>Kim Liên Travel</title>
 		<meta name="description" content="One for all - All for one">
 		<link rel="canonical" href="https://gleehome.com.vn/" />
 
@@ -30,7 +30,7 @@
 		<meta name="twitter:description" content="GleeHome - Công ty tư vấn thiết kế hoàn thiện nội thất. Luôn dẫn đầu về xu hướng thiết kế nội thất. Làm việc chuyên nghiệp, uy tín, chất lượng" />
 		<meta name="twitter:image" content="https://gleehome.com.vn/" />
 
-
+		<link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@100;200;300;400;500;600;700;800;900&display=swap" rel="stylesheet">
 		<link href="public/frontend/resources/fonts/font-awesome-4.7.0/css/font-awesome.min.css" rel="stylesheet" />
 		<link href="public/frontend/resources/uikit/css/uikit.modify.css" rel="stylesheet" />
 		<link href="public/frontend/resources/library/css/general.css" rel="stylesheet" />
@@ -47,7 +47,7 @@
 		<?php echo view('frontend/homepage/common/footer') ?>
 		<?php echo view('frontend/homepage/common/offcanvas') ?>
 		<script src="public/frontend/resources/plugins/OwlCarousel2-2.3.4/dist/owl.carousel.min.js"></script>
-		<script src="public/frontend/resources/plugins/jquery-nice-select-1.1.0/js/jquery.nice-select.js"></script>
+		<script src="public/frontend/resources/uikit/js/components/slideshow.min.js"></script>
 		<script src="public/frontend/resources/function.js"></script>
 		<script src="public/frontend/resources/plugins.js"></script>
 	</body>

@@ -94,7 +94,7 @@ class Slide extends BaseController{
 		 					'where'  => ['catalogueid' => $insertCatId ]
 		 				],true);
 		 			}
-		 			$idInsertBatch = get_id_create_batch($insertSlideId[0]['id'], count($insertSlide));
+		 			// $idInsertBatch = get_id_create_batch($insertSlideId[0]['id'], count($insertSlide));
 		 				if(isset($idInsertBatch) && is_array($idInsertBatch) && count($idInsertBatch)){
 				 			$dataSlideTranslate = separateArray($this->execute($insertCatId, $idInsertBatch), ['objectid', 'catalogueid', 'title', 'description', 'language', 'content','url','userid_created', 'created_at']);
 			 			}

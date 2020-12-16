@@ -36,3 +36,18 @@ $(document).ready(function(){
 		return false;
 	});
 });
+
+$(document).on('change','.get_module_primary',function(){
+	let _this = $(this);
+	let val = _this.val();
+	if(val != 0){
+		let form_URL = 'ajax/dashboard/get_module_primary';
+		$.post(form_URL, {
+			val: val
+		},
+		function(data){
+			let json = JSON.parse(data);
+			$('.module_primary').val(json.module_primary);
+		});	
+	}
+})

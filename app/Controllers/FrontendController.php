@@ -6,7 +6,7 @@ use App\Models\AutoloadModel;
 class FrontendController extends Controller
 {
 
-	protected $helpers = [];
+	protected $helpers = ['mystring'];
 	public $currentTime;
 	public $AutoloadModel;
 	public function initController(\CodeIgniter\HTTP\RequestInterface $request, \CodeIgniter\HTTP\ResponseInterface $response, \Psr\Log\LoggerInterface $logger)

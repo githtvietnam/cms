@@ -135,4 +135,42 @@
 			<description>Xóa</description>
 		</item>
 	</permissions>
+	<permissions>
+		<title>Danh sách - [Tour]</title>
+		<item>
+			<param>backend/tour/tour/index</param>
+			<description>Xem</description>
+		</item>
+		<item>
+			<param>backend/tour/tour/create</param>
+			<description>Thêm</description>
+		</item>
+		<item>
+			<param>backend/tour/tour/update</param>
+			<description>Sửa</description>
+		</item>
+		<item>
+			<param>backend/tour/tour/delete</param>
+			<description>Xóa</description>
+		</item>
+	</permissions>
+	<permissions>
+		<title>Danh sách Nhóm - [Tour]</title>
+		<item>
+			<param>backend/tour/catalogue/index</param>
+			<description>Xem</description>
+		</item>
+		<item>
+			<param>backend/tour/catalogue/create</param>
+			<description>Thêm</description>
+		</item>
+		<item>
+			<param>backend/tour/catalogue/update</param>
+			<description>Sửa</description>
+		</item>
+		<item>
+			<param>backend/tour/catalogue/delete</param>
+			<description>Xóa</description>
+		</item>
+	</permissions>
 </module>

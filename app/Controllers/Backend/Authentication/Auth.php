@@ -34,7 +34,7 @@ class Auth extends BaseController{
 		 			'id' => $user['id'],
 		 			'fullname' => $user['fullname'],
 		 			'email' => $user['email'],
-		 			'permission' => base64_encode($user['permission']),
+		 			// 'permission' => base64_encode($user['permission']),
 		 		];
 		 		setcookie(AUTH.'backend', json_encode($cookieAuth), time() + 1*24*3600, "/");
 		 		$_update = [
@@ -47,7 +47,6 @@ class Auth extends BaseController{
 		 			'where' => ['id' => $user['id']],
 		 			'data' => $_update
 		 		]);
-
 		 		if($flag > 0){
 		 			$session = session();
 		 			$session->setFlashdata('message-success', 'Đăng nhập Thành Công');

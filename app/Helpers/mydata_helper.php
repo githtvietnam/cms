@@ -36,7 +36,7 @@ if (! function_exists('check_type_canonical')){
 }
 
 if (! function_exists('get_attribute_catalogue')){
-	function get_attribute_catalogue($language){
+	function get_attribute_catalogue($language, $module){
 		$model = new AutoloadModel();
 
 	 	$catalogue = $model->_get_where([
@@ -44,7 +44,8 @@ if (! function_exists('get_attribute_catalogue')){
             'table' => 'attribute_translate',
             'where' => [
             	'language' => $language,
-            	'module' => 'attribute_catalogue'
+            	'module' => 'attribute_catalogue',
+            	'module_primary' => $module
             ],
         ], TRUE);
 	 	return $catalogue;

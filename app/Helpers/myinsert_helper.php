@@ -6,6 +6,7 @@ if (! function_exists('insert_wholesale')){
 	function insert_wholesale(array $param = [], $module = '', $method = '' , $id = ''){
 		$model = new AutoloadModel();
 		$new_array = [];
+		$module_explode = explode("_", $module);
 		foreach ($param as $key => $value) {
 			foreach ($param['number_start'] as $keyChild => $valChild) {
 				if($param['number_start'][$keyChild] == '' && $param['number_end'][$keyChild] == '' && $param['wholesale_price'][$keyChild] == ''){
@@ -28,18 +29,25 @@ if (! function_exists('insert_wholesale')){
 		];
 		if($method =='create'){
 			$flag = $model->_insert([
-				'table' => 'product_wholesale',
+				'table' => $module_explode[0].'_wholesale',
 				'data' => $store
 			]);
 		}else{
 			$flag = $model->_update([
-				'table' => 'product_wholesale',
+				'table' => $module_explode[0].'_wholesale',
 				'data' => $store,
 				'where' => [
 					'objectid' => $id,
 					'module' => $module
 				]
 			]);
+
+			if($flag == ''){
+				$flag = $model->_insert([
+					'table' => $module_explode[0].'_wholesale',
+					'data' => $store
+				]);
+			}
 		}
 
 	 	return $flag;
@@ -47,13 +55,14 @@ if (! function_exists('insert_wholesale')){
 }
 
 if (! function_exists('insert_version')){
-	function insert_version(array $param = [], $objectid = '', $language = '', $method = ''){
+	function insert_version(array $param = [], $objectid = '', $language = '', $method = '', $module = ''){
 		$model = new AutoloadModel();
 		$new_array = [];
 		$insert = [];
+		$module_explode = explode("_", $module);
 		if($method == 'update'){
 			$delete = $model->_delete([
-				'table' => 'product_version',
+				'table' => $module_explode[0].'_version',
 				'where' => ['objectid' => $objectid,'language' => $language]
 			]);
 		}
@@ -88,7 +97,7 @@ if (! function_exists('insert_version')){
 			}
 
 			$flag =	$model->_create_batch([
-				'table' => 'product_version',
+				'table' => $module_explode[0].'_version',
 				'data' => $insert,
 			]);
 		}
@@ -96,10 +105,11 @@ if (! function_exists('insert_version')){
 }
 
 if (! function_exists('insert_attribute')){
-	function insert_attribute(array $param = [], $id = '', $language = '', $catalogueid = ''){
+	function insert_attribute(array $param = [], $id = '', $language = '', $catalogueid = '', $module = ''){
 		$model = new AutoloadModel();
 		$data = [];
 		$new_array = [];
+		$module_explode = explode("_", $module);
 		foreach ($param as $key => $value) {
 			foreach ($value as $keyChild => $valChild) {
 				$data[$param['attribute_catalogue'][$keyChild]] = $param['attribute'][$keyChild];
@@ -129,10 +139,10 @@ if (! function_exists('insert_attribute')){
 
 		$attr = $model->_get_where([
 			'select' => 'attribute',
-			'table' => 'product_translate',
+			'table' => $module_explode[0].'_translate',
 			'where' => [
 				'language' => $language,
-				'module' => 'product_catalogue',
+				'module' => $module_explode[0].'_catalogue',
 				'objectid' => $catalogueid
 			]
 		]);
@@ -162,16 +172,16 @@ if (! function_exists('insert_attribute')){
 		}
 		// pre($attr);
 		$new_array = json_encode($attr);
-		// Nhap vao CSDL table: product_transalte
+		// Nhap vao CSDL table: $module_explode[0]. _transalte
 		$insert = [
 			'attribute' => $new_array
 		];
 		$flag = $model->_update([
-			'table' => 'product_translate',
+			'table' => $module_explode[0].'_translate',
 			'data' => $insert,
 			'where' => [
 				'language' => $language,
-				'module' => 'product_catalogue',
+				'module' => $module_explode[0].'_catalogue',
 				'objectid' => $catalogueid
 			]
 		]);

@@ -1,7 +1,6 @@
 var count = 0;
 if(attribute_cat != ''){
 	attribute_cat = JSON.parse(attribute_cat)
-
 }
 
 // Run on web load

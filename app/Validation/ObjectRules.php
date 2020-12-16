@@ -37,16 +37,30 @@ class ObjectRules {
  	}
 
  	public function check_id(string $productid = '', string $module = ''): bool{
-		$originalId = $this->request->getPost('productid');
+		if($module == 'tour'){
+			$originalId = $this->request->getPost('tourid');
+		}else{
+			$originalId = $this->request->getPost('productid');
+		}
 		$modulExtract = explode('_', $module);
 		$count = 0;
 		if($originalId != $productid){
-			$count = $this->AutoloadModel->_get_where([
-				'select' => 'objectid',
-				'table' => $modulExtract[0].'_translate',
-				'where' => ['productid' => $productid],
-				'count' => TRUE
-			]);
+			if($module == 'tour'){
+				$count = $this->AutoloadModel->_get_where([
+					'select' => 'objectid',
+					'table' => $modulExtract[0],
+					'where' => ['tourid' => $productid],
+					'count' => TRUE
+				]);
+			}else{
+				$count = $this->AutoloadModel->_get_where([
+					'select' => 'objectid',
+					'table' => $modulExtract[0].'_translate',
+					'where' => ['productid' => $productid],
+					'count' => TRUE
+				]);
+
+			}
 		}
 		if($count > 0){
 			return false;

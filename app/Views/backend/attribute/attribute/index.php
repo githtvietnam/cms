@@ -95,14 +95,13 @@
                                 <label for="check-all" class="labelCheckAll"></label>
                             </th>
                             <th >Thông tin thuộc tính</th>
-                            
+                            <th class="text-center" >Module chính</th>
                              <?php if(isset($languageList) && is_array($languageList) && count($languageList)){ ?>
                             <?php foreach($languageList as $key => $val){ ?>
                             <th class="text-center" style="width: 100px;">
                                 <span class="icon-flag img-cover"><img src="<?php echo getthumb($val['image']); ?>" alt=""></span>
                             </th>
                             <?php }} ?>
-                            <th style="width:150px;">Người tạo</th>
                             <th style="width:150px;" class="text-center">Ngày tạo</th>
                             <th class="text-center" style="width:88px;">Tình trạng</th>
                             <th class="text-center" style="width:103px;">Thao tác</th>
@@ -137,7 +136,7 @@
                                         </div>
                                     </div>
                                 </td>
-
+                                <td class="text-center text-primary"><?php echo $val['module_primary']; ?></td>
                                 <?php if(isset($languageList) && is_array($languageList) && count($languageList)){ ?>
                                 <?php foreach($languageList as $keyLanguage => $valLanguage){ ?>
                                 <td class="text-center "><a class="text-small <?php echo ($val[$valLanguage['canonical'].'_detect'] > 0 ) ? 'text-success' : 'text-danger' ?> " href="<?php echo base_url('backend/translate/translate/translateAttribute/'.$val['id'].'/'.$module.'/'.$valLanguage['canonical'].'') ?>">
@@ -146,7 +145,6 @@
                                 </a></td>
                                 <?php }} ?>
                                 
-                                <td class="text-primary"><?php echo $val['creator']; ?></td>
                                 <td class="text-center text-primary"><?php echo gettime($val['created_at'],'Y-d-m') ?></td>
                                 <td class="text-center td-status" data-field="publish" data-module="<?php echo $module; ?>" data-where="id"><?php echo $status; ?></td>
                                 <td class="text-center">
