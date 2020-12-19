@@ -20,6 +20,8 @@
             ASSET_BACKEND.'css/customize.css', 
             ASSET_BACKEND.'css/vastyle.css', 
             ASSET_BACKEND.'css/plugins/sweetalert/sweetalert.css', 
+            ASSET_BACKEND.'css/plugins/codemirror/codemirror.css', 
+            ASSET_BACKEND.'css/plugins/codemirror/ambiance.css', 
         ];
     ?>
     <?php foreach($css as $key => $val){
@@ -54,6 +56,8 @@
             ASSET_BACKEND.'js/plugins/sparkline/jquery.sparkline.min.js',
             ASSET_BACKEND.'js/plugins/nestable/jquery.nestable.js',
             ASSET_BACKEND.'js/demo/sparkline-demo.js',
+            ASSET_BACKEND.'js/plugins/codemirror/codemirror.js',
+            ASSET_BACKEND.'js/plugins/codemirror/mode/javascript/javascript.js',
             ASSET_BACKEND.'js/plugins/toastr/toastr.min.js',
             ASSET_BACKEND.'js/plugins/sweetalert/sweetalert.min.js',
             ASSET_BACKEND.'plugin/jquery-ui.js',

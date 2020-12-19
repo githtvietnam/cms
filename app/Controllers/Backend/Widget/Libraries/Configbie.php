@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Controllers\Backend\System\Libraries;
+namespace App\Controllers\Backend\Widget\Libraries;
 use App\Controllers\BaseController;
 
 class ConfigBie{
