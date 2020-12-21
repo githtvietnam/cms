@@ -517,3 +517,12 @@ button[disabled], html input[disabled] {
     color: #676a6c;
     border: 1px solid #aaa;
 }
+
+.tv-tab-content{
+	display: block;
+	border: none;
+}
+.tab-content.tv{
+	display: block;
+	border: none;
+}

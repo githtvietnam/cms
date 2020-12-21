@@ -81,6 +81,7 @@
                                                 	$_data['listSlide'] = $data;
                                                 	$_data['count'] = $count;
                                                  ?>
+
                                                 <?php echo view('backend/dashboard/common/slideblock', $_data); ?>
                                           	<?php }  ?>
 										</ul>

@@ -11,7 +11,6 @@
 	</div>
 </div>
 <div class="wrapper wrapper-content animated fadeInRight">
-		
 	<div class="row">
 		<div class="col-lg-6  clearfix">
 			<div class="lable-language">Tiếng Việt</div>
@@ -38,7 +37,7 @@
 													</div>
 													<div class="col-lg-7">
 														<div class="tabs-container tv">
-															<div class="tab-content">
+															<div class="tab-content tv">
 																<div  class="tab-0 tab-pane active">
 																		<div class="row mb5 ">
 																			<label>URL</label>
@@ -116,7 +115,7 @@
 													<div class="tv-slide-container clearfix">
 														<div class="col-lg-12">
 															<div class="tabs-container tv">
-																<div class="tab-content">
+																<div class="tab-content tv">
 																			<div class="row mb5">
 																				<label>URL</label>
 																				<input  placeholder="Tên Slide..." type="text"  class="form-control m-b" name="dataTrans[<?php echo $key ?>][url]" value="<?php echo isset($value[$key]['url'])? $value[$key]['url']: '' ?>" >
