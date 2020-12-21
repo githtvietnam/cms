@@ -80,7 +80,51 @@ $(document).ready(function(){
 
 			get_select2(_this);
 		});
+	}
 
+	$(document).on('change','.select2_panel', function(){
+		let _this = $(this);
+		let val  = _this.val();
+		var module_explode = val.split("_");
+		$('.selectMultiplePanel').attr('data-join', module_explode[0]+'_translate');
+		$('.selectMultiplePanel').attr('data-module', val);
+		$(".selectMultiplePanel").empty();
+		if($('.selectMultiplePanel').length){
+			$('.selectMultiplePanel').each(function(){
+				let _this = $(this);
+				let select = _this.attr('data-select');		
+				let module = _this.attr('data-module');
+				let join = _this.attr('data-join');
+				get_select2(_this);
+			});
+		}
+		return false;
+	});
+
+	if($('.selectMultiplePanel').length){
+		$('.selectMultiplePanel').each(function(){
+			let _this = $(this);
+			let select = _this.attr('data-select');		
+			let module = _this.attr('data-module');
+			let join = _this.attr('data-join');
+			setTimeout(function(){
+				if(catalogue != ''){
+					$.post('ajax/dashboard/pre_select2', {
+						value: catalogue, module: module, select: select, join: join,},
+						function(data){
+							let json = JSON.parse(data);
+							if(json.items!='undefined' && json.items.length){
+								for(let i = 0; i< json.items.length; i++){
+									var option = new Option(json.items[i].text, json.items[i].id, true, true);
+									_this.append(option).trigger('change');
+								}
+							}
+						});
+				}
+			}, 10);
+
+			get_select2(_this);
+		});
 	}
 
 	$('.ck-editor').each(function(){
@@ -602,32 +646,61 @@ function get_select2(object){
 	let select = object.attr('data-select');
 	let join = object.attr('data-join');
 	$('.selectMultiple').select2({
-			minimumInputLength: 2,
-			placeholder: 'Nhập tối thiểu 2 ký tự để tìm kiếm',
-				ajax: {
-					url: 'ajax/dashboard/get_select2',
-					type: 'POST',
-					dataType: 'json',
-					deley: 250,
-					data: function (params) {
-						return {
-							locationVal: params.term,
-							module:module,
-							select: select,
-							join: join,
+		minimumInputLength: 2,
+		placeholder: 'Nhập tối thiểu 2 ký tự để tìm kiếm',
+			ajax: {
+				url: 'ajax/dashboard/get_select2',
+				type: 'POST',
+				dataType: 'json',
+				deley: 250,
+				data: function (params) {
+					return {
+						locationVal: params.term,
+						module:module,
+						select: select,
+						join: join,
 
-						};
-					},
-					processResults: function (data) {
-						// console.log(data);
-						return {
-							results: $.map(data, function(obj, i){
-								return obj
-							})
-						}
-						
-					},
-					cache: true,
-				}
-		});
+					};
+				},
+				processResults: function (data) {
+					// console.log(data);
+					return {
+						results: $.map(data, function(obj, i){
+							return obj
+						})
+					}
+					
+				},
+				cache: true,
+			}
+	});
+	$('.selectMultiplePanel').select2({
+		minimumInputLength: 2,
+		placeholder: 'Nhập tối thiểu 2 ký tự để tìm kiếm',
+			ajax: {
+				url: 'ajax/dashboard/get_select2',
+				type: 'POST',
+				dataType: 'json',
+				deley: 250,
+				data: function (params) {
+					return {
+						locationVal: params.term,
+						module:module,
+						select: select,
+						join: join,
+
+					};
+				},
+				processResults: function (data) {
+					// console.log(data);
+					return {
+						results: $.map(data, function(obj, i){
+							return obj
+						})
+					}
+					
+				},
+				cache: true,
+			}
+	});
 }

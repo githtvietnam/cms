@@ -79,6 +79,7 @@ class Dashboard extends BaseController{
 		$param['module'] = $this->request->getPost('module');
 		$param['select'] = $this->request->getPost('select');
 		$param['join'] = $this->request->getPost('join');
+		
 		$object = [];
 		if($param['value'] != ''){
 			$object = $this->AutoloadModel->_get_where([
@@ -112,6 +113,8 @@ class Dashboard extends BaseController{
 		$param['keyword'] = $this->request->getPost('locationVal');
 		$param['select'] = $this->request->getPost('select');
 		$param['join'] = $this->request->getPost('join');
+		
+
 		if (isset($param['join']) && $param['join'] != '')
 			{
 				$object = $this->AutoloadModel->_get_where([

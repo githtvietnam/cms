@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <module>
 	<permissions>
-		<title>Cấu hình chung</title>
+		<title>Quản lý - [Menu]</title>
 		<item>
 			<param>backend/menu/menu/index</param>
 			<description>Xem</description>
@@ -18,16 +18,28 @@
 			<param>backend/menu/general/translator/vi</param>
 			<description>Xem bản dịch</description>
 		</item>
+		<item>
+			<param>backend/menu/general/translator/en</param>
+			<description>Xem bản dịch</description>
+		</item>
 	</permissions>
 	<permissions>
-		<title>General System</title>
+		<title>Quản lý - [Giao diện]</title>
 		<item>
-			<param>backend/system/general/index</param>
-			<description>Xem Toàn Bộ</description>
+			<param>backend/panel/panel/index</param>
+			<description>Xem</description>
 		</item>
 		<item>
-			<param>backend/system/general/index</param>
-			<description>Xem</description>
+			<param>backend/panel/panel/create</param>
+			<description>Thêm</description>
+		</item>
+		<item>
+			<param>backend/panel/panel/update</param>
+			<description>Sửa</description>
+		</item>
+		<item>
+			<param>backend/panel/panel/delete</param>
+			<description>Xóa</description>
 		</item>
 	</permissions>
 </module>
