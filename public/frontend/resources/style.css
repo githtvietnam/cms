@@ -964,3 +964,12 @@ table {
 .readmore:hover{
     background: #055092;
 }
+
+.css_submenu{
+    top: 0 !important;
+    left: 100% !important;  
+}
+
+.dropdown-menu .submenu>li:hover>.css_submenu{
+    display: block !important;
+}

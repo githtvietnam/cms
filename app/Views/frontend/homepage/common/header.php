@@ -20,32 +20,9 @@
 				<div class="hd-menu ">
 					<nav id="main-nav">
 						<ul class="uk-navbar-nav uk-clearfix main-menu">
-							<li><a href="">trang chủ</a></li>
-							<li>
-								<a href="">giới thiệu</a>
-								<div class="dropdown-menu">
-									<ul class="uk-list submenu">
-										<li><a href="" title="">Về Kim Liên Travel</a></li>
-										<li><a href="" title="">Thành Tích - Giải Thưởng</a></li>
-										<li><a href="" title="">Chính Sách</a></li>
-										<li><a href="" title="">Quy Định Đặt Tour</a></li>
-										<li><a href="" title="">Liên Hệ</a></li>
-									</ul>
-								</div>
-							</li>
-							<li><a href="">tour trong nước</a></li>
-							<li><a href="">tour nước ngoài</a></li>
-							<li>
-								<a href="">Cẩm nang & tin tức</a>
-								<div class="dropdown-menu">
-									<ul class="uk-list submenu">
-										<li><a href="" title="">Tin Kim Liên</a></li>
-										<li><a href="" title="">Thông Tin Du Lịch</a></li>
-										<li><a href="" title="">Khám Phá & Trải Nghiệm</a></li>
-										<li><a href="" title="">Cẩm Nang Du Lịch</a></li>
-									</ul>
-								</div>
-							</li>
+							<?php if(isset($menu) && is_array($menu) && count($menu)){ ?>
+								<?php echo render_menu_frontend($menu['data']); ?>
+							<?php } ?>
 						</ul>
 					</nav>
 				</div>

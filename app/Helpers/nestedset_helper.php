@@ -39,7 +39,7 @@ if (! function_exists('render_menu_recursive')){
 	                if($val['children'] != []){
 
 	                	$html = $html.'<ol class="dd-list">';
-	                		$html = $html.render_menu_recursive($val['children'], $id);
+	                		$html = $html.render_menu_recursive($val['children'], $id, $language);
 	            		$html = $html.'</ol>';
 	                }
                 $html = $html.'</li>';
