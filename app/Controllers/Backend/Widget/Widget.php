@@ -13,30 +13,44 @@ class Widget extends BaseController{
 		$this->data['module'] = 'website_widget';
 	}
 
-	public function _remap($method = '',$languageCurrent = ''){
-		$session = session();
-		$flag = $this->authentication->check_permission([
-			'routes' => 'backend/widget/widget/'.$method
-		]);
-		if($flag == false){
- 			$session->setFlashdata('message-danger', 'Bạn không có quyền truy cập vào chức năng này!');
- 			return redirect()->to(BASE_URL.'backend/dashboard/dashboard/index');
-		}else{
-			if(method_exists($this, $method)){
-				return $this->$method();
-			}
-			throw \CodeIgniter\Exceptions\PageNotFoundException::forPagenotFound();
-		}
-	}
-
 	public function index(){
 		$session = session();
-		
-		$this->data['widgetList'] = $this->AutoloadModel->_get_where([
-			'select' => 'keyword, html,css,script,id,title,publish',
-			'table' => 'website_widget',
-		], TRUE);
+		$options = [
+			'base_uri' => 'widgetcms.com/api/widget/widget', // need returned error: 403 Forbidden
+		];
+		$client = new \CodeIgniter\HTTP\CURLRequest(
+	        new \Config\App(),
+	        new \CodeIgniter\HTTP\URI(),
+	        new \CodeIgniter\HTTP\Response(new \Config\App()),
+	        $options
+		);
+		$listWidget = $client->get('widgetcms.com/api/widget/widget/list');
+		$this->data['widgetList'] = json_decode(validate_input($listWidget->getBody()),TRUE);
+		$this->data['widgetList'] = $this->data['widgetList']['data'];
+		$catalogueWidget = $client->get('widgetcms.com/api/widget/widget/widget_catalogue_list');
+		$catalogueWidget = json_decode(validate_input($catalogueWidget->getBody()),TRUE);
+		$this->data['widgetCAtalogueList'] = $catalogueWidget['data'];
+		$this->data['widgetMatch'] = match_2_arrays($this->data['widgetCAtalogueList'], $this->data['widgetList']);	
 		$temp = [];
+
+		$this->data['selectWidget'] = $this->AutoloadModel->_get_where([
+			'select' => 'id,catalogueid, keyword',
+			'table' => 'website_widget'
+		],TRUE);
+
+		foreach ($this->data['widgetMatch'] as $key => $value) {
+			if($value['data'] != []){
+				foreach ($value['data'] as $keyChild => $valChild) {
+					foreach ($this->data['selectWidget'] as $keyPublish => $valPublish) {
+						if($valPublish['keyword'] == $valChild['keyword'] && $valPublish['catalogueid'] == $valChild['catalogueid']){
+							$this->data['widgetMatch'][$key]['data'][$keyChild]['publish'] = 1;
+						}
+					}
+				}
+			}
+		}
+		// prE($this->data['widgetMatch']);
+
 		if(isset($this->data['system'])){
 			foreach($this->data['system'] as $key => $val){
 				$temp[$val['keyword']] = $val['content'];

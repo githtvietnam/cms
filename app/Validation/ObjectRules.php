@@ -86,6 +86,24 @@ class ObjectRules {
 		return true;
  	}
 
+ 	public function check_keyword(string $keyword = '', $module = ''): bool{
+		
+		$originalId = $this->request->getPost('keyword');
+		$count = 0;
+		if($originalId != $keyword){
+			$count = $this->AutoloadModel->_get_where([
+				'select' => 'id',
+				'table' => $module ,
+				'where' => ['keyword' => $keyword],
+				'count' => TRUE
+			]);
+		}
+		if($count > 0){
+			return false;
+		}
+		return true;
+ 	}
+
 
 }
 

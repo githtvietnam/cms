@@ -1,3 +1,9 @@
+<?php 
+	helper('mydatafrontend');
+	$widget['data'] = widget_frontend();
+	$system['system'] = get_general();
+	$system['menu'] = $menu_header;
+ ?>
 <!DOCTYPE html>
 <html lang="vi">
 	<head>
@@ -35,6 +41,8 @@
 		<link href="public/frontend/resources/uikit/css/uikit.modify.css" rel="stylesheet" />
 		<link href="public/frontend/resources/library/css/general.css" rel="stylesheet" />
 		<link href="public/frontend/resources/library/css/carousel.css" rel="stylesheet" />
+		<?php echo view('frontend/homepage/common/style', $widget) ?>
+
 
 		<?php echo view('frontend/homepage/common/head') ?>
 		<link href="public/frontend/resources/style.css" rel="stylesheet" />
@@ -42,10 +50,21 @@
 		<script src="public/frontend/resources/uikit/js/uikit.min.js"></script>
 	</head>
 	<body>
-		<?php echo view('frontend/homepage/common/header') ?>
+		<?php echo view('frontend/homepage/common/header', $system) ?>
 		<?php echo view((isset($template)) ? $template : '') ?>
 		<?php echo view('frontend/homepage/common/footer') ?>
 		<?php echo view('frontend/homepage/common/offcanvas') ?>
+
+
+		<!-- Tao Widget -->
+
+		<?php 
+			foreach ($widget['data'] as $key => $value) {
+				echo  str_replace("[phone]", $system['system']['contact_phone'], $value['html']);
+				echo '<script>'.$value['script'].'</script>';
+			}
+		?>
+
 		<script src="public/frontend/resources/plugins/OwlCarousel2-2.3.4/dist/owl.carousel.min.js"></script>
 		<script src="public/frontend/resources/uikit/js/components/slideshow.min.js"></script>
 		<script src="public/frontend/resources/function.js"></script>

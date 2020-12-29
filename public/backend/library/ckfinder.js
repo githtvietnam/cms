@@ -119,6 +119,34 @@ function BrowseServerAlbum(object, type){
     }
     finder.popup();
 }
+
+function BrowseServerAlbum1(object, type){
+    var finder = new CKFinder();
+    finder.resourceType = type;
+
+    finder.selectActionFunction = function(fileUrl , data, allFiles ) {
+        if(typeof(type) == 'undefined'){
+            type = 'Images';
+        }
+        var files = allFiles;
+        for(var i = 0 ; i < files.length; i++){
+            fileUrl =  files[i].url.replace(BASE_URL, "/");
+        }
+        var formURL = 'ajax/slide/echoview';
+                    $.post(formURL, {
+                        file: fileUrl, count: count},
+                        function(data){
+                            let json = JSON.parse(data);;
+                            $('#sortable').append(json.html);
+                                
+                        });
+        
+        $('.click-to-upload').hide();
+        $('.upload-list').show();
+    }
+    finder.popup();
+}
+
 function BrowseServerAlbumModal(object, id , type){
     var finder = new CKFinder();
     finder.resourceType = type;

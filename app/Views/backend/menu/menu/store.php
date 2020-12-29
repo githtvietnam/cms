@@ -175,12 +175,12 @@
                                <div class="row mb15">
                                    <div class="col-lg-4">
                                        <div class="form-row"> 
-                                           <input type="text" placeholder="" value="<?php echo $value['title'] ?>" name="menu[title][]" class="form-control" >
+                                           <input type="text" placeholder="" value="<?php echo $value['title'] ?>" name="menu[title][]" class="form-control input_menu_title" >
                                        </div>
                                    </div>
                                    <div class="col-lg-4">
                                        <div class="form-row">
-                                           <input type="text" placeholder="" value="<?php echo $value['canonical'] ?>" name="menu[link][]" class="form-control" >
+                                           <input type="text" placeholder="" value="<?php echo $value['canonical'] ?>" name="menu[link][]" class="form-control input_menu_canonical" >
                                        </div>
                                    </div>
                                    <div class="col-lg-2">

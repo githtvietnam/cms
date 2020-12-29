@@ -43,6 +43,13 @@ class Slide extends BaseController{
 				$fileData[$key]['description'] = '';
 				$fileData[$key]['content'] = '';
 			}
+		}else{
+				$fileData[$count]['image'] = $file;
+				$fileData[$count]['order'] = 0;
+				$fileData[$count]['url'] = '';
+				$fileData[$count]['title'] = '';
+				$fileData[$count]['description'] = '';
+				$fileData[$count]['content'] = '';
 		}
 		$html = view('backend/dashboard/common/slideblock', ['listSlide' => $fileData, 'count' => $count], ['saveData' => true]);
 		echo json_encode([

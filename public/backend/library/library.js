@@ -15,6 +15,40 @@ $(document).ready(function(){
    		 	$('.upload-list').hide();
 		}
 	});
+
+	$(document).on('click','.va-option-input', function(){
+		let _this = $(this);
+		let catalogueid = _this.parents('.wrap-catalogue-widget').attr('data-id')
+		let count = _this.parents('.wrap-catalogue-widget').find('.va-option-input:checked').length;
+		if(count == 1){
+			let form_URL = 'ajax/dashboard/select_widget';
+			let select = _this.parents('.wrap-catalogue-widget').find('.va-option-input:checked');
+			let html = select.attr('data-html')
+			let css = select.attr('data-css')
+			let script = select.attr('data-script')
+			let title = select.attr('data-title')
+			let keyword = select.attr('data-keyword')
+        	$.post(form_URL, {
+				catalogueid : catalogueid, html: html, css: css, script: script, title: title, keyword: keyword
+			},
+			function(data){
+				
+			});	
+		}else if(count == 0){
+			let delete_URL = 'ajax/dashboard/delete_widget';
+			$.post(delete_URL, {
+				catalogueid : catalogueid
+			},
+			function(data){
+				
+			});	
+		}else{
+			_this.prop("checked", false);
+		    toastr.warning('Chỉ chọn duy nhất 1 mục trong nhóm!','Xảy ra lỗi!');
+		}
+		console.log(count)
+	});
+
 	$(document).ready(function(){
 		let data_0 = $('#insert_general').attr('data-max-0');
 		for(let i = 1; i <= data_0; i++ ){
@@ -104,6 +138,7 @@ $(document).ready(function(){
 	if($('.selectMultiplePanel').length){
 		$('.selectMultiplePanel').each(function(){
 			let _this = $(this);
+			$('.select2_panel').trigger('change');
 			let select = _this.attr('data-select');		
 			let module = _this.attr('data-module');
 			let join = _this.attr('data-join');

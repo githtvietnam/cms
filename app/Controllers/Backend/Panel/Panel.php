@@ -13,119 +13,66 @@ class Panel extends BaseController{
 	public function __construct(){
 		$this->configbie = new ConfigBie();
 		$this->data = [];
-		$this->data['module'] = 'panel_translate';
+		$this->data['module'] = 'website_panel';
 		$this->nestedsetbie = new Nestedsetbie(['table' => $this->data['module'],'language' => $this->currentLanguage()]);
 
 	}
 
-	public function index($id = 0, $language = ''){
+	public function index($language = ''){
 		$flag = $this->authentication->check_permission([
-			'routes' => 'backend/product/product/index'
+			'routes' => 'backend/panel/panel/index'
 		]);
 		if($flag == false){
  			$session->setFlashdata('message-danger', 'Bạn không có quyền truy cập vào chức năng này!');
  			return redirect()->to(BASE_URL.'backend/dashboard/dashboard/index');
 		}
+		if($language == ''){
+			$language = $this->currentLanguage();
+		}
+
+		$select = $this->configbie->panel();
+		$this->data['locate'] = $select['locate'];
+		
+		$this->data['panel'] = $this->AutoloadModel->_get_where([
+			'select' => 'keyword, title, module, catalogue, locate,id',
+			'table' => $this->data['module'],
+			'where' => [
+				'language' => $language,
+				'deleted_at' => 0
+			]
+		], TRUE);
 		
 		$session = session();
-		$this->data['id'] = $id;
 		$this->data['languageSelect'] = $language;
 		$this->data['fixWrapper'] = 'fix-wrapper';
 		$this->data['template'] = 'backend/panel/panel/index';
 		return view('backend/dashboard/layout/home', $this->data);
 	}
 
-	public function create($id = 0, $language = ''){
-		
-
-
-		$this->data['languageABC'] = $language;
+	public function create(){
+		$flag = $this->authentication->check_permission([
+			'routes' => 'backend/panel/panel/index'
+		]);
+		if($flag == false){
+ 			$session->setFlashdata('message-danger', 'Bạn không có quyền truy cập vào chức năng này!');
+ 			return redirect()->to(BASE_URL.'backend/dashboard/dashboard/index');
+		}
 		$session = session();
-		
-
+		$select = $this->configbie->panel();
+		$this->data['locate'] = $select['locate'];
+		$this->data['dropdown'] = $select['dropdown'];
 		if($this->request->getMethod() == 'post'){
 			$validate = $this->validation();
 			if ($this->validate($validate['validate'], $validate['errorValidate'])){
-				$menu = $this->request->getPost('menu');
+				$store = $this->store(['method' => 'create']);
+				$resultid = $this->AutoloadModel->_insert([
+		 			'table' => $this->data['module'],
+		 			'data' => $store,
+		 		]);
+		 		if($resultid > 0){
 
-				if(isset($menu) && is_array($menu) && count($menu)){
-					$_insert = [];
-					$newMenu = [];
-					$idLanguageList = [];
-					$count = 0;
-					$id = $this->request->getPost('parentid');
-					$GetdataLanguage = $this->AutoloadModel->_get_where([
-						'select' => 'objectid',
-						'table' => 'menu_translate',
-						'where' => ['language' => $language, 'catalogueid' => $id]
-					], TRUE);
-					foreach ($GetdataLanguage as $key => $value) {
-						$idLanguageList[] =  $value['objectid'];
-					}
-					// pre($idLanguageList);
-
-					$delete = $this->AutoloadModel->_delete([
-						'table' => 'menu',
-						'where' => ['catalogueid' => $id],
-						'where_in' => $idLanguageList,
-						'where_in_field' => 'id'
-					]);
-
-					$delete_menuTranslate = $this->AutoloadModel->_delete([
-						'table' => 'menu_translate',
-						'where' => ['module' => 'menu', 'language' => $language, 'catalogueid' => $id],
-					]);
-					
-					
-					foreach($menu['order'] as $key => $val){
-						$_insert[] = [
-							'catalogueid' => $this->request->getPost('parentid'),
-							'order' => $val,
-							'userid_created' => $this->auth['id'],
-							'created_at' => $this->currentTime
-						];
-						$count++;		
-					}
-
-					$flag = [];
-					$flag =	$this->AutoloadModel->_create_batch([
-						'table' => 'menu',
-						'data' => $_insert,
-					]);
-
-					if($flag > 0){
-						$getData = $this->AutoloadModel->_get_where([
-							'select' => 'id',
-							'table' => 'menu',
-							'order_by' => 'created_at desc',
-							'limit' => $count
-						],TRUE);
-						foreach ($getData as $key => $value) {
-							$rewrite_url[] = ['id' => $value['id'],'canonical' => $menu['link'][$key]];
-							$dataURL = rewrite_url($rewrite_url, 'normal', 'menu' , 'menu', '.html');
-							$newMenu[] = [
-								'objectid' => $getData[$key]['id'],
-								'title' => $menu['title'][$key],
-								'canonical'  => $dataURL[$key],
-								'catalogueid' => $this->request->getPost('parentid'),
-								'language' => $language,
-								'module' => 'menu',
-								'created_at' => $this->currentTime,
-								'userid_created' => $this->auth['id']
-							];		
-						}
-						$insertData = $this->AutoloadModel->_create_batch([
-							'table' => 'menu_translate',
-							'data' => $newMenu
-						]);
-
-						$this->nestedsetbie->Get('level ASC, order ASC', $language);
-						$this->nestedsetbie->Recursive(0, $this->nestedsetbie->Set());
-						$this->nestedsetbie->Action();
-						
-						$session->setFlashdata('message-success', 'Tạo Menu Thành Công!');
-						return redirect()->to(BASE_URL.'backend/menu/menu/index/'.$id.'/'.$language.'');
-					}
+		 			$session->setFlashdata('message-success', 'Tạo Giao diện Thành Công! Hãy tạo danh mục tiếp theo.');
+ 					return redirect()->to(BASE_URL.'backend/panel/panel/index');
 		 		}
 		 	}else{
 	        	$this->data['validate'] = $this->validator->listErrors();
@@ -136,14 +83,112 @@ class Panel extends BaseController{
 		return view('backend/dashboard/layout/home', $this->data);
 	}
 
+	public function update($id = 0, $language = ''){
+		$flag = $this->authentication->check_permission([
+			'routes' => 'backend/panel/panel/index'
+		]);
+		if($flag == false){
+ 			$session->setFlashdata('message-danger', 'Bạn không có quyền truy cập vào chức năng này!');
+ 			return redirect()->to(BASE_URL.'backend/dashboard/dashboard/index');
+		}
+		$session = session();
+		$select = $this->configbie->panel();
+		$this->data['locate'] = $select['locate'];
+		$this->data['dropdown'] = $select['dropdown'];
+		if($language == ''){
+			$language = $this->currentLanguage();
+		}
+
+		$this->data[$this->data['module']] = $this->AutoloadModel->_get_where([
+			'select' => 'keyword, title, module, catalogue, locate,id',
+			'table' => $this->data['module'],
+			'where' => [
+				'language' => $language,
+				'id' => $id
+			]
+		]);
+		// pre($this->data[$this->data['module']]);
+
+		if($this->request->getMethod() == 'post'){
+			$validate = $this->validation();
+			if ($this->validate($validate['validate'], $validate['errorValidate'])){
+				$store = $this->store(['method' => 'update']);
+				$resultid = $this->AutoloadModel->_update([
+		 			'table' => $this->data['module'],
+		 			'data' => $store,
+		 			'where' => ['id' => $id],
+		 		]);
+		 		if($resultid > 0){
+
+		 			$session->setFlashdata('message-success', 'Cập nhật Giao diện Thành Công! Hãy cập nhật danh mục tiếp theo.');
+ 					return redirect()->to(BASE_URL.'backend/panel/panel/index');
+		 		}
+		 	}else{
+	        	$this->data['validate'] = $this->validator->listErrors();
+	        }
+	 	}
+		$this->data['id'] = $id;
+		$this->data['fixWrapper'] = 'fix-wrapper';
+		$this->data['template'] = 'backend/panel/panel/update';
+		return view('backend/dashboard/layout/home', $this->data);
+	}
+
+	public function delete($id = 0){
+		$flag = $this->authentication->check_permission([
+			'routes' => 'backend/panel/panel/index'
+		]);
+		if($flag == false){
+ 			$session->setFlashdata('message-danger', 'Bạn không có quyền truy cập vào chức năng này!');
+ 			return redirect()->to(BASE_URL.'backend/dashboard/dashboard/index');
+		}
+		$id = (int)$id;
+		$this->data[$this->data['module']] = $this->AutoloadModel->_get_where([
+			'select' => 'id, title',
+			'table' => $this->data['module'],
+			'where' => ['id' => $id,'deleted_at' => 0,'language' => $this->currentLanguage()]
+		]);
+		$session = session();
+		if(!isset($this->data[$this->data['module']]) || is_array($this->data[$this->data['module']]) == false || count($this->data[$this->data['module']]) == 0){
+			$session->setFlashdata('message-danger', 'Giao diện không tồn tại');
+ 			return redirect()->to(BASE_URL.'backend/panel/panel/index');
+		}
+
+		if($this->request->getPost('delete')){
+		
+			$flag = $this->AutoloadModel->_update([
+				'table' => $this->data['module'],
+				'data' => ['deleted_at' => 1],
+				'where' => [
+					'id' => $id,
+				]
+			]);
+
+			$session = session();
+			if($flag > 0){
+	 			$session->setFlashdata('message-success', 'Xóa bản ghi thành công!');
+			}else{
+				$session->setFlashdata('message-danger', 'Có vấn đề xảy ra, vui lòng thử lại!');
+			}
+			return redirect()->to(BASE_URL.'backend/panel/panel/index');
+		}
+
+		$this->data['template'] = 'backend/panel/panel/delete';
+		return view('backend/dashboard/layout/home', $this->data);
+	}
+
 
 	private function validation(){
 		$validate = [
-			'parentid' => 'is_natural_no_zero',
+			'title' => 'required',
+			'keyword' => 'required|check_keyword['.$this->data['module'].']',
 		];
 		$errorValidate = [
-			'parentid' => [
-				'is_natural_no_zero' => 'Bạn bắt buộc phải chọn vị trí hiển thị cho menu!'
+			'title' => [
+				'required' => 'Bạn phải nhập Tiêu đề giao diện!',
+			],
+			'keyword' => [
+				'required' => 'Bạn phải nhập Từ khóa giao diện!',
+				'check_keyword' => 'Từ khóa đã tồn tại, vui lòng chọn từ khóa khác!'
 			]
 		];
 		return [
@@ -174,6 +219,40 @@ class Panel extends BaseController{
 			'select' => $select,
 		];
 
+	}
+
+	private function store($param = []){
+		helper(['text']);
+		$catalogue = $this->request->getPost('catalogue');
+		if(isset($catalogue) && is_array($catalogue) && count($catalogue)){
+			foreach($catalogue as $key => $val){
+				if($val == (int)$this->request->getPost('catalogueid')){
+					unset($catalogue[$key]);
+				}
+			}
+		}
+		if(isset($catalogue) && is_array($catalogue) && count($catalogue)){
+			$catalogue = array_values($catalogue);
+		}
+
+
+		$store = [
+ 			'module' => $this->request->getPost('module'),
+ 			'catalogue' => json_encode($catalogue),
+ 			'keyword' => $this->request->getPost('keyword'),
+ 			'title' => $this->request->getPost('title'),
+ 			'locate' => $this->request->getPost('locate'),
+ 			'language' => $this->currentLanguage()
+ 		];
+ 		if($param['method'] == 'create' && isset($param['method'])){	
+ 			$store['created_at'] = $this->currentTime;
+ 			$store['userid_created'] = $this->auth['id'];
+ 			
+ 		}else{
+ 			$store['updated_at'] = $this->currentTime;
+ 			$store['userid_updated'] = $this->auth['id'];
+ 		}
+ 		return $store;
 	}
 
 	private function condition_keyword($keyword = ''): string{

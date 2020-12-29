@@ -155,6 +155,13 @@ $(document).ready(function(){
 		}
 	})
 
+	$(document).on('keyup' , '.input_menu_title', function(){
+		let _this = $(this);
+		let val = _this.val();
+		let text = slug(val);
+		_this.parents('.col-lg-4').siblings().find('.input_menu_canonical').val(text);
+	})
+
 	$(document).ready(function(){
         $('.input-group input').add($('.input-group textarea')).focus(function() {
             let _this = $(this);
@@ -344,12 +351,12 @@ $(document).ready(function(){
 	html = html + '<div class="row mb15">';
 		html = html + '<div class="col-lg-4">';
 			html = html + '<div class="form-row">';	
-				html = html + '<input type="text" placeholder="" value="'+name+'" name="menu[title][]" class="form-control" >';
+				html = html + '<input type="text" placeholder="" value="'+name+'" name="menu[title][]" class="form-control input_menu_title" >';
 			html = html + '</div>';
 		html = html + '</div>';
 		html = html + '<div class="col-lg-4">';
 			html = html + '<div class="form-row">';
-				html = html + '<input type="text" placeholder="" value="'+canonical+'" name="menu[link][]" class="form-control" >';
+				html = html + '<input type="text" placeholder="" value="'+canonical+'" name="menu[link][]" class="form-control input_menu_canonical" >';
 				
 			html = html + '</div>';
 		html = html + '</div>';

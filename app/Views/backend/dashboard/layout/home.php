@@ -76,10 +76,13 @@
                 $script[count($script)+1] = ASSET_BACKEND.'library/module/'.$module.'.js';
             }
         }
+
+        
     ?>
     <?php foreach($script as $key => $val){
         echo '<script src="'.$val.'"></script>';
     } ?>
+    
   <?php echo view('backend/dashboard/common/notification') ?>
 </body>
 </html>

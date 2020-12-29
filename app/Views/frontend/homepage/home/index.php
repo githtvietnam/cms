@@ -1,17 +1,12 @@
 <section class="slide-panel">
 	<div class="uk-slidenav-position" data-uk-slideshow>
 		<ul class="uk-slideshow" data-uk-slideshow="{autoplay:true}" >
-			<li><a href="" class="img-cover"><img src="public/frontend/resources/img/banner/boc-tham-slide.png" alt=""></a></li>
-			<li><a href="" class="img-cover"><img src="public/frontend/resources/img/banner/cskh-slide.png" alt=""></a></li>
-			<li><a href="" class="img-cover"><img src="public/frontend/resources/img/banner/mua5tang1-slide.png" alt=""></a></li>
-			<li><a href="" class="img-cover"><img src="public/frontend/resources/img/banner/oasis-phu-quoc-silde-web.png" alt=""></a></li>
-			<li><a href="" class="img-cover"><img src="public/frontend/resources/img/banner/qc112020-the-tich-diemslide.png" alt=""></a></li>
-			<li><a href="" class="img-cover"><img src="public/frontend/resources/img/banner/qc112020-voucher-200k-slide.png" alt=""></a></li>
-			<li><a href="" class="img-cover"><img src="public/frontend/resources/img/banner/qc122020-b-voucher-500k-slide.png" alt=""></a></li>
-			<li><a href="" class="img-cover"><img src="public/frontend/resources/img/banner/qc122020-sinh-nhat-slide-1-.png" alt=""></a></li>
-			<li><a href="" class="img-cover"><img src="public/frontend/resources/img/banner/slide-web-combo-vinholiday.png" alt=""></a></li>
-			<li><a href="" class="img-cover"><img src="public/frontend/resources/img/banner/slide-web-con-dao-0920.png" alt=""></a></li>
-			<li><a href="" class="img-cover"><img src="public/frontend/resources/img/banner/tour-mien-tay.png" alt=""></a></li>
+			<?php 
+				if(isset($slide_banner) && is_array($slide_banner) && count($slide_banner)){
+					foreach ($slide_banner['data'] as $key => $value) {
+			?>
+				<li><a href="<?php echo $value['url'] ?>" title="<?php echo $value['title'] ?>" class="img-cover"><img src="<?php echo $value['image'] ?>" alt="<?php echo $value['title'] ?>"></a></li>
+			<?php }} ?>
 		</ul>
 		<a href="" class="uk-slidenav uk-slidenav-contrast uk-slidenav-previous" data-uk-slideshow-item="previous"></a>
 		<a href="" class="uk-slidenav uk-slidenav-contrast uk-slidenav-next" data-uk-slideshow-item="next"></a>

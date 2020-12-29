@@ -7,6 +7,52 @@ class Dashboard extends BaseController{
 		
 	}
 
+	public function select_widget(){
+		$param['title'] = $this->request->getPost('title');
+		$param['catalogueid'] = $this->request->getPost('catalogueid');
+		$param['keyword'] = $this->request->getPost('keyword');
+		$param['css'] = $this->request->getPost('css');
+		$param['html'] = $this->request->getPost('html');
+		$param['script'] = $this->request->getPost('script');
+
+		$del = $this->AutoloadModel->_delete([
+			'table' => 'website_widget',
+			'where' =>[
+				'catalogueid' => $param['catalogueid']
+			]
+		]);
+
+		$data = [
+			'catalogueid' => $param['catalogueid'],
+			'title' => $param['title'],
+			'keyword' => $param['keyword'],
+			'css' => $param['css'],
+			'html' => $param['html'],
+			'script' => $param['script'],
+		];
+
+		$flag = $this->AutoloadModel->_insert([
+			'table' => 'website_widget',
+			'data' => $data
+		]);
+
+		echo json_encode($data);die();
+	}
+
+	public function delete_widget(){
+		$param['catalogueid'] = $this->request->getPost('catalogueid');
+
+		$del = $this->AutoloadModel->_delete([
+			'table' => 'website_widget',
+			'where' =>[
+				'catalogueid' => $param['catalogueid']
+			]
+		]);
+
+
+		echo json_encode($del);die();
+	}
+
 	public function get_module_primary(){
 		$val = $this->request->getPost('val');
 		
@@ -79,7 +125,6 @@ class Dashboard extends BaseController{
 		$param['module'] = $this->request->getPost('module');
 		$param['select'] = $this->request->getPost('select');
 		$param['join'] = $this->request->getPost('join');
-		
 		$object = [];
 		if($param['value'] != ''){
 			$object = $this->AutoloadModel->_get_where([

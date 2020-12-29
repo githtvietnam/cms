@@ -388,24 +388,7 @@ $(document).on('change','#toogle_readonly',function(){
 	}
 });
 
-$(document).on('change','#id_auto',function(){
-	let _this = $(this);
-	let title = $('#title').val();
-	let result = title.split(' ');	
-	let count = result.length;
-	let text = '';
-	let i = 0;
-	for(i = 0; i < count; i++){
-		let char = result[i].charAt(0);
-		text = text + char;
-	}
-	text = text+'-001';
-	if($('#id_auto').is(':checked')){
-		$('.productid').val(text)
-	}else{
-		$('.productid').val(productid)
-	}
-});
+
 
 $(document).on('keyup','#title',function(){
 	let _this = $(this);
@@ -420,11 +403,6 @@ $(document).on('keyup','#title',function(){
 	}
 	text = text+'-001';
 
-	if($('#id_auto').is(':checked')){
-		$('.productid').val(text)
-	}else{
-		$('.productid').val(productid)
-	}
 });
 
 $(document).on('keyup','#brand_title',function(){

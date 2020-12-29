@@ -37,6 +37,24 @@ if(!function_exists('get_first_img')){
 	}
 }
 
+if(!function_exists('match_2_arrays')){
+	function match_2_arrays(array $catalogue = [], array $index = []){
+		$new = [];
+		foreach ($catalogue as $key => $val) {
+			$new[$val['id']]['title'] = $val['title'];
+			$new[$val['id']]['keyword'] = $val['keyword'];
+			$new[$val['id']]['data'] = [];
+			foreach ($index as $keyChild => $valChild) {
+				if($val['id'] == $valChild['catalogueid']){
+					$abc = array_push($new[$val['id']]['data'], $valChild);
+				}
+			}
+		}
+
+		return $new;
+	}
+}
+
 
 if(!function_exists('gettime')){
 	function gettime($time, $type = 'H:i - d/m/Y'){

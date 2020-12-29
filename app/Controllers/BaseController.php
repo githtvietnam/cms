@@ -37,7 +37,6 @@ class BaseController extends Controller
 	public $authentication;
 	public $defaulLanguage;
 	public $currentLanguage;
-
 	/**
 	 * Constructor.
 	 */
@@ -65,6 +64,8 @@ class BaseController extends Controller
 			'table' => 'language',
 			'where' => ['default' => 1]
 		]);
+
+		
 		
 
 		helper($this->helpers);

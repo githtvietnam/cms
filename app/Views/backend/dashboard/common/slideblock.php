@@ -22,7 +22,7 @@
 					<li class=" tab-0 tab-pane active"><a href=".tab-0" aria-expanded="true"> Thông tin chung</a></li>
 					<li class="tab-1 tab-pane"><a href=".tab-1" aria-expanded="false">SEO</a></li>
 				</ul>
-				<div class="tab-content">
+				<div class="tab-content tv-tab-content">
 					<div  class="tab-0 tab-pane active">
 						<div class="panel-body">
 							<div class="row mb5">

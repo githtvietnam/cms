@@ -5,7 +5,7 @@
 		<div class="uk-container uk-container-center">
 			<div class="hd-hotline">
 				Hotline: 
-				<span> 0903 230 230 / 0888 532 439 / 024.35770809</span>
+				<span><?php echo $system['contact_phone'].' / '.$system['contact_hotline'] ?></span>
 			</div>
 		</div>
 	</div>

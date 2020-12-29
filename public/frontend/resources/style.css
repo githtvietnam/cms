@@ -560,7 +560,24 @@ table {
     left: 0;
 }
 
+.main-nav li:hover>.sub-menu-2 {
+    display: block;
+}
 
+.sub-menu-2 {
+    position: absolute;
+    width: 200px;
+    top: 0;
+    left: 100%;
+    list-style-type: none;
+    text-align: left;
+    background: #fff none repeat scroll 0 0;
+    display: none;
+    box-shadow: 1px 5px 10px rgba(0, 0, 0, .35);
+    right: auto;
+    z-index: 100;
+    animation: slipUp 0.5s ease;
+}
 
 #main-nav .main-menu>li:hover>.dropdown-menu {
     display: block;

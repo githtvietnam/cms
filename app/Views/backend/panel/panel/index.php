@@ -59,15 +59,22 @@
                             </tr>
                         </thead>
                         <tbody id="ajax-content">
-                            <tr class="gradeX" id="cat-1">
-                                <td class="text-center">1</td>
-                                <td><a class="" href="<?php echo base_url('backend/panel/panel/update/'.$val['id']) ?>" title="">Danh mục sản phẩm ( Chỉ chọn 1 danh mục sản phẩm )</a></td>
-                                <td class="text-center">Trang chủ</td>
-                                <td class="text-center" >
-                                    <a type="button" href="<?php echo base_url('backend/panel/panel/update/'.$val['id']) ?>" class="btn btn-primary"><i class="fa fa-edit"></i></a>
-                                    <a type="button" href="<?php echo base_url('backend/panel/panel/delete/'.$val['id']) ?>" class="btn btn-danger"><i class="fa fa-trash"></i></a>
-                                </td>
-                            </tr>
+                            <?php if(isset($panel) && is_array($panel) && count($panel)){ 
+                                foreach ($panel as $key => $value) {
+                                    if(isset($locate[$value['locate']]) && $locate[$value['locate']] != ''){
+                                        $location = $locate[$value['locate']];
+                                    }
+                            ?>
+                                <tr class="gradeX" id="<?php echo $value['keyword'] ?>">
+                                    <td class="text-center"><?php echo $value['keyword'] ?></td>
+                                    <td><a class="" href="<?php echo base_url('backend/panel/panel/update/'.$value['id']) ?>" title=""><?php echo $value['title'] ?></a></td>
+                                    <td class="text-center"><?php echo $location ?></td>
+                                    <td class="text-center" >
+                                        <a type="button" href="<?php echo base_url('backend/panel/panel/update/'.$value['id']) ?>" class="btn btn-primary"><i class="fa fa-edit"></i></a>
+                                        <a type="button" href="<?php echo base_url('backend/panel/panel/delete/'.$value['id']) ?>" class="btn btn-danger"><i class="fa fa-trash"></i></a>
+                                    </td>
+                                </tr>
+                            <?php }} ?>
                         </tbody>
                     </table>
                 </div>

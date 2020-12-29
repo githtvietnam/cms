@@ -9,13 +9,24 @@ class ConfigBie{
 		$this->params = $params;
 	}
 	public function panel(){
-		$data['article'] =  array(
-			'title' => 'Bài viết',
-			'translate' => true
+		$data['locate'] =  array(
+			0 => '-- Chọn vị trí Panel --',
+            'home' => 'Trang chủ',
+            'sidebar' => 'Sidebar',
+            'footer' => 'Footer'
 		);
-		$data['article_catalogue'] =  array(
-			'title' => 'Chuyên mục',
-			'translate' => true
+		$data['dropdown'] =  array(
+			0 => '-- Chọn danh mục sản phẩm --',
+            'product' => 'Sản phẩm',
+            'product_catalogue' => 'Danh mục sản phẩm',
+            'slide' => 'Slide',
+            'slide_catalogue' => 'Danh mục slide',
+            'brand' => 'Thương hiệu',
+            'brand_catalogue' => 'Danh mục Thương hiệu',
+            'article' => 'Bài viết',
+            'article_catalogue' => 'Danh mục Bài viết',
+            'tour' => 'Chuyến du lịch',
+            'tour_catalogue' => 'Danh mục Chuyến du lịch',
 		);
 
 		return $data;

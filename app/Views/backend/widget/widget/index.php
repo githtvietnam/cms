@@ -11,9 +11,6 @@
                     <li class="active"><strong>Quản lý Widget</strong></li>
                 </ol>
             </div>
-            <div class="uk-button">
-                <a href="<?php echo base_url('backend/widget/widget/create') ?>" class="btn btn-danger "><i class="fa fa-plus"></i> Thêm Widget Mới</a>
-            </div>
         </div>
    </div>
 </div>
@@ -26,69 +23,37 @@
                         <h5>Quản lý Widget </h5>
                     </div>
                     <div class="ibox-content">
-                        <div class="text-danger mb10">* Vị trí trên, dưới, trái, phải được tính bằng px.</div>
-                        <table class="table table-striped table-bordered table-hover dataTables-example">
-                            <thead>
-                            <tr>
-                                <th class="text-center">Giao diện</th>
-                                <th>Tiêu đề</th>
-                                <th>Từ khóa Widget</th>
-                                <th class="text-center">Trên</th>
-                                <th class="text-center">Dưới</th>
-                                <th class="text-center">Trái</th>
-                                <th class="text-center">Phải</th>
-                                <th class="text-center" style="width:88px;">Tình trạng</th>
-                                <th class="text-center" style="width:88px;">Thao tác</th>
-                            </tr>
-                            </thead>
-                            <tbody>
-
-                                <?php if(isset($widgetList) && is_array($widgetList) && count($widgetList)){ ?>
-                                <?php foreach($widgetList as $key => $val){ 
-                                    $val['html'] = base64_decode(validate_input($val['html']));
-                                    $val['css'] = base64_decode(validate_input($val['css']));
-                                    $val['script'] = base64_decode(validate_input($val['script']));
-                                ?>
-
-                                <?php  
-                                    $status = ($val['publish'] == 1) ? '<span class="text-success">Active</span>'  : '<span class="text-danger">Deactive</span>';
-                                ?>
-
-                                <tr id="post-<?php echo $val['id']; ?>" data-id="<?php echo $val['id']; ?>">
-                                    <td class="text-center"></td>
-                                    <td> 
-                                        <div class="main-info">
-                                            <div class="title"><a class="maintitle" href="<?php echo site_url('backend/widget/widget/update/'.$val['id']); ?>" title=""><?php echo $val['title']; ?></a></div>
+                        <?php if(isset($widgetMatch) && is_array($widgetMatch) && count($widgetMatch)){ ?>
+                            <?php foreach ($widgetMatch as $key => $val) { ?>
+                                <div class="wrap-catalogue-widget" data-keyword="<?php echo $val['keyword'] ?>" data-id="<?php echo $key ?>">
+                                    <div class="catalogue-widget-title">
+                                        <h2 class="text-success text-bold"><?php echo $val['title'] ?></h2>
+                                    </div>
+                                    <div class="wrap-widget">
+                                        <?php if($val['data'] != []){ ?>
+                                        <div class="uk-grid uk-grid-large uk-grid-width-large-1-4 uk-clearfix">
+                                            <?php foreach ($val['data'] as $keyChild => $valChild) { ?>
+                                                <div class="widget-panel">
+                                                    <div class="widget-body text-center" data-id="<?php echo $valChild['id'] ?>" data-keyword="<?php echo $valChild['keyword'] ?>">
+                                                        <div class="widget-img mb10">
+                                                            <img src="<?php echo API_WIDGET.$valChild['image'] ?>" alt="<?php echo $valChild['title'] ?>">
+                                                        </div>
+                                                        <div class="va_checkbox">
+                                                            <label> 
+                                                                <input type="checkbox" class="va-option-input" <?php echo ((isset($valChild['publish']) && $valChild['publish'] == 1)) ? 'checked' : '' ?> data-keyword="<?php echo $valChild['keyword'] ?>" data-title="<?php echo $valChild['title'] ?>" data-script="<?php echo $valChild['script'] ?>" data-css="<?php echo $valChild['css'] ?>" data-html="<?php echo $valChild['html'] ?>" value="<?php echo $valChild['id'] ?>" name="<?php echo $val['keyword'] ?>"> <i></i> 
+                                                            </label>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            <?php } ?>
                                         </div>
-                                    </td>
-                                     <td> 
-                                        <div class="main-info">
-                                            <div class="keyword"><a class="mainkeyword" href="<?php echo site_url('backend/widget/widget/update/'.$val['id']); ?>" keyword=""><?php echo $val['keyword']; ?></a></div>
-                                        </div>
-                                    </td>
-                                    <td class="text-center text-primary"></td>
-                                    <td class="text-center text-primary"></td>
-                                    <td class="text-center text-primary"></td>
-                                    <td class="text-center text-primary"></td>
-                                    <td class="text-center td-status" data-field="publish" data-module="<?php echo $module; ?>" data-where="id"><?php echo $status; ?></td>
-                                    <td class="text-center">
-                                        <a type="button" href="<?php echo base_url('backend/widget/widget/update/'.$val['id']) ?>" class="btn btn-primary"><i class="fa fa-edit"></i></a>
-                                    </td>
-                                </tr>
-                                <?php }}else{ ?>
-                                    <tr>
-                                        <td colspan="100%"><span class="text-danger">Không có dữ liệu phù hợp...</span></td>
-                                    </tr>
-                                <?php } ?>
-                            </tbody>
-
-                        </table>
-                        <div id="pagination">
-                            <?php echo (isset($pagination)) ? $pagination : ''; ?>
-                        </div>
-                        <div class="clearfix mt30">
-                            <button type="submit"  class="btn btn-success block m-b pull-right">Lưu thay đổi</button>
-                        </div>
+                                        <?php }if($val['data'] == []){ ?>
+                                            <div><span class="text-danger">Không có dữ liệu phù hợp...</span></div>
+                                        <?php } ?>
+                                    </div> 
+                                    <hr>                               
+                                </div>
+                        <?php }} ?>
                     </div>
                 </div>
             </div>

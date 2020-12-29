@@ -526,3 +526,91 @@ button[disabled], html input[disabled] {
 	display: block;
 	border: none;
 }
+
+.sub-menu-2 {
+    position: absolute;
+    width: 200px;
+    top: 0;
+    left: 100%;
+    list-style-type: none;
+    text-align: left;
+    background: #fff none repeat scroll 0 0;
+    display: none;
+    box-shadow: 1px 5px 10px rgba(0, 0, 0, .35);
+    right: auto;
+    z-index: 100;
+    animation: slipUp 0.5s ease;
+}
+
+.va-option-input {
+  appearance: none;
+  height: 30px;
+  width: 30px;
+  transition: all 0.15s ease-out 0s;
+  background: #cbd1d8;
+  border: none;
+  color: #fff;
+  cursor: pointer;
+  display: inline-block;
+  margin-right: 0.5rem;
+  outline: none;
+  position: relative;
+  z-index: 1000;
+}
+.va-option-input:hover {
+  background: #9faab7;
+
+}
+.va-option-input:checked {
+  background: #40e0d0;
+
+}
+.va-option-input:checked::before {
+  height: 30px;
+  width: 30px;
+  position: absolute;
+  content: '✔';
+  display: inline-block;
+  	outline: 0;
+  font-size: 26.66667px;
+  text-align: center;
+  line-height: 30px;
+}
+.va-option-input:checked::after {
+  -webkit-animation: click-wave 0.65s;
+  -moz-animation: click-wave 0.65s;
+  animation: click-wave 0.65s;
+  background: #40e0d0;
+  content: '';
+  	outline: 0;
+  display: block;
+  position: relative;
+  z-index: 100;
+}
+
+.widget-img img{
+	height: 60px;
+}
+
+@keyframes click-wave {
+  0% {
+    height: 30px;
+    width: 30px;
+    opacity: 0.35;
+    position: relative;
+  	outline: 0;
+
+  }
+  100% {
+    height: 200px;
+    width: 200px;
+  	outline: 0;
+    margin-left: -80px;
+    margin-top: -80px;
+    opacity: 0;
+  }
+}
+
+input[type=file]:focus, input[type=checkbox]:focus, input[type=radio]:focus{
+	outline: 0;
+}
