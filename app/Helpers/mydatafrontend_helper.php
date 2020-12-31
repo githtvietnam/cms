@@ -33,6 +33,78 @@ if (! function_exists('get_general')){
     }
 }
 
+if (! function_exists('get_panel')){
+    function get_panel( $locate = '', $language = ''){
+        $model = new AutoloadModel();
+        $object = $model->_get_where([
+           'select' => 'keyword, title, locate, module, catalogue',
+            'table' => 'website_panel',
+            'where' => ['language' => $language,'locate' => $locate, 'deleted_at' => 0 ]
+        ],TRUE);
+
+        foreach ($object as $key => $value) {
+            $module_explode = explode("_", $value['module']);
+            $select  = '';
+            if($module_explode[0] == 'tour' || $module_explode[0] == 'product'){
+                $select = 'tb1.price, tb1.price_promotion,';
+            }
+            if(isset($module_explode[1]) && $module_explode[1] != ''){
+                $value['catalogue'] = json_decode($value['catalogue']);
+                $data = $model->_get_where([
+                    'select' => 'tb1.id, tb1.image, tb1.catalogueid, tb1.album,'.$select.'  tb2.title, tb2.meta_description, tb2.canonical',
+                    'table' => $module_explode[0].' as tb1',
+                    'join' => [
+                        [
+                            $module_explode[0].'_translate as tb2','tb1.id = tb2.objectid AND tb2.language = \''.$language.'\' AND tb2.module = \''.$module_explode[0].'\'','inner'
+                        ]
+                    ],
+                    'where' => ['tb1.deleted_at' => 0],
+                    'where_in_field' => 'tb1.catalogueid',
+                    'where_in' => $value['catalogue'],
+                ],TRuE);
+                foreach ($data as $keyData => $valData) {
+                    $data[$keyData]['canonical'] = fix_canonical(slug($valData['canonical']));
+                    $data[$keyData]['album'] = json_decode($valData['album']);
+                    if(isset($data[$keyData]['image']) && $data[$keyData]['image'] != ''){
+                        $data[$keyData]['avatar'] = $data[$keyData]['image'];
+                    }else{
+                        $data[$keyData]['avatar'] = $data[$keyData]['album'][0];
+                    }
+                }
+                $object[$key]['data'] = $data;
+            }else if($value['module'] == '0'){
+                $object[$key]['data'] = [];
+            }else{
+                $value['catalogue'] = json_decode($value['catalogue']);
+                $data = $model->_get_where([
+                    'select' => 'tb1.id, tb1.image, tb1.catalogueid, tb1.album,'.$select.'  tb2.title, tb2.meta_description, tb2.canonical',
+                    'table' => $module_explode[0].' as tb1',
+                    'join' => [
+                        [
+                            $module_explode[0].'_translate as tb2','tb1.id = tb2.objectid AND tb2.language = \''.$language.'\' AND tb2.module = \''.$module_explode[0].'\'','inner'
+                        ]
+                    ],
+                    'where' => ['tb1.deleted_at' => 0],
+                    'where_in_field' => 'tb1.id',
+                    'where_in' => $value['catalogue'],
+                ],TRuE);
+                foreach ($data as $keyData => $valData) {
+                    $data[$keyData]['canonical'] = fix_canonical(slug($valData['canonical']));
+                    $data[$keyData]['album'] = json_decode($valData['album']);
+                    if(isset($data[$keyData]['image']) && $data[$keyData]['image'] != ''){
+                        $data[$keyData]['avatar'] = $data[$keyData]['image'];
+                    }else{
+                        $data[$keyData]['avatar'] = $data[$keyData]['album'][0];
+                    }
+                }
+                $object[$key]['data'] = $data;
+            }
+        }
+        
+        return $object;
+    }
+}
+
 if (! function_exists('widget_frontend')){
     function widget_frontend(){
         $model = new AutoloadModel();

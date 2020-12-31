@@ -327,7 +327,7 @@ class Slide extends BaseController{
 		helper(['text']);
 		$store = [
  			'title'   => $this->request->getPost('title'),
- 			'keyword' => $this->request->getPost('keyword'),
+ 			'keyword' => slug($this->request->getPost('keyword')),
  			'publish' => $this->request->getPost('publish'),
  			'data'    => json_encode($this->request->getPost('data'), TRUE),
  		];

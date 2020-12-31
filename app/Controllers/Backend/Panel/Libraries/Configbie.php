@@ -19,8 +19,6 @@ class ConfigBie{
 			0 => '-- Chọn danh mục sản phẩm --',
             'product' => 'Sản phẩm',
             'product_catalogue' => 'Danh mục sản phẩm',
-            'slide' => 'Slide',
-            'slide_catalogue' => 'Danh mục slide',
             'brand' => 'Thương hiệu',
             'brand_catalogue' => 'Danh mục Thương hiệu',
             'article' => 'Bài viết',

@@ -364,7 +364,7 @@ class Tour extends BaseController{
 		$store = [
 			'objectid' => $objectid,
 			'title' => validate_input($this->request->getPost('title')),
-			'canonical' => $this->request->getPost('canonical'),
+			'canonical' => slug($this->request->getPost('canonical')),
 			'content' => base64_encode($this->request->getPost('content')),
 			'description' => base64_encode($this->request->getPost('description')),
 			'meta_title' => validate_input($this->request->getPost('meta_title')),

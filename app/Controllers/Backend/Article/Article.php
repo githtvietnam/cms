@@ -179,7 +179,7 @@ class Article extends BaseController{
 		 		if($flag > 0){
 		 			$flagLang = $this->AutoloadModel->_update([
 			 			'table' => $this->data['module'].'_translate',
-			 			'where' => ['objectid' => $id],
+			 			'where' => ['objectid' => $id, 'module' => 'article', 'language' => $this->currentLanguage()],
 			 			'data' => $updateLanguage,
 			 		]);
 			 		if($updateLanguage['canonical'] != $this->data[$this->data['module']]['canonical']){

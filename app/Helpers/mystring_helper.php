@@ -113,6 +113,12 @@ if (! function_exists('pre')){
 	}
 }
 
+if (! function_exists('fix_canonical')){
+	function fix_canonical($canonical = ''){
+		$canonical = BASE_URL.$canonical.HTSUFFIX;
+		return $canonical;		
+	}
+}
 
 if (! function_exists('convertArray')){
 	function convert_array($param){

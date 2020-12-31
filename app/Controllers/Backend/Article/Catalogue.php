@@ -145,7 +145,7 @@ class Catalogue extends BaseController{
 		 		if($flag > 0){
 		 			$flag = $this->AutoloadModel->_update([
 			 			'table' => 'article_translate',
-			 			'where' => ['objectid' => $id],
+			 			'where' => ['objectid' => $id,'module' => 'article_catalogue', 'language' => $this->currentLanguage()],
 			 			'data' => $updateLanguage
 			 		]);
 

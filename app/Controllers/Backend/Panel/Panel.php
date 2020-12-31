@@ -239,7 +239,7 @@ class Panel extends BaseController{
 		$store = [
  			'module' => $this->request->getPost('module'),
  			'catalogue' => json_encode($catalogue),
- 			'keyword' => $this->request->getPost('keyword'),
+ 			'keyword' => slug($this->request->getPost('keyword')),
  			'title' => $this->request->getPost('title'),
  			'locate' => $this->request->getPost('locate'),
  			'language' => $this->currentLanguage()
