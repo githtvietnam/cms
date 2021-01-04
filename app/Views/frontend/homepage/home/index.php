@@ -1,16 +1,7 @@
 <section class="slide-panel">
-	<div class="uk-slidenav-position" data-uk-slideshow>
-		<ul class="uk-slideshow" data-uk-slideshow="{autoplay:true}" >
-			<?php 
-				if(isset($slide_banner) && is_array($slide_banner) && count($slide_banner)){
-					foreach ($slide_banner['data'] as $key => $value) {
-			?>
-				<li><a href="<?php echo $value['url'] ?>" title="<?php echo $value['title'] ?>" class="img-cover"><img src="<?php echo $value['image'] ?>" alt="<?php echo $value['title'] ?>"></a></li>
-			<?php }} ?>
-		</ul>
-		<a href="" class="uk-slidenav uk-slidenav-contrast uk-slidenav-previous" data-uk-slideshow-item="previous"></a>
-		<a href="" class="uk-slidenav uk-slidenav-contrast uk-slidenav-next" data-uk-slideshow-item="next"></a>
-	</div>
+	<?php if(isset($slide_banner)){
+		echo $slide_banner;		
+	} ?>
 </section>
 
 

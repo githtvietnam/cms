@@ -41,10 +41,7 @@
                 </ul>
             </li>
             <li class="<?php echo ( $uriModule == 'tour' ) ? 'active'  : '' ?>">
-                <a href="index.html"><i class="fa fa-globe" aria-hidden="true"></i> <span class="nav-label">QL Chuyến du lịch</span> <span class="fa arrow"></span></a>
-                <ul class="nav nav-second-level">
-                    <li class="<?php echo ( $uriModule_name == 'tour') ? 'active'  : '' ?>"><a href="<?php echo base_url('backend/tour/tour/index') ?>">QL Chuyến du lịch</a></li>
-                </ul>
+                <a href="<?php echo base_url('backend/tour/tour/index') ?>"><i class="fa fa-globe" aria-hidden="true"></i> <span class="nav-label">QL Chuyến du lịch</span> </a>
             </li>
             <li class="<?php echo ( $uriModule == 'attribute') ? 'active'  : '' ?>">
                 <a href="<?php echo base_url('backend/attribute/attribute/index') ?>"><i class="fa fa-folder-open-o" aria-hidden="true"></i><span class="nav-label">QL Thuộc Tính</span> </a>

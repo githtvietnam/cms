@@ -15,11 +15,28 @@ class Home extends FrontendController{
 			'language' => $this->currentLanguage(),
 			'output' => 'array'
 		]);
-		$this->data['slide_banner'] = get_slide('slide-banner');
-		$this->data['slide_tour'] = get_slide('slide-tour');
-		$this->data['slide_company'] = get_slide('slide-company');
+		$this->data['slide_banner'] = get_slide([
+			'keyword' => 'slide-banner',
+			'language' => $this->currentLanguage(),
+			'output' => 'html',
+			'type' => 'uikit',
+			'limit' => 1
+		]);
+		$this->data['slide_tour'] = get_slide([
+			'keyword' => 'slide-tour',
+			'language' => $this->currentLanguage(),
+			'output' => 'array',
+		]);
+		$this->data['slide_company'] = get_slide([
+			'keyword' => 'slide-company',
+			'language' => $this->currentLanguage(),
+			'output' => 'array',
+		]);
 
-		$panel = get_panel('home', $this->currentLanguage());
+		$panel = get_panel([
+			'locate' => 'home',
+			'language' => $this->currentLanguage()
+		]);
 		foreach ($panel as $key => $value) {
 			$this->data['panel'][$value['keyword']] = $value;
 		}

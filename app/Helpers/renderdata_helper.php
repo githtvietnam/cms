@@ -26,5 +26,24 @@ if (! function_exists('render_menu_frontend')){
     }
 }
 
+if (! function_exists('render_slideshow_uikit')){
+    function render_slideshow_uikit(array $param = []){
+        $html = '';
+        if(isset($param) && is_array($param) && count($param)){
+            $html = $html.'<div class="uk-slidenav-position" data-uk-slideshow>';
+                $html = $html.'<ul class="uk-slideshow" data-uk-slideshow="{autoplay:true}" >';
+                    foreach ($param as $key => $value) {
+                        $html = $html.'<li><a href="'.$value['url'].'" title="'.$value['title'].'" class="img-cover"><img src="'.$value['image'].'" alt="'.$value['title'].'"></a></li>';
+                    }
+                $html = $html.'</ul>';
+                $html = $html.'<a href="" class="uk-slidenav uk-slidenav-contrast uk-slidenav-previous" data-uk-slideshow-item="previous"></a>';
+                $html = $html.'<a href="" class="uk-slidenav uk-slidenav-contrast uk-slidenav-next" data-uk-slideshow-item="next"></a>';
+            $html = $html.'</div>';
+        }
+        return $html;
+    }
+}
+
+
 ?>
 

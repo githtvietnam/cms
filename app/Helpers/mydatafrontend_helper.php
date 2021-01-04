@@ -2,17 +2,34 @@
 use App\Models\AutoloadModel;
 
 if (! function_exists('get_slide')){
-	function get_slide( $keyword = ''){
+	function get_slide($param = []){
 		$model = new AutoloadModel();
 	 	$object = $model->_get_where([
             'select' => 'id, title, keyword, publish, data,',
             'table' => 'slide_catalogue',
             'where' => [
             	'publish' => 1,
-                'keyword' => $keyword
+                'keyword' => $param['keyword']
             ],
         ]);
         $object['data'] = json_decode($object['data'],TRUE);
+        switch ($param['output']){
+            case 'html':
+                switch ($param['type']){
+                    case 'uikit':
+                        return render_slideshow_uikit($object['data']);
+                }
+                break;
+            case 'json':
+                return json_encode($object);
+                break;
+            case 'array':
+                return $object;
+                break;
+            default:
+                return $object;
+                break;
+        }
 	 	return $object;
 	}
 }
@@ -29,18 +46,21 @@ if (! function_exists('get_general')){
         foreach ($object as $key => $value) {
             $data[$value['keyword']] = $value['content'];
         }
-        return $data;
+
+
     }
 }
 
 if (! function_exists('get_panel')){
-    function get_panel( $locate = '', $language = ''){
+    function get_panel( $param = []){
         $model = new AutoloadModel();
         $object = $model->_get_where([
            'select' => 'keyword, title, locate, module, catalogue',
             'table' => 'website_panel',
-            'where' => ['language' => $language,'locate' => $locate, 'deleted_at' => 0 ]
+            'where' => ['language' => $param['language'],'locate' => $param['locate'], 'deleted_at' => 0 ]
         ],TRUE);
+
+        pre($object);
 
         foreach ($object as $key => $value) {
             $module_explode = explode("_", $value['module']);
@@ -55,7 +75,7 @@ if (! function_exists('get_panel')){
                     'table' => $module_explode[0].' as tb1',
                     'join' => [
                         [
-                            $module_explode[0].'_translate as tb2','tb1.id = tb2.objectid AND tb2.language = \''.$language.'\' AND tb2.module = \''.$module_explode[0].'\'','inner'
+                            $module_explode[0].'_translate as tb2','tb1.id = tb2.objectid AND tb2.language = \''.$param['languea'].'\' AND tb2.module = \''.$module_explode[0].'\'','inner'
                         ]
                     ],
                     'where' => ['tb1.deleted_at' => 0],
@@ -81,7 +101,7 @@ if (! function_exists('get_panel')){
                     'table' => $module_explode[0].' as tb1',
                     'join' => [
                         [
-                            $module_explode[0].'_translate as tb2','tb1.id = tb2.objectid AND tb2.language = \''.$language.'\' AND tb2.module = \''.$module_explode[0].'\'','inner'
+                            $module_explode[0].'_translate as tb2','tb1.id = tb2.objectid AND tb2.language = \''.$param['languea'].'\' AND tb2.module = \''.$module_explode[0].'\'','inner'
                         ]
                     ],
                     'where' => ['tb1.deleted_at' => 0],
