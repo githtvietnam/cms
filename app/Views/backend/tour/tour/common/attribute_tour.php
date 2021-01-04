@@ -10,7 +10,7 @@
 <div class="ibox mb20 block-version" data-countattribute_catalogue="2">	
 	<div class="ibox-title" style="padding-bottom: 15px;">
 		<div class="uk-flex uk-flex-middle uk-flex-space-between">
-			<h5 class="mb0">Sản phẩm có nhiều phiên bản <span class="text-danger">(Chọn tối đa 3)</span></h5>
+			<h5 class="mb0">Tạo thuộc tính cho Tour <span class="text-danger">(Chọn tối đa 3)</span></h5>
 			<div class="ibox-tools">
 				<button class="btn version_setting btn-success full-width m-b m0" style="<?php echo isset($list_attribute['catalogue']) ? ((count($list_attribute['catalogue']) >= 1) ? 'display: none;' : '') : ''; ?>">Thêm phiên bản</button>
 			</div>
@@ -100,7 +100,7 @@
 						<button class="btn add_version  full-width m-b m0" style="<?php echo isset($list_attribute['catalogue']) ? ((count($list_attribute['catalogue']) >= (count($attribute_catalogue)+1) ) ? 'display: none;' : '') : ''; ?>">Thêm Phiên bản</button>
 					</div>
 					<div class="uk-flex uk-flex-middle uk-flex-space-between">
-						<button type="button" name="add_attribute" id="add_attribute" data-toggle="modal" data-target="#product_add_attribute" class="btn mt20 mb20">Tạo thuộc tính cho sản phẩm</button>
+						<button type="button" name="add_attribute" id="add_attribute" data-toggle="modal" data-target="#tour_add_attribute" class="btn mt20 mb20">Tạo thuộc tính cho Tour</button>
 					</div>
 				</div>
 			</div>

@@ -254,6 +254,8 @@ $(document).on('click','.add_version', function(){
 	});
 	$countAttr = $('.block-attribute table tbody').find('tr').length;
 	$countCat = attribute_cat.length;
+	console.log($countAttr)
+	console.log($countCat)
 	if(parseInt($countAttr) >= $countCat){
 		$('.add_version').hide()
 	}else{

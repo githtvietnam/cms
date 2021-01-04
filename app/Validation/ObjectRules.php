@@ -20,6 +20,7 @@ class ObjectRules {
 		$originalCanonical = $this->request->getPost('original_canonical');
 		$modulExtract = explode('_', $module);
 		$count = 0;
+		$dem = 0;
 		if($originalCanonical != $canonical){
 			$count = $this->AutoloadModel->_get_where([
 				'select' => 'objectid',
@@ -27,10 +28,16 @@ class ObjectRules {
 				'where' => ['canonical' => $canonical],
 				'count' => TRUE
 			]);
+			if($count == 0){
+				$dem = $this->AutoloadModel->_get_where([
+					'select' => 'objectid',
+					'table' => 'router',
+					'where' => ['canonical' => $canonical, 'module' => $module],
+					'count' => TRUE
+				]);
+			}
 		}
-
-		
-		if($count > 0){
+		if($count > 0 || $dem > 0){
 			return false;
 		}
 		return true;

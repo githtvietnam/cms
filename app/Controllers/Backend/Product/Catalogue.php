@@ -110,21 +110,12 @@ class Catalogue extends BaseController{
 
 	public function update($id = 0){
 		$id = (int)$id;
-		$this->data[$this->data['module']] = $this->AutoloadModel->_get_where([
-			'select' => 'tb1.id, tb2.title, tb2.canonical, tb2.description, tb2.content, tb2.meta_title, tb2.meta_description, tb1.parentid, tb1.image, tb1.album, tb1.publish',
-
-			'table' => $this->data['module'].' as tb1',
-			'join' =>  [
-					[
-						'product_translate as tb2','tb1.id = tb2.objectid AND tb2.module = \''.$this->data['module'].'\' AND tb2.language = \''.$this->currentLanguage().'\' ','inner'
-					]
-				],
-			'where' => ['tb1.id' => $id,'tb1.deleted_at' => 0]
-		]);
-
-		$this->data[$this->data['module']]['description'] = base64_decode($this->data[$this->data['module']]['description']);
-		$this->data[$this->data['module']]['content'] = base64_decode($this->data[$this->data['module']]['content']);
 		$session = session();
+		$this->data[$this->data['module']] = $this->get_data_module($id);
+		if($this->data[$this->data['module']] == false){
+			$session->setFlashdata('message-danger', 'Nhóm sản phẩm không tồn tại!');
+ 			return redirect()->to(BASE_URL.'backend/product/catalogue/index');
+		}
 		if(!isset($this->data[$this->data['module']]) || is_array($this->data[$this->data['module']]) == false || count($this->data[$this->data['module']]) == 0){
 			$session->setFlashdata('message-danger', 'Nhóm Sản phẩm không tồn tại');
  			return redirect()->to(BASE_URL.'backend/product/catalogue/index');
@@ -168,19 +159,14 @@ class Catalogue extends BaseController{
 	}
 
 	public function delete($id = 0){
-
-		$id = (int)$id;
-		$this->data[$this->data['module']] = $this->AutoloadModel->_get_where([
-			'select' => 'tb1.id, tb2.title, tb1.lft, tb1.rgt',
-			'table' => $this->data['module'].' as tb1',
-			'join' =>  [
-					[
-						'product_translate as tb2','tb1.id = tb2.objectid AND tb2.module = \''.$this->data['module'].'\' AND tb2.language = \''.$this->currentLanguage().'\' ','inner'
-					]
-				],
-			'where' => ['tb1.id' => $id,'tb1.deleted_at' => 0]
-		]);
 		$session = session();
+		$id = (int)$id;
+		$this->data[$this->data['module']] = $this->get_data_module($id);
+		if($this->data[$this->data['module']] == false){
+			$session->setFlashdata('message-danger', 'Nhóm sản phẩm không tồn tại!');
+ 			return redirect()->to(BASE_URL.'backend/product/catalogue/index');
+		}
+		
 		if(!isset($this->data[$this->data['module']]) || is_array($this->data[$this->data['module']]) == false || count($this->data[$this->data['module']]) == 0){
 			$session->setFlashdata('message-danger', 'Nhóm Sản phẩm không tồn tại');
  			return redirect()->to(BASE_URL.'backend/product/catalogue/index');
@@ -212,6 +198,28 @@ class Catalogue extends BaseController{
 
 		$this->data['template'] = 'backend/product/catalogue/delete';
 		return view('backend/dashboard/layout/home', $this->data);
+	}
+
+	private function get_data_module($id = 0){
+		$flag = $this->AutoloadModel->_get_where([
+			'select' => 'tb1.id, tb2.title, tb2.canonical, tb2.description, tb2.content, tb2.meta_title, tb2.meta_description, tb1.parentid, tb1.image, tb1.album, tb1.publish',
+
+			'table' => $this->data['module'].' as tb1',
+			'join' =>  [
+					[
+						'product_translate as tb2','tb1.id = tb2.objectid AND tb2.module = \''.$this->data['module'].'\' AND tb2.language = \''.$this->currentLanguage().'\' ','inner'
+					]
+				],
+			'where' => ['tb1.id' => $id,'tb1.deleted_at' => 0]
+		]);
+		if(!isset($flag) || is_array($flag) == false || count($flag) == 0){
+ 			return false;
+		}else{
+			$flag['content'] = base64_decode($flag['content']);
+			$flag['description'] = base64_decode($flag['description']);
+		}
+
+		return $flag;
 	}
 
 	private function condition_where(){

@@ -109,7 +109,7 @@ class Product extends BaseController{
 
 		if(!isset($this->data['check_code']) && !is_array($this->data['check_code']) && !count($this->data['check_code'])){
 			$session->setFlashdata('message-danger', 'Bạn chưa tạo phần cấu hình chung cho mã Sản phẩm!');
- 			return redirect()->to(BASE_URL.'backend/product/store/index');
+ 			return redirect()->to(BASE_URL.'backend/product/product/index');
 		}else{
 
 			$this->data['export_brand'] = $this->export_brand();
@@ -169,49 +169,18 @@ class Product extends BaseController{
 
 	public function update($id = 0){
 		$id = (int)$id;
+		$session = session();
 		$this->data['export_brand'] = $this->export_brand();
 		$this->data['attribute_catalogue'] = get_attribute_catalogue($this->currentLanguage(), $this->data['module']);
-		$this->data[$this->data['module']] = $this->AutoloadModel->_get_where([
-			'select' => 'tb1.id, tb1.catalogue, tb1.bar_code, tb1.brandid, tb1.catalogueid, tb1.model, tb1.price_promotion, tb1.price, tb1.productid, tb1.id, tb1.id, tb1.id, tb2.title, tb2.objectid, tb2.sub_title, tb2.sub_content, tb2.description, tb2.canonical,  tb2.content, tb2.meta_title, tb2.meta_description, tb1.album, tb1.publish',
-			'table' => $this->data['module'].' as tb1',
-			'join' =>  [
-					[
-						'product_translate as tb2','tb1.id = tb2.objectid AND tb2.module = \''.$this->data['module'].'\' AND tb2.language = \''.$this->currentLanguage().'\' ','inner'
-					]
-				],
-			'where' => ['tb1.id' => $id,'tb1.deleted_at' => 0]
-		]);
-		$this->data['getWholesale'] = $this->AutoloadModel->_get_where([
-			'select' => 'number_start, number_end, price',
-			'table' => 'product_wholesale',
-			'where' => ['objectid' => $id]
-		]);
-		$this->data['version'] = $this->get_data_version($id);
-		if(isset($this->data['getWholesale']) && is_array($this->data['getWholesale']) && count($this->data['getWholesale'])){
-			$this->data['wholesale'] = [
-				'number_start' => json_decode($this->data['getWholesale']['number_start']),
-				'number_end' => json_decode($this->data['getWholesale']['number_end']),
-				'price_wholesale' => json_decode($this->data['getWholesale']['price']),
-			];
-			$this->data['wholesale_list'] = [];
-			foreach ($this->data['wholesale'] as $key => $value) {
-				foreach ($value as $keyChild => $valChild) {
-					$this->data['wholesale_list'][$keyChild][$key] = $valChild;
-				}
-			}
-		}
-
-
-		$this->data[$this->data['module']]['content'] = base64_decode($this->data[$this->data['module']]['content']);
-		$this->data[$this->data['module']]['description'] = base64_decode($this->data[$this->data['module']]['description']);
-		$this->data[$this->data['module']]['sub_title'] = json_decode(base64_decode($this->data[$this->data['module']]['sub_title']));
-		$this->data[$this->data['module']]['sub_content'] = json_decode(base64_decode($this->data[$this->data['module']]['sub_content']));
-		// pre($this->data[$this->data['module']]);
-		$session = session();
-		if(!isset($this->data[$this->data['module']]) || is_array($this->data[$this->data['module']]) == false || count($this->data[$this->data['module']]) == 0){
-			$session->setFlashdata('message-danger', 'Sản phẩm không tồn tại');
+		$this->data[$this->data['module']] = $this->get_data_module($id);
+		if($this->data[$this->data['module']] == false){
+			$session->setFlashdata('message-danger', 'Sản phẩm không tồn tại!');
  			return redirect()->to(BASE_URL.'backend/product/product/index');
 		}
+		$this->data['version'] = $this->get_data_version($id);
+		$this->data['wholesale_list'] = $this->get_list_wholesale($id);
+
+		
 
 		if($this->request->getMethod() == 'post'){
 			$validate = $this->validation();
@@ -260,23 +229,15 @@ class Product extends BaseController{
 	}
 
 	public function delete($id = 0){
+		$session = session();
 
 		$id = (int)$id;
-		$this->data[$this->data['module']] = $this->AutoloadModel->_get_where([
-			'select' => 'tb1.id, tb2.title',
-			'table' => $this->data['module'].' as tb1',
-			'join' =>  [
-					[
-						'product_translate as tb2','tb1.id = tb2.objectid AND tb2.module = \''.$this->data['module'].'\' AND tb2.language = \''.$this->currentLanguage().'\' ','inner'
-					]
-				],
-			'where' => ['tb1.id' => $id,'tb1.deleted_at' => 0]
-		]);
-		$session = session();
-		if(!isset($this->data[$this->data['module']]) || is_array($this->data[$this->data['module']]) == false || count($this->data[$this->data['module']]) == 0){
-			$session->setFlashdata('message-danger', 'Sản phẩm không tồn tại');
+		$this->data[$this->data['module']] = $this->get_data_module($id);
+		if($this->data[$this->data['module']] == false){
+			$session->setFlashdata('message-danger', 'Sản phẩm không tồn tại!');
  			return redirect()->to(BASE_URL.'backend/product/product/index');
 		}
+		return $flag;
 
 		if($this->request->getPost('delete')){
 			$_id = $this->request->getPost('id');
@@ -321,6 +282,29 @@ class Product extends BaseController{
 		}
 
 		return $where;
+	}
+
+	private function get_list_wholesale($id = 0){
+		$check = $this->AutoloadModel->_get_where([
+			'select' => 'number_start, number_end, price',
+			'table' => 'product_wholesale',
+			'where' => ['objectid' => $id]
+		]);
+		if(isset($check) && is_array($check) && count($check)){
+			$array = [
+				'number_start' => json_decode($check['number_start']),
+				'number_end' => json_decode($check['number_end']),
+				'price_wholesale' => json_decode($check['price']),
+			];
+			$data = [];
+			foreach ($array as $key => $value) {
+				foreach ($value as $keyChild => $valChild) {
+					$data[$keyChild][$key] = $valChild;
+				}
+			}
+			return $data;
+		}
+
 	}
 
 	private function create_relationship($objectid = 0, $catalogue = []){
@@ -592,6 +576,31 @@ class Product extends BaseController{
 			'where_in_field' => 'tb2.catalogueid'
 		];
 
+	}
+
+	private function get_data_module($id = 0){
+		$session = session();
+		$flag = $this->AutoloadModel->_get_where([
+			'select' => 'tb1.id, tb1.catalogue, tb1.bar_code, tb1.brandid, tb1.catalogueid, tb1.model, tb1.price_promotion, tb1.price, tb1.productid, tb1.id, tb1.id, tb1.id, tb2.title, tb2.objectid, tb2.sub_title, tb2.sub_content, tb2.description, tb2.canonical,  tb2.content, tb2.meta_title, tb2.meta_description, tb1.album, tb1.publish',
+			'table' => $this->data['module'].' as tb1',
+			'join' =>  [
+					[
+						'product_translate as tb2','tb1.id = tb2.objectid AND tb2.module = \''.$this->data['module'].'\' AND tb2.language = \''.$this->currentLanguage().'\' ','inner'
+					]
+				],
+			'where' => ['tb1.id' => $id,'tb1.deleted_at' => 0]
+		]);
+		if(!isset($flag) || is_array($flag) == false || count($flag) == 0){
+ 			return false;
+		}else{
+			$flag['content'] = base64_decode($flag['content']);
+			$flag['description'] = base64_decode($flag['description']);
+			$flag['sub_title'] = json_decode(base64_decode($flag['sub_title']));
+			$flag['sub_content'] = json_decode(base64_decode($flag['sub_content']));
+		}
+
+
+		return $flag;
 	}
 
 	private function validation(){

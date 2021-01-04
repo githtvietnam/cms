@@ -172,9 +172,11 @@
                                                         </label>
                                                     </div>
                                                     <select class="form-control" style="width: 100%;" name="<?php echo 'config['.$key.'_'.$keyVal.']'; ?>" id="<?php echo 'config['.$key.'_'.$keyVal.']'; ?>">
-                                                        <?php foreach ($val['select'] as $keySelect => $valSelect) { ?>
+                                                        <?php 
+                                                        if(isset($val['select']) && is_array($val['select']) && count($val['select'])){
+                                                        foreach ($val['select'] as $keySelect => $valSelect) { ?>
                                                             <option value="<?php echo $keySelect ?>" <?php echo (isset($temp[$keyword]) ? ($keySelect == $temp[$keyword] ? 'selected' :'') : '') ?>><?php echo $valSelect ?></option>
-                                                        <?php } ?>
+                                                        <?php }} ?>
                                                     </select>
 
                                                 </div>
@@ -195,9 +197,11 @@
                                                         </label>
                                                     </div>
                                                     <select name="<?php echo 'config['.$key.'_'.$keyVal.']'; ?>" class="form-control select2" style="width: 100%;">
-                                                        <?php foreach ($val['select'] as $keySelect => $valSelect) { ?>
+                                                        <?php 
+                                                        if(isset($val['select']) && is_array($val['select']) && count($val['select'])){
+                                                        foreach ($val['select'] as $keySelect => $valSelect) { ?>
                                                             <option value="<?php echo $keySelect ?>" <?php echo ($keySelect == $temp[$keyword] ? 'selected' :'') ?>><?php echo $valSelect ?></option>
-                                                        <?php } ?>
+                                                        <?php }} ?>
                                                     </select>
                                                 </div>
                                             </div>

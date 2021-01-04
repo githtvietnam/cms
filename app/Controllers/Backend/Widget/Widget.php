@@ -15,16 +15,17 @@ class Widget extends BaseController{
 
 	public function index(){
 		$session = session();
-		$options = [
-			'base_uri' => 'widgetcms.com/api/widget/widget', // need returned error: 403 Forbidden
-		];
+		
 		$client = new \CodeIgniter\HTTP\CURLRequest(
 	        new \Config\App(),
 	        new \CodeIgniter\HTTP\URI(),
-	        new \CodeIgniter\HTTP\Response(new \Config\App()),
-	        $options
+	        new \CodeIgniter\HTTP\Response(new \Config\App())
 		);
-		$listWidget = $client->get('widgetcms.com/api/widget/widget/list');
+		$listWidget = $client->get('widgetcm.com/api/widget/widget/list', ['allow_redirects' => true]);
+		if(!isset($listWidget)){
+			$session->setFlashdata('message-danger', 'Lỗi không thể kết nối để lấy ra dữ liệu!');
+			return redirect()->to(BASE_URL.'backend/dashboard/dashboard/index');
+		}
 		$this->data['widgetList'] = json_decode(validate_input($listWidget->getBody()),TRUE);
 		$this->data['widgetList'] = $this->data['widgetList']['data'];
 		$catalogueWidget = $client->get('widgetcms.com/api/widget/widget/widget_catalogue_list');
