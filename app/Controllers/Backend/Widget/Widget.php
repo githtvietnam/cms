@@ -14,86 +14,91 @@ class Widget extends BaseController{
 	}
 
 	public function index(){
-		$session = session();
-		
-		$client = new \CodeIgniter\HTTP\CURLRequest(
-	        new \Config\App(),
-	        new \CodeIgniter\HTTP\URI(),
-	        new \CodeIgniter\HTTP\Response(new \Config\App())
-		);
-		$listWidget = $client->get('widgetcm.com/api/widget/widget/list', ['allow_redirects' => true]);
-		if(!isset($listWidget)){
-			$session->setFlashdata('message-danger', 'Lỗi không thể kết nối để lấy ra dữ liệu!');
-			return redirect()->to(BASE_URL.'backend/dashboard/dashboard/index');
-		}
-		$this->data['widgetList'] = json_decode(validate_input($listWidget->getBody()),TRUE);
-		$this->data['widgetList'] = $this->data['widgetList']['data'];
-		$catalogueWidget = $client->get('widgetcms.com/api/widget/widget/widget_catalogue_list');
-		$catalogueWidget = json_decode(validate_input($catalogueWidget->getBody()),TRUE);
-		$this->data['widgetCAtalogueList'] = $catalogueWidget['data'];
-		$this->data['widgetMatch'] = match_2_arrays($this->data['widgetCAtalogueList'], $this->data['widgetList']);	
-		$temp = [];
+		try{
+			$session = session();
+			
+			$client = new \CodeIgniter\HTTP\CURLRequest(
+		        new \Config\App(),
+		        new \CodeIgniter\HTTP\URI(),
+		        new \CodeIgniter\HTTP\Response(new \Config\App())
+			);
+			$listWidget = $client->get('widgetcms.com/api/widget/widget/list');
+			if(!isset($listWidget)){
+				$session->setFlashdata('message-danger', 'Lỗi không thể kết nối để lấy ra dữ liệu!');
+				return redirect()->to(BASE_URL.'backend/dashboard/dashboard/index');
+			}
+			$this->data['widgetList'] = json_decode(validate_input($listWidget->getBody()),TRUE);
+			$this->data['widgetList'] = $this->data['widgetList']['data'];
+			$catalogueWidget = $client->get('widgetcms.com/api/widget/widget/widget_catalogue_list');
+			$catalogueWidget = json_decode(validate_input($catalogueWidget->getBody()),TRUE);
+			$this->data['widgetCAtalogueList'] = $catalogueWidget['data'];
+			$this->data['widgetMatch'] = match_2_arrays($this->data['widgetCAtalogueList'], $this->data['widgetList']);	
+			$temp = [];
 
-		$this->data['selectWidget'] = $this->AutoloadModel->_get_where([
-			'select' => 'id,catalogueid, keyword',
-			'table' => 'website_widget'
-		],TRUE);
+			$this->data['selectWidget'] = $this->AutoloadModel->_get_where([
+				'select' => 'id,catalogueid, keyword',
+				'table' => 'website_widget'
+			],TRUE);
 
-		foreach ($this->data['widgetMatch'] as $key => $value) {
-			if($value['data'] != []){
-				foreach ($value['data'] as $keyChild => $valChild) {
-					foreach ($this->data['selectWidget'] as $keyPublish => $valPublish) {
-						if($valPublish['keyword'] == $valChild['keyword'] && $valPublish['catalogueid'] == $valChild['catalogueid']){
-							$this->data['widgetMatch'][$key]['data'][$keyChild]['publish'] = 1;
+			foreach ($this->data['widgetMatch'] as $key => $value) {
+				if($value['data'] != []){
+					foreach ($value['data'] as $keyChild => $valChild) {
+						foreach ($this->data['selectWidget'] as $keyPublish => $valPublish) {
+							if($valPublish['keyword'] == $valChild['keyword'] && $valPublish['catalogueid'] == $valChild['catalogueid']){
+								$this->data['widgetMatch'][$key]['data'][$keyChild]['publish'] = 1;
+							}
 						}
 					}
 				}
 			}
-		}
-		// prE($this->data['widgetMatch']);
+			// prE($this->data['widgetMatch']);
 
-		if(isset($this->data['system'])){
-			foreach($this->data['system'] as $key => $val){
-				$temp[$val['keyword']] = $val['content'];
-			}
-		}
-
-		$this->data['temp'] = $temp;
-
-		if($this->request->getMethod() == 'post'){
-			$config  = $this->request->getPost('config');
-			if(isset($config) && is_array($config) && count($config)){
-				$delete = $this->AutoloadModel->_delete([
-					'table' => 'system_translate',
-					'where' => ['language' => $this->currentLanguage()]
-				]);
-				$_update = [];
-				foreach($config as $key => $val){
-					$_update[] = [
-						'language' => $this->currentLanguage(),
-						'keyword' => $key,
-						'content' => $val,
-						'userid_updated' => $this->auth['id'],
-						'updated_at' => $this->currentTime
-					];
-					
+			if(isset($this->data['system'])){
+				foreach($this->data['system'] as $key => $val){
+					$temp[$val['keyword']] = $val['content'];
 				}
-				$flag =	$this->AutoloadModel->_create_batch([
-					'table' => 'system_translate',
-					'data' => $_update,
-				]);
 			}
-	 		if($flag > 0){
 
-	 			$session->setFlashdata('message-success', 'Cập Nhật Cấu hình chung Thành Công!');
-				return redirect()->to(BASE_URL.'backend/widget/widget/index');
-	 		}
+			$this->data['temp'] = $temp;
 
-	        
+			if($this->request->getMethod() == 'post'){
+				$config  = $this->request->getPost('config');
+				if(isset($config) && is_array($config) && count($config)){
+					$delete = $this->AutoloadModel->_delete([
+						'table' => 'system_translate',
+						'where' => ['language' => $this->currentLanguage()]
+					]);
+					$_update = [];
+					foreach($config as $key => $val){
+						$_update[] = [
+							'language' => $this->currentLanguage(),
+							'keyword' => $key,
+							'content' => $val,
+							'userid_updated' => $this->auth['id'],
+							'updated_at' => $this->currentTime
+						];
+						
+					}
+					$flag =	$this->AutoloadModel->_create_batch([
+						'table' => 'system_translate',
+						'data' => $_update,
+					]);
+				}
+		 		if($flag > 0){
+
+		 			$session->setFlashdata('message-success', 'Cập Nhật Cấu hình chung Thành Công!');
+					return redirect()->to(BASE_URL.'backend/widget/widget/index');
+		 		}
+
+		        
+			}
+
+			$this->data['template'] = 'backend/widget/widget/index';
+			return view('backend/dashboard/layout/home', $this->data);
+		}catch(\Exception $e){
+ 			$session->setFlashdata('message-danger', 'Không thể kết nối để lấy dữ liệu!');
+			return redirect()->to(BASE_URL.'backend/dashboard/dashboard/index');
 		}
-
-		$this->data['template'] = 'backend/widget/widget/index';
-		return view('backend/dashboard/layout/home', $this->data);
 	}
 
 	public function create(){

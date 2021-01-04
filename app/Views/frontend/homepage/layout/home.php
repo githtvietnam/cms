@@ -60,7 +60,7 @@
 
 		<?php 
 			foreach ($widget['data'] as $key => $value) {
-				echo  str_replace("[phone]", $system['system']['contact_phone'], $value['html']);
+				echo  str_replace("[phone]", isset($system['system']['contact_phone']) ? $system['system']['contact_phone'] : '', $value['html']);
 				echo '<script>'.$value['script'].'</script>';
 			}
 		?>

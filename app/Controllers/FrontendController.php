@@ -6,7 +6,7 @@ use App\Models\AutoloadModel;
 class FrontendController extends Controller
 {
 
-	protected $helpers = ['mystring','mydatafrontend'];
+	protected $helpers = ['mystring','mydatafrontend','renderdata'];
 	public $currentTime;
 	public $AutoloadModel;
 	public $client;

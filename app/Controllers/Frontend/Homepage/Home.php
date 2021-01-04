@@ -10,7 +10,11 @@ class Home extends FrontendController{
 	}
 
 	public function index(){
-		$this->data['menu_header'] = get_menu('menu_3', $this->currentLanguage());
+		$this->data['menu_header'] = get_menu([
+			'keyword' => 'menu_3',
+			'language' => $this->currentLanguage(),
+			'output' => 'array'
+		]);
 		$this->data['slide_banner'] = get_slide('slide-banner');
 		$this->data['slide_tour'] = get_slide('slide-tour');
 		$this->data['slide_company'] = get_slide('slide-company');

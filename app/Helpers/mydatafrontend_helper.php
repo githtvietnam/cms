@@ -122,7 +122,7 @@ if (! function_exists('widget_frontend')){
 }
 
 if (! function_exists('get_menu')){
-    function get_menu($keyword = '', $language = ''){
+    function get_menu($param = []){
         $model = new AutoloadModel();
         $catalogue = $model->_get_where([
             'select' => ' tb1.id,tb1.value, tb1.title as titleCatalogue',
@@ -137,7 +137,7 @@ if (! function_exists('get_menu')){
             'table' => 'menu as tb1',
             'join' => [
                 [
-                    'menu_translate as tb2','tb1.id = tb2.objectid AND tb2.language = \''.$language.'\' ','inner'
+                    'menu_translate as tb2','tb1.id = tb2.objectid AND tb2.language = \''.$param['language'].'\' ','inner'
                 ]
             ],
             'order_by' => 'order desc'
@@ -163,14 +163,27 @@ if (! function_exists('get_menu')){
         }
 
         foreach ($data as $key => $value) {
-            if($value['keyword'] == $keyword){
+            if($value['keyword'] == $param['keyword']){
                 $select = $value;
             }else{
                 $select = [];
             }
         }
 
-        return $select;
+        switch ($param['output']){
+            case 'html':
+                return render_menu_frontend($select['data']);
+                break;
+            case 'json':
+                return json_encode($select);
+                break;
+            case 'array':
+                return $select;
+                break;
+            default:
+                return $select;
+                break;
+        }
     }
 }
 
@@ -194,30 +207,6 @@ if (! function_exists('menu_recursive')){
     }
 }
 
-if (! function_exists('render_menu_frontend')){
-    function render_menu_frontend(array $param = []){
-        $html = '';
-        if(isset($param) && is_array($param) && count($param)){
-            foreach ($param as $key => $val) {
-                $class = '';
-                $html = $html.'<li>';
-                $html = $html.'<a href="'.$val['canonical'].'" title="'.$val['title'].'">'.$val['title'].'</a>';
-                if($val['level'] >= 2){
-                    $class = 'css_submenu';
-                }
-
-                if($val['children'] != []){
-                    $html = $html.'<div class="dropdown-menu '.$class.'">';
-                        $html = $html.'<ul class="uk-list submenu">';
-                            $html = $html.render_menu_frontend($val['children']);
-                        $html = $html.'</ul>';
-                    $html = $html.'</div>';
-                }
-            }
-        }
-        return $html;
-    }
-}
 
 ?>
 

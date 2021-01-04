@@ -5,7 +5,7 @@
 		<div class="uk-container uk-container-center">
 			<div class="hd-hotline">
 				Hotline: 
-				<span><?php echo $system['contact_phone'].' / '.$system['contact_hotline'] ?></span>
+				<span><?php echo ((isset($system['contact_phone'])) ? $system['contact_phone'] : '').((isset($system['contact_hotline'])) ? ' / '.$system['contact_hotline'] : '') ?></span>
 			</div>
 		</div>
 	</div>
