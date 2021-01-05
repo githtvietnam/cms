@@ -1,8 +1,6 @@
 <?php 
 	helper('mydatafrontend');
 	$widget['data'] = widget_frontend();
-	$system['system'] = get_general();
-	$system['menu'] = $menu_header;
  ?>
 <!DOCTYPE html>
 <html lang="vi">
@@ -11,32 +9,31 @@
 		<meta charset="UTF-8">
 		<meta name="viewport" content="width=device-width, initial-scale=1.0">
 		<meta name="robots" content="index,follow" />
-		<meta name="copyright" content="GLEE HOME " />
-		<meta name="author" content="Vanh Shoes">
+		<meta name="author" content="<?php echo (isset($general['homepage_company'])) ? $general['homepage_company'] : ''; ?>" />
+		<meta name="copyright" content="<?php echo (isset($general['homepage_company'])) ? $general['homepage_company'] : ''; ?>" />
 		<meta http-equiv="refresh" content="1800" />
 
 		<!-- GOOGLE -->
-		<title>Kim Liên Travel</title>
-		<meta name="description" content="One for all - All for one">
-		<link rel="canonical" href="https://gleehome.com.vn/" />
+		<title><?php echo isset($meta_title)?htmlspecialchars($meta_title):'';?></title>
+		<meta name="description" charset="UTF-8" content="<?php echo isset($meta_description)?htmlspecialchars($meta_description):'';?>" />
+		<?php echo isset($canonical)?'<link rel="canonical" href="'.$canonical.'" />':'';?>
+		<meta property="og:locale" content="vi_VN" />
 
-		<!-- FACEBOOK -->
-		<meta property="og:title" content="Thiết kế nội thất GleeHome - Sofa gỗ, bàn thờ đẹp tại Hà Nội" />
-		<meta property="og:type" content="article" />
-		<meta property="og:image" content="https://gleehome.com.vn/" />
-		<meta property="og:url" content="https://gleehome.com.vn/" />
-		<meta property="og:description" content="GleeHome - Công ty tư vấn thiết kế hoàn thiện nội thất. Luôn dẫn đầu về xu hướng thiết kế nội thất. Làm việc chuyên nghiệp, uy tín, chất lượng" />
-		<meta property="og:site_name" content="GLEE HOME " />
+		<!-- for Facebook -->
+		<meta property="og:title" content="<?php echo (isset($meta_title) && !empty($meta_title))?htmlspecialchars($meta_title):'';?>" />
+		<meta property="og:type" content="<?php echo (isset($og_type) && $og_type != '') ? $og_type : 'article'; ?>" />
+		<meta property="og:image" content="<?php echo (isset($meta_image) && !empty($meta_image)) ? $meta_image : base_url(isset($general['homepage_logo']) ? $general['homepage_logo'] : ''); ?>" />
+		<?php echo isset($canonical)?'<meta property="og:url" content="'.$canonical.'" />':'';?>
+		<meta property="og:description" content="<?php echo (isset($meta_description) && !empty($meta_description))?htmlspecialchars($meta_description):'';?>" />
+		<meta property="og:site_name" content="<?php echo (isset($general['homepage_company'])) ? $general['homepage_company'] : ''; ?>" />
 		<meta property="fb:admins" content=""/>
 		<meta property="fb:app_id" content="" />
-
-		<!-- for Twitter -->
 		<meta name="twitter:card" content="summary" />
-		<meta name="twitter:title" content="Thiết kế nội thất GleeHome - Sofa gỗ, bàn thờ đẹp tại Hà Nội" />
-		<meta name="twitter:description" content="GleeHome - Công ty tư vấn thiết kế hoàn thiện nội thất. Luôn dẫn đầu về xu hướng thiết kế nội thất. Làm việc chuyên nghiệp, uy tín, chất lượng" />
-		<meta name="twitter:image" content="https://gleehome.com.vn/" />
+		<meta name="twitter:title" content="<?php echo isset($meta_title)?htmlspecialchars($meta_title):'';?>" />
+		<meta name="twitter:description" content="<?php echo (isset($meta_description) && !empty($meta_description))?htmlspecialchars($meta_description):'';?>" />
+		<meta name="twitter:image" content="<?php echo (isset($meta_image) && !empty($meta_image))?$meta_image:base_url((isset($general['homepage_logo'])) ? $general['homepage_logo']  : '');?>" />
 
-		<link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@100;200;300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+
 		<link href="public/frontend/resources/fonts/font-awesome-4.7.0/css/font-awesome.min.css" rel="stylesheet" />
 		<link href="public/frontend/resources/uikit/css/uikit.modify.css" rel="stylesheet" />
 		<link href="public/frontend/resources/library/css/general.css" rel="stylesheet" />
@@ -48,9 +45,10 @@
 		<link href="public/frontend/resources/style.css" rel="stylesheet" />
 		<script src="public/frontend/resources/library/js/jquery.js"></script>
 		<script src="public/frontend/resources/uikit/js/uikit.min.js"></script>
+		<script> var BASE_URL = '<?php echo base_url(); ?>'; </script>
 	</head>
 	<body>
-		<?php echo view('frontend/homepage/common/header', $system) ?>
+		<?php echo view('frontend/homepage/common/header') ?>
 		<?php echo view((isset($template)) ? $template : '') ?>
 		<?php echo view('frontend/homepage/common/footer') ?>
 		<?php echo view('frontend/homepage/common/offcanvas') ?>
@@ -60,7 +58,7 @@
 
 		<?php 
 			foreach ($widget['data'] as $key => $value) {
-				echo  str_replace("[phone]", isset($system['system']['contact_phone']) ? $system['system']['contact_phone'] : '', $value['html']);
+				echo  str_replace("[phone]", isset($general['contact_phone']) ? $general['contact_phone'] : '', $value['html']);
 				echo '<script>'.$value['script'].'</script>';
 			}
 		?>

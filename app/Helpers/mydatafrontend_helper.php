@@ -45,11 +45,13 @@ if (! function_exists('get_general')){
             'where' => ['language' => 'vi' ]
         ],TRUE);
         $data= [];
-        foreach ($object as $key => $value) {
-            $data[$value['keyword']] = $value['content'];
+        if(isset($object) &&  is_array($object)  && count($object)){
+            foreach ($object as $key => $value) {
+                $data[$value['keyword']] = $value['content'];
+            }
         }
 
-
+        return $data;
     }
 }
 
@@ -61,66 +63,70 @@ if (! function_exists('get_panel')){
             'table' => 'website_panel',
             'where' => ['language' => $param['language'],'locate' => $param['locate'], 'deleted_at' => 0 ]
         ],TRUE);
-
-        foreach ($object as $key => $value) {
-            $module_explode = explode("_", $value['module']);
-            $select  = '';
-            if($module_explode[0] == 'tour' || $module_explode[0] == 'product'){
-                $select = 'tb1.price, tb1.price_promotion,';
-            }
-            if(isset($module_explode[1]) && $module_explode[1] != ''){
-                $value['catalogue'] = json_decode($value['catalogue']);
-                $data = $model->_get_where([
-                    'select' => 'tb1.id, tb1.image, tb1.catalogueid, tb1.album,'.$select.'  tb2.title, tb2.meta_description, tb2.canonical',
-                    'table' => $module_explode[0].' as tb1',
-                    'join' => [
-                        [
-                            $module_explode[0].'_translate as tb2','tb1.id = tb2.objectid AND tb2.language = \''.$param['language'].'\' AND tb2.module = \''.$module_explode[0].'\'','inner'
-                        ]
-                    ],
-                    'where' => ['tb1.deleted_at' => 0],
-                    'where_in_field' => 'tb1.catalogueid',
-                    'where_in' => $value['catalogue'],
-                ],TRuE);
-                foreach ($data as $keyData => $valData) {
-                    $data[$keyData]['canonical'] = fix_canonical(slug($valData['canonical']));
-                    $data[$keyData]['album'] = json_decode($valData['album']);
-                    if(isset($data[$keyData]['image']) && $data[$keyData]['image'] != ''){
-                        $data[$keyData]['avatar'] = $data[$keyData]['image'];
-                    }else{
-                        $data[$keyData]['avatar'] = $data[$keyData]['album'][0];
+        if(isset($object) &&  is_array($object)  && count($object)){
+            foreach ($object as $key => $value) {
+                $module_explode = explode("_", $value['module']);
+                $select  = '';
+                if($module_explode[0] == 'tour' || $module_explode[0] == 'product'){
+                    $select = 'tb1.price, tb1.price_promotion,';
+                }
+                if(isset($module_explode[1]) && $module_explode[1] != ''){
+                    $value['catalogue'] = json_decode($value['catalogue']);
+                    $data = $model->_get_where([
+                        'select' => 'tb1.id, tb1.image, tb1.catalogueid, tb1.album,'.$select.'  tb2.title, tb2.meta_description, tb2.canonical',
+                        'table' => $module_explode[0].' as tb1',
+                        'join' => [
+                            [
+                                $module_explode[0].'_translate as tb2','tb1.id = tb2.objectid AND tb2.language = \''.$param['language'].'\' AND tb2.module = \''.$module_explode[0].'\'','inner'
+                            ]
+                        ],
+                        'where' => ['tb1.deleted_at' => 0],
+                        'where_in_field' => 'tb1.catalogueid',
+                        'where_in' => $value['catalogue'],
+                    ],TRuE);
+                    if(isset($data) &&  is_array($data)  && count($data)){
+                        foreach ($data as $keyData => $valData) {
+                            $data[$keyData]['canonical'] = fix_canonical(slug($valData['canonical']));
+                            $data[$keyData]['album'] = json_decode($valData['album']);
+                            if(isset($data[$keyData]['image']) && $data[$keyData]['image'] != ''){
+                                $data[$keyData]['avatar'] = $data[$keyData]['image'];
+                            }else{
+                                $data[$keyData]['avatar'] = $data[$keyData]['album'][0];
+                            }
+                        }
+                        $object[$key]['data'] = $data;
+                    }
+                }else if($value['module'] == '0'){
+                    $object[$key]['data'] = [];
+                }else{
+                    $value['catalogue'] = json_decode($value['catalogue']);
+                    $data = $model->_get_where([
+                        'select' => 'tb1.id, tb1.image, tb1.catalogueid, tb1.album,'.$select.'  tb2.title, tb2.meta_description, tb2.canonical',
+                        'table' => $module_explode[0].' as tb1',
+                        'join' => [
+                            [
+                                $module_explode[0].'_translate as tb2','tb1.id = tb2.objectid AND tb2.language = \''.$param['language'].'\' AND tb2.module = \''.$module_explode[0].'\'','inner'
+                            ]
+                        ],
+                        'where' => ['tb1.deleted_at' => 0],
+                        'where_in_field' => 'tb1.id',
+                        'where_in' => $value['catalogue'],
+                    ],TRuE);
+                    if(isset($data) &&  is_array($data)  && count($data)){
+                        foreach ($data as $keyData => $valData) {
+                            $data[$keyData]['canonical'] = fix_canonical(slug($valData['canonical']));
+                            $data[$keyData]['album'] = json_decode($valData['album']);
+                            if(isset($data[$keyData]['image']) && $data[$keyData]['image'] != ''){
+                                $data[$keyData]['avatar'] = $data[$keyData]['image'];
+                            }else{
+                                $data[$keyData]['avatar'] = $data[$keyData]['album'][0];
+                            }
+                        }
+                        $object[$key]['data'] = $data;
                     }
                 }
-                $object[$key]['data'] = $data;
-            }else if($value['module'] == '0'){
-                $object[$key]['data'] = [];
-            }else{
-                $value['catalogue'] = json_decode($value['catalogue']);
-                $data = $model->_get_where([
-                    'select' => 'tb1.id, tb1.image, tb1.catalogueid, tb1.album,'.$select.'  tb2.title, tb2.meta_description, tb2.canonical',
-                    'table' => $module_explode[0].' as tb1',
-                    'join' => [
-                        [
-                            $module_explode[0].'_translate as tb2','tb1.id = tb2.objectid AND tb2.language = \''.$param['language'].'\' AND tb2.module = \''.$module_explode[0].'\'','inner'
-                        ]
-                    ],
-                    'where' => ['tb1.deleted_at' => 0],
-                    'where_in_field' => 'tb1.id',
-                    'where_in' => $value['catalogue'],
-                ],TRuE);
-                foreach ($data as $keyData => $valData) {
-                    $data[$keyData]['canonical'] = fix_canonical(slug($valData['canonical']));
-                    $data[$keyData]['album'] = json_decode($valData['album']);
-                    if(isset($data[$keyData]['image']) && $data[$keyData]['image'] != ''){
-                        $data[$keyData]['avatar'] = $data[$keyData]['image'];
-                    }else{
-                        $data[$keyData]['avatar'] = $data[$keyData]['album'][0];
-                    }
-                }
-                $object[$key]['data'] = $data;
             }
         }
-        
         return $object;
     }
 }
@@ -132,10 +138,12 @@ if (! function_exists('widget_frontend')){
             'select' => 'id, html, css, script, title, keyword',
             'table' => 'website_widget',
         ],TRUE);
-        foreach ($object as $key => $value) {
-            $object[$key]['css'] = base64_decode($value['css']);
-            $object[$key]['html'] = base64_decode($value['html']);
-            $object[$key]['script'] = base64_decode($value['script']);
+        if(isset($object) &&  is_array($object)  && count($object)){
+            foreach ($object as $key => $value) {
+                $object[$key]['css'] = base64_decode($value['css']);
+                $object[$key]['html'] = base64_decode($value['html']);
+                $object[$key]['script'] = base64_decode($value['script']);
+            }
         }
         return $object;
     }
@@ -168,42 +176,42 @@ if (! function_exists('get_menu')){
             foreach ($catalogue as $key => $value) {
                 $data[$value['id']] = ['title' => $value['titleCatalogue'],'keyword' =>  $value['value']];
             }
-
-            foreach ($data as $key => $value) {
-                $data[$key]['data'] = [];
-                foreach ($menu as $keyMenu => $valMenu) {
-                    if($valMenu['catalogueid'] == $key){
-                        $new = array_push($data[$key]['data'], $valMenu);
+            if(isset($data) && is_aray($data) && count($data)){
+                foreach ($data as $key => $value) {
+                    $data[$key]['data'] = [];
+                    foreach ($menu as $keyMenu => $valMenu) {
+                        if($valMenu['catalogueid'] == $key){
+                            $new = array_push($data[$key]['data'], $valMenu);
+                        }
                     }
                 }
-            }
 
-            foreach ($data as $key => $value) {
-                $data[$key]['data'] = menu_recursive($value['data']);
-            }
-
-            foreach ($data as $key => $value) {
-                if($value['keyword'] == $param['keyword']){
-                    $select = $value;
-                }else{
-                    $select = [];
+                foreach ($data as $key => $value) {
+                    $data[$key]['data'] = menu_recursive($value['data']);
                 }
-            }
 
+                foreach ($data as $key => $value) {
+                    if($value['keyword'] == $param['keyword']){
+                        $select = $value;
+                    }else{
+                        $select = [];
+                    }
+                }
 
-            switch ($param['output']){
-                case 'html':
-                    return render_menu_frontend($select['data']);
-                    break;
-                case 'json':
-                    return json_encode($select);
-                    break;
-                case 'array':
-                    return $select;
-                    break;
-                default:
-                    return $select;
-                    break;
+                switch ($param['output']){
+                    case 'html':
+                        return render_menu_frontend($select['data']);
+                        break;
+                    case 'json':
+                        return json_encode($select);
+                        break;
+                    case 'array':
+                        return $select;
+                        break;
+                    default:
+                        return $select;
+                        break;
+                }
             }
         }else{
             return $catalogue;

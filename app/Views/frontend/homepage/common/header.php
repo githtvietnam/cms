@@ -5,7 +5,7 @@
 		<div class="uk-container uk-container-center">
 			<div class="hd-hotline">
 				Hotline: 
-				<span><?php echo ((isset($system['contact_phone'])) ? $system['contact_phone'] : '').((isset($system['contact_hotline'])) ? ' / '.$system['contact_hotline'] : '') ?></span>
+				<span><?php echo ((isset($general['contact_phone'])) ? $general['contact_phone'] : '').((isset($general['contact_hotline'])) ? ' / '.$general['contact_hotline'] : '') ?></span>
 			</div>
 		</div>
 	</div>
@@ -20,8 +20,8 @@
 				<div class="hd-menu ">
 					<nav id="main-nav">
 						<ul class="uk-navbar-nav uk-clearfix main-menu">
-							<?php if(isset($menu) && is_array($menu) && count($menu)){ ?>
-								<?php echo render_menu_frontend($menu['data']); ?>
+							<?php if(isset($menu_header) && is_array($menu_header) && count($menu_header)){ ?>
+								<?php echo render_menu_frontend($menu_header['data']); ?>
 							<?php } ?>
 						</ul>
 					</nav>
