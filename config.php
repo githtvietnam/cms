@@ -7,7 +7,7 @@ define('BACKEND_DIRECTORY', 'admin');
 define('AUTH', 'HTVIETNAM_');
 define('ASSET_BACKEND', 'public/backend/');
 
-define('BASE_URL', 'http://ci4.com/');
+define('BASE_URL', 'http://htcms.com/');
 define('HTSUFFIX', '.html');
 
 define('DEBUG', 0);
@@ -19,4 +19,4 @@ define('API_WIDGET', 'http://widgetcms.com');
 define('HTDBHOST', 'localhost');
 define('HTDBUSER', 'root');
 define('HTDBPASS', '');
-define('HTDBNAME', 'ci4_cms');
+define('HTDBNAME', 'ht_cms');

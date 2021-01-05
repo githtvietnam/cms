@@ -15,17 +15,22 @@ class FrontendController extends Controller
 		parent::initController($request, $response, $logger);
 		$this->AutoloadModel = new AutoloadModel();
 		$this->currentTime =  gmdate('Y-m-d H:i:s', time() + 7*3600);
-		
+
 		helper($this->helpers);
 	}
 
+	public function change_language(){
+
+	}
+
 	public function currentLanguage(){
-		$this->AutoloadModel = new AutoloadModel();
-		$this->defaulLanguage = $this->AutoloadModel->_get_where([
-			'select' => 'canonical',
-			'table' => 'language',
-			'where' => ['default' => 1]
-		]);
-		return $this->defaulLanguage['canonical'];
+		$general['language'] = 'vi';
+
+		if(!isset($_COOKIE['language']) || $_COOKIE['language'] == ''){
+			setcookie('language', $general['language'], '/', 8*3600)
+		}
+
+		
+
 	}
 }
