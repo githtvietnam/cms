@@ -176,7 +176,7 @@ if (! function_exists('get_menu')){
             foreach ($catalogue as $key => $value) {
                 $data[$value['id']] = ['title' => $value['titleCatalogue'],'keyword' =>  $value['value']];
             }
-            if(isset($data) && is_aray($data) && count($data)){
+            if(isset($data) && is_array($data) && count($data)){
                 foreach ($data as $key => $value) {
                     $data[$key]['data'] = [];
                     foreach ($menu as $keyMenu => $valMenu) {
