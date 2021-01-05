@@ -1,3 +1,14 @@
+<?php  
+    helper('form', 'data');
+    $baseController = new App\Controllers\BaseController();
+    $language = $baseController->currentLanguage();
+    $get_catalogue = check_type_canonical($language);
+    if($get_catalogue['content'] == 'silo'){
+    	$class = 'get_catalogue';
+    }else{
+    	$class = '';
+    }
+?>
 <form method="post" action="" >
 	<div class="wrapper wrapper-content animated fadeInRight">
 		<div class="row">
@@ -216,7 +227,7 @@
 									<small class="text-danger">Chọn [Root] Nếu không có danh mục cha</small>
 								</div>
 								<div class="form-row">
-									<?php echo form_dropdown('catalogueid', $dropdown, set_value('catalogueid', (isset($article['catalogueid'])) ? $article['catalogueid'] : ''), 'class="form-control m-b select2 get_catalogue" data-module="'.$module.'"');?>
+									<?php echo form_dropdown('catalogueid', $dropdown, set_value('catalogueid', (isset($article['catalogueid'])) ? $article['catalogueid'] : ''), 'class="form-control m-b select2 '.$class.'" data-module="'.$module.'"');?>
 								</div>
 
 								<script>

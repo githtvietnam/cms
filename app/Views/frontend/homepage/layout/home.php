@@ -3,10 +3,10 @@
 	$widget['data'] = widget_frontend();
  ?>
 <!DOCTYPE html>
-<html lang="vi">
+<html lang="vi-VN">
 	<head>
 		<!-- CONFIG -->
-		<meta charset="UTF-8">
+		<meta http-equiv="content-type" content="text/html; charset=utf-8" />
 		<meta name="viewport" content="width=device-width, initial-scale=1.0">
 		<meta name="robots" content="index,follow" />
 		<meta name="author" content="<?php echo (isset($general['homepage_company'])) ? $general['homepage_company'] : ''; ?>" />
