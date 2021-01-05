@@ -12,23 +12,25 @@ if (! function_exists('get_slide')){
                 'keyword' => $param['keyword']
             ],
         ]);
-        $object['data'] = json_decode($object['data'],TRUE);
-        switch ($param['output']){
-            case 'html':
-                switch ($param['type']){
-                    case 'uikit':
-                        return render_slideshow_uikit($object['data']);
-                }
-                break;
-            case 'json':
-                return json_encode($object);
-                break;
-            case 'array':
-                return $object;
-                break;
-            default:
-                return $object;
-                break;
+        if(isset($object) &&  is_array($object)  && count($object)){
+            $object['data'] = json_decode($object['data'],TRUE);
+            switch ($param['output']){
+                case 'html':
+                    switch ($param['type']){
+                        case 'uikit':
+                            return render_slideshow_uikit($object['data']);
+                    }
+                    break;
+                case 'json':
+                    return json_encode($object);
+                    break;
+                case 'array':
+                    return $object;
+                    break;
+                default:
+                    return $object;
+                    break;
+            }
         }
 	 	return $object;
 	}
@@ -149,58 +151,62 @@ if (! function_exists('get_menu')){
                 'tb1.deleted_at' => 0
             ]
         ],TRUE);
+        if(isset($catalogue) && is_array($catalogue)   && count($catalogue)){
+            $menu = $model->_get_where([
+                'select' => ' tb1.id, tb1.catalogueid, tb1.parentid, tb1.lft, tb1.rgt, tb1.level, tb1.order, tb2.title,tb2.objectid, tb2.canonical, tb2.catalogueid as dataid',
+                'table' => 'menu as tb1',
+                'join' => [
+                    [
+                        'menu_translate as tb2','tb1.id = tb2.objectid AND tb2.language = \''.$param['language'].'\' ','inner'
+                    ]
+                ],
+                'order_by' => 'order desc'
+            ], TRUE);
 
-        $menu = $model->_get_where([
-            'select' => ' tb1.id, tb1.catalogueid, tb1.parentid, tb1.lft, tb1.rgt, tb1.level, tb1.order, tb2.title,tb2.objectid, tb2.canonical, tb2.catalogueid as dataid',
-            'table' => 'menu as tb1',
-            'join' => [
-                [
-                    'menu_translate as tb2','tb1.id = tb2.objectid AND tb2.language = \''.$param['language'].'\' ','inner'
-                ]
-            ],
-            'order_by' => 'order desc'
-        ], TRUE);
+            $data = [];
 
-        $data = [];
+            foreach ($catalogue as $key => $value) {
+                $data[$value['id']] = ['title' => $value['titleCatalogue'],'keyword' =>  $value['value']];
+            }
 
-        foreach ($catalogue as $key => $value) {
-            $data[$value['id']] = ['title' => $value['titleCatalogue'],'keyword' =>  $value['value']];
-        }
-
-        foreach ($data as $key => $value) {
-            $data[$key]['data'] = [];
-            foreach ($menu as $keyMenu => $valMenu) {
-                if($valMenu['catalogueid'] == $key){
-                    $new = array_push($data[$key]['data'], $valMenu);
+            foreach ($data as $key => $value) {
+                $data[$key]['data'] = [];
+                foreach ($menu as $keyMenu => $valMenu) {
+                    if($valMenu['catalogueid'] == $key){
+                        $new = array_push($data[$key]['data'], $valMenu);
+                    }
                 }
             }
-        }
 
-        foreach ($data as $key => $value) {
-            $data[$key]['data'] = menu_recursive($value['data']);
-        }
-
-        foreach ($data as $key => $value) {
-            if($value['keyword'] == $param['keyword']){
-                $select = $value;
-            }else{
-                $select = [];
+            foreach ($data as $key => $value) {
+                $data[$key]['data'] = menu_recursive($value['data']);
             }
-        }
 
-        switch ($param['output']){
-            case 'html':
-                return render_menu_frontend($select['data']);
-                break;
-            case 'json':
-                return json_encode($select);
-                break;
-            case 'array':
-                return $select;
-                break;
-            default:
-                return $select;
-                break;
+            foreach ($data as $key => $value) {
+                if($value['keyword'] == $param['keyword']){
+                    $select = $value;
+                }else{
+                    $select = [];
+                }
+            }
+
+
+            switch ($param['output']){
+                case 'html':
+                    return render_menu_frontend($select['data']);
+                    break;
+                case 'json':
+                    return json_encode($select);
+                    break;
+                case 'array':
+                    return $select;
+                    break;
+                default:
+                    return $select;
+                    break;
+            }
+        }else{
+            return $catalogue;
         }
     }
 }

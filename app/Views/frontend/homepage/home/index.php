@@ -10,13 +10,15 @@
 		<div class="title-panel-general mb50">
 			<div class="uk-flex uk-flex-middle uk-flex-center">
 				<a href="" title="" class="mr10">
-					<h2><?php echo $panel['hot-deal']['title'] ?></h2>
+					<h2><?php echo ((isset($panel['hot-deal']['title'])) ? $panel['hot-deal']['title'] : '') ?></h2>
 				</a>
 				<span><img  class="" alt="Hot Deals" src="public/frontend/resources/img/icon/icon-tin-tuc.png"></span>
 			</div>
 		</div>
 		<div class="uk-grid uk-grid-medium uk-grid-width-small-1-1 uk-grid-width-medium-1-2 uk-grid-width-large-1-4 uk-clearfix">
-			<?php  $n=0;for($i = 0; $i < count($panel['hot-deal']['data']) ; $i++){?>
+			<?php  
+			if(isset($panel['hot-deal']['data']) && is_array($panel['hot-deal']['data']) && count($panel['hot-deal']['data'])){
+			$n=0;for($i = 0; $i < count($panel['hot-deal']['data']) ; $i++){?>
 				<div class="wrap-hot-deal">
 					<div class="hot-deal-body">
 						<div class="hot-deal-img">
@@ -25,20 +27,20 @@
 								<span class="status-deal">Tour Hot</span>
 							</div>
 							<a href="" class="img-cover">
-								<img src="<?php echo $panel['hot-deal']['data'][$n]['avatar']?>" alt="">
+								<img src="<?php echo ((isset($panel['hot-deal']['data'][$n]['avatar'])) ? $panel['hot-deal']['data'][$n]['avatar'] : '') ?>" alt="">
 							</a>
 						</div>
 						<div class="hot-deal-content">
 							<a href="" class="hot-deal-title mb10">
-								<?php echo $panel['hot-deal']['data'][$n]['title']?>
+								<?php echo ((isset($panel['hot-deal']['data'][$n]['title'])) ? $panel['hot-deal']['data'][$n]['title'] : '') ?>
 							</a>
 							<div class="hot-deal-price">
-								<?php echo $panel['hot-deal']['data'][$n]['price']?>
+								<?php echo ((isset($panel['hot-deal']['data'][$n]['price'])) ? $panel['hot-deal']['data'][$n]['price'] : '') ?>
 							</div>
 						</div>
 					</div>
 				</div>
-			<?php $n++; }  ?>
+			<?php $n++; }}  ?>
 		</div>
 		<button class="btn-view-all btn">
 			xem đầy đủ các tour deal 
@@ -51,27 +53,29 @@
 		<div class="title-panel-general mb50">
 			<div class="uk-flex uk-flex-middle uk-flex-center">
 				<a href="" title="" class="mr10">
-					<h2><?php echo $panel['tour-trong-nuoc']['title'] ?></h2>
+					<h2><?php echo ((isset($panel['tour-trong-nuoc']['title'])) ? $panel['tour-trong-nuoc']['title'] : '')  ?></h2>
 				</a>
 				<span><img  class="" alt="Hot Deals" src="public/frontend/resources/img/icon/icon-hanh-ly.png"></span>
 			</div>
 		</div>
 		<div class="uk-grid uk-grid-medium uk-grid-width-small-1-1 uk-grid-width-medium-1-2 uk-grid-width-large-1-4 uk-clearfix">
-			<?php  $n=0;for($i = 0; $i < count($panel['tour-trong-nuoc']['data']) ; $i++){?>
+			<?php  
+			if(isset($panel['tour-trong-nuoc']['data']) && is_array($panel['tour-trong-nuoc']['data']) && count($panel['tour-trong-nuoc']['data'])){
+			$n=0;for($i = 0; $i < count($panel['tour-trong-nuoc']['data']) ; $i++){?>
 				<div class="wrap-tour-category">
 					<div class="tour-category-body">
 						<div class="tour-category-img">
-							<a href="<?php echo $panel['tour-trong-nuoc']['data'][$n]['canonical']?>" class="img-cover">
-								<img src="<?php echo $panel['tour-trong-nuoc']['data'][$n]['avatar']?>" alt="">
+							<a href="<?php echo ((isset($panel['tour-trong-nuoc']['data'][$n]['canonical'])) ? $panel['tour-trong-nuoc']['data'][$n]['canonical'] : '') ?>" class="img-cover">
+								<img src="<?php echo ((isset($panel['tour-trong-nuoc']['data'][$n]['avatar'])) ? $panel['tour-trong-nuoc']['data'][$n]['avatar'] : '') ?>" alt="">
 							</a>
 						</div>
 						<div class="tour-category-content">
 							<a href="" class="tour-category-title">
-								<?php echo $panel['tour-trong-nuoc']['data'][$n]['title']?>
+								<?php echo ((isset($panel['tour-trong-nuoc']['data'][$n]['title'])) ? $panel['tour-trong-nuoc']['data'][$n]['title'] : '') ?>
 							</a>
 							<div class="uk-flex uk-flex-middle uk-flex-space-between">
 								<div class="tour-category-price">
-									<?php echo $panel['tour-trong-nuoc']['data'][$n]['price']?>
+									<?php echo ((isset($panel['tour-trong-nuoc']['data'][$n]['price'])) ? $panel['tour-trong-nuoc']['data'][$n]['price'] : '') ?>
 								</div>
 								<button class="btn btn-view">
 									Xem ngay
@@ -80,7 +84,7 @@
 						</div>
 					</div>
 				</div>
-			<?php $n++; }  ?>
+			<?php $n++; }}  ?>
 		</div>
 		<button class="btn-view-all btn">
 			xem đầy đủ các tour hot 
@@ -164,7 +168,7 @@
 		<div class="title-panel-general mb50">
 			<div class="uk-flex uk-flex-middle uk-flex-center">
 				<a href="" title="" class="mr10">
-					<h2><?php echo $panel['tin-tuc']['title'] ?></h2>
+					<h2><?php echo ((isset($panel['tin-tuc']['title'])) ? $panel['tin-tuc']['title'] : '')  ?></h2>
 				</a>
 				<span><img  class="" alt="Hot Deals" src="public/frontend/resources/img/icon/icon-hanh-ly.png"></span>
 			</div>
@@ -172,19 +176,21 @@
 		<div class="blog-slide">
 			<div class="owl-slide">
 				<div class="owl-carousel owl-theme" data-owl="<?php echo base64_encode(json_encode($owlInit)); ?>" data-disabled="0">
-					<?php  $m=0;for($i = 0; $i < count($panel['tin-tuc']['data']) ; $i++){?>
+					<?php  
+					if(isset($panel['tin-tuc']['data']) && is_array($panel['tin-tuc']['data']) && count($panel['tin-tuc']['data'])){
+					$m=0;for($i = 0; $i < count($panel['tin-tuc']['data']) ; $i++){?>
 						<div class="wrap-blog-slide">
 							<div class="blog-slide-body">
 								<div class="blog-overlay"></div>
-								<a href="<?php echo $panel['tin-tuc']['data'][$m]['canonical']?>" class="blog-img img-cover">
-									<img src="<?php echo $panel['tin-tuc']['data'][$m]['avatar']?>" alt="">
+								<a href="<?php echo ((isset($panel['tin-tuc']['data'][$m]['canonical'])) ? $panel['tin-tuc']['data'][$m]['canonical'] : '') ?>" class="blog-img img-cover">
+									<img src="<?php echo ((isset($panel['tin-tuc']['data'][$m]['avatar'])) ? $panel['tin-tuc']['data'][$m]['avatar'] : '') ?>" alt="">
 								</a>
 								<div class="blog-time">
 									2020
 								</div>										
 								<div class="blog-slide-content">
 									<a href="" class="blog-slide-title ">
-										<?php echo $panel['tin-tuc']['data'][$m]['title']?>
+										<?php echo ((isset($panel['tin-tuc']['data'][$m]['title'])) ? $panel['tin-tuc']['data'][$m]['title'] : '') ?>
 									</a>
 									<hr>
 									<div class="uk-flex uk-flex-middle uk-flex-space-between">
@@ -198,7 +204,7 @@
 								</div>
 							</div>
 						</div>
-					<?php $m++; }  ?>
+					<?php $m++; }}  ?>
 				</div>
 			</div>
 		</div>
