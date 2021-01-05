@@ -34,8 +34,8 @@ class Home extends FrontendController{
 		]);
 
 		$this->data['general'] = get_general();
-		$this->data['meta_title'] = $this->data['general']['seo_meta_title'];
-		$this->data['meta_description'] = $this->data['general']['seo_meta_description'];
+		$this->data['meta_title'] = (isset($this->data['general']['seo_meta_title']) ? $this->data['general']['seo_meta_title'] : '');
+		$this->data['meta_description'] = (isset($this->data['general']['seo_meta_description']) ? $this->data['general']['seo_meta_description'] : '');
 		$this->data['og_type'] = 'website';
 		$this->data['canonical'] = BASE_URL;
 		$panel = get_panel([
