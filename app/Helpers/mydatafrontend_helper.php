@@ -60,8 +60,6 @@ if (! function_exists('get_panel')){
             'where' => ['language' => $param['language'],'locate' => $param['locate'], 'deleted_at' => 0 ]
         ],TRUE);
 
-        pre($object);
-
         foreach ($object as $key => $value) {
             $module_explode = explode("_", $value['module']);
             $select  = '';
@@ -75,7 +73,7 @@ if (! function_exists('get_panel')){
                     'table' => $module_explode[0].' as tb1',
                     'join' => [
                         [
-                            $module_explode[0].'_translate as tb2','tb1.id = tb2.objectid AND tb2.language = \''.$param['languea'].'\' AND tb2.module = \''.$module_explode[0].'\'','inner'
+                            $module_explode[0].'_translate as tb2','tb1.id = tb2.objectid AND tb2.language = \''.$param['language'].'\' AND tb2.module = \''.$module_explode[0].'\'','inner'
                         ]
                     ],
                     'where' => ['tb1.deleted_at' => 0],
@@ -101,7 +99,7 @@ if (! function_exists('get_panel')){
                     'table' => $module_explode[0].' as tb1',
                     'join' => [
                         [
-                            $module_explode[0].'_translate as tb2','tb1.id = tb2.objectid AND tb2.language = \''.$param['languea'].'\' AND tb2.module = \''.$module_explode[0].'\'','inner'
+                            $module_explode[0].'_translate as tb2','tb1.id = tb2.objectid AND tb2.language = \''.$param['language'].'\' AND tb2.module = \''.$module_explode[0].'\'','inner'
                         ]
                     ],
                     'where' => ['tb1.deleted_at' => 0],

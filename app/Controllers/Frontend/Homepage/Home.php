@@ -40,7 +40,7 @@ class Home extends FrontendController{
 		foreach ($panel as $key => $value) {
 			$this->data['panel'][$value['keyword']] = $value;
 		}
-		// prE($this->data['slide_company']);
+		prE($this->data['panel']);
 
 		$this->data['template'] = 'frontend/homepage/home/index';
 		return view('frontend/homepage/layout/home', $this->data);

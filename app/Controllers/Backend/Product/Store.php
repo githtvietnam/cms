@@ -101,7 +101,7 @@ class Store extends BaseController{
 			'where' => ['module' => $this->data['module']],
 		]);
 
-		if(!isset($this->data['check_code']) && !is_array($this->data['check_code']) && !count($this->data['check_code'])){
+		if(!isset($this->data['check_code']) && !is_array($this->data['check_code']) ){
 			$session->setFlashdata('message-danger', 'Bạn chưa tạo phần cấu hình chung cho mã Cửa hàng!');
  			return redirect()->to(BASE_URL.'backend/product/store/index');
 		}else{
