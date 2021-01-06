@@ -68,7 +68,10 @@ if (! function_exists('get_panel')){
                 $module_explode = explode("_", $value['module']);
                 $select  = '';
                 if($module_explode[0] == 'tour' || $module_explode[0] == 'product'){
-                    $select = 'tb1.price, tb1.price_promotion,';
+                    $select = 'tb1.price, tb1.price_promotion';
+                }
+                if($module_explode[0] == 'tour'){
+                    $select = $select . ', tb1.time_end, tb2.start_at, tb2.end_at,';
                 }
                 if(isset($module_explode[1]) && $module_explode[1] != ''){
                     $value['catalogue'] = json_decode($value['catalogue']);
@@ -189,15 +192,12 @@ if (! function_exists('get_menu')){
                 foreach ($data as $key => $value) {
                     $data[$key]['data'] = menu_recursive($value['data']);
                 }
-
+                $select = [];
                 foreach ($data as $key => $value) {
                     if($value['keyword'] == $param['keyword']){
                         $select = $value;
-                    }else{
-                        $select = [];
                     }
                 }
-
                 switch ($param['output']){
                     case 'html':
                         return render_menu_frontend($select['data']);

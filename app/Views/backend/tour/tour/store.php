@@ -285,6 +285,15 @@
 										<?php echo form_dropdown('catalogue[]', '', NULL, 'class="form-control selectMultiple" multiple="multiple" data-title="Nhập 2 kí tự để tìm kiếm..."  style="width: 100%;" data-join="'.$module.'_translate" data-module="'.$module.'_catalogue" data-select="title"'); ?>
 									</div>
 								</div>
+
+								<div class="form-row mt20">
+									<label class="control-label text-left">
+										<span>Chọn thời gian hết hạn Tour</span>
+									</label>
+									<div class="form-row">
+										<input type="text" id="birthdaytime" name="time_end" value="<?php echo (isset($_POST['time_end'])) ? json_encode($_POST['time_end']) : ((isset($tour['time_end']) && $tour['time_end'] != '') ? $tour['time_end'] : '');   ?>" name="birthdaytime" class="form-control datetimepicker">
+									</div>
+								</div>
 							</div>
 						</div>
 					</div>

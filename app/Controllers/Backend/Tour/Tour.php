@@ -60,7 +60,7 @@ class Tour extends BaseController{
 			$catalogue = $this->condition_catalogue();
 			$languageDetact = $this->detect_language();
 			$this->data['tourList'] = $this->AutoloadModel->_get_where([
-				'select' => 'tb1.id, tb1.catalogueid as cat_id, tb1.price,tb1.order, tb1.price_promotion, tb1.album,  tb2.catalogueid, tb1.publish, tb3.title as tour_title, tb1.catalogue, tb2.objectid, tb3.content, tb3.sub_title, tb3.sub_content, tb3.canonical, tb3.meta_title, tb3.meta_description,  tb4.title as cat_title ,'.((isset($languageDetact['select'])) ? $languageDetact['select'] : ''),
+				'select' => 'tb1.id, tb1.time_end, tb1.catalogueid as cat_id, tb1.price,tb1.order, tb1.price_promotion, tb1.album,  tb2.catalogueid, tb1.publish, tb3.title as tour_title, tb1.catalogue, tb2.objectid, tb3.content, tb3.sub_title, tb3.sub_content, tb3.canonical, tb3.meta_title, tb3.meta_description,  tb4.title as cat_title ,'.((isset($languageDetact['select'])) ? $languageDetact['select'] : ''),
 				'table' => $this->data['module'].' as tb1',
 				'where' => $where,
 				'where_in' => $catalogue['where_in'],
@@ -84,7 +84,6 @@ class Tour extends BaseController{
 				'group_by' => 'tb1.id'
 			], TRUE);
 		}
-		// pre($this->data['tourList']);
 
 		$this->data['dropdown'] = $this->nestedsetbie->dropdown();
 		$this->data['template'] = 'backend/tour/tour/index';
@@ -201,6 +200,7 @@ class Tour extends BaseController{
 			 		if($wholesale != []){
 						insert_wholesale($wholesale, $this->data['module'],'update', $id);
 			 		}
+			 		$flag = $this->create_relationship($id);
 					$this->version($id, 'update');
 		 			$this->insert_router(['method' => 'update','id' => $id]);
 		 			$this->nestedsetbie->Get('level ASC, order ASC');
@@ -284,6 +284,13 @@ class Tour extends BaseController{
 		}
 		$catalogueid = $this->request->getPost('catalogueid');
 		$relationshipId = 	array_unique(array_merge($catalogue, [$catalogueid]));
+		$this->AutoloadModel->_delete([
+			'table' => 'object_relationship',
+			'where' => [
+				'module' => $this->data['module'],
+				'objectid' => $objectid
+			]
+		]);
 		$insert = [];
 		if(isset($relationshipId) && is_array($relationshipId) && count($relationshipId)){
 			foreach($relationshipId as $key => $val){
@@ -294,12 +301,14 @@ class Tour extends BaseController{
 				);
 			}
 		}
+
 		if(isset($insert) && is_array($insert) && count($insert)){
 			$flag = $this->AutoloadModel->_create_batch([
 				'data' => $insert,
 				'table' => 'object_relationship'
 			]);
 		}
+
 		return $flag;
 	}
 
@@ -316,6 +325,8 @@ class Tour extends BaseController{
 		$store = [
 			'objectid' => $objectid,
 			'title' => validate_input($this->request->getPost('title')),
+			'start_at' => $this->request->getPost('start_at'),
+			'end_at' => $this->request->getPost('end_at'),
 			'canonical' => slug($this->request->getPost('canonical')),
 			'content' => base64_encode($this->request->getPost('content')),
 			'description' => base64_encode($this->request->getPost('description')),
@@ -349,6 +360,7 @@ class Tour extends BaseController{
  			'catalogueid' => (int)$this->request->getPost('catalogueid'),
  			'catalogue' => json_encode($catalogue),
  			'tourid' => $this->request->getPost('tourid'),
+ 			'time_end' => gettime($this->request->getPost('time_end'), 'datetime'),
  			'album' => json_encode($this->request->getPost('album'), TRUE),
  			'publish' => $this->request->getPost('publish'),
  			'price' => $this->request->getPost('price'),
@@ -496,7 +508,7 @@ class Tour extends BaseController{
 
 	private function get_data_module($id = 0){
 		$flag = $this->AutoloadModel->_get_where([
-			'select' => 'tb1.id, tb1.catalogue,tb1.catalogueid,  tb1.price_promotion, tb1.price, tb1.tourid, tb1.id, tb2.title, tb2.objectid, tb2.sub_title, tb2.sub_content, tb2.description, tb2.canonical,  tb2.content, tb2.meta_title, tb2.meta_description, tb1.album, tb1.publish',
+			'select' => 'tb1.id,tb1.time_end, tb1.catalogue,tb1.catalogueid,  tb1.price_promotion, tb1.price, tb1.tourid, tb1.id, tb2.title, tb2.objectid, tb2.sub_title, tb2.sub_content, tb2.description, tb2.canonical,  tb2.content, tb2.meta_title, tb2.meta_description, tb1.album, tb1.publish, tb2.start_at, tb2.end_at',
 			'table' => $this->data['module'].' as tb1',
 			'join' =>  [
 					[
@@ -537,13 +549,14 @@ class Tour extends BaseController{
 			'table' => 'tour_wholesale',
 			'where' => ['objectid' => $id]
 		]);
+		$data = [];
+		
 		if(isset($check) && is_array($check) && count($check)){
 			$array = [
 				'number_start' => json_decode($check['number_start']),
 				'number_end' => json_decode($check['number_end']),
 				'price_wholesale' => json_decode($check['price']),
 			];
-			$data = [];
 			foreach ($array as $key => $value) {
 				foreach ($value as $keyChild => $valChild) {
 					$data[$keyChild][$key] = $valChild;

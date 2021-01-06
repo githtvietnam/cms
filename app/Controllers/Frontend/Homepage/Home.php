@@ -11,7 +11,12 @@ class Home extends FrontendController{
 
 	public function index(){
 		$this->data['menu_header'] = get_menu([
-			'keyword' => 'menu_3',
+			'keyword' => 'header_home',
+			'language' => $this->currentLanguage(),
+			'output' => 'array'
+		]);
+		$this->data['menu_footer'] = get_menu([
+			'keyword' => 'menu_footer',
 			'language' => $this->currentLanguage(),
 			'output' => 'array'
 		]);
@@ -32,8 +37,7 @@ class Home extends FrontendController{
 			'language' => $this->currentLanguage(),
 			'output' => 'array',
 		]);
-
-		$this->data['general'] = get_general();
+		$this->data['general'] = $this->general;
 		$this->data['meta_title'] = (isset($this->data['general']['seo_meta_title']) ? $this->data['general']['seo_meta_title'] : '');
 		$this->data['meta_description'] = (isset($this->data['general']['seo_meta_description']) ? $this->data['general']['seo_meta_description'] : '');
 		$this->data['og_type'] = 'website';
@@ -45,7 +49,6 @@ class Home extends FrontendController{
 		foreach ($panel as $key => $value) {
 			$this->data['panel'][$value['keyword']] = $value;
 		}
-
 		$this->data['template'] = 'frontend/homepage/home/index';
 		return view('frontend/homepage/layout/home', $this->data);
 	}

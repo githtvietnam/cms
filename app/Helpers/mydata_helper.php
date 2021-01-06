@@ -313,7 +313,6 @@ if (! function_exists('object_menu')){
 if (! function_exists('silo')){
 	function silo($id = '', $canonical = '', $module = '', $catid = '', $lang = ''){
 	    $model = new AutoloadModel();
-		
 		$moduleExplode = explode('_',  $module);
 	    if($catid == 0){
 	        $category = $model->_get_where([
@@ -347,9 +346,8 @@ if (! function_exists('silo')){
 	            'table' => $moduleExplode[0].'_catalogue',
 	            'where' => ['id' => $catid]
 	        ]);
-	        // pre($category);
 	        if($category['parentid'] != 0){
-	        	$category = $model->_get_where([
+	        	$abc = $model->_get_where([
 		            'select' => 'id, lft, rgt, parentid',
 		            'table' => $moduleExplode[0].'_catalogue',
 		            'where' => ['id' => $category['parentid']]
@@ -364,12 +362,13 @@ if (! function_exists('silo')){
 	            	]
 	            ],
 	            'where' => [
-	                'tb1.lft >=' => $category['lft'],
-	                'tb1.rgt <=' => $category['rgt'],
+	                'tb1.lft >=' => $abc['lft'],
+	                'tb1.lft <=' => $category['lft'],
+	                'tb1.rgt <=' => $abc['rgt'],
+	                'tb1.rgt >=' => $category['rgt'],
 	            ],
 	            'order_by' => 'tb1.lft asc',
 	        ], TRUE);
-
 	        $url = '';
 
 	        foreach($allCategory as $key => $val){

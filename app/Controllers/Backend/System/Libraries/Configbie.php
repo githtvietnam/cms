@@ -24,6 +24,7 @@ class ConfigBie{
 				'logo' => array('type' => 'images', 'label' => 'Logo'),
 				'logo_footer' => array('type' => 'images', 'label' => 'Logo Chân trang'),
 				'favicon' => array('type' => 'images', 'label' => 'Favicon','title' => 'Favicon là gì?','link' => 'https://webchuanseoht.com/favicon-la-gi-tac-dung-cua-favicon-nhu-the-nao.html'),
+				'footer' => array('type' => 'textarea', 'label' => 'Thông tin chung Footer'),
 			),
 		);
 		$data['homepage_1'] =  array(
@@ -120,6 +121,7 @@ class ConfigBie{
 				'status' => array('type' => 'select2', 'label' => 'Trạng thái website','select' => array(0 => 'Mở cửa Website', 1 => 'Đóng cửa website')),
 				'index' => array('type' => 'select2', 'label' => 'Index Google','select' => array(1 => 'Có', 0 => 'Không')),
 				'canonical' => array('type' => 'select2', 'label' => 'Đường dẫn','select' => array('normal' => 'Normal', 'silo' => 'Silo')),
+				'language' => array('type' => 'select', 'label' => 'Ngôn ngữ mặc định','select' => array('vi' => 'Tiếng Việt', 'en' => 'Tiếng Anh')),
 			),
 		);
 

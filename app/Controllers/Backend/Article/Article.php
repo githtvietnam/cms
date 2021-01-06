@@ -182,6 +182,7 @@ class Article extends BaseController{
 			 			'where' => ['objectid' => $id, 'module' => 'article', 'language' => $this->currentLanguage()],
 			 			'data' => $updateLanguage,
 			 		]);
+			 		$flag = $this->create_relationship($id);
 			 		if($updateLanguage['canonical'] != $this->data[$this->data['module']]['canonical']){
 		 				$this->insert_router(['method' => 'update','id' => $id]);
 			 			
@@ -256,7 +257,13 @@ class Article extends BaseController{
 		}
 		$catalogueid = $this->request->getPost('catalogueid');
 		$relationshipId = 	array_unique(array_merge($catalogue, [$catalogueid]));
-
+		$this->AutoloadModel->_delete([
+			'table' => 'object_relationship',
+			'where' => [
+				'module' => $this->data['module'],
+				'objectid' => $objectid
+			]
+		]);
 		$insert = [];
 		if(isset($relationshipId) && is_array($relationshipId) && count($relationshipId)){
 			foreach($relationshipId as $key => $val){
@@ -276,7 +283,6 @@ class Article extends BaseController{
 		}
 
 		return $flag;
-
 	}
 
 	public function condition_catalogue(){

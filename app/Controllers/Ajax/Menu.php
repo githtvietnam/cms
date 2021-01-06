@@ -41,6 +41,7 @@ class Menu extends BaseController{
 		$param['id'] = json_decode($this->request->getPost('id'));
 		$param['module'] = $this->request->getPost('module');
 		$param['lang'] = $this->request->getPost('lang');
+		$param['type_canonical'] = $this->request->getPost('type_canonical');
 		$data = [];
 		$url = [];
 		foreach ($param['canonical'] as $key => $value) {
@@ -50,11 +51,16 @@ class Menu extends BaseController{
 			$data[$key]['lang'] = $param['lang'];
 			$data[$key]['catid'] = $param['catid'][$key];
 		}
+
 		foreach ($data as $key => $value) {
-			$data[$key]['url'] = silo($value['id'], $value['canonical'], $value['module'], $value['catid'], $value['lang']);
+			if($param['type_canonical'] == 'silo'){
+				$data[$key]['url'] = silo($value['id'], $value['canonical'], $value['module'], $value['catid'], $value['lang']);
+			}else{
+				$data[$key]['url'] = $value['canonical'];
+			}
+
 			$data[$key]['title'] = $param['title'][$key];
 		}
-		// pre($data);
 		
 		echo json_encode($data);die();		
 	}

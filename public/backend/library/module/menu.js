@@ -61,7 +61,7 @@ $(document).ready(function(){
 			console.log(_catid);
 			console.log(_canonical);
 			$.post(formUrl, {
-					canonical : _canonical, title: _title, catid : _catid, module : _module , lang: _language, id: _id
+					canonical : _canonical, title: _title, catid : _catid, module : _module , lang: _language, id: _id, type_canonical: type_canonical
 				},
 				function(data){
 					let json = JSON.parse(data);

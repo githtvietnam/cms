@@ -91,6 +91,18 @@ class Menu extends BaseController{
 			'order_by' => 'title asc'
 		], TRUE);
 
+		$object = $this->AutoloadModel->_get_where([
+			'select' => '*',
+			'table' => 'system_translate',
+			'where' => ['language' => $this->currentLanguage()],
+		], TRUE);
+		$this->data['general']= [];
+        if(isset($object) &&  is_array($object)  && count($object)){
+            foreach ($object as $key => $value) {
+                $this->data['general'][$value['keyword']] = $value['content'];
+            }
+        }
+
 
 		if($this->request->getMethod() == 'post'){
 			$validate = $this->validation();
@@ -103,7 +115,6 @@ class Menu extends BaseController{
 					$newMenu = [];
 					$count = 0;
 					
-
 					$delete = $this->AutoloadModel->_delete([
 						'table' => 'menu',
 						'where' => ['catalogueid' => $catalogueid]
@@ -139,19 +150,17 @@ class Menu extends BaseController{
 							'limit' => $count
 						],TRUE);
 						foreach ($getData as $key => $value) {
-							$rewrite_url[] = ['id' => $value['id'],'canonical' => $menu['link'][$key]];
-							$dataURL = rewrite_url($rewrite_url, 'silo', 'menu' , 'menu', '.html');
-							$canonical = $menu['link'][$key].'.html';
+
 							$newMenu[] = [
 								'objectid' => $getData[$key]['id'],
 								'title' => $menu['title'][$key],
-								'canonical'  => $dataURL[$key],
+								'canonical'  => $menu['link'][$key],
 								'catalogueid' => $this->request->getPost('parentid'),
 								'language' => $language,
 								'module' => 'menu',
 								'created_at' => $this->currentTime,
 								'userid_created' => $this->auth['id']
-							];		
+							];	
 						}
 						$insertData = $this->AutoloadModel->_create_batch([
 							'table' => 'menu_translate',
@@ -237,7 +246,17 @@ class Menu extends BaseController{
 		foreach ($configbie as $key => $value) {
 			$configbieList[] = $this->ObjectList($language, $key, $value); 
 		}
-
+		$object = $this->AutoloadModel->_get_where([
+			'select' => '*',
+			'table' => 'system_translate',
+			'where' => ['language' => $this->currentLanguage()],
+		], TRUE);
+		$this->data['general']= [];
+        if(isset($object) &&  is_array($object)  && count($object)){
+            foreach ($object as $key => $value) {
+                $this->data['general'][$value['keyword']] = $value['content'];
+            }
+        }
 		foreach ($configbieList as $key => $value) {
 			if($value == []){
 
@@ -324,12 +343,10 @@ class Menu extends BaseController{
 							'limit' => $count
 						],TRUE);
 						foreach ($getData as $key => $value) {
-							$rewrite_url[] = ['id' => $value['id'],'canonical' => $menu['link'][$key]];
-							$dataURL = rewrite_url($rewrite_url, 'normal', 'menu' , 'menu', '.html');
 							$newMenu[] = [
 								'objectid' => $getData[$key]['id'],
 								'title' => $menu['title'][$key],
-								'canonical'  => $dataURL[$key],
+								'canonical'  => $menu['link'][$key],
 								'catalogueid' => $this->request->getPost('parentid'),
 								'language' => $language,
 								'module' => 'menu',

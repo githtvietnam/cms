@@ -59,6 +59,7 @@
             ASSET_BACKEND.'js/plugins/codemirror/codemirror.js',
             ASSET_BACKEND.'js/plugins/codemirror/mode/javascript/javascript.js',
             ASSET_BACKEND.'js/plugins/toastr/toastr.min.js',
+            ASSET_BACKEND.'js/plugins/datapicker/bootstrap-datepicker.js',
             ASSET_BACKEND.'js/plugins/sweetalert/sweetalert.min.js',
             ASSET_BACKEND.'plugin/jquery-ui.js',
             ASSET_BACKEND.'plugin/inputTags.jquery.min.js',

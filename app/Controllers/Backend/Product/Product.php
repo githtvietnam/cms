@@ -205,6 +205,7 @@ class Product extends BaseController{
 			 		if($wholesale != []){
 						insert_wholesale($wholesale, $this->data['module'],'update', $id);
 			 		}
+			 		$flag = $this->create_relationship($id);
 					$this->version($id, 'update');
 		 			$this->insert_router(['method' => 'update','id' => $id]);
 		 			$this->nestedsetbie->Get('level ASC, order ASC');
@@ -312,7 +313,13 @@ class Product extends BaseController{
 		}
 		$catalogueid = $this->request->getPost('catalogueid');
 		$relationshipId = 	array_unique(array_merge($catalogue, [$catalogueid]));
-
+		$this->AutoloadModel->_delete([
+			'table' => 'object_relationship',
+			'where' => [
+				'module' => $this->data['module'],
+				'objectid' => $objectid
+			]
+		]);
 		$insert = [];
 		if(isset($relationshipId) && is_array($relationshipId) && count($relationshipId)){
 			foreach($relationshipId as $key => $val){
@@ -332,7 +339,6 @@ class Product extends BaseController{
 		}
 
 		return $flag;
-
 	}
 
 	private function condition_keyword($keyword = ''): string{

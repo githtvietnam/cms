@@ -5,8 +5,10 @@
     $language = $baseController->currentLanguage();
     $AutoloadModel = new App\Models\AutoloadModel();
     $languageList = get_full_language(['currentLanguage' => $language]);
-
 ?>
+<script type="text/javascript">
+    var type_canonical = "<?php echo $general['website_canonical']; ?>";
+</script>
 <div class="row wrapper border-bottom white-bg page-heading">
     <div class="col-lg-10">
         <h2>Thêm mới Menu</h2>

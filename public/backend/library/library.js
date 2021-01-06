@@ -16,6 +16,15 @@ $(document).ready(function(){
 		}
 	});
 
+	$('.datetimepicker').datepicker({
+		todayBtn: "linked",
+		keyboardNavigation: false,
+		forceParse: false,
+		calendarWeeks: true,
+		autoclose: true,
+		dateFormat: "dd/mm/yy"
+	});
+
 	$(document).on('click','.va-option-input', function(){
 		let _this = $(this);
 		let catalogueid = _this.parents('.wrap-catalogue-widget').attr('data-id')
@@ -205,7 +214,7 @@ $(document).ready(function(){
 	$(document).on('keyup', '.title', function(){
 		let _this = $(this);
 		let metaTitle = _this.val();
-		get_catalogue(metaTitle);
+		get_catalogue(slug(metaTitle));
 		let totalCharacter = metaTitle.length;
 		if(totalCharacter > 70){
 			$('.meta-title').addClass('input-error');
@@ -454,6 +463,8 @@ function get_location(param){
 
 function get_catalogue(val = ''){
 	let data ='';
+	val = slug(val);
+	console.log(val)
 	let id = $('.get_catalogue').val();
 	let module = $('.get_catalogue').attr('data-module');
 	let canonical = $('.canonical');
@@ -591,7 +602,7 @@ function cnvVi(str) {
 	str = str.replace(/ù|ú|ụ|ủ|ũ|ư|ừ|ứ|ự|ử|ữ/g, "u");
 	str = str.replace(/ỳ|ý|ỵ|ỷ|ỹ/g, "y");
 	str = str.replace(/đ/g, "d");
-	str = str.replace(/!|@|%|\^|\*|\(|\)|\+|\=|\<|\>|\?|,|\.|\:|\;|\'| |\"|\&|\#|\[|\]|\\|\/|~|$|_/g, "-");
+	str = str.replace(/!|@|%|\^|\*|\(|\)|\+|\=|\<|\>|\?|,|\.|\:|\;|\'|\–| |\"|\&|\#|\[|\]|\\|\/|~|$|_/g, "-");
 	str = str.replace(/-+-/g, "-");
 	str = str.replace(/^\-+|\-+$/g, "");
 	return str;

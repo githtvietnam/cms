@@ -10,32 +10,32 @@
 		<div class="title-panel-general mb50">
 			<div class="uk-flex uk-flex-middle uk-flex-center">
 				<a href="" title="" class="mr10">
-					<h2><?php echo ((isset($panel['hot-deal']['title'])) ? $panel['hot-deal']['title'] : '') ?></h2>
+					<h2><?php echo ((isset($panel['hot-deals']['title'])) ? $panel['hot-deals']['title'] : '') ?></h2>
 				</a>
 				<span><img  class="" alt="Hot Deals" src="public/frontend/resources/img/icon/icon-tin-tuc.png"></span>
 			</div>
 		</div>
 		<div class="uk-grid uk-grid-medium uk-grid-width-small-1-1 uk-grid-width-medium-1-2 uk-grid-width-large-1-4 uk-clearfix">
 			<?php  
-			if(isset($panel['hot-deal']['data']) && is_array($panel['hot-deal']['data']) && count($panel['hot-deal']['data'])){
-			$n=0;for($i = 0; $i < count($panel['hot-deal']['data']) ; $i++){?>
+			if(isset($panel['hot-deals']['data']) && is_array($panel['hot-deals']['data']) && count($panel['hot-deals']['data'])){
+			$n=0;for($i = 0; $i < count($panel['hot-deals']['data']) ; $i++){?>
 				<div class="wrap-hot-deal">
 					<div class="hot-deal-body">
 						<div class="hot-deal-img">
-							<div class="hot-deal-time-end">
-								Khuyến mãi còn 2 Ngày
+							<div class="hot-deal-time-end countdown" data-time="<?php echo isset($panel['hot-deals']['data'][$n]['time_end']) ? $panel['hot-deals']['data'][$n]['time_end'] : '' ?>">
+								<div class="value">Khuyến mãi còn <span></span> Ngày </div>
 								<span class="status-deal">Tour Hot</span>
 							</div>
-							<a href="" class="img-cover">
-								<img src="<?php echo ((isset($panel['hot-deal']['data'][$n]['avatar'])) ? $panel['hot-deal']['data'][$n]['avatar'] : '') ?>" alt="">
+							<a href="<?php echo ((isset($panel['hot-deals']['data'][$n]['canonical'])) ? $panel['hot-deals']['data'][$n]['canonical'] : '') ?>" class="img-cover">
+								<img src="<?php echo ((isset($panel['hot-deals']['data'][$n]['avatar'])) ? $panel['hot-deals']['data'][$n]['avatar'] : '') ?>" alt="">
 							</a>
 						</div>
 						<div class="hot-deal-content">
-							<a href="" class="hot-deal-title mb10">
-								<?php echo ((isset($panel['hot-deal']['data'][$n]['title'])) ? $panel['hot-deal']['data'][$n]['title'] : '') ?>
+							<a href="<?php echo ((isset($panel['hot-deals']['data'][$n]['canonical'])) ? $panel['hot-deals']['data'][$n]['canonical'] : '') ?>" class="hot-deal-title mb10">
+								<?php echo ((isset($panel['hot-deals']['data'][$n]['title'])) ? $panel['hot-deals']['data'][$n]['title'] : '') ?>
 							</a>
 							<div class="hot-deal-price">
-								<?php echo ((isset($panel['hot-deal']['data'][$n]['price'])) ? $panel['hot-deal']['data'][$n]['price'] : '') ?>
+								<?php echo ((isset($panel['hot-deals']['data'][$n]['price'])) ? $panel['hot-deals']['data'][$n]['price'] : '') ?>
 							</div>
 						</div>
 					</div>
@@ -70,7 +70,7 @@
 							</a>
 						</div>
 						<div class="tour-category-content">
-							<a href="" class="tour-category-title">
+							<a href="<?php echo ((isset($panel['tour-trong-nuoc']['data'][$n]['canonical'])) ? $panel['tour-trong-nuoc']['data'][$n]['canonical'] : '') ?>" class="tour-category-title">
 								<?php echo ((isset($panel['tour-trong-nuoc']['data'][$n]['title'])) ? $panel['tour-trong-nuoc']['data'][$n]['title'] : '') ?>
 							</a>
 							<div class="uk-flex uk-flex-middle uk-flex-space-between">
@@ -189,7 +189,7 @@
 									2020
 								</div>										
 								<div class="blog-slide-content">
-									<a href="" class="blog-slide-title ">
+									<a href="<?php echo ((isset($panel['tin-tuc']['data'][$m]['canonical'])) ? $panel['tin-tuc']['data'][$m]['canonical'] : '') ?>" class="blog-slide-title ">
 										<?php echo ((isset($panel['tin-tuc']['data'][$m]['title'])) ? $panel['tin-tuc']['data'][$m]['title'] : '') ?>
 									</a>
 									<hr>

@@ -388,21 +388,6 @@ $(document).on('change','#toogle_readonly',function(){
 	}
 });
 
-
-$(document).on('keyup','#title',function(){
-	let _this = $(this);
-	let val = _this.val();
-	let result = val.split(' ');	
-	let count = result.length;
-	let text = '';
-	let i = 0;
-	for(i = 0; i < count; i++){
-		let char = result[i].charAt(0);
-		text = text + char;
-	}
-	text = text+'-001';
-});
-
 $(document).on('keyup','#brand_title',function(){
 	let _this = $(this);
 	let val = _this.val();
