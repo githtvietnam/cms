@@ -13,6 +13,17 @@ if(!function_exists('translate')){
 	}
 }
 
+//trả về: chuỗi bị cắt từ 0 tới kí tự thứ n
+//đầu vào: $str chuỗi bị cắt, $n cắt bn kí tự
+if(!function_exists('cutnchar')){
+	function cutnchar($str = NULL, $n = 320){
+		if(strlen($str) < $n) return $str;
+		$html = substr($str, 0, $n);
+		$html = substr($html, 0, strrpos($html,' '));
+		return $html.'...';
+	}
+}
+
 if(!function_exists('view_cells')){
 	function view_cells(string $module = ''){
 		$module = explode('_',  $module);
@@ -20,11 +31,13 @@ if(!function_exists('view_cells')){
 		foreach ($module as $key => $value) {
 			$new_module[] = ucwords($value);
 		}
+		if(!isset($new_module[1])){
+			$new_module[1] = $new_module[0];
+		}
 		$view =  '\App\Controllers\Frontend\\';
 		foreach ($new_module as $key => $value) {
 			$view = $view.$value.((isset($new_module[$key + 1])) ? '\\' : '').((!isset($new_module[$key + 1])) ? '::index' : '');
 		}
-
 		return $view;
 	}
 }
@@ -34,6 +47,12 @@ if(!function_exists('get_first_img')){
 		$image = json_decode($album);
 		$image = $image[0];
 		return $image;
+	}
+}
+
+if(!function_exists('check_isset')){
+	function check_isset(string $check = ''){
+		return (isset($check) ? $check : '');
 	}
 }
 

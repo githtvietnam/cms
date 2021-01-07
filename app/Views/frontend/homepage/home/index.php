@@ -1,8 +1,3 @@
-<section class="slide-panel">
-	<?php if(isset($slide_banner)){
-		echo $slide_banner;		
-	} ?>
-</section>
 
 
 <section class="hot-deal-panel">

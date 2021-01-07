@@ -29,6 +29,7 @@
     } ?>
     <script type="text/javascript">
         var BASE_URL = '<?php echo BASE_URL; ?>';
+        var SUFFIX = '<?php echo HTSUFFIX; ?>';
     </script>
 </head>
 <body>

@@ -409,9 +409,7 @@ class Article extends BaseController{
  			$this->AutoloadModel->_update([
 	 			'table' => 'router',
 	 			'where' => ['objectid' => $param['id'], 'module' => $this->data['module'], 'language' => $this->currentLanguage()],
-	 			'data' => [
-	 				'canonical' => $data['canonical']
-	 			]
+	 			'data' => $data
 	 		]);
  		}
  		return true;

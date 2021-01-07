@@ -27,5 +27,12 @@ if(!function_exists('rewrite_url')){
 	}
 }
 
+if(!function_exists('write_url')){
+	function write_url($canonical = '', $suffix = TRUE, $fulllink = FALSE){
+		$domain = ($fulllink == TRUE)?BASE_URL:'';
+		if(!empty($canonical)) return ($suffix == TRUE)?($domain.$canonical.HTSUFFIX):($domain.$canonical);
+	}
+}
+
 ?>
 

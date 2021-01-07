@@ -40,7 +40,7 @@
 			<div class="col-lg-6  ">
 				<div class="form-row">
 					<label class="control-label text-left">
-						<span>Chọn điểm xuất phát</span>
+						<span>Chọn điểm xuất phát <b class="text-danger">(*)</b></span>
 					</label>
 					<?php 
 						$city = get_data(['select' => 'provinceid, name','table' => 'vn_province','order_by' => 'order desc, name asc']);
@@ -57,7 +57,7 @@
 			<div class="col-lg-6  ">
 				<div class="form-row">
 					<label class="control-label text-left">
-						<span>Chọn điểm kết thúc</span>
+						<span>Chọn điểm kết thúc <b class="text-danger">(*)</b></span>
 					</label>
 					<?php echo form_dropdown('end_at', $city, set_value('end_at', (isset($tour['end_at'])) ? $tour['end_at'] : 0), 'class="form-control select2 m-b end_at"  id="end_at"');?>
 				</div>

@@ -58,8 +58,6 @@ $(document).ready(function(){
 			_title = JSON.stringify(_title)
 			_id = JSON.stringify(_id)
 			let formUrl = 'ajax/menu/render_link';
-			console.log(_catid);
-			console.log(_canonical);
 			$.post(formUrl, {
 					canonical : _canonical, title: _title, catid : _catid, module : _module , lang: _language, id: _id, type_canonical: type_canonical
 				},
@@ -356,7 +354,7 @@ $(document).ready(function(){
 		html = html + '</div>';
 		html = html + '<div class="col-lg-4">';
 			html = html + '<div class="form-row">';
-				html = html + '<input type="text" placeholder="" value="'+canonical+'" name="menu[link][]" class="form-control input_menu_canonical" >';
+				html = html + '<input type="text" placeholder="" value="'+canonical+SUFFIX+'" name="menu[link][]" class="form-control input_menu_canonical" >';
 				
 			html = html + '</div>';
 		html = html + '</div>';

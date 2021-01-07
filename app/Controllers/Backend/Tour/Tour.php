@@ -603,6 +603,8 @@ class Tour extends BaseController{
 			'tourid' => 'required|check_id['.$this->data['module'].']',
 			'canonical' => 'required|check_canonical['.$this->data['module'].']',
 			'catalogueid' => 'is_natural_no_zero',
+			'start_at' => 'is_no_0',
+			'end_at' => 'is_no_0',
 		];
 		$errorValidate = [
 			'title' => [
@@ -621,6 +623,12 @@ class Tour extends BaseController{
 			],
 			'catalogueid' => [
 				'is_natural_no_zero' => 'Bạn Phải chọn danh mục cha cho Chuyến du lịch!',
+			],
+			'start_at' => [
+				'is_no_0' => 'Bạn Phải chọn điểm xuất phát!',
+			],
+			'end_at' => [
+				'is_no_0' => 'Bạn Phải chọn điểm kết thúc!',
 			],
 		];
 

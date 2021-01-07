@@ -93,6 +93,13 @@ class ObjectRules {
 		return true;
  	}
 
+ 	public function is_no_0(string $keyword = ''): bool{
+		if($keyword == 0){
+			return false;
+		}
+		return true;
+ 	}
+
  	public function check_keyword(string $keyword = '', $module = ''): bool{
 		
 		$originalId = $this->request->getPost('keyword');

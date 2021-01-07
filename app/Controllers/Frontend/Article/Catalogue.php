@@ -14,11 +14,48 @@ class Catalogue extends FrontendController{
 	public function index($id = 0, $page = 1){
         helper(['mypagination']);
         $id = (int)$id;
+        $session = session();
         $module_extract = explode("_", $this->data['module']);
+        $this->data['detailCatalogue'] = $this->AutoloadModel->_get_where([
+            'select' => ' tb1.id,tb1.lft, tb1.rgt, tb1.level, tb1.parentid, tb1.image,  tb2.title, tb2.canonical,  tb2.content, tb2.description, tb2.meta_title, tb2.meta_description',
+            'table' => $this->data['module'].' as tb1',
+            'join' => [
+                [   
+                    $module_extract[0].'_translate as tb2','tb2.module = \''.$this->data['module'].'\' AND tb2.objectid = tb1.id AND tb2.language = \''.$this->currentLanguage().'\'', 'inner'
+                ]
+            ],
+            'where' => [
+                'tb1.deleted_at' => 0,
+                'tb1.publish' => 1,
+                'tb1.id' => $id
+            ]
+        ]);
+        // if(isset($this->data['detailCatalogue']) && is_array($this->data['detailCatalogue']) && count($this->data['detailCatalogue'])){
+        //     $session->setFlashdata('message-danger', 'Danh mục không tồn tại!');
+        //     return redirect()->to(BASE_URL);
+        // }
+        $this->data['breadcrumb'] = $this->AutoloadModel->_get_where([
+            'select' => 'tb1.lft, tb1.rgt, tb1.id, tb1.parentid,  tb2.title, tb2.canonical',
+            'table' => $this->data['module'].' as tb1',
+            'join' => [
+                [   
+                    $module_extract[0].'_translate as tb2','tb2.module = \''.$this->data['module'].'\' AND tb2.objectid = tb1.id AND tb2.language = \''.$this->currentLanguage().'\'', 'inner'
+                ]
+            ],
+            'where' => [
+                'tb1.deleted_at' => 0,
+                'tb1.publish' => 1,
+                'tb1.lft <=' => $this->data['detailCatalogue']['lft'], 
+                'tb1.rgt >=' => $this->data['detailCatalogue']['rgt'], 
+            ],
+            'order_by' => 'tb1.lft asc'
+        ], TRUE);
+        $seoPage = '';
         $page = (int)$page;
         $perpage = ($this->request->getGet('perpage')) ? $this->request->getGet('perpage') : 20;
         $keyword = $this->condition_keyword();
         $catalogue = $this->condition_catalogue($id);
+
         $config['total_rows'] = $this->AutoloadModel->_get_where([
             'select' => 'tb1.id',
             'table' => $module_extract[0].' as tb1',
@@ -36,13 +73,18 @@ class Catalogue extends FrontendController{
                 ],
             'count' => TRUE
         ]);
+        $config['base_url'] = write_url($this->data['detailCatalogue']['canonical'], FALSE, TRUE);
         if($config['total_rows'] > 0){
-            $config = pagination_config_bt(['url' => 'frontend/article/catalogue/index','perpage' => $perpage], $config);
+            $config = pagination_frontend(['url' => $config['base_url'],'perpage' => 2], $config);
             $this->pagination->initialize($config);
             $this->data['pagination'] = $this->pagination->create_links();
             $totalPage = ceil($config['total_rows']/$config['per_page']);
             $page = ($page <= 0)?1:$page;
             $page = ($page > $totalPage)?$totalPage:$page;
+            $seoPage = ($page >= 2)?(' - Trang '.$page):'';
+            if($page >= 2){
+                $this->data['canonical'] = $config['base_url'].'/trang-'.$page.HTSUFFIX;
+            }
             $page = $page - 1;
             $this->data['articleList'] = $this->AutoloadModel->_get_where([
                 'select' => 'tb1.id,tb1.viewed, tb1.image, tb3.title, tb3.canonical, tb3.meta_title, tb3.meta_description, tb3.viewed, tb3.description, tb3.content',
@@ -68,9 +110,26 @@ class Catalogue extends FrontendController{
                 'group_by' => 'tb1.id'
             ], TRUE);
         }
-        
 
-        pre($this->data['articleList']);
+        $this->data['meta_title'] = (!empty( $this->data['detailCatalogue']['meta_title'])? $this->data['detailCatalogue']['meta_title']: $this->data['detailCatalogue']['title']).$seoPage;
+        $this->data['meta_description'] = (!empty( $this->data['detailCatalogue']['meta_description'])? $this->data['detailCatalogue']['meta_description']:cutnchar(strip_tags( $this->data['detailCatalogue']['description']), 300)).$seoPage;
+        $this->data['meta_image'] = !empty( $this->data['detailCatalogue']['image'])?base_url( $this->data['detailCatalogue']['image']):'';
+
+        if(!isset($this->data['canonical']) || empty($this->data['canonical'])){
+            $this->data['canonical'] = $config['base_url'].HTSUFFIX;
+        }
+
+        $this->data['slide_banner'] = get_slide([
+            'keyword' => 'slide-banner',
+            'language' => $this->currentLanguage(),
+            'output' => 'html',
+            'type' => 'uikit',
+            'limit' => 1
+        ]);
+        $this->data['general'] = $this->general;
+
+        $this->data['template'] = 'frontend/article/catalogue/index';
+        return view('frontend/homepage/layout/home', $this->data);
 	}
 
     private function condition_keyword($keyword = ''): string{

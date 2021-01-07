@@ -1,5 +1,13 @@
 <!-- PC HEADER -->
 <!-- uk-visible-large -->
+
+<?php 
+	helper('mydatafrontend');
+	$baseController = new App\Controllers\FrontendController();
+    $language = $baseController->currentLanguage();
+	$menu_header =  menu_header($language);
+	$slide_banner =  slide($language);
+ ?>
 <header class="pc-header  uk-visible-large " >
 	<div class="hd-upper">
 		<div class="uk-container uk-container-center">
@@ -33,6 +41,13 @@
 			</div>
 		</div>
 	</div>
+
+	<section class="slide-panel">
+		<?php if(isset($slide_banner)){
+			echo $slide_banner;		
+		} ?>
+	</section>
+
 </header><!-- .header -->
 
 

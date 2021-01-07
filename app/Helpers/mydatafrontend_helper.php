@@ -55,6 +55,32 @@ if (! function_exists('get_general')){
     }
 }
 
+
+if (! function_exists('menu_header')){
+    function menu_header($lang = ''){
+        $menu_header = get_menu([
+            'keyword' => 'header_home',
+            'language' => $lang,
+            'output' => 'array'
+        ]);
+        return $menu_header;
+    }
+}
+
+if (! function_exists('slide')){
+    function slide($lang = ''){
+       $slide_banner = get_slide([
+            'keyword' => 'slide-banner',
+            'language' => $lang,
+            'output' => 'html',
+            'type' => 'uikit',
+            'limit' => 1
+        ]);
+
+        return $slide_banner;
+    }
+}
+
 if (! function_exists('get_panel')){
     function get_panel( $param = []){
         $model = new AutoloadModel();
