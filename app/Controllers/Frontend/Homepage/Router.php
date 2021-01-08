@@ -11,6 +11,12 @@ class Router extends FrontendController{
         $this->index($canonical);
     }
 
+    public function list($page = 0){
+        $page = (int)$page;
+        $router = '\App\Controllers\Frontend\Tour\ListTour::index';
+        return view_cell($router, 'page='.$page.'');
+    }
+
 
 	public function index($canonical = '', $page = 1){
 

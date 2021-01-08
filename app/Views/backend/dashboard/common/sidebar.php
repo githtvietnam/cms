@@ -46,6 +46,9 @@
             <li class="<?php echo ( $uriModule == 'attribute') ? 'active'  : '' ?>">
                 <a href="<?php echo base_url('backend/attribute/attribute/index') ?>"><i class="fa fa-folder-open-o" aria-hidden="true"></i><span class="nav-label">QL Thuộc Tính</span> </a>
             </li>
+            <li class="<?php echo ( $uriModule == 'location') ? 'active'  : '' ?>">
+                <a href="<?php echo base_url('backend/location/location/index') ?>"><i class="fa fa-folder-open-o" aria-hidden="true"></i><span class="nav-label">QL Vị trí</span> </a>
+            </li>
             <li class="<?php echo ( $uriModule == 'article') ? 'active'  : '' ?>">
                 <a href="index.html"><i class="fa fa-file"></i> <span class="nav-label"><?php echo translate('cms_lang.sidebar.sb_article', $language) ?></span> <span class="fa arrow"></span></a>
                 <ul class="nav nav-second-level">

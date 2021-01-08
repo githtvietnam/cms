@@ -8,7 +8,7 @@ use App\Libraries\Pagination;
 class FrontendController extends Controller
 {
 
-	protected $helpers = ['mystring','mydatafrontend','renderdata','myurl'];
+	protected $helpers = ['mystring','mydatafrontend','renderdata','myurl','form'];
 	public $currentTime;
 	public $AutoloadModel;
 	public $client;

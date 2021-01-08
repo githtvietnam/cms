@@ -100,6 +100,12 @@ class Tour extends BaseController{
  			return redirect()->to(BASE_URL.'backend/dashboard/dashboard/index');
 		}
 		$this->data['attribute_catalogue'] = get_attribute_catalogue($this->currentLanguage(), $this->data['module']);
+		$location = $this->location();
+		if(isset($location) && is_array($data) && count($data)){
+			foreach ($data as $key => $value) {
+				$this->data['location'][$value['id']] = $value['title'];
+			}
+		}
 		$this->data['check_code'] = $this->AutoloadModel->_get_where([
 			'select' => 'code,objectid',
 			'table' => 'id_general',
@@ -142,7 +148,11 @@ class Tour extends BaseController{
 
 		 				$this->insert_router(['method' => 'create','id' => $resultid]);
 	 					$flag = $this->create_relationship($resultid);
-
+	 					$this->insert_location([
+			 				'id' => $resultid,
+			 				'location' => $location,
+			 				'end_at' => $this->request->getPost('end_at')
+			 			]);
 			 			$this->nestedsetbie->Get('level ASC, order ASC');
 						$this->nestedsetbie->Recursive(0, $this->nestedsetbie->Set());
 						$this->nestedsetbie->Action();
@@ -167,6 +177,12 @@ class Tour extends BaseController{
 		$id = (int)$id;
 		$this->data['export_brand'] = $this->export_brand();
 		$this->data['attribute_catalogue'] = get_attribute_catalogue($this->currentLanguage(), $this->data['module']);
+		$location = $this->location();
+		if(isset($location) && is_array($location) && count($location)){
+			foreach ($location as $key => $value) {
+				$this->data['location'][$value['id']] = $value['title'];
+			}
+		}
 		$this->data[$this->data['module']] = $this->get_data_module($id);
 		if($this->data[$this->data['module']] == false){
 			$session->setFlashdata('message-danger', 'Chuyến du lịch không tồn tại!');
@@ -203,6 +219,11 @@ class Tour extends BaseController{
 			 		$flag = $this->create_relationship($id);
 					$this->version($id, 'update');
 		 			$this->insert_router(['method' => 'update','id' => $id]);
+		 			$this->insert_location([
+		 				'id' => $id,
+		 				'location' => $location,
+		 				'end_at' => $this->request->getPost('end_at')
+		 			]);
 		 			$this->nestedsetbie->Get('level ASC, order ASC');
 					$this->nestedsetbie->Recursive(0, $this->nestedsetbie->Set());
 					$this->nestedsetbie->Action();
@@ -327,6 +348,8 @@ class Tour extends BaseController{
 			'title' => validate_input($this->request->getPost('title')),
 			'start_at' => $this->request->getPost('start_at'),
 			'end_at' => $this->request->getPost('end_at'),
+			'number_days' => $this->request->getPost('number_days'),
+			'day_start' => $this->request->getPost('day_start'),
 			'canonical' => slug($this->request->getPost('canonical')),
 			'content' => base64_encode($this->request->getPost('content')),
 			'description' => base64_encode($this->request->getPost('description')),
@@ -401,6 +424,111 @@ class Tour extends BaseController{
 	 			]
 	 		]);
  		}
+ 		return true;
+	}
+
+	private function location(){
+		$data = $this->AutoloadModel->_get_where([
+			'select' => 'tb1.id,  tb1.catalogueid,  tb2.title, tb2.keyword,  tb1.userid_updated, tb1.publish, tb1.created_at, tb1.updated_at , tb2.data',
+			'table' => 'location as tb1',
+			'join' =>  [
+				[
+					'location_translate as tb2','tb1.id = tb2.objectid AND tb2.module = "location"   AND tb2.language = \''.$this->currentLanguage().'\' ','inner'
+				],
+			],
+			'where' => [
+				'tb1.deleted_at' => 0,
+				'tb1.publish' => 1
+			],
+		], TRUE);
+		
+ 		return $data;
+	}
+
+	private function insert_location($param = []){
+		$count = 0;
+		foreach ($param['location'] as $key => $value) {
+			$data = json_decode($value['data']);
+			if(isset($data) && is_array($data) && count($data)){
+				foreach ($data as $keyChild => $valChild) {
+					if($valChild == $param['id']){
+						$count++;
+					}
+				}
+			}
+		}
+
+		if($count == 0){
+			foreach ($param['location'] as $key => $value) {
+				if($value['id'] == $param['end_at']){
+					$json = json_decode($param['location'][$key]['data']);
+					if(isset($json) && is_array($json) && count($json)){
+						array_push($json, $param['id']);
+					}else{
+						$json = [
+							0 => $param['id']
+						];
+					}	
+					$this->AutoloadModel->_update([
+						'table' => 'location_translate',
+						'where' => [
+							'objectid' => $param['end_at'],
+							'module' => 'location',
+							'language' => $this->currentLanguage()
+						],
+						'data' => [
+							'data' => json_encode($json)
+						]
+					]);
+				}
+			}
+		}else{
+			foreach ($param['location'] as $key => $value) {
+				$data = json_decode($value['data']);
+				if(isset($data) && is_array($data) && count($data)){
+					foreach ($data as $keyChild => $valChild) {
+						if($valChild == $param['id']){
+							array_splice($data, $keyChild, 1);
+							$this->AutoloadModel->_update([
+								'table' => 'location_translate',
+								'where' => [
+									'objectid' => $value['id'],
+									'module' => 'location',
+									'language' => $this->currentLanguage()
+								],
+								'data' => [
+									'data' => json_encode($data)
+								]
+							]);
+						}
+					}
+				}
+			}
+			foreach ($param['location'] as $key => $value) {
+				if($value['id'] == $param['end_at']){
+					$json = json_decode($param['location'][$key]['data']);
+					if(isset($json) && is_array($json) && count($json)){
+						array_push($json, $param['id']);
+					}else{
+						$json = [
+							0 => $param['id']
+						];
+					}	
+					$this->AutoloadModel->_update([
+						'table' => 'location_translate',
+						'where' => [
+							'objectid' => $param['end_at'],
+							'module' => 'location',
+							'language' => $this->currentLanguage()
+						],
+						'data' => [
+							'data' => json_encode($json)
+						]
+					]);
+				}
+			}
+		}
+		
  		return true;
 	}
 
@@ -508,7 +636,7 @@ class Tour extends BaseController{
 
 	private function get_data_module($id = 0){
 		$flag = $this->AutoloadModel->_get_where([
-			'select' => 'tb1.id,tb1.time_end, tb1.catalogue,tb1.catalogueid,  tb1.price_promotion, tb1.price, tb1.tourid, tb1.id, tb2.title, tb2.objectid, tb2.sub_title, tb2.sub_content, tb2.description, tb2.canonical,  tb2.content, tb2.meta_title, tb2.meta_description, tb1.album, tb1.publish, tb2.start_at, tb2.end_at',
+			'select' => 'tb1.id,tb1.time_end, tb1.catalogue,tb1.catalogueid,  tb1.price_promotion, tb1.price, tb1.tourid, tb1.id, tb2.title, tb2.objectid, tb2.sub_title, tb2.sub_content, tb2.description, tb2.canonical,  tb2.content, tb2.meta_title, tb2.meta_description,tb2.day_start, tb2.number_days, tb1.album, tb1.publish, tb2.start_at, tb2.end_at',
 			'table' => $this->data['module'].' as tb1',
 			'join' =>  [
 					[
@@ -599,6 +727,8 @@ class Tour extends BaseController{
 	private function validation(){
 		$validate = [
 			'title' => 'required',
+			'number_days' => 'required',
+			'day_start' => 'required',
 			'price' => 'required',
 			'tourid' => 'required|check_id['.$this->data['module'].']',
 			'canonical' => 'required|check_canonical['.$this->data['module'].']',
@@ -609,6 +739,12 @@ class Tour extends BaseController{
 		$errorValidate = [
 			'title' => [
 				'required' => 'Bạn phải nhập tên Chuyến du lịch!'
+			],
+			'number_days' => [
+				'required' => 'Bạn phải nhập số ngày Tour!'
+			],
+			'day_start' => [
+				'required' => 'Bạn phải nhập Ngày khởi hành!'
 			],
 			'tourid' => [
 				'required' => 'Bạn phải nhập mã Chuyến du lịch!',

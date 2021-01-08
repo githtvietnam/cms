@@ -37,6 +37,7 @@
 
 		<link href="public/frontend/resources/fonts/font-awesome-4.7.0/css/font-awesome.min.css" rel="stylesheet" />
 		<link href="public/frontend/resources/uikit/css/uikit.modify.css" rel="stylesheet" />
+		<link href="public/frontend/resources/plugins/select2/dist/css/select2.min.css" rel="stylesheet" />
 		<link href="public/frontend/resources/library/css/general.css" rel="stylesheet" />
 		<link href="public/frontend/resources/library/css/carousel.css" rel="stylesheet" />
 		<?php echo view('frontend/homepage/common/style', $widget) ?>
@@ -66,6 +67,9 @@
 
 		<script src="public/frontend/resources/plugins/OwlCarousel2-2.3.4/dist/owl.carousel.min.js"></script>
 		<script src="public/frontend/resources/uikit/js/components/slideshow.min.js"></script>
+		<script src="public/frontend/resources/plugins/select2/dist/js/select2.min.js"></script>
+		<script src="public/frontend/resources/uikit/js/components/accordion.min.js"></script>
+
 		<script src="public/frontend/resources/function.js"></script>
 		<script src="public/frontend/resources/plugins.js"></script>
 	</body>

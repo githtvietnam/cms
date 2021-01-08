@@ -1,3 +1,21 @@
+$(document).ready(function(){
+	if($('.select2').length){
+		$('.select2').select2();
+	}
+
+	$(document).on('change','.va-choose-tour input[type="radio"]', function(){
+		let _this = $(this)
+		let val = _this.val()
+		let form_URL = 'frontend/ajax/dashboard/get_select2';
+		$.post(form_URL, {
+			id : val
+		},
+		function(data){
+			let json = JSON.parse(data);
+			$('.check_end').html(json.html);
+		});	
+	})
+});
 	(function($) {
 	    "use strict";
 	    var HT = {};
@@ -6,13 +24,16 @@
 
 	    var $window = $(window),
 	        $document = $(document),
-	        $btn_modal = $('.btn-modal'),
 	        $slide_item = $('.slide-item'),
 			$btn_modal = $('.btn-modal-general'),
 	        $num = $('.num'),
 	        owl = $('.owl-carousel'),
 	        $btn_tab = $('.btn-tab'),
+	        $active_menu = $('.hd-menu-item'),
+	        $num = $('.num'),
+	        $document = $(document),
 	        $js_dropdown = $('.js-dropdown');
+
 	    // Check if element exists
 	    $.fn.elExists = function() {
 	        return this.length > 0;
@@ -74,22 +95,82 @@
 	        }
 	    }
 
+	    HT.tabs = function() {
+            $('ul.tabs li').click(function() {
+                var tab_id = $(this).attr('data-tab');
+
+                $('ul.tabs li').removeClass('current');
+                $('.tab-content').removeClass('current');
+
+                $(this).addClass('current');
+                $("#" + tab_id).addClass('current');
+            })
+            $('ul.tabs-detail li').click(function() {
+                var tab_id = $(this).attr('data-tab');
+
+                $('ul.tabs-detail li').removeClass('current');
+                $('.tab-content-detail').removeClass('current');
+
+                $(this).addClass('current');
+                $("#" + tab_id).addClass('current');
+            })
+        }
+        // rating
+
+    HT.vote = function() {
+        $(document).ready(function() {
+
+            //Action on hover
+
+            $('#stars li').on('mouseover', function() {
+                var onStar = parseInt($(this).data('value'), 10);
+
+
+                $(this).parent().children('li.star').each(function(e) {
+                    if (e < onStar) {
+                        $(this).addClass('hover');
+                    } else {
+                        $(this).removeClass('hover');
+                    }
+                });
+
+            }).on('mouseout', function() {
+                $(this).parent().children('li.star').each(function(e) {
+                    $(this).removeClass('hover');
+                });
+            });
+
+            // Action on click
+
+            $('#stars li').on('click', function() {
+                var onStar = parseInt($(this).data('value'), 10);
+                var stars = $(this).parent().children('li.star');
+                var i;
+                for (i = 0; i < stars.length; i++) {
+                    $(stars[i]).removeClass('selected');
+                }
+
+                for (i = 0; i < onStar; i++) {
+                    $(stars[i]).addClass('selected');
+                }
+            });
+        });
+    }
+
+    // Nice select
+
+    HT.niceSelect = function() {
+        $('select').niceSelect();
+    }
 
 	    // Document ready functions
 	    $document.on('ready', function() {
-	        // HT.lazyLoadding(); 
-	        HT.countUp();
-	        HT.carousel();
+	    	HT.tabs(),
+            HT.vote(), 
+            HT.niceSelect(),
+	        HT.countUp(),
+	        HT.carousel(),
 	        HT.modal_review();
-	        // HT.tagClick();
-	        // HT.textMove();
-	        // HT.dropdown();
-	        // HT.jRange();
-	        // HT.input_jRange();
-	        // HT.twoSlider();
-	        // HT.dispayView();
-	        // HT.flexSlide();
-	        // HT.filter();
 	    });
 
 	})(jQuery);

@@ -52,7 +52,7 @@ class Catalogue extends FrontendController{
         ], TRUE);
         $seoPage = '';
         $page = (int)$page;
-        $perpage = ($this->request->getGet('perpage')) ? $this->request->getGet('perpage') : 20;
+        $perpage = ($this->request->getGet('perpage')) ? $this->request->getGet('perpage') : 1;
         $keyword = $this->condition_keyword();
         $catalogue = $this->condition_catalogue($id);
 
@@ -75,13 +75,12 @@ class Catalogue extends FrontendController{
         ]);
         $config['base_url'] = write_url($this->data['detailCatalogue']['canonical'], FALSE, TRUE);
         if($config['total_rows'] > 0){
-            $config = pagination_frontend(['url' => $config['base_url'],'perpage' => 1], $config);
+            $config = pagination_frontend(['url' => $config['base_url'],'perpage' => $perpage], $config);
             $this->pagination->initialize($config);
             $this->data['pagination'] = $this->pagination->create_links();
             $totalPage = ceil($config['total_rows']/$config['per_page']);
             $page = ($page <= 0)?1:$page;
             $page = ($page > $totalPage)?$totalPage:$page;
-            $seoPage = ($page >= 2)?(' - Trang '.$page):'';
             if($page >= 2){
                 $this->data['canonical'] = $config['base_url'].'/trang-'.$page.HTSUFFIX;
             }
@@ -110,7 +109,6 @@ class Catalogue extends FrontendController{
                 'group_by' => 'tb1.id'
             ], TRUE);
         }
-
         $this->data['meta_title'] = (!empty( $this->data['detailCatalogue']['meta_title'])? $this->data['detailCatalogue']['meta_title']: $this->data['detailCatalogue']['title']).$seoPage;
         $this->data['meta_description'] = (!empty( $this->data['detailCatalogue']['meta_description'])? $this->data['detailCatalogue']['meta_description']:cutnchar(strip_tags( $this->data['detailCatalogue']['description']), 300)).$seoPage;
         $this->data['meta_image'] = !empty( $this->data['detailCatalogue']['image'])?base_url( $this->data['detailCatalogue']['image']):'';

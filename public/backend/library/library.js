@@ -111,12 +111,7 @@ $(document).ready(function(){
 						value: catalogue, module: module, select: select, join: join,},
 						function(data){
 							let json = JSON.parse(data);
-							if(json.items!='undefined' && json.items.length){
-								for(let i = 0; i< json.items.length; i++){
-									var option = new Option(json.items[i].text, json.items[i].id, true, true);
-									_this.append(option).trigger('change');
-								}
-							}
+							
 						});
 				}
 			}, 10);

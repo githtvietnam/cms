@@ -33,7 +33,7 @@ if (! function_exists('pagination_frontend')){
 	function pagination_frontend(array $param = [],array $config = []){
 
 		$config['base_url'] = base_url($param['url']);
-		$config['suffix'] = (!empty($_SERVER['QUERY_STRING'])?('?'.$_SERVER['QUERY_STRING']):'');
+		$config['suffix'] = (!empty($_SERVER['QUERY_STRING'])?('?'.$_SERVER['QUERY_STRING']): HTSUFFIX);
 		$config['first_url'] = $config['base_url'].$config['suffix'];
 		$config['per_page'] = $param['perpage'];
 		$config['uri_segment'] = 2;

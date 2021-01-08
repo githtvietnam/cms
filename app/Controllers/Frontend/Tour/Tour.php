@@ -14,12 +14,11 @@ class Tour extends FrontendController{
     public function index($id = 0, $page = 1){
         helper(['mypagination']);
         $id = (int)$id;
-
         $session = session();
         $module_extract = explode("_", $this->data['module']);
         $keyword = $this->condition_keyword();
         $this->data['object'] = $this->AutoloadModel->_get_where([
-            'select' => 'tb1.id,tb1.price, tb1.price_promotion,tb1.catalogueid, tb1.viewed, tb1.album, tb1.image, tb2.title, tb2.canonical, tb2.meta_title,tb2.attribute,tb2.sub_title,tb2.sub_content, tb2.meta_description,  tb2.description, tb2.content, tb3.name as start, tb4.name as end',
+            'select' => 'tb1.id,tb1.price, tb1.price_promotion,tb1.catalogueid, tb1.viewed, tb1.album, tb1.image, tb2.title, tb2.canonical, tb2.meta_title,tb2.attribute,tb2.sub_title,tb2.sub_content, tb1.tourid,tb2.meta_description, tb2.day_start,tb2.number_days, tb2.description, tb2.content, tb3.name as start, tb4.title as end',
             'table' => $module_extract[0].' as tb1',
             'where' => [
                 'tb1.deleted_at' => 0,
@@ -34,7 +33,7 @@ class Tour extends FrontendController{
                     'vn_province as tb3','tb2.start_at = tb3.provinceid','inner'
                 ],
                 [
-                    'vn_province as tb4','tb2.end_at = tb4.provinceid','inner'
+                    'location_translate as tb4','tb2.end_at = tb4.objectid AND tb4.module="location" AND tb4.language=\''.$this->currentLanguage().'\'','inner'
                 ]
             ],
         ]);
@@ -45,6 +44,8 @@ class Tour extends FrontendController{
         $this->data['object']['album'] = json_decode($this->data['object']['album']);
         $this->data['object']['description'] = validate_input(base64_decode($this->data['object']['description']));
         $this->data['object']['content'] = validate_input(base64_decode($this->data['object']['content']));
+        $this->data['object']['sub_content'] = json_decode(base64_decode($this->data['object']['sub_content']));
+        $this->data['object']['sub_title'] = json_decode(base64_decode($this->data['object']['sub_title']));
 
         $this->data['detailCatalogue'] = $this->AutoloadModel->_get_where([
             'select' => ' tb1.id,tb1.lft, tb1.rgt, tb1.level, tb1.parentid, tb1.image,  tb2.title, tb2.canonical,  tb2.content, tb2.description, tb2.meta_title, tb2.meta_description',
@@ -95,7 +96,7 @@ class Tour extends FrontendController{
 
         $this->data['general'] = $this->general;
 
-        $this->data['template'] = 'frontend/tour/catalogue/index';
+        $this->data['template'] = 'frontend/tour/tour/index';
         return view('frontend/homepage/layout/home', $this->data);
     }
 
@@ -109,7 +110,6 @@ class Tour extends FrontendController{
 
     private function set_cookie($id = 0, $param = []){
         $idList = [];
-        pre($param);
         if(!isset($_COOKIE['COUNT_'.$this->data['module']]) || empty($_COOKIE['COUNT_'.$this->data['module']])){
             array_push($idList, $id);
             setcookie('COUNT_'.$this->data['module'], json_encode($idList), time() + 1*24*3600, "/");
