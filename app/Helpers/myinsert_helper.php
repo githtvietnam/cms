@@ -115,7 +115,7 @@ if (! function_exists('insert_attribute')){
 				$data[$param['attribute_catalogue'][$keyChild]] = $param['attribute'][$keyChild];
 			}
 		}
-
+		
 		// Explode color -> array
 		
 		foreach ($data as $key => $value) {

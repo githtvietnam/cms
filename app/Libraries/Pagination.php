@@ -70,7 +70,7 @@ class Pagination {
 	 *
 	 * @var	string
 	 */
-	protected $first_link = '&lsaquo; First';
+	protected $first_link = '&lsaquo;&lsaquo; ';
 
 	/**
 	 * Next link
@@ -91,7 +91,7 @@ class Pagination {
 	 *
 	 * @var	string
 	 */
-	protected $last_link = 'Last &rsaquo;';
+	protected $last_link = ' &rsaquo;&rsaquo;';
 
 	/**
 	 * URI Segment

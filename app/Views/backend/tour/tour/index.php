@@ -162,15 +162,15 @@
                                 </td>
                                 <td class="text-center update_price td-status" >
                                     <div class="view_price text-success">
-                                        <?php echo ($val['price'] != '' || $val['price'] == 0) ? $val['price'] : '0' ?>
+                                        <?php echo ($val['price'] != '' || $val['price'] == 0) ? number_format(check_isset($val['price']),0,',','.') : '0' ?>
                                     </div>
-                                    <input type="text" name="price" value="<?php echo ($val['price'] != '' || $val['price'] == 0) ? $val['price'] : '0' ?>" data-id="<?php echo $val['objectid'] ?>" data-field="price" class="int index_update_price form-control" style="text-align: right;display:none; padding: 6px 3px;">
+                                    <input type="text" name="price" value="<?php echo ($val['price'] != '' || $val['price'] == 0) ? number_format(check_isset($val['price']),0,',','.') : '0' ?>" data-id="<?php echo $val['objectid'] ?>" data-field="price" class="int index_update_price form-control" style="text-align: right;display:none; padding: 6px 3px;">
                                 </td>
                                 <td class="text-center update_price text-primary">
                                     <div class="view_price text-success">
-                                        <?php echo (($val['price_promotion'] != '' || $val['price_promotion'] != 0) ? $val['price_promotion'] : '0') ?>
+                                        <?php echo (($val['price_promotion'] != '' || $val['price_promotion'] != 0) ? number_format(check_isset($val['price_promotion']),0,',','.') : '0') ?>
                                     </div>
-                                    <input type="text" name="price_promotion" value="<?php echo (($val['price_promotion'] != '' || $val['price_promotion'] != 0) ? $val['price_promotion'] : '0') ?>" data-id="<?php echo $val['objectid'] ?>" data-field="price_promotion" class="int index_update_price form-control" style="text-align: right;display:none; padding: 6px 3px;">
+                                    <input type="text" name="price_promotion" value="<?php echo (($val['price_promotion'] != '' || $val['price_promotion'] != 0) ? number_format(check_isset($val['price_promotion']),0,',','.') : '0') ?>" data-id="<?php echo $val['objectid'] ?>" data-field="price_promotion" class="int index_update_price form-control" style="text-align: right;display:none; padding: 6px 3px;">
                                 </td>
                                 <td class="text-center text-primary">
                                     <?php echo form_input('order['.$val['id'].']', $val['order'], 'data-module="'.$module.'" data-id="'.$val['id'].'"  class="form-control sort-order" placeholder="Vị trí" style="width:50px;text-align:right;"');?>

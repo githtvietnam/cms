@@ -18,7 +18,7 @@
 					</div>
 					<div class="ibox-content">
 						<div class="row mb15">
-							<div class="col-lg-6">
+							<div class="col-lg-4">
 								<div class="form-row">
 									<label class="control-label text-left">
 										<span>Tiêu đề danh mục <b class="text-danger">(*)</b></span>
@@ -26,12 +26,27 @@
 									<?php echo form_input('title', validate_input(set_value('title', (isset($location_catalogue['title'])) ? $location_catalogue['title'] : '')), 'class="form-control title" placeholder="" id="title" autocomplete="off"'); ?>
 								</div>
 							</div>
-							<div class="col-lg-6">
+							<div class="col-lg-4">
 								<div class="form-row">
 									<label class="control-label text-left">
-										<span>Từ khóa danh mục</span>
+										<span>Từ khóa danh mục <b class="text-danger">(*)</b></span>
 									</label>
 									<?php echo form_input('keyword', validate_input(set_value('keyword', (isset($location_catalogue['keyword'])) ? $location_catalogue['keyword'] : '')), 'class="form-control keyword" placeholder="" id="keyword" autocomplete="off"'); ?>
+								</div>
+							</div>
+							<div class="col-lg-4">
+								<div class="form-row">
+									<label class="control-label text-left">
+										<span>Thuộc tính vị trí <b class="text-danger">(*)</b></span>
+									</label>
+									<?php 
+										$attribute = [
+											0 => '-- Chọn thuộc tính vị trí --',
+											'start' => 'Điểm khởi hành',
+											'end' => 'Điểm kết thúc'
+										];
+									 ?>
+									<?php echo form_dropdown('attribute', $attribute, set_value('attribute', (isset($location_catalogue['attribute'])) ? $location_catalogue['attribute'] : ''), ' class="form-control m-b select2 "');?>
 								</div>
 							</div>
 						</div>

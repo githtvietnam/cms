@@ -32,6 +32,7 @@
 										<span>Từ khóa vị trí</span>
 									</label>
 									<?php echo form_input('keyword', validate_input(set_value('keyword', (isset($location['keyword'])) ? $location['keyword'] : '')), 'class="form-control keyword" placeholder="" id="keyword" autocomplete="off"'); ?>
+									<?php echo form_hidden('keyword_original', validate_input(set_value('keyword_original', (isset($location['keyword'])) ? $location['keyword'] : '')), 'class="form-control keyword" placeholder="" id="keyword" autocomplete="off"'); ?>
 								</div>
 							</div>
 							

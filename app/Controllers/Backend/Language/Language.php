@@ -1,4 +1,4 @@
-<?php 
+<?php
 namespace App\Controllers\Backend\Language;
 use App\Controllers\BaseController;
 use App\Libraries\Nestedsetbie;
@@ -6,8 +6,8 @@ use App\Libraries\Nestedsetbie;
 class Language extends BaseController{
 	protected $data;
 	public $nestedsetbie;
-	
-	
+
+
 	public function __construct(){
 		$this->data = [];
 		$this->data['module'] = 'language';
@@ -73,6 +73,7 @@ class Language extends BaseController{
 			$validate = $this->validation();
 			if ($this->validate($validate['validate'], $validate['errorValidate'])){
 		 		$insert = $this->store(['method' => 'create']);
+
 
 		 		$resultid = $this->AutoloadModel->_insert([
 		 			'table' => $this->data['module'],
@@ -151,7 +152,7 @@ class Language extends BaseController{
 
 		if($this->request->getPost('delete')){
 			$_id = $this->request->getPost('id');
-		
+
 			$flag = $this->AutoloadModel->_update([
 				'table' => $this->data['module'],
 				'data' => ['deleted_at' => 1],
@@ -207,10 +208,10 @@ class Language extends BaseController{
  			'image' => $this->request->getPost('image'),
  			'publish' => $this->request->getPost('publish'),
  		];
- 		if($param['method'] == 'create' && isset($param['method'])){	
+ 		if($param['method'] == 'create' && isset($param['method'])){
  			$store['created_at'] = $this->currentTime;
  			$store['userid_created'] = $this->auth['id'];
- 			
+
  		}else{
  			$store['updated_at'] = $this->currentTime;
  			$store['userid_updated'] = $this->auth['id'];
@@ -221,7 +222,7 @@ class Language extends BaseController{
 	private function validation(){
 		$validate = [
 			'title' => 'required',
-			'canonical' => 'required|check_canonical['.$this->data['module'].']'
+			// 'canonical' => 'required|check_canonical['.$this->data['module'].']'
 		];
 		$errorValidate = [
 			'title' => [

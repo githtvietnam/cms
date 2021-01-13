@@ -90,7 +90,7 @@ class Article extends FrontendController{
 
         $this->data['general'] = $this->general;
 
-        $this->data['template'] = 'frontend/article/catalogue/index';
+        $this->data['template'] = 'frontend/article/article/index';
         return view('frontend/homepage/layout/home', $this->data);
     }
 
@@ -104,7 +104,6 @@ class Article extends FrontendController{
 
     private function set_cookie($id = 0, $param = []){
         $idList = [];
-        pre($param);
         if(!isset($_COOKIE['COUNT_'.$this->data['module']]) || empty($_COOKIE['COUNT_'.$this->data['module']])){
             array_push($idList, $id);
             setcookie('COUNT_'.$this->data['module'], json_encode($idList), time() + 1*24*3600, "/");

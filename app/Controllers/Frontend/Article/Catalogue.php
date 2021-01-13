@@ -52,7 +52,7 @@ class Catalogue extends FrontendController{
         ], TRUE);
         $seoPage = '';
         $page = (int)$page;
-        $perpage = ($this->request->getGet('perpage')) ? $this->request->getGet('perpage') : 20;
+        $perpage = ($this->request->getGet('perpage')) ? $this->request->getGet('perpage') : 10;
         $keyword = $this->condition_keyword();
         $catalogue = $this->condition_catalogue($id);
 
@@ -75,7 +75,7 @@ class Catalogue extends FrontendController{
         ]);
         $config['base_url'] = write_url($this->data['detailCatalogue']['canonical'], FALSE, TRUE);
         if($config['total_rows'] > 0){
-            $config = pagination_frontend(['url' => $config['base_url'],'perpage' => 2], $config);
+            $config = pagination_frontend(['url' => $config['base_url'],'perpage' => $perpage], $config);
             $this->pagination->initialize($config);
             $this->data['pagination'] = $this->pagination->create_links();
             $totalPage = ceil($config['total_rows']/$config['per_page']);
@@ -109,6 +109,7 @@ class Catalogue extends FrontendController{
                 'order_by'=> 'tb1.id desc',
                 'group_by' => 'tb1.id'
             ], TRUE);
+            // pre($this->data['articleList']);
         }
 
         $this->data['meta_title'] = (!empty( $this->data['detailCatalogue']['meta_title'])? $this->data['detailCatalogue']['meta_title']: $this->data['detailCatalogue']['title']).$seoPage;

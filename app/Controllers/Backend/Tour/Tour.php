@@ -1,4 +1,4 @@
-<?php 
+<?php
 namespace App\Controllers\Backend\Tour;
 use App\Controllers\BaseController;
 use App\Libraries\Nestedsetbie;
@@ -6,8 +6,8 @@ use App\Libraries\Nestedsetbie;
 class Tour extends BaseController{
 	protected $data;
 	public $nestedsetbie;
-	
-	
+
+
 	public function __construct(){
 		$this->data = [];
 		$this->data['module'] = 'tour';
@@ -76,7 +76,7 @@ class Tour extends BaseController{
 					[
 						'tour_translate as tb4','tb1.catalogueid = tb4.objectid AND tb4.module = "tour_catalogue" AND tb3.language = \''.$this->currentLanguage().'\' ','inner'
 					],
-					
+
 				],
 				'limit' => $config['per_page'],
 				'start' => $page * $config['per_page'],
@@ -100,12 +100,9 @@ class Tour extends BaseController{
  			return redirect()->to(BASE_URL.'backend/dashboard/dashboard/index');
 		}
 		$this->data['attribute_catalogue'] = get_attribute_catalogue($this->currentLanguage(), $this->data['module']);
-		$location = $this->location();
-		if(isset($location) && is_array($data) && count($data)){
-			foreach ($data as $key => $value) {
-				$this->data['location'][$value['id']] = $value['title'];
-			}
-		}
+		$this->data['location_end'] = $this->location('end')['select'];
+		$this->data['location_start'] = $this->location('start')['select'];
+
 		$this->data['check_code'] = $this->AutoloadModel->_get_where([
 			'select' => 'code,objectid',
 			'table' => 'id_general',
@@ -136,7 +133,7 @@ class Tour extends BaseController{
 						$this->version($resultid, 'create');
 						$this->AutoloadModel->_insert([
 							'table' => 'tour_translate',
-							'data' => $storeLanguage 
+							'data' => $storeLanguage
 						]);
 				 		$this->AutoloadModel->_update([
 	 						'table' => 'id_general',
@@ -149,10 +146,11 @@ class Tour extends BaseController{
 		 				$this->insert_router(['method' => 'create','id' => $resultid]);
 	 					$flag = $this->create_relationship($resultid);
 	 					$this->insert_location([
-			 				'id' => $resultid,
-			 				'location' => $location,
-			 				'end_at' => $this->request->getPost('end_at')
+			 				'id' => $id,
+			 				'end' => $this->request->getPost('end_at'),
+			 				'start' => $this->request->getPost('start_at'),
 			 			]);
+			 			$this->attribute_relationship($resultid);
 			 			$this->nestedsetbie->Get('level ASC, order ASC');
 						$this->nestedsetbie->Recursive(0, $this->nestedsetbie->Set());
 						$this->nestedsetbie->Action();
@@ -177,12 +175,8 @@ class Tour extends BaseController{
 		$id = (int)$id;
 		$this->data['export_brand'] = $this->export_brand();
 		$this->data['attribute_catalogue'] = get_attribute_catalogue($this->currentLanguage(), $this->data['module']);
-		$location = $this->location();
-		if(isset($location) && is_array($location) && count($location)){
-			foreach ($location as $key => $value) {
-				$this->data['location'][$value['id']] = $value['title'];
-			}
-		}
+		$this->data['location_end'] = $this->location('end')['select'];
+		$this->data['location_start'] = $this->location('start')['select'];
 		$this->data[$this->data['module']] = $this->get_data_module($id);
 		if($this->data[$this->data['module']] == false){
 			$session->setFlashdata('message-danger', 'Chuyến du lịch không tồn tại!');
@@ -190,7 +184,6 @@ class Tour extends BaseController{
 		}
 		$this->data['version'] = $this->get_data_version($id);
 		$this->data['wholesale_list'] = $this->get_list_wholesale($id);
-		
 
 		if($this->request->getMethod() == 'post'){
 			$validate = $this->validation();
@@ -221,9 +214,10 @@ class Tour extends BaseController{
 		 			$this->insert_router(['method' => 'update','id' => $id]);
 		 			$this->insert_location([
 		 				'id' => $id,
-		 				'location' => $location,
-		 				'end_at' => $this->request->getPost('end_at')
+		 				'end' => $this->request->getPost('end_at'),
+		 				'start' => $this->request->getPost('start_at'),
 		 			]);
+		 			$this->attribute_relationship($id);
 		 			$this->nestedsetbie->Get('level ASC, order ASC');
 					$this->nestedsetbie->Recursive(0, $this->nestedsetbie->Set());
 					$this->nestedsetbie->Action();
@@ -236,7 +230,7 @@ class Tour extends BaseController{
 	        	$this->data['validate'] = $this->validator->listErrors();
 	        }
 		}
-		
+
 		$this->data['fixWrapper'] = 'fix-wrapper';
 		$this->data['dropdown'] = $this->nestedsetbie->dropdown();
 		$this->data['method'] = 'update';
@@ -252,11 +246,11 @@ class Tour extends BaseController{
 			$session->setFlashdata('message-danger', 'Chuyến du lịch không tồn tại!');
  			return redirect()->to(BASE_URL.'backend/tour/tour/index');
 		}
-		
+
 
 		if($this->request->getPost('delete')){
 			$_id = $this->request->getPost('id');
-		
+
 			$flag = $this->AutoloadModel->_update([
 				'table' => $this->data['module'],
 				'data' => ['deleted_at' => 1],
@@ -379,6 +373,12 @@ class Tour extends BaseController{
 			$attributeid = array_values($attributeid);
 		}
 
+		$price = $this->request->getPost('price');
+		$price = str_replace('.', '', $price);
+		$price = (float)$price;
+		$price_promotion = $this->request->getPost('price_promotion');
+		$price_promotion = str_replace('.', '', $price_promotion);
+		$price_promotion = (float)$price_promotion;
 		$store = [
  			'catalogueid' => (int)$this->request->getPost('catalogueid'),
  			'catalogue' => json_encode($catalogue),
@@ -386,31 +386,31 @@ class Tour extends BaseController{
  			'time_end' => gettime($this->request->getPost('time_end'), 'datetime'),
  			'album' => json_encode($this->request->getPost('album'), TRUE),
  			'publish' => $this->request->getPost('publish'),
- 			'price' => $this->request->getPost('price'),
- 			'price_promotion' => $this->request->getPost('promotion_price'),
+ 			'price' => $price,
+ 			'price_promotion' => $price_promotion,
  		];
- 		if($param['method'] == 'create' && isset($param['method'])){	
+ 		if($param['method'] == 'create' && isset($param['method'])){
  			$store['created_at'] = $this->currentTime;
  			$store['userid_created'] = $this->auth['id'];
- 			
+
  		}else{
  			$store['updated_at'] = $this->currentTime;
  			$store['userid_updated'] = $this->auth['id'];
  		}
  		return $store;
 	}
-	
+
 	private function insert_router($param = []){
 		helper(['text']);
 		$view = view_cells($this->data['module']);
 		$data = [
-			'canonical' => $this->request->getPost('canonical'),  
+			'canonical' => $this->request->getPost('canonical'),
 			'module' => $this->data['module'],
-			'objectid' => $param['id'],  
-			'language' => $this->currentLanguage(),  
+			'objectid' => $param['id'],
+			'language' => $this->currentLanguage(),
 			'view' => $view
 		];
- 		if($param['method'] == 'create' && isset($param['method'])){	
+ 		if($param['method'] == 'create' && isset($param['method'])){
  			$insertRouter = $this->AutoloadModel->_insert([
 	 			'table' => 'router',
 	 			'data' => $data,
@@ -427,13 +427,13 @@ class Tour extends BaseController{
  		return true;
 	}
 
-	private function location(){
+	private function location($attr = ''){
 		$data = $this->AutoloadModel->_get_where([
-			'select' => 'tb1.id,  tb1.catalogueid,  tb2.title, tb2.keyword,  tb1.userid_updated, tb1.publish, tb1.created_at, tb1.updated_at , tb2.data',
+			'select' => 'tb1.id,  tb1.catalogueid,  tb2.title, tb2.keyword,  tb1.userid_updated, tb1.publish, tb1.created_at, tb1.updated_at ',
 			'table' => 'location as tb1',
 			'join' =>  [
 				[
-					'location_translate as tb2','tb1.id = tb2.objectid AND tb2.module = "location"   AND tb2.language = \''.$this->currentLanguage().'\' ','inner'
+					'location_translate as tb2','tb1.id = tb2.objectid AND tb2.module = "location"   AND tb2.language = \''.$this->currentLanguage().'\'AND tb2.attribute = \''.$attr.'\' ','inner'
 				],
 			],
 			'where' => [
@@ -441,94 +441,66 @@ class Tour extends BaseController{
 				'tb1.publish' => 1
 			],
 		], TRUE);
-		
- 		return $data;
+		$flag = [
+			0 => (($attr == 'start') ? 'Chọn điểm khởi hành' : 'Chọn điểm kết thúc')
+		];
+
+		if(isset($data) && is_array($data) && count($data)){
+			foreach ($data as $key => $value) {
+				$array[$value['id']] = $value['title'];
+			}
+		}
+		$flag = $flag+$array;
+
+
+ 		return [
+ 			'select' => $flag,
+ 			'array' => $data
+ 		];
 	}
 
 	private function insert_location($param = []){
-		$count = 0;
-		foreach ($param['location'] as $key => $value) {
-			$data = json_decode($value['data']);
-			if(isset($data) && is_array($data) && count($data)){
-				foreach ($data as $keyChild => $valChild) {
-					if($valChild == $param['id']){
-						$count++;
-					}
-				}
-			}
+		$this->AutoloadModel->_delete([
+			'table' => 'location_relationship',
+			'where' => [
+				'objectid' => $param['id'],
+			]
+		]);
+		$insert[] = [
+			'objectid' => $param['id'],
+			'catalogueid' => $param['end'],
+			'attribute' => 'end',
+			'module' => 'location'
+		];
+		$insert[] = [
+			'objectid' => $param['id'],
+			'catalogueid' => $param['start'],
+			'attribute' => 'start',
+			'module' => 'location'
+		];
+		foreach ($insert as $key => $value) {
+			$select = $this->AutoloadModel->_get_where([
+				'select' => 'tb1.catalogueid, tb1.id',
+				'table' => 'location as tb1',
+				'where' => [
+					'tb1.id' => $value['catalogueid'],
+					'tb1.publish' => 1,
+					'tb1.deleted_at' => 0
+				]
+			]);
+			$insert[] = [
+				'objectid' => $param['id'],
+				'catalogueid' => $select['catalogueid'],
+				'attribute' => $value['attribute'],
+				'module' => 'location_catalogue'
+			];
 		}
 
-		if($count == 0){
-			foreach ($param['location'] as $key => $value) {
-				if($value['id'] == $param['end_at']){
-					$json = json_decode($param['location'][$key]['data']);
-					if(isset($json) && is_array($json) && count($json)){
-						array_push($json, $param['id']);
-					}else{
-						$json = [
-							0 => $param['id']
-						];
-					}	
-					$this->AutoloadModel->_update([
-						'table' => 'location_translate',
-						'where' => [
-							'objectid' => $param['end_at'],
-							'module' => 'location',
-							'language' => $this->currentLanguage()
-						],
-						'data' => [
-							'data' => json_encode($json)
-						]
-					]);
-				}
-			}
-		}else{
-			foreach ($param['location'] as $key => $value) {
-				$data = json_decode($value['data']);
-				if(isset($data) && is_array($data) && count($data)){
-					foreach ($data as $keyChild => $valChild) {
-						if($valChild == $param['id']){
-							array_splice($data, $keyChild, 1);
-							$this->AutoloadModel->_update([
-								'table' => 'location_translate',
-								'where' => [
-									'objectid' => $value['id'],
-									'module' => 'location',
-									'language' => $this->currentLanguage()
-								],
-								'data' => [
-									'data' => json_encode($data)
-								]
-							]);
-						}
-					}
-				}
-			}
-			foreach ($param['location'] as $key => $value) {
-				if($value['id'] == $param['end_at']){
-					$json = json_decode($param['location'][$key]['data']);
-					if(isset($json) && is_array($json) && count($json)){
-						array_push($json, $param['id']);
-					}else{
-						$json = [
-							0 => $param['id']
-						];
-					}	
-					$this->AutoloadModel->_update([
-						'table' => 'location_translate',
-						'where' => [
-							'objectid' => $param['end_at'],
-							'module' => 'location',
-							'language' => $this->currentLanguage()
-						],
-						'data' => [
-							'data' => json_encode($json)
-						]
-					]);
-				}
-			}
-		}
-		
+		$this->AutoloadModel->_create_batch([
+			'table' => 'location_relationship',
+			'data' => $insert
+		]);
+
  		return true;
 	}
 
@@ -539,14 +511,14 @@ class Tour extends BaseController{
 			'where' => ['publish' => 1,'deleted_at' => 0,'canonical !=' => $this->currentLanguage()]
 		], TRUE);
 
-		
+
 		$select = '';
 		$i = 3;
 		if(isset($languageList) && is_array($languageList) && count($languageList)){
 			foreach($languageList as $key => $val){
 				$select = $select.'(SELECT COUNT(objectid) FROM tour_translate WHERE tour_translate.objectid = tb1.id AND tour_translate.module = "tour" AND tour_translate.language = "'.$val['canonical'].'") as '.$val['canonical'].'_detect, ';
 				$i++;
-			}	
+			}
 		}
 
 
@@ -575,6 +547,38 @@ class Tour extends BaseController{
 		}else{
 			return $store;
 		}
+	}
+
+	private function attribute_relationship($id){
+		$attribute = $this->request->getPost('attribute');
+		$attr = [];
+		
+		$this->AutoloadModel->_delete([
+			'table' => 'attribute_relationship',
+			'where' => [
+				'objectid' => $id,
+			]
+		]);
+		if(isset($attribute) && is_array($attribute) && count($attribute)){
+			foreach ($attribute as $key => $value) {
+				foreach ($value as $keyChild => $valChild) {
+					array_unshift($attr, $valChild);	
+				}
+			}
+			$insert = [];
+			foreach ($attr as $key => $value) {
+				$insert[] = [
+					'objectid' => $id,
+					'attributeid' => $value
+				];
+			}
+
+			$this->AutoloadModel->_create_batch([
+				'table' => 'attribute_relationship',
+				'data' => $insert
+			]);
+		}
+		return true;
 	}
 
 	private function export_brand(){
@@ -664,7 +668,7 @@ class Tour extends BaseController{
 			'where' => ['objectid' => $id]
 		],TRUE);
 		foreach ($flag as $key => $value) {
-			
+
 			$flag[$key]['content'] = json_decode($flag[$key]['content'], TRUE);
 		}
 
@@ -678,7 +682,7 @@ class Tour extends BaseController{
 			'where' => ['objectid' => $id]
 		]);
 		$data = [];
-		
+
 		if(isset($check) && is_array($check) && count($check)){
 			$array = [
 				'number_start' => json_decode($check['number_start']),
@@ -696,7 +700,7 @@ class Tour extends BaseController{
 
 	public function condition_catalogue(){
 		$catalogueid = $this->request->getGet('catalogueid');
-		$id = [];	
+		$id = [];
 		if($catalogueid > 0){
 			$catalogue = $this->AutoloadModel->_get_where([
 				'select' => 'tb1.id, tb1.lft, tb1.rgt, tb3.title',

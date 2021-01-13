@@ -55,6 +55,43 @@ if (! function_exists('get_general')){
     }
 }
 
+if (! function_exists('explode_price')){
+    function explode_price($price = ''){
+        $explode = explode(',', $price);
+        $data = [];
+        foreach ($explode as $key => $value) {
+            $price_explode = explode('-', $value);
+            $data[$key]['start'] = $price_explode[0];
+            $data[$key]['end'] = $price_explode[1];
+            $data[$key]['value'] = $value;
+        }
+        return $data;
+    }
+}
+
+if(!function_exists('convertPrice')){
+    function convertPrice($price = ''){
+        $price = (int)$price;
+        $ty = ($price / 1000000000);
+        if($ty >= 1){
+            return round($ty, 1).' tỷ';
+        }
+        $tramtrieu = ($price / 100000000);
+        if($tramtrieu >= 1){
+            return round($tramtrieu).' trăm triệu';
+        }
+        $chuctrieu = ($price / 10000000);
+        if($chuctrieu >= 1){
+            return round($tramtrieu).' mươi triệu';
+        }
+        $trieu = ($price / 1000000);
+        if($trieu >= 1){
+            return round($trieu).' triệu';
+        }
+        return $price;
+    }
+}
+
 
 if (! function_exists('menu_header')){
     function menu_header($lang = ''){
@@ -66,6 +103,53 @@ if (! function_exists('menu_header')){
         return $menu_header;
     }
 }
+if (! function_exists('location')){
+    function location($lang = '', $keyword = ''){
+        $model = new AutoloadModel();
+         $flag = $model->_get_where([
+            'select' => 'tb1.id, tb2.title, tb2.keyword',
+            'table' => 'location_catalogue as tb1',
+            'join' => [
+                [
+                    'location_translate as tb2', 'tb1.id = tb2.objectid AND tb2.module = "location_catalogue" AND tb2.language = \''.$lang.'\' AND tb2.attribute = \''.$keyword.'\'', 'inner'
+                ]
+            ],
+            'order_by' => 'tb2.id asc'
+        ],TRUE);
+        return $flag;
+    }
+}
+
+if (! function_exists('attribute')){
+    function attribute($lang = '', $keyword = ''){
+        $model = new AutoloadModel();
+        $module = $model->_get_where([
+            'select' => 'tb1.id, tb2.title',
+            'table' => 'attribute_catalogue as tb1',
+            'join' => [
+                [
+                    'attribute_translate as tb2', 'tb1.id = tb2.objectid AND tb2.module = "attribute_catalogue" AND tb2.canonical=\''.$keyword.'\' AND tb2.language = \''.$lang.'\'', 'inner'
+                ],
+            ],
+            'order_by' => 'tb2.id asc'
+        ]);
+        $flag = $model->_get_where([
+            'select' => 'tb1.id, tb2.title',
+            'table' => 'attribute as tb1',
+            'join' => [
+                [
+                    'attribute_translate as tb2', 'tb1.id = tb2.objectid AND tb2.module = "attribute" AND tb2.language = \''.$lang.'\'', 'inner'
+                ],
+            ],
+            'where' => [
+                'tb1.catalogueid' => $module['id']
+            ],
+            'order_by' => 'tb2.id asc'
+        ],TRUE);
+        return $flag;
+    }
+}
+
 
 if (! function_exists('slide')){
     function slide($lang = ''){
@@ -92,9 +176,10 @@ if (! function_exists('get_panel')){
         if(isset($object) &&  is_array($object)  && count($object)){
             foreach ($object as $key => $value) {
                 $module_explode = explode("_", $value['module']);
-                $select  = '';
+                $select  = '';$select_cat='';
                 if($module_explode[0] == 'tour' || $module_explode[0] == 'product'){
                     $select = 'tb1.price, tb1.price_promotion';
+                    $select_cat = 'tb3.price, tb3.price_promotion';
                 }
                 if($module_explode[0] == 'tour'){
                     $select = $select . ', tb1.time_end, tb2.start_at, tb2.end_at,';
@@ -102,16 +187,21 @@ if (! function_exists('get_panel')){
                 if(isset($module_explode[1]) && $module_explode[1] != ''){
                     $value['catalogue'] = json_decode($value['catalogue']);
                     $data = $model->_get_where([
-                        'select' => 'tb1.id, tb1.image, tb1.catalogueid, tb1.album,'.$select.'  tb2.title, tb2.meta_description, tb2.canonical',
-                        'table' => $module_explode[0].' as tb1',
-                        'join' => [
+                        'select' => 'tb1.catalogueid, tb3.id, '.$select_cat.', tb2.title, tb2.content, tb2.canonical, tb3.album, tb3.image',
+                        'table' => 'object_relationship as tb1',
+                        'join' =>[
                             [
-                                $module_explode[0].'_translate as tb2','tb1.id = tb2.objectid AND tb2.language = \''.$param['language'].'\' AND tb2.module = \''.$module_explode[0].'\'','inner'
+                                $module_explode[0].'_translate as tb2','tb2.module = \''.$module_explode[0].'\' AND tb2.objectid = tb1.objectid AND tb2.language = \''.$param['language'].'\'','inner'
+                            ],
+                            [
+                                $module_explode[0].' as tb3', 'tb1.objectid = tb3.id','inner'
                             ]
+
                         ],
-                        'where' => ['tb1.deleted_at' => 0],
+                        'where' => ['tb1.module' => $module_explode[0]],
                         'where_in_field' => 'tb1.catalogueid',
                         'where_in' => $value['catalogue'],
+                        'group_by' => 'tb3.id'
                     ],TRuE);
                     if(isset($data) &&  is_array($data)  && count($data)){
                         foreach ($data as $keyData => $valData) {

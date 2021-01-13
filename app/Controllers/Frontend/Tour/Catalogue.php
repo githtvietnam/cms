@@ -52,7 +52,7 @@ class Catalogue extends FrontendController{
         ], TRUE);
         $seoPage = '';
         $page = (int)$page;
-        $perpage = ($this->request->getGet('perpage')) ? $this->request->getGet('perpage') : 1;
+        $perpage = ($this->request->getGet('perpage')) ? $this->request->getGet('perpage') : 10;
         $keyword = $this->condition_keyword();
         $catalogue = $this->condition_catalogue($id);
 
@@ -78,6 +78,7 @@ class Catalogue extends FrontendController{
             $config = pagination_frontend(['url' => $config['base_url'],'perpage' => $perpage], $config);
             $this->pagination->initialize($config);
             $this->data['pagination'] = $this->pagination->create_links();
+
             $totalPage = ceil($config['total_rows']/$config['per_page']);
             $page = ($page <= 0)?1:$page;
             $page = ($page > $totalPage)?$totalPage:$page;
@@ -86,7 +87,7 @@ class Catalogue extends FrontendController{
             }
             $page = $page - 1;
             $this->data['tourList'] = $this->AutoloadModel->_get_where([
-                'select' => 'tb1.id,tb1.viewed, tb1.image, tb3.title, tb3.canonical, tb3.meta_title, tb3.meta_description, tb3.description, tb3.content',
+                'select' => 'tb1.id,tb1.viewed,tb1.tourid, tb1.image,tb1.price, tb1.price_promotion, tb3.number_days, tb1.album, tb3.title, tb3.canonical, tb3.meta_title, tb3.meta_description, tb3.description, tb3.content, tb3.day_start',
                 'table' => $module_extract[0].' as tb1',
                 'where' => [
                     'tb1.deleted_at' => 0,

@@ -30,7 +30,9 @@ class AutoloadModel extends Model{
 			// $this->builder->from($param['table']);
 			if(isset($param['keyword']) && !empty($param['keyword']) ){
 				$this->builder->where($param['keyword']);
-				
+			}
+			if(isset($param['query']) && !empty($param['query']) ){
+				$this->builder->where($param['query']);
 			}
 			if(isset($param['group_by']) && !empty($param['group_by'])){
 				$this->builder->groupBy($param['group_by']); 
@@ -128,7 +130,7 @@ class AutoloadModel extends Model{
 	public function _create_batch(array $param = []){
 		$this->builder = $this->db->table($param['table']);	
 		$this->builder->insertBatch($param['data']);
-
+		
 		$result = $this->db->affectedRows();
 		return $result;
 	}

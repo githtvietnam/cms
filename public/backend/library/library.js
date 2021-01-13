@@ -175,6 +175,10 @@ $(document).ready(function(){
 		return false;
 	});
 
+	$(document).ready(function(){
+		$('.int').trigger('change')
+	})
+
 	$(document).on('click','.float, .int',function(){
 		let data = $(this).val();
 		if(data == 0){

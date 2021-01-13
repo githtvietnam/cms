@@ -15,7 +15,7 @@ class ListTour extends FrontendController{
         helper(['mypagination']);
         $session = session();
         $page = (int)$page;
-        $perpage = ($this->request->getGet('perpage')) ? $this->request->getGet('perpage') : 1;
+        $perpage = ($this->request->getGet('perpage')) ? $this->request->getGet('perpage') : 50;
         $where = $this->condition_where();
         $keyword = $this->condition_keyword();
         $config['total_rows'] = $this->AutoloadModel->_get_where([
@@ -60,7 +60,7 @@ class ListTour extends FrontendController{
                     [
                         'tour_translate as tb4','tb1.catalogueid = tb4.objectid AND tb4.module = "tour_catalogue" AND tb3.language = \''.$this->currentLanguage().'\' ','inner'
                     ],
-                    
+
                 ],
                 'limit' => $config['per_page'],
                 'start' => $page * $config['per_page'],
@@ -71,44 +71,15 @@ class ListTour extends FrontendController{
             if(!isset($this->data['canonical']) || empty($this->data['canonical'])){
                 $this->data['canonical'] = $config['base_url'].HTSUFFIX;
             }
-            $city = $this->AutoloadModel->_get_where([
-                'select' => 'name, provinceid',
-                'table' => 'vn_province',
-                'order_by' => 'order desc, name asc'
-            ],TRUE);
-            if(isset($city) && is_array($city) && count($city)){
-                $this->data['start'] = convert_array([
-                    'data' => $city,
-                    'field' => 'provinceid',
-                    'value' => 'name',
-                    'text' => 'điểm khởi hành',
-                ]);
-            }
-            $end = $this->AutoloadModel->_get_where([
-                'select' => 'tb1.id, tb2.title',
-                'table' => 'location as tb1',
-                'join' => [
-                    [
-                        'location_translate as tb2', 'tb1.id = tb2.objectid AND tb2.module = "location" AND tb2.language = \''.$this->currentLanguage().'\'', 'inner'
-                    ]
-                ],
-                'order_by' => 'tb1.catalogueid asc'
-            ],TRUE);
-            if(isset($end) && is_array($end) && count($end)){
-                $this->data['end'] = convert_array([
-                    'data' => $end,
-                    'field' => 'id',
-                    'value' => 'title',
-                    'text' => 'điểm đến',
-                ]);
-            }
+            $this->data['end'] = $this->location('end');
+            $this->data['start'] = $this->location('start');
 
             $this->data['listLocation'] = $this->AutoloadModel->_get_where([
                 'select' => 'tb1.id, tb2.title',
                 'table' => 'location_catalogue as tb1',
                 'join' => [
                     [
-                        'location_translate as tb2', 'tb1.id = tb2.objectid AND tb2.module = "location_catalogue" AND tb2.language = \''.$this->currentLanguage().'\'', 'inner'
+                        'location_translate as tb2', 'tb1.id = tb2.objectid AND tb2.module = "location_catalogue" AND tb2.language = \''.$this->currentLanguage().'\' AND tb2.attribute = "end"', 'inner'
                     ]
                 ],
                 'order_by' => 'tb2.id asc'
@@ -129,7 +100,7 @@ class ListTour extends FrontendController{
 
     public function condition_catalogue(){
         $catalogueid = $this->request->getGet('catalogueid');
-        $id = [];   
+        $id = [];
         if($catalogueid > 0){
             $catalogue = $this->AutoloadModel->_get_where([
                 'select' => 'tb1.id, tb1.lft, tb1.rgt, tb3.title',
@@ -181,6 +152,28 @@ class ListTour extends FrontendController{
             $keyword = '(title LIKE \'%'.$keyword.'%\')';
         }
         return $keyword;
+    }
+
+    private function location($keyword = ''){
+        $data = $this->AutoloadModel->_get_where([
+            'select' => 'tb1.id, tb2.title',
+            'table' => 'location as tb1',
+            'join' => [
+                [
+                    'location_translate as tb2', 'tb1.id = tb2.objectid AND tb2.module = "location" AND tb2.language = \''.$this->currentLanguage().'\' AND tb2.attribute = \''.$keyword.'\'', 'inner'
+                ]
+            ],
+            'order_by' => 'tb1.catalogueid asc'
+        ],TRUE);
+        if(isset($data) && is_array($data) && count($data)){
+            $flag = convert_array([
+                'data' => $data,
+                'field' => 'id',
+                'value' => 'title',
+                'text' => 'điểm đến',
+            ]);
+        }
+        return $flag;
     }
 
 }

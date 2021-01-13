@@ -384,6 +384,13 @@ class Product extends BaseController{
 			$attributeid = array_values($attributeid);
 		}
 
+		$price = $this->request->getPost('price');
+		$price = str_replace('.', '', $price);
+		$price = (float)$price;
+		$price_promotion = $this->request->getPost('price_promotion');
+		$price_promotion = str_replace('.', '', $price_promotion);
+		$price_promotion = (float)$price_promotion;
+
 		$store = [
  			'catalogueid' => (int)$this->request->getPost('catalogueid'),
  			'catalogue' => json_encode($catalogue),
@@ -391,8 +398,8 @@ class Product extends BaseController{
  			'brandid' => $this->request->getPost('brandid'),
  			'album' => json_encode($this->request->getPost('album'), TRUE),
  			'publish' => $this->request->getPost('publish'),
- 			'price' => $this->request->getPost('price'),
- 			'price_promotion' => $this->request->getPost('promotion_price'),
+ 			'price' => $price,
+ 			'price_promotion' => $price_promotion,
  			'bar_code' => $this->request->getPost('bar_code'),
  			'model' => $this->request->getPost('model'),
  		];

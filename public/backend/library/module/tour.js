@@ -462,6 +462,8 @@ $(document).on('click' ,'.update_price' ,function(){
 $(document).on('change' ,'.index_update_price' ,function(){
 	let _this = $(this);
 	let val = _this.val();
+	val = val.replaceAll(".","");
+	val = parseFloat(val);
 	let id = _this.attr('data-id')
 	let field = _this.attr('data-field')
 	let form_URL = 'ajax/tour/update_price';

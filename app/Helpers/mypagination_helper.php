@@ -30,14 +30,15 @@ if (! function_exists('pagination_config_bt')){
 	}
 }
 if (! function_exists('pagination_frontend')){
-	function pagination_frontend(array $param = [],array $config = []){
+	function pagination_frontend(array $param = [],array $config = [],$page = 1){
 
 		$config['base_url'] = base_url($param['url']);
 		$config['suffix'] = (!empty($_SERVER['QUERY_STRING'])?('?'.$_SERVER['QUERY_STRING']): HTSUFFIX);
 		$config['first_url'] = $config['base_url'].$config['suffix'];
 		$config['per_page'] = $param['perpage'];
+		$config['cur_page'] = $page;
 		$config['uri_segment'] = 2;
-		$config['num_links'] = 5;
+		$config['num_links'] = 2;
 		$config['prefix'] = 'trang-';
 		$config['use_page_numbers'] = TRUE;
 		$config['full_tag_open'] = '<ul class="pagination no-margin">';

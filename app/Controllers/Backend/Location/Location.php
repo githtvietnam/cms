@@ -168,6 +168,7 @@ class Location extends BaseController{
 			 			'where' => ['objectid' => $id,'module' => $this->data['module'],'language' => $this->currentLanguage()],
 			 			'data' => $updateLanguage,
 			 		]);
+			 		$flag = $this->create_relationship($id);
 		 			$session->setFlashdata('message-success', 'Cập Nhật Vị trí Thành Công!');
  					return redirect()->to(BASE_URL.'backend/location/location/index');
 		 		}
@@ -235,7 +236,13 @@ class Location extends BaseController{
 		}
 		$catalogueid = $this->request->getPost('catalogueid');
 		$relationshipId = 	array_unique(array_merge($catalogue, [$catalogueid]));
-
+		$this->AutoloadModel->_delete([
+			'table' => 'object_relationship',
+			'where' => [
+				'module' => $this->data['module'],
+				'objectid' => $objectid
+			]
+		]);
 		$insert = [];
 		if(isset($relationshipId) && is_array($relationshipId) && count($relationshipId)){
 			foreach($relationshipId as $key => $val){
@@ -255,7 +262,6 @@ class Location extends BaseController{
 		}
 
 		return $flag;
-
 	}
 
 	public function condition_catalogue(){
@@ -317,6 +323,18 @@ class Location extends BaseController{
 
 	private function storeLanguage($objectid = 0){
 		helper(['text']);
+
+		$cat = (int)$this->request->getPost('catalogueid');
+		$data = $this->AutoloadModel->_get_where([
+			'select' => 'attribute',
+			'table' => 'location_translate',
+			'where' => [
+				'objectid' => $cat,
+				'module' => 'location_catalogue',
+				'language' => $this->currentLanguage()
+			]
+		]);
+
 		$store = [
 			'objectid' => $objectid,
 			'title' => validate_input($this->request->getPost('title')),
@@ -324,6 +342,7 @@ class Location extends BaseController{
 			'description' => $this->request->getPost('description'),
 			'language' => $this->currentLanguage(),
 			'module' => $this->data['module'],
+			'attribute' => $data['attribute']
 		];
 		return $store;
 	}
@@ -372,7 +391,7 @@ class Location extends BaseController{
 	private function validation(){
 		$validate = [
 			'title' => 'required',
-			'keyword' => 'required',
+			'keyword' => 'required|check_keyword_translate['.$this->data['module'].']',
 			'catalogueid' => 'is_natural_no_zero',
 		];
 		$errorValidate = [
@@ -381,6 +400,7 @@ class Location extends BaseController{
 			],
 			'keyword' => [
 				'required' => 'Bạn phải nhập vào trường từ khóa danh mục',
+				'check_keyword_translate' => 'Từ khóa bạn nhập đã tồn tại'
 			],
 			'catalogueid' => [
 				'is_natural_no_zero' => 'Bạn Phải chọn danh mục cha cho Vị trí',

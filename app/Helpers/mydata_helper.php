@@ -1,4 +1,4 @@
-<?php 
+<?php
 use App\Models\AutoloadModel;
 
 if (! function_exists('get_data')){
@@ -74,11 +74,11 @@ if (! function_exists('separateArray')){
 		for ($i = 0; $i < count($param);$i++){
 			if (isset($param[$i]))
 				for ($j = 0; $j < count($target);$j++){
-					$data[$i][$target[$j]] = $param[$i][$target[$j]]; 
+					$data[$i][$target[$j]] = $param[$i][$target[$j]];
 				}
 			}
 		return $data;
-	} 
+	}
 }
 if(!function_exists('get_id_create_batch')){
 	function get_id_create_batch(int $firstid = 0, int $length = 0){
@@ -97,7 +97,7 @@ if (! function_exists('count_object')){
 
 		$catalogueid = $param['catalogueid'];
 
-		$id = [];	
+		$id = [];
 		if($catalogueid > 0){
 			$catalogue = $model->_get_where([
 				'select' => 'id, lft, rgt, title',
@@ -138,10 +138,10 @@ if (! function_exists('count_object')){
 				'count' => TRUE
 			]);
 		}
-		
+
 
 		return $count;
-		
+
 	}
 }
 
@@ -182,7 +182,7 @@ if (! function_exists('get_catalogue_object')){
             'order_by' => 'tb4.title asc'
 		], TRUE);
 		return $object;
-		
+
 	}
 }
 
@@ -388,4 +388,3 @@ if (! function_exists('silo')){
 }
 
 ?>
-

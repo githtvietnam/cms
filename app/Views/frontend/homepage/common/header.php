@@ -1,19 +1,33 @@
 <!-- PC HEADER -->
 <!-- uk-visible-large -->
 
-<?php 
-	helper('mydatafrontend');
+<?php
+	helper(['mydatafrontend','mydata']);
 	$baseController = new App\Controllers\FrontendController();
     $language = $baseController->currentLanguage();
 	$menu_header =  menu_header($language);
 	$slide_banner =  slide($language);
+	$languageList = get_data([
+		'select' => 'id, title, image, canonical',
+		'table' => 'language',
+		'order_by' => 'order desc, id desc'
+	], TRUE);
  ?>
 <header class="pc-header  uk-visible-large " >
 	<div class="hd-upper">
 		<div class="uk-container uk-container-center">
-			<div class="hd-hotline">
-				Hotline: 
-				<span><?php echo ((isset($general['contact_phone'])) ? $general['contact_phone'] : '').((isset($general['contact_hotline'])) ? ' / '.$general['contact_hotline'] : '') ?></span>
+			<div class="uk-flex uk-flex-middle uk-flex-space-between">
+				<div class="hd-hotline">
+					Hotline:
+					<span><?php echo ((isset($general['contact_phone'])) ? $general['contact_phone'] : '').((isset($general['contact_hotline'])) ? ' / '.$general['contact_hotline'] : '') ?></span>
+				</div>
+				<?php if(isset($languageList) && is_array($languageList) && count($languageList)){ ?>
+				<div class="language-widget">
+					<?php foreach($languageList as $key => $val){ ?>
+					<a href="" onclick="return false;" title="<?php echo $val['title'] ?>"><img src="<?php echo $val['image']; ?>" style="max-width:25px;height:15px;" alt="<?php echo $val['title'] ?>"></a>
+					<?php } ?>
+				</div>
+				<?php } ?>
 			</div>
 		</div>
 	</div>
@@ -21,7 +35,7 @@
 		<div class="uk-container uk-container-center">
 			<div class="uk-flex uk-flex-middle uk-flex-space-between">
 				<div class="hd-logo">
-					<a href="">
+					<a href="" title="logo">
 						<img src="public/frontend/resources/img/logo/kim-lien-travel-logo.png" alt="">
 					</a>
 				</div>
@@ -34,17 +48,14 @@
 						</ul>
 					</nav>
 				</div>
-				<div class="hd-cart">
-					<a href=""><img src="public/frontend/resources/img/icon/icon-cart.png" alt="">
-					<span class="quantity">0</span></a>
-				</div>
+
 			</div>
 		</div>
 	</div>
 
 	<section class="slide-panel">
 		<?php if(isset($slide_banner)){
-			echo $slide_banner;		
+			echo $slide_banner;
 		} ?>
 	</section>
 
@@ -70,4 +81,3 @@
 	</section>
 </header>
 <!-- .mobile-header -->
-

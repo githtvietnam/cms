@@ -94,7 +94,25 @@ class ObjectRules {
  	}
 
  	public function is_no_0(string $keyword = ''): bool{
-		if($keyword == 0){
+		if($keyword == '0'){
+			return false;
+		}
+		return true;
+ 	}
+
+ 	public function check_keyword_translate(string $keyword = '', $module = ''): bool{
+		$modulExtract = explode('_', $module);
+		$originalId = $this->request->getPost('keyword_original');
+		$count = 0;
+		if($originalId != $keyword){
+			$count = $this->AutoloadModel->_get_where([
+				'select' => 'id',
+				'table' => $modulExtract[0].'_translate' ,
+				'where' => ['keyword' => $keyword,'module' => $module],
+				'count' => TRUE
+			]);
+		}
+		if($count > 0 ){
 			return false;
 		}
 		return true;

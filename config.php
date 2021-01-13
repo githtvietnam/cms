@@ -19,4 +19,4 @@ define('API_WIDGET', 'http://widgetcms.com');
 define('HTDBHOST', 'localhost');
 define('HTDBUSER', 'root');
 define('HTDBPASS', '');
-define('HTDBNAME', 'ci4_cms');
+define('HTDBNAME', 'cms4_data');

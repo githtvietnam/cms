@@ -6,7 +6,7 @@ $(document).ready(function(){
 	$(document).on('change','.va-choose-tour input[type="radio"]', function(){
 		let _this = $(this)
 		let val = _this.val()
-		let form_URL = 'frontend/ajax/dashboard/get_select2';
+		let form_URL = 'ajax/frontend/dashboard/get_select2';
 		$.post(form_URL, {
 			id : val
 		},
@@ -15,6 +15,78 @@ $(document).ready(function(){
 			$('.check_end').html(json.html);
 		});	
 	})
+	$(document).on('change','.check-aside input', function(){
+		let _this = $(this)
+		$('.tour_list_panel').hide();
+		$('.tour_search_panel').html("");
+		filter();
+	})
+	$(document).on('click','#pagination_ajax li a', function(){
+		let _this = $(this)
+		$('.tour_list_panel').hide();
+		$('.tour_search_panel').html("");
+		let page = _this.attr('data-ci-pagination-page');
+		filter(page);
+		return false;
+	})
+
+	function filter(page = 1){
+		let idArea = [];
+		let price = [];
+		let vehicle = [];
+		let time = [];
+		let module = $('.va-articleCat-panel').attr('data-module');
+		let canonical = $('.va-articleCat-panel').attr('data-canonical');
+		$('.check-area input[name="area[]"]:checked').each(function(){
+    		let valthis = $(this);
+    		let valChild = valthis.val();
+    		idArea.push(valChild)
+    	})
+    	$('.check-price input[name="price[]"]:checked').each(function(){
+    		let valthis = $(this);
+    		let valChild = valthis.val();
+    		price.push(valChild)
+    	})
+    	$('.check-vehicle input[name="vehicle[]"]:checked').each(function(){
+    		let valthis = $(this);
+    		let valChild = valthis.val();
+    		vehicle.push(valChild)
+    	})
+    	$('.check-time input[name="time[]"]:checked').each(function(){
+    		let valthis = $(this);
+    		let valChild = valthis.val();
+    		time.push(valChild)
+    	})
+    	if(idArea.length == 0 && price.length == 0 && vehicle.length == 0 && time.length == 0 ){
+			$('.tour_list_panel').show();
+    	}else{
+    		let form_URL = 'ajax/frontend/filter/render_tour';
+			$.post(form_URL, {
+				cat : idArea, price: price, vehicle: vehicle, time: time,module:module, url: canonical,page : page
+			},
+			function(data){
+				let json = JSON.parse(data);
+				let decode = b64DecodeUnicode(json.html);
+				$('.tour_search_panel').html(decode);
+				$('#pagination_ajax').html(json.pagination);
+				// $('#pagination_ajax li').removeClass('active');
+				// $('#pagination_ajax li a').each(function() {
+		  //           let _thisLi = $(this);
+		  //           let data_page = _this.attr('data-ci-pagination-page');
+		  //           if(data_page == page){
+		  //           	_thisLi.parent('li').addClass('active')
+		  //           }
+		  //       });
+			});	
+    	}
+	}
+
+	function b64DecodeUnicode(str) {
+    // Going backwards: from bytestream, to percent-encoding, to original string.
+	    return decodeURIComponent(atob(str).split('').map(function(c) {
+	        return '%' + ('00' + c.charCodeAt(0).toString(16)).slice(-2);
+	    }).join(''));
+	}
 });
 	(function($) {
 	    "use strict";

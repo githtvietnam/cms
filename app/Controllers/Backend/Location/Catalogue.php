@@ -104,8 +104,7 @@ class Catalogue extends BaseController{
 	public function update($id = 0){
 		$id = (int)$id;
 		$this->data[$this->data['module']] = $this->AutoloadModel->_get_where([
-			'select' => 'tb1.id, tb2.title, tb2.keyword, tb2.description, tb1.parentid, tb1.publish',
-
+			'select' => 'tb1.id, tb2.title, tb2.keyword, tb2.description, tb1.parentid, tb1.publish, tb2.attribute',
 			'table' => $this->data['module'].' as tb1',
 			'join' =>  [
 					[
@@ -233,6 +232,7 @@ class Catalogue extends BaseController{
 			'title' => validate_input($this->request->getPost('title')),
 			'keyword' => slug($this->request->getPost('keyword')),
 			'description' => $this->request->getPost('description'),
+			'attribute' => $this->request->getPost('attribute'),
 			'language' => $this->currentLanguage(),
 			'module' => $this->data['module'],
 		];
@@ -285,6 +285,7 @@ class Catalogue extends BaseController{
 		$validate = [
 			'title' => 'required',
 			'keyword' => 'required',
+			'attribute' => 'is_no_0',
 		];
 		$errorValidate = [
 			'title' => [
@@ -292,6 +293,9 @@ class Catalogue extends BaseController{
 			],
 			'keyword' => [
 				'required' => 'Bạn phải nhập vào trường từ khóa danh mục',
+			],
+			'attribute' => [
+				'is_no_0' => 'Bạn phải chọn vị trí thuộc tính!',
 			],
 		];
 		return [

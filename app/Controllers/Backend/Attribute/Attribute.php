@@ -164,6 +164,7 @@ class Attribute extends BaseController{
 			 			'where' => ['objectid' => $id],
 			 			'data' => $updateLanguage,
 			 		]);
+			 		$flag = $this->create_relationship($id);
 		 			$session->setFlashdata('message-success', 'Cập Nhật Thuộc Tính Thành Công!');
  					return redirect()->to(BASE_URL.'backend/attribute/attribute/index');
 		 		}
@@ -234,7 +235,13 @@ class Attribute extends BaseController{
 		}
 		$catalogueid = $this->request->getPost('catalogueid');
 		$relationshipId = 	array_unique(array_merge($catalogue, [$catalogueid]));
-
+		$this->AutoloadModel->_delete([
+			'table' => 'object_relationship',
+			'where' => [
+				'module' => $this->data['module'],
+				'objectid' => $objectid
+			]
+		]);
 		$insert = [];
 		if(isset($relationshipId) && is_array($relationshipId) && count($relationshipId)){
 			foreach($relationshipId as $key => $val){
@@ -254,7 +261,6 @@ class Attribute extends BaseController{
 		}
 
 		return $flag;
-
 	}
 
 	public function condition_catalogue(){

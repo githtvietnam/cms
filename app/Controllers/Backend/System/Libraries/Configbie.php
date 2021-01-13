@@ -27,21 +27,6 @@ class ConfigBie{
 				'footer' => array('type' => 'textarea', 'label' => 'Thông tin chung Footer'),
 			),
 		);
-		$data['homepage_1'] =  array(
-			'label' => 'Thông tin chung 1',
-			'description' => 'Cài đặt đầy đủ thông tin chung của website. Tên thương hiệu website. Logo của website và icon website trên tab trình duyệt',
-			'value' => array(
-				'company' => array('type' => 'text', 'label' => 'Tên công ty'),
-				'company_1' => array('type' => 'images', 'label' => 'Tên công ty 1'),
-				'company_2' => array('type' => 'textarea', 'label' => 'Tên công ty 2'),
-				'company_3' => array('type' => 'editor', 'label' => 'Tên công ty 3'),
-				'brand' => array('type' => 'text', 'label' => 'Tên thương hiệu'),
-				'slogan' => array('type' => 'text', 'label' => 'Slogan'),
-				'logo' => array('type' => 'images', 'label' => 'Logo'),
-				'logo_footer' => array('type' => 'images', 'label' => 'Logo Chân trang'),
-				'favicon' => array('type' => 'images', 'label' => 'Favicon','title' => 'Favicon là gì?','link' => 'https://webchuanseoht.com/favicon-la-gi-tac-dung-cua-favicon-nhu-the-nao.html'),
-			),
-		);
 		$data['contact'] =  array(
 			'label' => 'Thông tin liên lạc',
 			'description' => 'Cấu hình đầy đủ thông tin liên hệ giúp khách hàng dễ dàng tiếp cận với dịch vụ của bạn',
@@ -61,8 +46,7 @@ class ConfigBie{
 			'description' => 'Cập nhật đầy đủ thông tin giúp khách hàng dễ dàng tiếp cận với dịch vụ của bạn',
 			'value' => array(
 				'intro_excerpt' => array('type' => 'editor', 'label' => 'Giới thiệu ngắn'),
-				'standard' => array('type' => 'text', 'label' => 'Tiêu chuẩn sản xuất', 'attention' => '* ( Mỗi 1 loại viết cách nhau dấu " | ")'),
-				'procedure' => array('type' => 'text', 'label' => 'Quy trình sản xuất' , 'attention' => '* ( Mỗi 1 loại viết cách nhau dấu " | ")'),
+				'price' => array('type' => 'textarea', 'label' => 'Cấu hình khoảng giá'  ),
 			),
 		);
 		$data['seo'] =  array(
@@ -92,13 +76,6 @@ class ConfigBie{
 			'description' => 'Mã nhúng mở rộng giúp bạn dễ dàng tích hợp các tính năng của nhà cung cấp thứ 3 phát triển vào website.',
 			'value' => array(
 				'facebook_pixel' => array('type' => 'textarea', 'label' => 'Script'),
-			),
-		);
-		$data['script2'] =  array(
-			'label' => 'Mã Nhúng Mở rộng_2',
-			'description' => 'Mã nhúng mở rộng giúp bạn dễ dàng tích hợp các tính năng của nhà cung cấp thứ 3 phát triển vào website.',
-			'value' => array(
-				'facebook_pixel2' => array('type' => 'textarea', 'label' => 'Script'),
 			),
 		);
 		$data['social'] =  array(
