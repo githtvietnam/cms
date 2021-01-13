@@ -72,11 +72,11 @@
 								$dropdown_attr = $list_attribute['catalogue'];
 								foreach ($list as $key => $value) {
 						 ?>
-						<tr class="<?php echo ((($value['catalogue'] == $checked[0]) || ($value['catalogue'] == $checked[1]) || ($value['catalogue'] == $checked[2])) ? 'bg-active' : '') ?>">
+						<tr class="<?php echo ((($value['catalogue'] == $checked[0])) ? 'bg-active' : '') ?>">
 							<td data-index="<?php echo $index; ?>">
-								<input type="checkbox" name="checkbox[]" <?php echo ((($value['catalogue'] == $checked[0]) || ($value['catalogue'] == $checked[1]) || ($value['catalogue'] == $checked[2])) ? 'checked=""' : '') ?> value="1" class="checkbox-item">
+								<input type="checkbox" name="checkbox[]" <?php echo ((($value['catalogue'] == $checked[0])) ? 'checked=""' : '') ?> value="1" class="checkbox-item">
 								<input type="text" name="checkbox_val[]" value="1" class="hidden">
-								<div for="" class="label-checkboxitem <?php echo ((($value['catalogue'] == $checked[0]) || ($value['catalogue'] == $checked[1]) || ($value['catalogue'] == $checked[2])) ? 'checked' : '') ?>"></div>
+								<div for="" class="label-checkboxitem <?php echo ((($value['catalogue'] == $checked[0])) ? 'checked' : '') ?>"></div>
 							</td>
 							<td>
 								<?php echo form_dropdown('attribute_catalogue[]', $catList, set_value('attribute_catalogue[]', (isset($value['catalogue'])) ? $value['catalogue'] : ''), 'class="form-control select2 trigger-select2"');?>

@@ -126,7 +126,6 @@ class Product extends BaseController{
 			 			'table' => $this->data['module'],
 			 			'data' => $insert,
 			 		]);
-		 			$this->insert_attribute($resultid, $insert['catalogueid'], $this->currentLanguage());
 
 			 		if($resultid > 0){
 			 			$storeLanguage = $this->storeLanguage($resultid);
@@ -195,7 +194,6 @@ class Product extends BaseController{
 		 			'data' => $update
 		 		]);
 
-		 		$this->insert_attribute($id,$update['catalogueid'], $this->currentLanguage());
 		 		if($flag > 0){
 		 			$this->AutoloadModel->_update([
 			 			'table' => 'product_translate',
@@ -532,19 +530,7 @@ class Product extends BaseController{
 		return $flag;
 	}
 
-	private function insert_attribute($id = '', $catalogueid = '', $language = ''){
-		$insert = [
-			'attribute_catalogue' => $this->request->getPost('attribute_catalogue'),
-			'attribute' => $this->request->getPost('attribute'),
-		];
-		// prE($insert);
-		
-		if($insert['attribute_catalogue'] != [] && $insert['attribute'] != []){
-			$flag = insert_attribute($insert , $id, $language, $catalogueid, $this->data['module']);
-		}
-
-		return true;
-	}
+	
 
 	private function get_data_version($id = ''){
 		$flag = $this->AutoloadModel->_get_where([

@@ -207,6 +207,10 @@ if (! function_exists('get_panel')){
                         foreach ($data as $keyData => $valData) {
                             $data[$keyData]['canonical'] = fix_canonical(slug($valData['canonical']));
                             $data[$keyData]['album'] = json_decode($valData['album']);
+                            if($select_cat != ''){
+                                $data[$keyData]['price'] = number_format($valData['price'],0,',','.');
+                                $data[$keyData]['price_promotion'] = number_format($valData['price_promotion'],0,',','.');
+                            }
                             if(isset($data[$keyData]['image']) && $data[$keyData]['image'] != ''){
                                 $data[$keyData]['avatar'] = $data[$keyData]['image'];
                             }else{
@@ -235,6 +239,10 @@ if (! function_exists('get_panel')){
                         foreach ($data as $keyData => $valData) {
                             $data[$keyData]['canonical'] = fix_canonical(slug($valData['canonical']));
                             $data[$keyData]['album'] = json_decode($valData['album']);
+                             if($select != ''){
+                                $data[$keyData]['price'] = number_format($valData['price'],0,',','.');
+                                $data[$keyData]['price_promotion'] = number_format($valData['price_promotion'],0,',','.');
+                            }
                             if(isset($data[$keyData]['image']) && $data[$keyData]['image'] != ''){
                                 $data[$keyData]['avatar'] = $data[$keyData]['image'];
                             }else{

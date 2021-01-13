@@ -18,7 +18,7 @@ class Tour extends FrontendController{
         $module_extract = explode("_", $this->data['module']);
         $keyword = $this->condition_keyword();
         $this->data['object'] = $this->AutoloadModel->_get_where([
-            'select' => 'tb1.id,tb1.price, tb1.price_promotion,tb1.catalogueid, tb1.viewed, tb1.album, tb1.image, tb2.title, tb2.canonical, tb2.meta_title,tb2.attribute,tb2.sub_title,tb2.sub_content, tb1.tourid,tb2.meta_description, tb2.day_start,tb2.number_days, tb2.description, tb2.content, tb3.name as start, tb4.title as end',
+            'select' => 'tb1.id,tb1.price, tb1.price_promotion,tb1.catalogueid, tb1.viewed, tb1.album, tb1.image, tb2.title, tb2.canonical, tb2.meta_title,tb2.sub_title,tb2.sub_content, tb1.tourid,tb2.meta_description, tb2.day_start,tb2.number_days, tb2.description, tb2.content, tb3.title as start, tb4.title as end',
             'table' => $module_extract[0].' as tb1',
             'where' => [
                 'tb1.deleted_at' => 0,
@@ -30,10 +30,10 @@ class Tour extends FrontendController{
                     'tour_translate as tb2','tb1.id = tb2.objectid AND tb2.module = "tour" AND tb2.language = \''.$this->currentLanguage().'\' ','inner'
                 ],
                 [
-                    'vn_province as tb3','tb2.start_at = tb3.provinceid','inner'
+                    'location_translate as tb3','tb2.start_at = tb3.objectid AND tb3.module="location" AND tb3.language=\''.$this->currentLanguage().'\' AND tb3.attribute = "start"','inner'
                 ],
                 [
-                    'location_translate as tb4','tb2.end_at = tb4.objectid AND tb4.module="location" AND tb4.language=\''.$this->currentLanguage().'\'','inner'
+                    'location_translate as tb4','tb2.end_at = tb4.objectid AND tb4.module="location" AND tb4.language=\''.$this->currentLanguage().'\'AND tb4.attribute = "end"','inner'
                 ]
             ],
         ]);
@@ -46,6 +46,8 @@ class Tour extends FrontendController{
         $this->data['object']['content'] = validate_input(base64_decode($this->data['object']['content']));
         $this->data['object']['sub_content'] = json_decode(base64_decode($this->data['object']['sub_content']));
         $this->data['object']['sub_title'] = json_decode(base64_decode($this->data['object']['sub_title']));
+        $this->data['object']['price'] = number_format($this->data['object']['price'],0,',','.');
+        $this->data['object']['price_promotion'] = number_format($this->data['object']['price_promotion'],0,',','.');
 
         $this->data['detailCatalogue'] = $this->AutoloadModel->_get_where([
             'select' => ' tb1.id,tb1.lft, tb1.rgt, tb1.level, tb1.parentid, tb1.image,  tb2.title, tb2.canonical,  tb2.content, tb2.description, tb2.meta_title, tb2.meta_description',
