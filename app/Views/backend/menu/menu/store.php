@@ -177,6 +177,7 @@
                                <div class="row mb15">
                                    <div class="col-lg-4">
                                        <div class="form-row"> 
+                                           <input type="hidden" placeholder="" value="<?php echo $value['id'] ?>" name="menu[id][]" class="form-control input_menu_title" >
                                            <input type="text" placeholder="" value="<?php echo $value['title'] ?>" name="menu[title][]" class="form-control input_menu_title" >
                                        </div>
                                    </div>

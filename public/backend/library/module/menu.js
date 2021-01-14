@@ -349,6 +349,7 @@ $(document).ready(function(){
 	html = html + '<div class="row mb15">';
 		html = html + '<div class="col-lg-4">';
 			html = html + '<div class="form-row">';	
+				html = html + '<input type="hidden" placeholder="" value="[0]" name="menu[id][]" class="form-control input_menu_title" >';
 				html = html + '<input type="text" placeholder="" value="'+name+'" name="menu[title][]" class="form-control input_menu_title" >';
 			html = html + '</div>';
 		html = html + '</div>';

@@ -18,42 +18,7 @@ class Menu extends BaseController{
 
 	}
 
-	// public function _remap($method = '',$languageCurrent = ''){
-	// 	$session = session();
-	// 	if($method != 'translator'){
-	// 		$flag = $this->authentication->check_permission([
-	// 			'routes' => 'backend/system/general/'.$method
-	// 		]);
-	// 		if($flag == false){
-	//  			$session->setFlashdata('message-danger', 'Bạn không có quyền truy cập vào chức năng này!');
-	//  			return redirect()->to(BASE_URL.'backend/dashboard/dashboard/index');
-	// 		}else{
-	// 			if(method_exists($this, $method)){
-	// 				return $this->$method();
-	// 			}
-	// 			throw \CodeIgniter\Exceptions\PageNotFoundException::forPagenotFound();
-	// 		}
-	// 	}else{
-	// 		$language = $this->currentLanguage();
-
-	// 		$count = $this->authentication->check_permission([
-	// 			'routes' => 'backend/system/general/'.$method.'/'.$language
-	// 		]); 
-
-	// 		if($count == false){
-	//  			$session->setFlashdata('message-danger', 'Bạn không có quyền truy cập vào chức năng này!');
-	//  			return redirect()->to(BASE_URL.'backend/dashboard/dashboard/index');
-	// 		}else{
-	// 			if(method_exists($this, $method)){
-	// 				return $this->$method($languageCurrent);
-	// 			}
-	// 			throw \CodeIgniter\Exceptions\PageNotFoundException::forPagenotFound();
-	// 		}
-	// 	}
-		
-		
-	// }
-
+	
 	public function index($id = 0, $language = ''){
 		if($language == ''){
 			$language = $this->currentLanguage();
@@ -65,6 +30,61 @@ class Menu extends BaseController{
 		$this->data['menuList'] = $this->menuList($id, $language);
 		$this->data['fixWrapper'] = 'fix-wrapper';
 		$this->data['template'] = 'backend/menu/menu/index';
+		return view('backend/dashboard/layout/home', $this->data);
+	}
+
+	public function listmenu($page = 1){
+
+		$session = session();
+
+		helper(['mypagination']);
+		$page = (int)$page;
+		$perpage = ($this->request->getGet('perpage')) ? $this->request->getGet('perpage') : 20;
+		$where = $this->condition_where();
+		$keyword = $this->condition_keyword();
+		$config['total_rows'] = $this->AutoloadModel->_get_where([
+			'select' => 'tb1.id',
+			'table' => $this->data['module'].'_catalogue as tb1',
+			'keyword' => $keyword,
+			'where' => $where,
+			'group_by' => 'tb1.id',
+			'count' => TRUE
+		]);
+		// pre($config['total_rows']);
+
+
+		if($config['total_rows'] > 0){
+			$config = pagination_config_bt(['url' => 'backend/menu/menu/listmenu','perpage' => $perpage], $config);
+
+			$this->pagination->initialize($config);
+			$this->data['pagination'] = $this->pagination->create_links();
+
+
+			$totalPage = ceil($config['total_rows']/$config['per_page']);
+			$page = ($page <= 0)?1:$page;
+			$page = ($page > $totalPage)?$totalPage:$page;
+			$page = $page - 1;
+
+			$languageDetact = $this->detect_language();
+			$this->data['menuCatalogue'] = $this->AutoloadModel->_get_where([
+				'select' => '  tb1.title, tb1.id, tb1.value, tb1.created_at, tb1.userid_created,tb2.fullname as creator, '.((isset($languageDetact['select'])) ? $languageDetact['select'] : ''),
+				'table' => $this->data['module'].'_catalogue as tb1',
+				'where' => $where,
+				'keyword' => $keyword,
+				'join' => [
+					[
+						'user as tb2','tb1.userid_created = tb2.id','inner'
+					]
+				],
+				'limit' => $config['per_page'],
+				'start' => $page * $config['per_page'],
+				'order_by'=> 'tb1.id desc',
+				'group_by' => 'tb1.id'
+			], TRUE);
+
+		}
+		
+		$this->data['template'] = 'backend/menu/menu/listmenu';
 		return view('backend/dashboard/layout/home', $this->data);
 	}
 
@@ -185,61 +205,7 @@ class Menu extends BaseController{
 		return view('backend/dashboard/layout/home', $this->data);
 	}
 
-	public function listmenu($page = 1){
-
-		$session = session();
-
-		helper(['mypagination']);
-		$page = (int)$page;
-		$perpage = ($this->request->getGet('perpage')) ? $this->request->getGet('perpage') : 20;
-		$where = $this->condition_where();
-		$keyword = $this->condition_keyword();
-		$config['total_rows'] = $this->AutoloadModel->_get_where([
-			'select' => 'tb1.id',
-			'table' => $this->data['module'].'_catalogue as tb1',
-			'keyword' => $keyword,
-			'where' => $where,
-			'group_by' => 'tb1.id',
-			'count' => TRUE
-		]);
-		// pre($config['total_rows']);
-
-
-		if($config['total_rows'] > 0){
-			$config = pagination_config_bt(['url' => 'backend/menu/menu/listmenu','perpage' => $perpage], $config);
-
-			$this->pagination->initialize($config);
-			$this->data['pagination'] = $this->pagination->create_links();
-
-
-			$totalPage = ceil($config['total_rows']/$config['per_page']);
-			$page = ($page <= 0)?1:$page;
-			$page = ($page > $totalPage)?$totalPage:$page;
-			$page = $page - 1;
-
-			$languageDetact = $this->detect_language();
-			$this->data['menuCatalogue'] = $this->AutoloadModel->_get_where([
-				'select' => '  tb1.title, tb1.id, tb1.value, tb1.created_at, tb1.userid_created,tb2.fullname as creator, '.((isset($languageDetact['select'])) ? $languageDetact['select'] : ''),
-				'table' => $this->data['module'].'_catalogue as tb1',
-				'where' => $where,
-				'keyword' => $keyword,
-				'join' => [
-					[
-						'user as tb2','tb1.userid_created = tb2.id','inner'
-					]
-				],
-				'limit' => $config['per_page'],
-				'start' => $page * $config['per_page'],
-				'order_by'=> 'tb1.id desc',
-				'group_by' => 'tb1.id'
-			], TRUE);
-
-		}
-		
-		$this->data['template'] = 'backend/menu/menu/listmenu';
-		return view('backend/dashboard/layout/home', $this->data);
-	}
-
+	
 	public function create($id = 0, $language = ''){
 		$configbie = $this->configbie->menu();
 		$configbieList = [];
@@ -304,67 +270,44 @@ class Menu extends BaseController{
 					foreach ($GetdataLanguage as $key => $value) {
 						$idLanguageList[] =  $value['objectid'];
 					}
-					// pre($idLanguageList);
-
-					$delete = $this->AutoloadModel->_delete([
-						'table' => 'menu',
-						'where' => ['catalogueid' => $id],
-						'where_in' => $idLanguageList,
-						'where_in_field' => 'id'
-					]);
-
-					$delete_menuTranslate = $this->AutoloadModel->_delete([
-						'table' => 'menu_translate',
-						'where' => ['module' => 'menu', 'language' => $language, 'catalogueid' => $id],
-					]);
-					
-					
-					foreach($menu['order'] as $key => $val){
-						$_insert[] = [
-							'catalogueid' => $this->request->getPost('parentid'),
-							'order' => $val,
-							'userid_created' => $this->auth['id'],
-							'created_at' => $this->currentTime
-						];
-						$count++;		
-					}
-
-					$flag = [];
-					$flag =	$this->AutoloadModel->_create_batch([
-						'table' => 'menu',
-						'data' => $_insert,
-					]);
-
-					if($flag > 0){
-						$getData = $this->AutoloadModel->_get_where([
-							'select' => 'id',
-							'table' => 'menu',
-							'order_by' => 'created_at desc',
-							'limit' => $count
-						],TRUE);
-						foreach ($getData as $key => $value) {
-							$newMenu[] = [
-								'objectid' => $getData[$key]['id'],
+					$all = [];
+					foreach($menu['id'] as $key => $val){
+						if($val == '[0]'){
+							$all['insert'][] = [
+								'catalogueid' => $this->request->getPost('parentid'),
+								'order' => $menu['order'][$key],
+								'userid_created' => $this->auth['id'],
+								'created_at' => $this->currentTime,
+							];
+							$all['insert_language'][] = [
 								'title' => $menu['title'][$key],
 								'canonical'  => $menu['link'][$key],
-								'catalogueid' => $this->request->getPost('parentid'),
 								'language' => $language,
-								'module' => 'menu',
-								'created_at' => $this->currentTime,
-								'userid_created' => $this->auth['id']
-							];		
+							];
+						}else{
+							$all['id_update'][] = [
+								'id' => $val
+							];
+							$all['update'][] = [
+								'order' => $menu['order'][$key],
+								'userid_updated' => $this->auth['id'],
+								'updated_at' => $this->currentTime,
+							];
+							$all['update_language'][] = [
+								'title' => $menu['title'][$key],
+								'canonical'  => $menu['link'][$key],
+							];
 						}
-						$insertData = $this->AutoloadModel->_create_batch([
-							'table' => 'menu_translate',
-							'data' => $newMenu
-						]);
+						$count++;		
+					}
+					$this->create_menu([
+						'data' => $all,
+						'language' => $language
+					]);
+					
 
-						$this->nestedsetbie->Get('level ASC, order ASC', $language);
-						$this->nestedsetbie->Recursive(0, $this->nestedsetbie->Set());
-						$this->nestedsetbie->Action();
+					if(isset($all['insert']) && is_array($all['insert']) && count($all['insert'])){
 						
-						$session->setFlashdata('message-success', 'Tạo Menu Thành Công!');
-						return redirect()->to(BASE_URL.'backend/menu/menu/index/'.$id.'/'.$language.'');
 					}
 		 		}
 		 	}else{
@@ -375,7 +318,6 @@ class Menu extends BaseController{
 		$this->data['template'] = 'backend/menu/menu/store';
 		return view('backend/dashboard/layout/home', $this->data);
 	}
-
 
 	private function validation(){
 		$validate = [
@@ -401,6 +343,38 @@ class Menu extends BaseController{
 		], TRUE);
 
 		return $menuCatalogue;
+	}
+
+	private function create_menu($param = []){
+		$_insert =	$this->AutoloadModel->_create_batch([
+			'table' => 'menu',
+			'data' => $param['data']['insert'],
+		]);
+		$getData = $this->AutoloadModel->_get_where([
+			'select' => 'id',
+			'table' => 'menu',
+			'order_by' => 'created_at desc',
+			'limit' => $_insert
+		],TRUE);
+		$newMenu = [];
+		foreach ($getData as $key => $value) {
+			$newMenu[] = [
+				'objectid' => $getData[$key]['id'],
+				'title' => $param['data']['insert_language'][$key]['title'],
+				'canonical'  => $param['data']['insert_language'][$key]['canonical'],
+				'catalogueid' => $this->request->getPost('parentid'),
+				'language' => $param['language'],
+				'module' => 'menu',
+				'created_at' => $this->currentTime,
+				'userid_created' => $this->auth['id']
+			];	
+		}
+		$insertData = $this->AutoloadModel->_create_batch([
+			'table' => 'menu_translate',
+			'data' => $newMenu
+		]);
+
+		return true;
 	}
 
 

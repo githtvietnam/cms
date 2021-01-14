@@ -494,11 +494,10 @@ class Tour extends BaseController{
 			];
 		}
 
-		$this->AutoloadModel->_create_batch([
+		$flag = $this->AutoloadModel->_create_batch([
 			'table' => 'location_relationship',
 			'data' => $insert
 		]);
-
  		return true;
 	}
 
