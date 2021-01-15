@@ -305,10 +305,6 @@ class Menu extends BaseController{
 						'language' => $language
 					]);
 					
-
-					if(isset($all['insert']) && is_array($all['insert']) && count($all['insert'])){
-						
-					}
 		 		}
 		 	}else{
 	        	$this->data['validate'] = $this->validator->listErrors();
