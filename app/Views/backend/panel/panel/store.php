@@ -72,7 +72,7 @@
                                 <label class="control-label text-left">
                                     <span>Chọn đối tượng phù hợp</span>
                                 </label>
-                                <?php echo form_dropdown('catalogue[]', '', NULL, 'class="form-control selectMultiplePanel" multiple="multiple" data-title="Nhập 2 kí tự để tìm kiếm..."  style="width: 100%;" data-join="" data-module="" data-select="title"'); ?>
+                                <?php echo form_dropdown('catalogue[]', '', NULL, 'class="form-control selectMultiplePanel" multiple="multiple" data-title="Nhập 2 kí tự để tìm kiếm..."  style="width: 100%;" data-join="" data-lang="'.$languageSelect.'" data-module="" data-select="title"'); ?>
                             </div>   
                         </div>   
                     </div>

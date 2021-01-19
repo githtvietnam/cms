@@ -10,6 +10,10 @@
 	$languageList = get_data([
 		'select' => 'id, title, image, canonical',
 		'table' => 'language',
+		'where' => [
+			'deleted_at' => 0,
+			'publish' => 1
+		],
 		'order_by' => 'order desc, id desc'
 	], TRUE);
  ?>
@@ -24,7 +28,7 @@
 				<?php if(isset($languageList) && is_array($languageList) && count($languageList)){ ?>
 				<div class="language-widget">
 					<?php foreach($languageList as $key => $val){ ?>
-					<a href="" onclick="return false;" title="<?php echo $val['title'] ?>"><img src="<?php echo $val['image']; ?>" style="max-width:25px;height:15px;" alt="<?php echo $val['title'] ?>"></a>
+					<a href="" data-keyword="<?php echo $val['canonical'] ?>" class="language_widget" onclick="return false;" title="<?php echo $val['title'] ?>"><img src="<?php echo $val['image']; ?>"  style="max-width:25px;height:15px;" alt="<?php echo $val['title'] ?>"></a>
 					<?php } ?>
 				</div>
 				<?php } ?>

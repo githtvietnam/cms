@@ -118,7 +118,7 @@ class Tour extends BaseController{
 				$validate = $this->validation();
 				if($this->validate($validate['validate'], $validate['errorValidate'])){
 					$sub_content = $this->request->getPost('sub_content');
-					$wholesale = $this->request->getPost('wholesale');
+					$schedule = $this->request->getPost('schedule');
 			 		$insert = $this->store(['method' => 'create']);
 
 			 		$resultid = $this->AutoloadModel->_insert([
@@ -181,14 +181,15 @@ class Tour extends BaseController{
 			$session->setFlashdata('message-danger', 'Chuyến du lịch không tồn tại!');
  			return redirect()->to(BASE_URL.'backend/tour/tour/index');
 		}
+		$this->data['sub_album'] = $this->rewrite_album($this->data[$this->data['module']]);
 		$this->data['version'] = $this->get_data_version($id);
-		$this->data['wholesale_list'] = $this->get_list_wholesale($id);
+		$this->data['schedule_list'] = $this->get_list_schedule($id);
 
 		if($this->request->getMethod() == 'post'){
 			$validate = $this->validation();
 			if ($this->validate($validate['validate'], $validate['errorValidate'])){
 				$sub_content = $this->request->getPost('sub_content');
-				$wholesale = $this->request->getPost('wholesale');
+				$schedule = $this->request->getPost('schedule');
 		 		$update = $this->store(['method' => 'update']);
 		 		$updateLanguage = $this->storeLanguage($id);
 		 		$updateLanguage = $this->convert_content($sub_content, $updateLanguage);
@@ -204,8 +205,8 @@ class Tour extends BaseController{
 			 			'where' => ['objectid' => $id, 'module' => $this->data['module']],
 			 			'data' => $updateLanguage
 			 		]);
-			 		if($wholesale != []){
-						insert_wholesale($wholesale, $this->data['module'],'update', $id);
+			 		if($schedule != []){
+						$this->insert_schedule($schedule, $this->data['module'],'update', $id);
 			 		}
 			 		$flag = $this->create_relationship($id);
 					$this->version($id, 'update');
@@ -335,11 +336,14 @@ class Tour extends BaseController{
 
 	private function storeLanguage($objectid = 0){
 		helper(['text']);
+			$sub_album['title'] = $this->request->getPost('sub_album_title');
+
 		$store = [
 			'objectid' => $objectid,
 			'title' => validate_input($this->request->getPost('title')),
 			'start_at' => $this->request->getPost('start_at'),
 			'end_at' => $this->request->getPost('end_at'),
+			'sub_album_title' => json_encode($this->request->getPost('sub_album_title'),TRUE),
 			'number_days' => $this->request->getPost('number_days'),
 			'day_start' => $this->request->getPost('day_start'),
 			'canonical' => slug($this->request->getPost('canonical')),
@@ -377,12 +381,15 @@ class Tour extends BaseController{
 		$price_promotion = $this->request->getPost('promotion_price');
 		$price_promotion = str_replace('.', '', $price_promotion);
 		$price_promotion = (float)$price_promotion;
+		$time = str_replace("/","-",$this->request->getPost('time_end'));
+ 		$end = gettime($time, 'datetime');
 		$store = [
  			'catalogueid' => (int)$this->request->getPost('catalogueid'),
  			'catalogue' => json_encode($catalogue),
  			'tourid' => $this->request->getPost('tourid'),
- 			'time_end' => gettime($this->request->getPost('time_end'), 'datetime'),
+ 			'time_end' => $end,
  			'album' => json_encode($this->request->getPost('album'), TRUE),
+ 			'sub_album' => json_encode($this->request->getPost('sub_album'), TRUE),
  			'publish' => $this->request->getPost('publish'),
  			'price' => $price,
  			'price_promotion' => $price_promotion,
@@ -621,11 +628,28 @@ class Tour extends BaseController{
 
 		return $flag;
 	}
+	private function rewrite_album($param = []){
+		$sub_album = json_decode($param['sub_album'],TRUE);
+		$sub_album_title = json_decode($param['sub_album_title'],TRUE);
+		$album = [];
+		if(isset($sub_album) && is_array($sub_album) && count($sub_album)){
+			foreach ($sub_album as $key => $value) {
+				foreach ($sub_album_title as $keyTitle => $valTitle) {
+					if($key == $keyTitle){
+						$album[$key]['title'] = $valTitle;
+						$album[$key]['album'] = $value;
+					}
+				}
+			}
+			
+		}
+		return $album;
+	}
 
 
 	private function get_data_module($id = 0){
 		$flag = $this->AutoloadModel->_get_where([
-			'select' => 'tb1.id,tb1.time_end, tb1.catalogue,tb1.catalogueid,  tb1.price_promotion, tb1.price, tb1.tourid, tb1.id, tb2.title, tb2.objectid, tb2.sub_title, tb2.sub_content, tb2.description, tb2.canonical,  tb2.content, tb2.meta_title, tb2.meta_description,tb2.day_start, tb2.number_days, tb1.album, tb1.publish, tb2.start_at, tb2.end_at',
+			'select' => 'tb1.id,tb1.time_end,tb1.sub_album, tb1.catalogue,tb1.catalogueid,  tb1.price_promotion, tb1.price, tb1.tourid, tb1.id, tb2.title, tb2.objectid, tb2.sub_title, tb2.sub_content, tb2.description, tb2.canonical,  tb2.content,tb2.sub_album_title, tb2.meta_title, tb2.meta_description,tb2.day_start, tb2.number_days, tb1.album, tb1.publish, tb2.start_at, tb2.end_at',
 			'table' => $this->data['module'].' as tb1',
 			'join' =>  [
 					[
@@ -660,19 +684,68 @@ class Tour extends BaseController{
 		return $flag;
 	}
 
-	private function get_list_wholesale($id = 0){
+	function insert_schedule(array $param = [], $module = '', $method = '' , $id = ''){
+		$new_array = [];
+		$module_explode = explode("_", $module);
+		foreach ($param as $key => $value) {
+			foreach ($param['schedule_start'] as $keyChild => $valChild) {
+				if($param['schedule_start'][$keyChild] == '' && $param['schedule_to'][$keyChild] == '' && $param['schedule_price'][$keyChild] == ''){
+					unset($param['schedule_start'][$keyChild]);
+					unset($param['schedule_to'][$keyChild]);
+					unset($param['schedule_price'][$keyChild]);
+				}
+			}
+		}
+		$start = json_encode($param['schedule_start']);
+		$end = json_encode($param['schedule_to']);
+		$price = json_encode($param['schedule_price']);
+		
+		$store = [
+			'objectid' => $id,
+			'module' => $module,
+			'schedule_start' => $start,
+			'schedule_to' => $end,
+			'price' => $price
+		];
+		if($method =='create'){
+			$flag = $this->AutoloadModel->_insert([
+				'table' => $module_explode[0].'_schedule',
+				'data' => $store
+			]);
+		}else{
+			$flag = $this->AutoloadModel->_update([
+				'table' => $module_explode[0].'_schedule',
+				'data' => $store,
+				'where' => [
+					'objectid' => $id,
+					'module' => $module
+				]
+			]);
+
+			if($flag == ''){
+				$flag = $this->AutoloadModel->_insert([
+					'table' => $module_explode[0].'_schedule',
+					'data' => $store
+				]);
+			}
+		}
+
+	 	return $flag;
+	}
+
+	private function get_list_schedule($id = 0){
 		$check = $this->AutoloadModel->_get_where([
-			'select' => 'number_start, number_end, price',
-			'table' => 'tour_wholesale',
+			'select' => 'schedule_start, schedule_to, price',
+			'table' => 'tour_schedule',
 			'where' => ['objectid' => $id]
 		]);
 		$data = [];
 
 		if(isset($check) && is_array($check) && count($check)){
 			$array = [
-				'number_start' => json_decode($check['number_start']),
-				'number_end' => json_decode($check['number_end']),
-				'price_wholesale' => json_decode($check['price']),
+				'schedule_start' => json_decode($check['schedule_start']),
+				'schedule_to' => json_decode($check['schedule_to']),
+				'price_schedule' => json_decode($check['price']),
 			];
 			foreach ($array as $key => $value) {
 				foreach ($value as $keyChild => $valChild) {

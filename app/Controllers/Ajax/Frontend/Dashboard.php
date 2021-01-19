@@ -40,4 +40,51 @@ class Dashboard extends BaseController{
 		]); die();
 	}
 
+    public function language(){
+        $keyword = $this->request->getPost('keyword');
+        setcookie('language', $keyword , time() + 1*24*3600, "/");
+        pre($keyword);
+    }
+
+    public function contact(){
+        $data = $this->request->getPost('data');
+        $param = [];
+        if(isset($data) && is_array($data)&& count($data)){
+            foreach ($data as $key => $value) {
+                $param[$value['name']] = $value['value'];
+            }
+        }
+
+        $store = [
+            'phone' => $param['phone'],
+            'email' => $param['email'],
+            'publish' => 1,
+            'deleted_at' => 0,
+            'created_at' => $this->currentTime
+        ];
+        $flag = $this->AutoloadModel->_insert([
+            'table' => 'contact',
+            'data' => $store
+        ]);
+        if($flag > 0){
+            $storeLanguage = [
+                'objectid' => $flag,
+                'module' => 'contact',
+                'language' => $this->currentLanguage(),
+                'fullname' => $param['fullname'],
+                'title' => $param['title'],
+                'content' => $param['message'],
+                'deleted_at' => 0,
+                'created_at' => $this->currentTime
+            ];
+            $insert = $this->AutoloadModel->_insert([
+                'table' => 'contact_translate',
+                'data' => $storeLanguage
+            ]);
+            if($insert> 0){
+                echo 1;die();
+            }
+        }
+        echo 0;die();
+    }
 }

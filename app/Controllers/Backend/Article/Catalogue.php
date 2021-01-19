@@ -117,7 +117,7 @@ class Catalogue extends BaseController{
 			'table' => $this->data['module'].' as tb1',
 			'join' =>  [
 					[
-						'article_translate as tb2','tb1.id = tb2.objectid AND tb2.language = \''.$this->currentLanguage().'\' ','inner'
+						'article_translate as tb2','tb1.id = tb2.objectid AND tb2.module = \''.$this->data['module'].'\'   AND tb2.language = \''.$this->currentLanguage().'\'  ','inner'
 					]
 				],
 			'where' => ['tb1.id' => $id,'tb1.deleted_at' => 0]
@@ -180,7 +180,7 @@ class Catalogue extends BaseController{
 			'table' => $this->data['module'].' as tb1',
 			'join' =>  [
 					[
-						'article_translate as tb2','tb1.id = tb2.objectid AND tb2.language = \''.$this->currentLanguage().'\' ','inner'
+						'article_translate as tb2','tb1.id = tb2.objectid AND tb2.module = \''.$this->data['module'].'\'   AND tb2.language = \''.$this->currentLanguage().'\'  ','inner'
 					]
 				],
 			'where' => ['tb1.id' => $id,'tb1.deleted_at' => 0]

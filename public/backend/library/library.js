@@ -1,5 +1,7 @@
 $(document).ready(function(){
-
+	jQuery(document).ready(function() {
+	  	jQuery("time.timeago").timeago();
+	});
 	$( function() {
 		$( "#sortable" ).sortable();
 		$( "#sortable" ).disableSelection();
@@ -133,7 +135,8 @@ $(document).ready(function(){
 				let select = _this.attr('data-select');		
 				let module = _this.attr('data-module');
 				let join = _this.attr('data-join');
-				get_select2(_this);
+			let language = _this.attr('data-lang');
+				get_select2(_this,language);
 			});
 		}
 		return false;
@@ -146,10 +149,11 @@ $(document).ready(function(){
 			let select = _this.attr('data-select');		
 			let module = _this.attr('data-module');
 			let join = _this.attr('data-join');
+			let language = _this.attr('data-lang');
 			setTimeout(function(){
 				if(catalogue != ''){
 					$.post('ajax/dashboard/pre_select2', {
-						value: catalogue, module: module, select: select, join: join,},
+						value: catalogue, module: module, select: select, join: join,language: language},
 						function(data){
 							let json = JSON.parse(data);
 							if(json.items!='undefined' && json.items.length){
@@ -686,7 +690,7 @@ function getDataMultiple(object, data, select="title"){
 	get_select2(object);
 }
 
-function get_select2(object){
+function get_select2(object,lang){
 	let module = object.attr('data-module');
 	let select = object.attr('data-select');
 	let join = object.attr('data-join');
@@ -733,7 +737,7 @@ function get_select2(object){
 						module:module,
 						select: select,
 						join: join,
-
+						language:lang
 					};
 				},
 				processResults: function (data) {

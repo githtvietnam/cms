@@ -68,6 +68,8 @@
 		<script src="public/frontend/resources/plugins/OwlCarousel2-2.3.4/dist/owl.carousel.min.js"></script>
 		<script src="public/frontend/resources/uikit/js/components/slideshow.min.js"></script>
 		<script src="public/frontend/resources/plugins/select2/dist/js/select2.min.js"></script>
+		<script src="public/frontend/resources/plugins/jquery.countdown.min.js"></script>
+		<script src="public/frontend/resources/plugins/sweetalert.min.js"></script>
 		<script src="public/frontend/resources/uikit/js/components/accordion.min.js"></script>
 
 		<script src="public/frontend/resources/function.js"></script>

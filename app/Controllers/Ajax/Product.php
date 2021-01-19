@@ -129,6 +129,8 @@ class Product extends BaseController{
 	public function update_price(){
 		$id = $this->request->getPost('id');
 		$val = $this->request->getPost('val');
+		$val = str_replace('.', '', $val);
+		$val = (float)$val;
 		$field = $this->request->getPost('field');
 		$flag = $this->AutoloadModel->_update([
 			'table' => 'product',

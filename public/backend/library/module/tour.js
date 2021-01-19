@@ -1,4 +1,5 @@
 var count = 0;
+var count_album = 0;
 if(attribute_cat != ''){
 	attribute_cat = JSON.parse(attribute_cat)
 }
@@ -32,16 +33,16 @@ $(document).ready(function(){
 // ===================================================== JQuery Gia ban buon chuyen du lich ==============================================================
 
 
-$(document).on('click','.btn_wholesale',function(){
+$(document).on('click','.btn_schedule',function(){
 	let _this = $(this);
-	let wholesale = [];
+	let schedule = [];
 	let accept = false;
-	let dem = $('.wholesale_desc').length;
+	let dem = $('.schedule_desc').length;
 
 	if(dem == 0){
-		$('.wholesale_more').append(render_wholesale(dem + 1, 1));
+		$('.schedule_more').append(render_schedule());
 	}else{
-		$('.number_start, .number_end').each(function () {
+		$('.schedule_start, .schedule_to').each(function () {
 			if($(this).val() == ''){
 				accept = false;
 			}else{
@@ -52,36 +53,18 @@ $(document).on('click','.btn_wholesale',function(){
 			toastr.options.closeButton = true;
 		    toastr.options.preventDuplicates = true;
 		    toastr.options.progressBar = true;
-		    toastr.warning('Bạn vui lòng nhập vào 2 trường số lượng để tiếp tục!','Xảy ra lỗi!');
+		    toastr.warning('Bạn vui lòng nhập lịch trình để tiếp tục!','Xảy ra lỗi!');
 			return false;
 		}else{
-			let before_end = parseInt($('#numberend_'+(dem)+'').val());
-			$('.wholesale_more').append(render_wholesale(dem + 1));
-			$('#numberstart_'+(dem+1)).val(before_end + 1);
+			$('.schedule_more').append(render_schedule());
 		}
 	}
 	return false;
 })
 
-$(document).on('click','.wholesale_del',function(){
+$(document).on('click','.schedule_del',function(){
 	let _this = $(this);
-	_this.parents('.wholesale_desc').remove();
-	return false;
-})
-
-$(document).on('change','.number_end',function(){
-	let _this = $(this);
-	let start = _this.parents('.wholesale_desc').find('.number_start').val();
-	let id = _this.attr('id')
-	id = id.split("_")
-	id[1] = parseInt(id[1])
-	let end = parseInt(_this.val())
-	if(end <= start){
-		_this.val('');
-	}
-	if($('#numberstart_'+(id[1]+1)+'').length != 0){
-		$('#numberstart_'+(id[1]+1)+'').val(end + 1);
-	}
+	_this.parents('.schedule_desc').remove();
 	return false;
 })
 
@@ -91,6 +74,10 @@ $(document).on('click','.add-attr',function(){
 	render_attr();
 })
 
+$(document).on('click','.add-album',function(){
+	let _this = $(this);
+	render_album();
+})
 
 $(document).on('click','.del_img_modal',function(){
     let _this = $(this);
@@ -462,8 +449,6 @@ $(document).on('click' ,'.update_price' ,function(){
 $(document).on('change' ,'.index_update_price' ,function(){
 	let _this = $(this);
 	let val = _this.val();
-	val = val.replaceAll(".","");
-	val = parseFloat(val);
 	let id = _this.attr('data-id')
 	let field = _this.attr('data-field')
 	let form_URL = 'ajax/tour/update_price';
@@ -534,32 +519,83 @@ function render_attr(){
 	ckeditor5(id);
 }
 
-function render_wholesale(dem = '', $number = ''){
+function render_album(){
 	let html ='';
-	html = html + '<div class="wholesale_desc mb15">';
+	html = html + '<div class="ibox desc-more  album" style="opacity: 1;">';
+        html = html + '<div class="ibox-title ui-sortable-handle">';
+        	html = html + '<div class="uk-flex uk-flex-middle">';
+        	html = html + '<div class="col-lg-2">';
+					html = html + 'Album ảnh';
+				html = html + '</div>';
+                html = html + '<div class="col-lg-6">';
+					html = html + '<input type="text" name="sub_album_title['+count_album+'][]" class="form-control" value="" placeholder="Tiêu đề">';
+				html = html + '</div>';
+				html = html + '<div class="col-lg-4">';
+					html = html + '<div class="uk-flex uk-flex-middle uk-flex-space-between">';
+						html = html + '<a onclick="BrowseServerAlbum($(this),&quot;sub_album&quot;,'+count_album+');return false;" href="" title="" class="upload-picture">Chọn hình</a>';
+		                html = html + '<div class="ibox-tools">';
+		                    html = html + '<a class="collapse-link ui-sortable">';
+		                        html = html + '<i class="fa fa-chevron-up"></i>';
+		                    html = html + '</a>';
+		                    html = html + '<a class="close-link">';
+		                        html = html + '<i class="fa fa-times"></i>';
+		                    html = html + '</a>';
+		                html = html + '</div>';
+					html = html + '</div>';
+				html = html + '</div>';
+        	html = html + '</div>';
+        html = html + '</div>';
+        html = html + '<div class="ibox-content" style="">';
+        	html= html + '<div class="row">';
+				html= html + '<div class="col-lg-12">';
+					html= html + '<div class="click-to-upload">';
+						html= html + '<div class="icon">';
+							html= html + '<a type="button" class="upload-picture" onclick="BrowseServerAlbum($(this),&quot;sub_album&quot;,'+count_album+');return false;">';
+								html= html + '<svg style="width:80px;height:80px;fill: #d3dbe2;margin-bottom: 10px;" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 80 80"><path d="M80 57.6l-4-18.7v-23.9c0-1.1-.9-2-2-2h-3.5l-1.1-5.4c-.3-1.1-1.4-1.8-2.4-1.6l-32.6 7h-27.4c-1.1 0-2 .9-2 2v4.3l-3.4.7c-1.1.2-1.8 1.3-1.5 2.4l5 23.4v20.2c0 1.1.9 2 2 2h2.7l.9 4.4c.2.9 1 1.6 2 1.6h.4l27.9-6h33c1.1 0 2-.9 2-2v-5.5l2.4-.5c1.1-.2 1.8-1.3 1.6-2.4zm-75-21.5l-3-14.1 3-.6v14.7zm62.4-28.1l1.1 5h-24.5l23.4-5zm-54.8 64l-.8-4h19.6l-18.8 4zm37.7-6h-43.3v-51h67v51h-23.7zm25.7-7.5v-9.9l2 9.4-2 .5zm-52-21.5c-2.8 0-5-2.2-5-5s2.2-5 5-5 5 2.2 5 5-2.2 5-5 5zm0-8c-1.7 0-3 1.3-3 3s1.3 3 3 3 3-1.3 3-3-1.3-3-3-3zm-13-10v43h59v-43h-59zm57 2v24.1l-12.8-12.8c-3-3-7.9-3-11 0l-13.3 13.2-.1-.1c-1.1-1.1-2.5-1.7-4.1-1.7-1.5 0-3 .6-4.1 1.7l-9.6 9.8v-34.2h55zm-55 39v-2l11.1-11.2c1.4-1.4 3.9-1.4 5.3 0l9.7 9.7c-5.2 1.3-9 2.4-9.4 2.5l-3.7 1h-13zm55 0h-34.2c7.1-2 23.2-5.9 33-5.9l1.2-.1v6zm-1.3-7.9c-7.2 0-17.4 2-25.3 3.9l-9.1-9.1 13.3-13.3c2.2-2.2 5.9-2.2 8.1 0l14.3 14.3v4.1l-1.3.1z"></path></svg>';
+							html= html + '</a>';
+						html= html + '</div>';
+						html= html + '<div class="small-text">Sử dụng nút <b>Chọn hình</b> để thêm hình.</div>';
+					html= html + '</div>';
+					html= html + '<div class="upload-list"  style="padding:5px;">';
+						html= html + '<div class="row">';
+							html= html + '<ul id="" class="clearfix sortui data-album">';
+							html= html +'</ul>';
+						html= html +'</div>';
+					html= html +'</div>';
+				html= html +'</div>';
+			html= html +'</div>';
+        html = html + '</div>';
+    html = html + '</div>';
+    count_album++;
+	$('.album-more').prepend(html);
+}
+
+function render_schedule(){
+	let html ='';
+	html = html + '<div class="schedule_desc mb15">';
 		html = html + '<div class="uk-flex uk-flex-middle uk-flex-space-between">';
 			html = html + '<div class="va-flex-row">';
 				html = html + '<div class="form-row">';
 					html = html + '<label class="control-label text-left">';
-						html = html + '<span>Số lượng từ</span>';
+						html = html + '<span>Từ</span>';
 					html = html + '</label>';
-					html = html + '<input type="number" name="wholesale[number_start][]" value="'+$number+'" class="form-control number_start" placeholder="" id="numberstart_'+dem+'" autocomplete="off">';
+					html = html + '<input type="text" name="schedule[schedule_start][]" value="" class="form-control schedule_start" placeholder="" autocomplete="off">';
 				html = html + '</div>';
 			html = html + '</div>';
 			html = html + '<div class="va-flex-row">';
 				html = html + '<label class="control-label ">';
 					html = html + '<span>Đến</span>';
 				html = html + '</label>';
-				html = html + '<input type="number" name="wholesale[number_end][]" value="" class="form-control number_end" placeholder="" id="numberend_'+dem+'" autocomplete="off">';
+				html = html + '<input type="text" name="schedule[schedule_to][]" value="" class="form-control schedule_to" placeholder=""  autocomplete="off">';
 			html = html + '</div>';
 			html = html + '<div class="va-flex-row">';
 				html = html + '<label class="control-label ">';
 					html = html + '<span>Giá mới</span>';
 				html = html + '</label>';
-				html = html + '<input type="text" name="wholesale[wholesale_price][]" value="" class="form-control wholesale_price int price" placeholder="" id="wholesaleprice_'+dem+'" autocomplete="off">';
+				html = html + '<input type="text" name="schedule[schedule_price][]" value="" class="form-control schedule_price int price" placeholder=""  autocomplete="off">';
 			html = html + '</div>';
 			html = html + '<div class="va-flex-row">';
-				html = html + '<a type="button" class="btn btn-default wholesale_del" ><i class="fa fa-trash"></i></a>';
+				html = html + '<a type="button" class="btn btn-default schedule_del" ><i class="fa fa-trash"></i></a>';
 			html = html + '</div>';
 		html = html + '</div>';
 	html = html + '</div>';

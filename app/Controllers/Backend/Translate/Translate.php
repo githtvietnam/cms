@@ -559,14 +559,16 @@ class Translate extends BaseController
 		$store = [
 			'objectid' => $param['objectid'],
 			'title' => validate_input($this->request->getPost('title')),
-			'canonical' => $this->request->getPost('canonical'),
+			'canonical' => slug($this->request->getPost('canonical')),
 			'description' => base64_encode($this->request->getPost('description')),
 			'content' => base64_encode($this->request->getPost('content')),
 			'meta_title' => validate_input($this->request->getPost('meta_title')),
 			'meta_description' => validate_input($this->request->getPost('meta_description')),
 			'language' => $param['language'],
 			'module' => $param['module'],
+			'updated_at' => $this->currentTime,
 		];
+
 		return $store;
 	}
 	private function storeContact($param = []){

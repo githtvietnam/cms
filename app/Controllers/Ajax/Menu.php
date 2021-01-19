@@ -33,6 +33,20 @@ class Menu extends BaseController{
 		echo $flag;die();
 	}
 
+	public function del_menu(){
+		$id = $this->request->getPost('id');
+		$flag = $this->AutoloadModel->_delete([
+			'table' => 'menu',
+			'where' => ['id' => $id],
+		]);
+		$flag = $this->AutoloadModel->_delete([
+			'table' => 'menu_translate',
+			'where' => ['objectid' => $id],
+		]);
+		echo $flag;die();
+	}
+
+
 	public function render_link(){
 		$param = [];
 		$param['canonical'] = json_decode($this->request->getPost('canonical'));

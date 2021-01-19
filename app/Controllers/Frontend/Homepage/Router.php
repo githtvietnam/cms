@@ -17,7 +17,6 @@ class Router extends FrontendController{
         return view_cell($router, 'page='.$page.'');
     }
 
-
 	public function index($canonical = '', $page = 1){
 
         $count = $this->AutoloadModel->_get_where([

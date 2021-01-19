@@ -1,7 +1,30 @@
 $(document).ready(function(){
+	function sweet_error_alert(title, message){
+		swal({
+			title: title,
+			text: message,
+			type: 'error',
+		});
+	}
 	if($('.select2').length){
 		$('.select2').select2();
 	}
+
+	$('.countdown').each(function(){
+      	let _this = $(this);
+      	let time = _this.attr('data-time');
+      	_this.countdown(time, function(event) {
+	        let day = event.strftime('%D');
+	        let hour = event.strftime('%H');
+	        let mins = event.strftime('%M');
+	        let second = event.strftime('%S');
+	        _this.find('.days').html('').html(day);
+	        _this.find('.hours').html('').html(hour);
+	        _this.find('.mins').html('').html(mins);
+	        _this.find('.second').html('').html(second);
+
+      	});
+    });
 
 	$(document).on('change','.va-choose-tour input[type="radio"]', function(){
 		let _this = $(this)
@@ -15,6 +38,37 @@ $(document).ready(function(){
 			$('.check_end').html(json.html);
 		});	
 	})
+
+	$(document).on('click','.language_widget', function(){
+		let _this = $(this)
+		let keyword = _this.attr('data-keyword')
+		let form_URL = 'ajax/frontend/dashboard/language';
+		$.post(form_URL, {
+			keyword : keyword
+		},
+		function(data){
+			location.reload();
+		});	
+	})
+	$(document).on('submit','.form-contact', function(){
+		let _this = $(this)
+		let data = $(".form-contact").serializeArray();
+		let form_URL = 'ajax/frontend/dashboard/contact';
+		$.post(form_URL, {
+			data : data
+		},
+		function(data){
+			console.log(data);
+			if(data == 0){
+				sweet_error_alert('Có vấn đề xảy ra','Vui lòng thử lại!')
+			}else{
+				$('.form-contact')[0].reset();
+				swal("Thành công!", "Chúng tôi sẽ liên lạc với bạn trong thời gian sớm nhất, cám ơn bạn đã sử dụng dịch vụ này!", "success");
+			}
+		});	
+		return false;
+	})
+
 	$(document).on('change','.check-aside input', function(){
 		let _this = $(this)
 		$('.tour_list_panel').hide();
@@ -69,14 +123,6 @@ $(document).ready(function(){
 				let decode = b64DecodeUnicode(json.html);
 				$('.tour_search_panel').html(decode);
 				$('#pagination_ajax').html(json.pagination);
-				// $('#pagination_ajax li').removeClass('active');
-				// $('#pagination_ajax li a').each(function() {
-		  //           let _thisLi = $(this);
-		  //           let data_page = _this.attr('data-ci-pagination-page');
-		  //           if(data_page == page){
-		  //           	_thisLi.parent('li').addClass('active')
-		  //           }
-		  //       });
 			});	
     	}
 	}

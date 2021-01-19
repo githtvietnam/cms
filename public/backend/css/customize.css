@@ -823,6 +823,18 @@ table th {
 	height:120px;
 }
 
+.data-album {
+	list-style:none;
+	padding-left:0;
+	margin-top:16px;
+}
+
+.data-album .thumb{
+	background: #fafbfc;
+    border: 1px solid #e3e3e3;
+	height:120px;
+}
+
 .ui-state-default, .ui-widget-content .ui-state-default, .ui-widget-header .ui-state-default{
 	border:0;
 	background:transparent;
@@ -882,6 +894,41 @@ table th {
 }
 
 #sortable .thumb .delete-image:hover{
+	cursor: pointer;
+}
+
+.data-album .thumb{
+	position: relative;
+}
+.data-album .delete-image{
+	display: none;
+	position: absolute;
+	bottom:5px;
+	text-align: center;
+	color:#fff;
+	width: 100%;
+	font-size: 15px;
+}
+.data-album .overlay{
+	/* transition: height 2s ease 3s; */
+	display: none;
+	position: absolute;
+	top:0px;
+	height:100%;
+	width: 100%;
+	background: #2c3e50;
+	opacity: 0.7;
+}
+.data-album .thumb:hover .overlay{
+	
+	display: block;
+}
+.data-album .thumb:hover .delete-image{
+
+	display: block;
+}
+
+.data-album .thumb .delete-image:hover{
 	cursor: pointer;
 }
 

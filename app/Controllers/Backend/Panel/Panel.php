@@ -29,7 +29,7 @@ class Panel extends BaseController{
 		if($language == ''){
 			$language = $this->currentLanguage();
 		}
-
+		$this->data['languageSelect'] = $language;
 		$select = $this->configbie->panel();
 		$this->data['locate'] = $select['locate'];
 		
@@ -49,7 +49,7 @@ class Panel extends BaseController{
 		return view('backend/dashboard/layout/home', $this->data);
 	}
 
-	public function create(){
+	public function create($language = ''){
 		$flag = $this->authentication->check_permission([
 			'routes' => 'backend/panel/panel/index'
 		]);
@@ -57,6 +57,10 @@ class Panel extends BaseController{
  			$session->setFlashdata('message-danger', 'Bạn không có quyền truy cập vào chức năng này!');
  			return redirect()->to(BASE_URL.'backend/dashboard/dashboard/index');
 		}
+		if($language == ''){
+			$language = $this->currentLanguage();
+		}
+		$this->data['languageSelect'] = $language;
 		$session = session();
 		$select = $this->configbie->panel();
 		$this->data['locate'] = $select['locate'];
@@ -64,7 +68,7 @@ class Panel extends BaseController{
 		if($this->request->getMethod() == 'post'){
 			$validate = $this->validation();
 			if ($this->validate($validate['validate'], $validate['errorValidate'])){
-				$store = $this->store(['method' => 'create']);
+				$store = $this->store(['method' => 'create','language' => $language]);
 				$resultid = $this->AutoloadModel->_insert([
 		 			'table' => $this->data['module'],
 		 			'data' => $store,
@@ -98,7 +102,7 @@ class Panel extends BaseController{
 		if($language == ''){
 			$language = $this->currentLanguage();
 		}
-
+		$this->data['languageSelect'] = $language;
 		$this->data[$this->data['module']] = $this->AutoloadModel->_get_where([
 			'select' => 'keyword, title, module, catalogue, locate,id',
 			'table' => $this->data['module'],
@@ -112,7 +116,7 @@ class Panel extends BaseController{
 		if($this->request->getMethod() == 'post'){
 			$validate = $this->validation();
 			if ($this->validate($validate['validate'], $validate['errorValidate'])){
-				$store = $this->store(['method' => 'update']);
+				$store = $this->store(['method' => 'update','language' => $language]);
 				$resultid = $this->AutoloadModel->_update([
 		 			'table' => $this->data['module'],
 		 			'data' => $store,
@@ -142,10 +146,14 @@ class Panel extends BaseController{
  			return redirect()->to(BASE_URL.'backend/dashboard/dashboard/index');
 		}
 		$id = (int)$id;
+		if($language == ''){
+			$language = $this->currentLanguage();
+		}
+		$this->data['languageSelect'] = $language;
 		$this->data[$this->data['module']] = $this->AutoloadModel->_get_where([
 			'select' => 'id, title',
 			'table' => $this->data['module'],
-			'where' => ['id' => $id,'deleted_at' => 0,'language' => $this->currentLanguage()]
+			'where' => ['id' => $id,'deleted_at' => 0,'language' => $language]
 		]);
 		$session = session();
 		if(!isset($this->data[$this->data['module']]) || is_array($this->data[$this->data['module']]) == false || count($this->data[$this->data['module']]) == 0){
@@ -242,7 +250,7 @@ class Panel extends BaseController{
  			'keyword' => slug($this->request->getPost('keyword')),
  			'title' => $this->request->getPost('title'),
  			'locate' => $this->request->getPost('locate'),
- 			'language' => $this->currentLanguage()
+ 			'language' => $param['language']
  		];
  		if($param['method'] == 'create' && isset($param['method'])){	
  			$store['created_at'] = $this->currentTime;

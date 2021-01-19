@@ -9,30 +9,35 @@
 	</div>
 	<div class="uk-grid uk-grid-collapse uk-grid-width-small-1-1 uk-grid-width-medium-1-2 uk-grid-width-large-1-4 uk-clearfix">
 		<?php
-		if(isset($panel['hot-deals']['data']) && is_array($panel['hot-deals']['data']) && count($panel['hot-deals']['data'])){
-		$n=0;for($i = 0; $i < count($panel['hot-deals']['data']) ; $i++){?>
+				foreach ($panel['hot-deals']['data'] as $key => $value) {
+			?>
 			<div class="wrap-hot-deal">
 				<div class="hot-deal-body">
 					<div class="hot-deal-img">
-						<div class="hot-deal-time-end countdown" data-time="<?php echo isset($panel['hot-deals']['data'][$n]['time_end']) ? $panel['hot-deals']['data'][$n]['time_end'] : '' ?>">
-							<div class="value">Khuyến mãi còn <span></span> Ngày </div>
+						<div class="hot-deal-time-end countdown" data-time="<?php echo check_isset($value['time_end']) ?>">
+							<div class="value">Khuyến mãi còn 
+								<span class="countdown" data-time="<?php echo check_isset($value['time_end']) ?>">
+                                    <span class="time days"></span>
+                                    <span class="smalltext">Ngày</span>
+                                </span> 
+                            </div>
 							<span class="status-deal">Tour Hot</span>
 						</div>
-						<a href="<?php echo ((isset($panel['hot-deals']['data'][$n]['canonical'])) ? $panel['hot-deals']['data'][$n]['canonical'] : '') ?>" class="img-cover image img-zoomin">
-							<img src="<?php echo ((isset($panel['hot-deals']['data'][$n]['avatar'])) ? $panel['hot-deals']['data'][$n]['avatar'] : '') ?>" alt="<?php echo $panel['hot-deals']['data'][$n]['title'] ?>">
+						<a href="<?php echo check_isset($value['canonical']) ?>" class="img-cover image img-zoomin">
+							<img src="<?php echo check_isset($value['avatar']) ?>" alt="<?php echo check_isset($value['title']) ?>">
 						</a>
 					</div>
 					<div class="hot-deal-content">
-						<a href="<?php echo ((isset($panel['hot-deals']['data'][$n]['canonical'])) ? $panel['hot-deals']['data'][$n]['canonical'] : '') ?>" class="hot-deal-title mb10">
-							<?php echo ((isset($panel['hot-deals']['data'][$n]['title'])) ? $panel['hot-deals']['data'][$n]['title'] : '') ?>
+						<a href="<?php echo check_isset($value['canonical']) ?>" class="hot-deal-title mb10">
+							<?php echo check_isset($value['title']) ?>
 						</a>
 						<div class="hot-deal-price">
-							<?php echo ((isset($panel['hot-deals']['data'][$n]['price'])) ? $panel['hot-deals']['data'][$n]['price'] : '') ?> đ
+							<?php echo check_isset($value['price']) ?> đ
 						</div>
 					</div>
 				</div>
 			</div>
-		<?php $n++; }}  ?>
+		<?php } ?>
 	</div>
 	<button class="btn-view-all btn">
 		xem đầy đủ các tour deal

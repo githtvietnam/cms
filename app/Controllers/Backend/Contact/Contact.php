@@ -23,11 +23,9 @@ class Contact extends BaseController{
 			'table' => $this->data['module'].' as tb1',
 			'keyword' => $keyword,
 			'where' => $where,
-			
 			'join' => [
-					
 					[
-						'contact_translate as tb4','tb1.catalogueid = tb4.objectid','inner'
+						'contact_translate as tb2','tb1.id = tb2.objectid AND tb2.module = "contact" AND tb2.language = \''.$this->currentLanguage().'\'','inner'
 					],
 					
 				],
@@ -46,17 +44,14 @@ class Contact extends BaseController{
 			$page = ($page > $totalPage)?$totalPage:$page;
 			$page = $page - 1;
 			$this->data['contactList'] = $this->AutoloadModel->_get_where([
-				'select' => 'tb1.id, tb1.order, tb1.fullname, tb1.phone, tb1.email, tb1.address,  tb1.content, tb1.created_at, tb4.title',
+				'select' => 'tb1.id, tb1.order, tb2.fullname, tb1.phone, tb1.email, tb2.content,tb2.address, tb1.created_at, tb2.title',
 				'table' => $this->data['module'].' as tb1',
 				'where' => $where,
 				'keyword' => $keyword,
 				'join' => [
-					
 					[
-						'contact_translate as tb4','tb1.catalogueid = tb4.objectid','inner'
+						'contact_translate as tb2','tb1.id = tb2.objectid AND tb2.module = "contact" AND tb2.language = \''.$this->currentLanguage().'\'','inner'
 					],
-					
-					
 				],
 				'limit' => $config['per_page'],
 				'start' => $page * $config['per_page'],

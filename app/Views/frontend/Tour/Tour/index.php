@@ -65,35 +65,26 @@
 						<div class="uk-width-medium-1-1 uk-width-large-1-4">
 							<aside class="aside-tour-detail-left">
 								<ul class="tabs tab-aside uk-list">
-									<li class="btn-tab-aside tab-link current" data-tab="tab-1">
-										
-											<i class="fa fa-picture-o" aria-hidden="true"></i>Thắng cảnh
-										
+									<li class="btn-tab-aside tab-link current" data-tab="tong-hop">
+										Tổng hợp
 									</li>
-									<li class="btn-tab-aside tab-link" data-tab="tab-2">
-										
-											<i class="fa fa-male" aria-hidden="true"></i>Du khách
-										
+									<?php if(isset($sub_album)&& is_array($sub_album) && count($sub_album)){
+										foreach ($sub_album as $key => $value) {
+									 ?>
+										<li class="btn-tab-aside va-btn-sub-album tab-link" data-tab="<?php echo check_isset(slug($value['title'][0])) ?>">
+											<?php echo check_isset($value['title'][0]) ?>
+										</li>
+									<?php }} ?>
+									<li class="btn-tab-aside tab-link" data-tab="video_tour"> 
+										Video
 									</li>
-									<li class="btn-tab-aside tab-link" data-tab="tab-3"> 
-										
-											<i class="fa fa-cutlery" aria-hidden="true"></i>Ẩm thực
-										
-									</li>
-									<li class="btn-tab-aside tab-link" data-tab="tab-4"> 
-										
-											<i class="fa fa-play-circle" aria-hidden="true"></i>Video
-										
-									</li>
-									
 								</ul>
 							</aside>
 						</div>
 						<div class="uk-width-medium-1-1 uk-width-large-3-4">
 							<div class="wrap-carousel">
-
 								<ul class=" uk-list tabs-content tabs-content-aside">
-									<li id="tab-1" class="tab-content current">
+									<li id="tong-hop" class="tab-content current">
 										<div class="owl-slide">
 											<div class="owl-carousel owl-theme" data-owl="<?php echo base64_encode(json_encode($owlInit)); ?>" data-disabled="0">
 												<?php if(isset($object['album']) && is_array($object['album']) && count($object['album'])){
@@ -108,37 +99,27 @@
 											</div>
 										</div>
 									</li>
-									<li id="tab-2" class="tab-content">
+									<?php if(isset($sub_album)&& is_array($sub_album) && count($sub_album)){
+										foreach ($sub_album as $key => $value) {
+									 ?>
+									<li id="<?php echo check_isset(slug($value['title'][0])) ?>" class="tab-content">
 										<div class="owl-slide">
 											<div class="owl-carousel owl-theme" data-owl="<?php echo base64_encode(json_encode($owlInit)); ?>" data-disabled="0">
-												<?php if(isset($object['album']) && is_array($object['album']) && count($object['album'])){
-													foreach ($object['album'] as $key => $value) {
+												<?php if(isset($value['album']) && is_array($value['album']) && count($value['album'])){
+													foreach ($value['album'] as $keyAlbum => $valAlbum) {
 												 ?>
 													<div class="wrap-img-tour-detail">
 														<a href="" class="img-cover">
-															<img src="<?php echo check_isset($value) ?>" alt="">
+															<img src="<?php echo check_isset($valAlbum) ?>" alt="">
 														</a>
 													</div>
 												<?php }} ?>
 											</div>
 										</div>
 									</li>
-									<li id="tab-3" class="tab-content">
-										<div class="owl-slide">
-											<div class="owl-carousel owl-theme" data-owl="<?php echo base64_encode(json_encode($owlInit)); ?>" data-disabled="0">
-												<?php if(isset($object['album']) && is_array($object['album']) && count($object['album'])){
-													foreach ($object['album'] as $key => $value) {
-												 ?>
-													<div class="wrap-img-tour-detail">
-														<a href="" class="img-cover">
-															<img src="<?php echo check_isset($value) ?>" alt="">
-														</a>
-													</div>
-												<?php }} ?>
-											</div>
-										</div>
-									</li>
-									<li id="tab-4" class="tab-content">
+									
+									<?php }} ?>
+									<li id="video_tour" class="tab-content">
 										<div class="owl-slide">
 											<div class="owl-carousel owl-theme" data-owl="<?php echo base64_encode(json_encode($owlInit)); ?>" data-disabled="0">
 												<div class="wrap-video-tour-detail">

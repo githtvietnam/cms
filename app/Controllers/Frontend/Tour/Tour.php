@@ -18,7 +18,7 @@ class Tour extends FrontendController{
         $module_extract = explode("_", $this->data['module']);
         $keyword = $this->condition_keyword();
         $this->data['object'] = $this->AutoloadModel->_get_where([
-            'select' => 'tb1.id,tb1.price, tb1.price_promotion,tb1.catalogueid, tb1.viewed, tb1.album, tb1.image, tb2.title, tb2.canonical, tb2.meta_title,tb2.sub_title,tb2.sub_content, tb1.tourid,tb2.meta_description, tb2.day_start,tb2.number_days, tb2.description, tb2.content, tb3.title as start, tb4.title as end',
+            'select' => 'tb1.id,tb1.price,tb1.sub_album, tb1.price_promotion,tb1.catalogueid, tb1.viewed, tb1.album, tb1.image, tb2.title, tb2.canonical,tb2.sub_album_title, tb2.meta_title, tb2.sub_title, tb2.sub_content, tb1.tourid, tb2.meta_description, tb2.day_start,tb2.number_days, tb2.description, tb2.content, tb3.title as start, tb4.title as end',
             'table' => $module_extract[0].' as tb1',
             'where' => [
                 'tb1.deleted_at' => 0,
@@ -41,6 +41,7 @@ class Tour extends FrontendController{
         //     $session->setFlashdata('message-danger', 'Bài viết không tồn tại!');
         //     return redirect()->to(BASE_URL);
         // }
+        $this->data['sub_album'] = $this->rewrite_album($this->data['object']);
         $this->data['object']['album'] = json_decode($this->data['object']['album']);
         $this->data['object']['description'] = validate_input(base64_decode($this->data['object']['description']));
         $this->data['object']['content'] = validate_input(base64_decode($this->data['object']['content']));
@@ -152,6 +153,24 @@ class Tour extends FrontendController{
             }
         }
         return true;
+    }
+
+    private function rewrite_album($param = []){
+        $sub_album = json_decode($param['sub_album'],TRUE);
+        $sub_album_title = json_decode($param['sub_album_title'],TRUE);
+        $album = [];
+        if(isset($sub_album) && is_array($sub_album) && count($sub_album)){
+            foreach ($sub_album as $key => $value) {
+                foreach ($sub_album_title as $keyTitle => $valTitle) {
+                    if($key == $keyTitle){
+                        $album[$key]['title'] = $valTitle;
+                        $album[$key]['album'] = $value;
+                    }
+                }
+            }
+            
+        }
+        return $album;
     }
 
     public function condition_catalogue($catalogueid = 0){

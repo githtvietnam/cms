@@ -27,7 +27,7 @@
                 </div>
             </div>
             <div class="uk-button">
-                <a href="<?php echo base_url('backend/panel/panel/create') ?>" class="btn btn-success "><i class="fa fa-plus"></i> Thêm Giao diện Mới</a>
+                <a href="<?php echo base_url('backend/panel/panel/create'.'/'.$languageSelect.'') ?>" class="btn btn-success "><i class="fa fa-plus"></i> Thêm Giao diện Mới</a>
             </div>
         </div>
     </div>
@@ -70,8 +70,8 @@
                                     <td><a class="" href="<?php echo base_url('backend/panel/panel/update/'.$value['id']) ?>" title=""><?php echo $value['title'] ?></a></td>
                                     <td class="text-center"><?php echo $location ?></td>
                                     <td class="text-center" >
-                                        <a type="button" href="<?php echo base_url('backend/panel/panel/update/'.$value['id']) ?>" class="btn btn-primary"><i class="fa fa-edit"></i></a>
-                                        <a type="button" href="<?php echo base_url('backend/panel/panel/delete/'.$value['id']) ?>" class="btn btn-danger"><i class="fa fa-trash"></i></a>
+                                        <a type="button" href="<?php echo base_url('backend/panel/panel/update/'.$value['id'].'/'.$languageSelect.'') ?>" class="btn btn-primary"><i class="fa fa-edit"></i></a>
+                                        <a type="button" href="<?php echo base_url('backend/panel/panel/delete/'.$value['id']).'/'.$languageSelect.'' ?>" class="btn btn-danger"><i class="fa fa-trash"></i></a>
                                     </td>
                                 </tr>
                             <?php }} ?>

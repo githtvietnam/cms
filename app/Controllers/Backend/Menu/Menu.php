@@ -285,26 +285,32 @@ class Menu extends BaseController{
 								'language' => $language,
 							];
 						}else{
-							$all['id_update'][] = [
-								'id' => $val
-							];
 							$all['update'][] = [
+								'id' => $val,
 								'order' => $menu['order'][$key],
 								'userid_updated' => $this->auth['id'],
 								'updated_at' => $this->currentTime,
 							];
 							$all['update_language'][] = [
+								'objectid' => $val,
 								'title' => $menu['title'][$key],
 								'canonical'  => $menu['link'][$key],
 							];
 						}
 						$count++;		
 					}
-					$this->create_menu([
-						'data' => $all,
-						'language' => $language
-					]);
-					
+					if(isset($all['insert'])&& is_array($all['insert']) && count($all['insert'])){
+						$this->create_menu([
+							'data' => $all,
+							'language' => $language
+						]);
+					}
+					if(isset($all['update'])&& is_array($all['update']) && count($all['update'])){
+						$this->update_menu([
+							'data' => $all,
+							'language' => $language
+						]);
+					}
 		 		}
 		 	}else{
 	        	$this->data['validate'] = $this->validator->listErrors();
@@ -370,6 +376,21 @@ class Menu extends BaseController{
 			'data' => $newMenu
 		]);
 
+		return true;
+	}
+
+	private function update_menu($param = []){
+		$flag = $this->AutoloadModel->_update_batch([
+			'table' => 'menu',
+			'data' => $param['data']['update'],
+			'field' =>'id'
+		]);
+
+		$store = $this->AutoloadModel->_update_batch([
+			'table' => 'menu_translate',
+			'data' => $param['data']['update_language'],
+			'field' =>'objectid'
+		]);
 		return true;
 	}
 

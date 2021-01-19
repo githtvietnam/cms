@@ -13,7 +13,7 @@ define('HTSUFFIX', '.html');
 define('DEBUG', 0);
 define('COMPRESS', 0);
 define('CMS_NAME', 'HT VIETNAM CMS 3.0');
-define('API_WIDGET', 'http://widgetcms.com');
+define('API_WIDGET', 'widget.webht.vn');
 
 
 define('HTDBHOST', 'localhost');

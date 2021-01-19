@@ -125,6 +125,12 @@ class Dashboard extends BaseController{
 		$param['module'] = $this->request->getPost('module');
 		$param['select'] = $this->request->getPost('select');
 		$param['join'] = $this->request->getPost('join');
+		$param['language'] = $this->request->getPost('language');
+		if(isset($param['language'])&& $param['language'] !=''){
+			$language = $param['language'];
+		}else{
+			$language = $this->currentLanguage();
+		}
 		$object = [];
 		
 		if($param['value'] != ''){
@@ -133,7 +139,7 @@ class Dashboard extends BaseController{
 				'table' => $param['module'].' as tb1',
 				'join' => [
 						[
-							$param['join'].' as tb2', 'tb1.id = tb2.objectid AND tb2.module = \''.$param['module'].'\'  AND tb2.language = \''.$this->currentLanguage().'\' ','inner'
+							$param['join'].' as tb2', 'tb1.id = tb2.objectid AND tb2.module = \''.$param['module'].'\'  AND tb2.language = \''.$language.'\' ','inner'
 						],
 					],
 				'where_in' => $param['value'],
@@ -159,14 +165,19 @@ class Dashboard extends BaseController{
 		$param['keyword'] = $this->request->getPost('locationVal');
 		$param['select'] = $this->request->getPost('select');
 		$param['join'] = $this->request->getPost('join');
-		
+		$param['language'] = $this->request->getPost('language');
+		if(isset($param['language'])&& $param['language'] !=''){
+			$language = $param['language'];
+		}else{
+			$language = $this->currentLanguage();
+		}
 		if (isset($param['join']) && $param['join'] != ''){
 			$object = $this->AutoloadModel->_get_where([
 				'select' => 'tb1.id, tb2.'.$param['select'].'',
 				'table' => $param['module'].' as tb1',
 				'join' => [
 						[
-							$param['join'].' as tb2', 'tb1.id = tb2.objectid AND tb2.module = \''.$param['module'].'\'  AND tb2.language = \''.$this->currentLanguage().'\' ','inner'
+							$param['join'].' as tb2', 'tb1.id = tb2.objectid AND tb2.module = \''.$param['module'].'\'  AND tb2.language = \''.$language.'\' ','inner'
 						],
 					],
 				'keyword' => '('.$param['select'].' LIKE \'%'.$param['keyword'].'%\')',

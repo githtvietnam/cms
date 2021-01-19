@@ -47,7 +47,7 @@ class Article extends BaseController{
 						'user as tb3','tb1.userid_created = tb3.id','inner'
 					],
 					[
-						'article_translate as tb4','tb1.id = tb4.objectid AND tb4.language = \''.$this->currentLanguage().'\' ','inner'
+						'article_translate as tb4','tb1.id = tb4.objectid AND tb4.module="article" AND tb4.language = \''.$this->currentLanguage().'\' ','inner'
 					]
 				],
 			'group_by' => 'tb1.id',
@@ -90,7 +90,6 @@ class Article extends BaseController{
 				'order_by'=> 'tb1.id desc',
 				'group_by' => 'tb1.id'
 			], TRUE);
-			// pre($this->data['articleList'] );
 		}
 		$this->data['dropdown'] = $this->nestedsetbie->dropdown();
 		$this->data['template'] = 'backend/article/article/index';
@@ -216,7 +215,7 @@ class Article extends BaseController{
 						'user as tb3','tb1.userid_created = tb3.id','inner'
 					],
 					[
-						'article_translate as tb4','tb1.id = tb4.objectid AND tb4.language = \''.$this->currentLanguage().'\' ','inner'
+						'article_translate as tb4','tb1.id = tb4.objectid AND tb4.module="article" AND tb4.language = \''.$this->currentLanguage().'\' ','inner'
 					]
 				],
 			'where' => ['tb1.id' => $id,'tb1.deleted_at' => 0]
@@ -294,7 +293,7 @@ class Article extends BaseController{
 				'table' => $this->data['module'].'_catalogue as tb1',
 				'join' =>  [
 					[
-						'article_translate as tb4','tb1.id = tb4.objectid AND tb4.language = \''.$this->currentLanguage().'\' ','inner'
+						'article_translate as tb4','tb1.id = tb4.objectid AND tb4.module="article_catalogue" AND tb4.language = \''.$this->currentLanguage().'\' ','inner'
 					],
 									],
 				'where' => ['tb1.id' => $catalogueid],
@@ -427,7 +426,7 @@ class Article extends BaseController{
 		$i = 3;
 		if(isset($languageList) && is_array($languageList) && count($languageList)){
 			foreach($languageList as $key => $val){
-				$select = $select.'(SELECT COUNT(objectid) FROM article_translate WHERE article_translate.objectid = tb1.id AND  article_translate.language = "'.$val['canonical'].'") as '.$val['canonical'].'_detect, ';
+				$select = $select.'(SELECT COUNT(objectid) FROM article_translate WHERE article_translate.objectid = tb1.id AND article_translate.module = "article" AND  article_translate.language = "'.$val['canonical'].'") as '.$val['canonical'].'_detect, ';
 				$i++;
 			}	
 		}

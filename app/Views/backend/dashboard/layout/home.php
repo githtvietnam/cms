@@ -63,6 +63,7 @@
             ASSET_BACKEND.'js/plugins/datapicker/bootstrap-datepicker.js',
             ASSET_BACKEND.'js/plugins/sweetalert/sweetalert.min.js',
             ASSET_BACKEND.'plugin/jquery-ui.js',
+            ASSET_BACKEND.'plugin/timeago.js',
             ASSET_BACKEND.'plugin/inputTags.jquery.min.js',
             ASSET_BACKEND.'plugin/ckfinder/ckfinder.js',
             ASSET_BACKEND.'plugin/ckeditor5/build/ckeditor.js',

@@ -183,6 +183,7 @@ if (! function_exists('get_panel')){
                 }
                 if($module_explode[0] == 'tour'){
                     $select = $select . ', tb1.time_end, tb2.start_at, tb2.end_at,';
+                    $select_cat = $select_cat.',tb3.time_end, tb2.start_at, tb2.end_at';
                 }
                 if(isset($module_explode[1]) && $module_explode[1] != ''){
                     $value['catalogue'] = json_decode($value['catalogue']);

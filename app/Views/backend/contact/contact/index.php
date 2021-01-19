@@ -20,10 +20,10 @@
 		            <label for="check-all" class="labelCheckAll"></label>
 		        </th>
 		        <th class="text-center" style="width:80px">Ưu tiên</th>
-		        <th class="medium">Thông tin người gửi</th>
-		        <th class="text-center big"> Nội dung gửi</th>
+		        <th class="medium text-center"  style="width:250px">Thông tin người gửi</th>
+		        <th class="text-center">Tiêu đề</th>
+		        <th class=" big"> Nội dung gửi</th>
 		        <th class="text-center">Thời gian gửi</th>
-		        <th class="text-center">Nơi nhận</th>
 		        <th class="text-center">Thao tác</th>
 		    </tr>
 		    </thead>
@@ -56,10 +56,10 @@
 		                    Địa chỉ: <?php echo $val['address']; ?>
 		                </div>
 		            </td>
+		            <td class="text-center"><?php echo $val['title']; ?></td>
 		            <td class="tv text">
 		                <div class="tv content line-3"><a href="<?php echo base_url('backend/contact/contact/reply/'.$val['id']) ?>"><?php echo $val['content']; ?></a></div></td>
 		            <td class="text-center"><?php echo $val['created_at']; ?></td>
-		            <td class="text-center"><?php echo $val['title']; ?></td>
 		            <td class="text-center tv">
 		                <button class="btn btn-danger btn-sm delete1" id="<?php echo $val['id'] ?>" name="delete" value="delete" type="submit">Xóa</button>
 		            </td>

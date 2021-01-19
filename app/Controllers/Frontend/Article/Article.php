@@ -33,6 +33,7 @@ class Article extends FrontendController{
             ],
         ]);
 
+
         // if(isset($this->data['object']) && is_array($this->data['object']) && count($this->data['object'])){
         //     $session->setFlashdata('message-danger', 'Bài viết không tồn tại!');
         //     return redirect()->to(BASE_URL);

@@ -26,17 +26,13 @@ class FrontendController extends Controller
 		$this->general = get_general();
 	}
 
-	public function change_language(){
-	}
-
 	public function currentLanguage(){
 		$language = (isset($this->general['website_language']) ? $this->general['website_language'] : 'vi');
 		if(!isset($_COOKIE['language']) || $_COOKIE['language'] == ''){
-			setcookie('language', $language,  8*3600, "/");
+			setcookie('language', $language , time() + 1*24*3600, "/");
+		}else{
+			$language = $_COOKIE['language'];
 		}
-
 		return $language;
-		
-
 	}
 }

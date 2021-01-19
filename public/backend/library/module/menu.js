@@ -341,6 +341,46 @@ $(document).ready(function(){
 		}
 		return false;
 	});
+
+	$(document).on('click','.btn_ajax_del', function(){
+		let _this = $(this);
+		let id = _this.attr('data-id');
+
+		if(id.length > 0){
+			swal({
+				title: "Hãy chắc chắn rằng bạn muốn thực hiện thao tác này?",
+				text: 'Xóa tiêu đề menu được chọn! Nếu đã xóa không thể khôi phục lại!',
+				type: "warning",
+				showCancelButton: true,
+				confirmButtonColor: "#DD6B55",
+				confirmButtonText: "Thực hiện!",
+				cancelButtonText: "Hủy bỏ!",
+				closeOnConfirm: false,
+				closeOnCancel: false },
+			function (isConfirm) {
+				if (isConfirm) {
+					var formURL = 'ajax/menu/del_menu';
+					$.post(formURL, {
+						id: id,},
+						function(data){
+							if(data == 0){
+									sweet_error_alert('Có vấn đề xảy ra','Vui lòng thử lại')
+								}else{
+									_this.parents('.row.mb15').remove();
+									swal("Xóa thành công!", "Bản ghi đã được xóa khỏi Menu.", "success");
+								}
+						});
+				} else {
+					swal("Hủy bỏ", "Thao tác bị hủy bỏ", "error");
+				}
+			});
+		}
+		else{
+			sweet_error_alert('Thông báo từ hệ thống!', 'Bạn phải chọn 1 bản ghi để thực hiện chức năng này');
+			return false;
+		}
+		return false;
+	});
 })
 
 

@@ -39,6 +39,7 @@ class ConfigBie{
 				'website' => array('type' => 'text', 'label' => 'Website'),
 				'map' => array('type' => 'textarea', 'label' => 'Bản đồ','title' => 'Hướng dẫn thiết lập bản đồ','link' => 'https://webchuanseoht.com/huong-dan-thiet-lap-ban-do-google-map.html'),
 				'bct' => array('type' => 'text', 'label' => 'Link Bộ công thương'),
+				'us' => array('type' => 'editor', 'label' => 'Thông tin liên hệ'),
 			),
 		);
 		$data['another'] =  array(

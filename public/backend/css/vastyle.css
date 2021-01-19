@@ -614,3 +614,63 @@ button[disabled], html input[disabled] {
 input[type=file]:focus, input[type=checkbox]:focus, input[type=radio]:focus{
 	outline: 0;
 }
+
+.img-dashboard img{
+  width: 80px;
+  height: 80px;
+}
+
+.content-dashboard a h3{
+  position: relative;
+  display: -webkit-box;
+  overflow: hidden;
+  line-height: 20px;
+  height: 60px;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 3;
+  text-transform: uppercase;
+}
+
+.wrap-dashboard li{
+  position: relative;
+}
+
+.number-viewed{
+  position: absolute;
+  bottom: 0px;
+  right: 10px;
+  color: red;
+}
+
+.title_tour_dashboard h3{
+  font-size: 12px
+}
+
+
+
+.price_tour_dashboard .old-price{
+  font-weight: 600;
+  color: red;
+  margin-right: 20px
+}
+
+.line-price{
+  text-decoration: line-through;
+  color: black !important;
+}
+
+.price_tour_dashboard .new-price{
+  color: red;
+  font-weight: 600;
+}
+
+.contact-section .contact-form .label {
+    font-size: 14px;
+    line-height: 22px;
+    color: #000;
+    margin-bottom: 15px;
+}
+
+.contact-section .contact-form .form-row {
+    margin-bottom: 10px;
+}

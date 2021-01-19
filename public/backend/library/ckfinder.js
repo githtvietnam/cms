@@ -88,7 +88,7 @@ function BrowseServerInput  (object, type){
     finder.popup();
 }
 
-function BrowseServerAlbum(object, type){
+function BrowseServerAlbum(object,name,count, type){
     var finder = new CKFinder();
     finder.resourceType = type;
 
@@ -96,26 +96,32 @@ function BrowseServerAlbum(object, type){
         if(typeof(type) == 'undefined'){
             type = 'Images';
         }
+
+        if(typeof(name) == 'undefined'){
+            name = 'album';
+        }else{
+            name = name+'['+count+']';
+        }
         
 
         var files = allFiles;
         var li = '';
         for(var i = 0 ; i < files.length; i++){
             fileUrl =  files[i].url.replace(BASE_URL, "/");
-
             li = li + '<li class="ui-state-default">';
                 li = li + '<div class="thumb">';
                     li = li + '<span class="image img-scaledown">';
                         li = li + '<img src="'+fileUrl+'" alt="">'; 
-                        li = li + '<input type="hidden" value="'+fileUrl+'" name="album[]">';
+                        li = li + '<input type="hidden" value="'+fileUrl+'" name="'+name+'[]">';
                     li = li + '</span>';
                     li = li + '<div class="overlay"></div><div class="delete-image"><i class="fa fa-trash" aria-hidden="true"></i></div>';
                 li = li + '</div>';
             li = li + '</li>';
         }
-        $('#sortable').append(li);
         $('.click-to-upload').hide();
         $('.upload-list').show();
+        object.parents('.album').find('.data-album').append(li);
+
     }
     finder.popup();
 }

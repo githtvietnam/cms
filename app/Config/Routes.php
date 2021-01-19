@@ -33,6 +33,7 @@ $routes->setAutoRoute(true);
 $routes->get('/', 'Frontend/Homepage/Home::index');
 $routes->get('lich-tong-hop.html', 'Frontend\Homepage\Router::list/$1');
 $routes->get('lich-tong-hop/trang-([0-9]+).html', 'Frontend\Homepage\Router::list/$1/$2');
+$routes->get('contact-us.html', 'Frontend\Contact\Contact::index');
 $routes->get('/admin', 'Backend/Authentication/Auth::login',['filter' => 'login' ]);
 $routes->get('([a-zA-Z0-9-]+).html', 'Frontend\Homepage\Router::index/$1');
 $routes->get('([a-zA-Z0-9-]+)/trang-([0-9]+).html', 'Frontend\Homepage\Router::index/$1/$2');

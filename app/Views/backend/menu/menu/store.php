@@ -193,7 +193,7 @@
                                    </div>
                                    <div class="col-lg-2">
                                        <div class="form-row" style="text-align:right;margin-top:10px;">
-                                           <a class="delete-menu image img-scaledown" data-node="0" style="height:12px;"><img src="/public/backend/img/close.png" /></a>
+                                           <a class=" <?php echo ((isset($value['id']) && $value['id'] != '') ? 'btn_ajax_del' : 'delete-menu') ?> image img-scaledown" data-id="<?php echo check_isset($value['id']) ?>" data-node="0" style="height:12px;"><img src="/public/backend/img/close.png" /></a>
                                        </div>
                                    </div>
                                </div>
