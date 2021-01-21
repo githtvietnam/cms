@@ -11,6 +11,13 @@ class Translate extends BaseController
 	}
 	public function translateObject($objectid = 0, $module = '', $language = ''){
 		$session = session();
+		$flag = $this->authentication->check_permission([
+			'routes' => 'backend/translate/translate/translateobject'
+		]);
+		if($flag == false){
+ 			$session->setFlashdata('message-danger', 'Bạn không có quyền truy cập vào chức năng này!');
+ 			return redirect()->to(BASE_URL.'backend/dashboard/dashboard/index');
+		}
 		$objectid = (int)$objectid;
 		$moduleExtract = explode('_', $module);
 		$this->data['object'] = $this->AutoloadModel->_get_where([
@@ -142,6 +149,13 @@ class Translate extends BaseController
 
 	public function translateProduct($objectid = 0, $module = '', $language = ''){
 		$session = session();
+		$flag = $this->authentication->check_permission([
+			'routes' => 'backend/translate/translate/translateproduct'
+		]);
+		if($flag == false){
+ 			$session->setFlashdata('message-danger', 'Bạn không có quyền truy cập vào chức năng này!');
+ 			return redirect()->to(BASE_URL.'backend/dashboard/dashboard/index');
+		}
 		$objectid = (int)$objectid;
 		$this->data['module'] = $module;
 		$moduleExtract = explode('_', $module);
@@ -246,6 +260,13 @@ class Translate extends BaseController
 
 	public function translateTour($objectid = 0, $module = '', $language = ''){
 		$session = session();
+		$flag = $this->authentication->check_permission([
+			'routes' => 'backend/translate/translate/translatetour'
+		]);
+		if($flag == false){
+ 			$session->setFlashdata('message-danger', 'Bạn không có quyền truy cập vào chức năng này!');
+ 			return redirect()->to(BASE_URL.'backend/dashboard/dashboard/index');
+		}
 		$objectid = (int)$objectid;
 		$this->data['module'] = $module;
 		$moduleExtract = explode('_', $module);
@@ -349,6 +370,13 @@ class Translate extends BaseController
 
 	public function translateContact($objectid = 0, $module = '', $language = ''){
 		$session = session();
+		$flag = $this->authentication->check_permission([
+			'routes' => 'backend/translate/translate/translatecontact'
+		]);
+		if($flag == false){
+ 			$session->setFlashdata('message-danger', 'Bạn không có quyền truy cập vào chức năng này!');
+ 			return redirect()->to(BASE_URL.'backend/dashboard/dashboard/index');
+		}
 		$objectid = (int)$objectid;
 		$moduleExtract = explode('_', $module);
 		$this->data['language'] = $language;
@@ -419,6 +447,13 @@ class Translate extends BaseController
 	}
 	public function translateAttributeCatalogue($objectid = 0, $module = '', $language = ''){
 		$session = session();
+		$flag = $this->authentication->check_permission([
+			'routes' => 'backend/translate/translate/translateattributecatalogue'
+		]);
+		if($flag == false){
+ 			$session->setFlashdata('message-danger', 'Bạn không có quyền truy cập vào chức năng này!');
+ 			return redirect()->to(BASE_URL.'backend/dashboard/dashboard/index');
+		}
 		$objectid = (int)$objectid;
 		$moduleExtract = explode('_', $module);
 		$this->data['language'] = $language;
@@ -488,6 +523,13 @@ class Translate extends BaseController
 	}
 	public function translateAttribute($objectid = 0, $module = '', $language = ''){
 		$session = session();
+		$flag = $this->authentication->check_permission([
+			'routes' => 'backend/translate/translate/translateattribute'
+		]);
+		if($flag == false){
+ 			$session->setFlashdata('message-danger', 'Bạn không có quyền truy cập vào chức năng này!');
+ 			return redirect()->to(BASE_URL.'backend/dashboard/dashboard/index');
+		}
 		$objectid = (int)$objectid;
 		$moduleExtract = explode('_', $module);
 		$this->data['language'] = $language;

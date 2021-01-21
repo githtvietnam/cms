@@ -46,6 +46,48 @@ class Dashboard extends BaseController{
         pre($keyword);
     }
 
+    public function contact_tour(){
+        $name = $this->request->getPost('name');
+        $contact = $this->request->getPost('contact');
+        $title = 'Vui lòng liên hệ!';
+        $message = 'Khách hàng '.$name.' đã để lại thông tin liên lạc qua '.$contact;
+        if(is_numeric($contact) ==1){
+            $abc = 'phone';
+        }else{
+            $abc = 'email';
+        }
+        $store = [
+            $abc => $contact,
+            'publish' => 1,
+            'deleted_at' => 0,
+            'created_at' => $this->currentTime
+        ];
+        $flag = $this->AutoloadModel->_insert([
+            'table' => 'contact',
+            'data' => $store
+        ]);
+        if($flag > 0){
+            $storeLanguage = [
+                'objectid' => $flag,
+                'module' => 'contact',
+                'language' => $this->currentLanguage(),
+                'fullname' => $name,
+                'title' => $title,
+                'content' => $message,
+                'deleted_at' => 0,
+                'created_at' => $this->currentTime
+            ];
+            $insert = $this->AutoloadModel->_insert([
+                'table' => 'contact_translate',
+                'data' => $storeLanguage
+            ]);
+            if($insert> 0){
+                echo 1;die();
+            }
+        }
+        echo 0;die();
+    }
+
     public function contact(){
         $data = $this->request->getPost('data');
         $param = [];

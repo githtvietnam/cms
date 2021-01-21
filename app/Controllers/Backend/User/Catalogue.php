@@ -96,7 +96,6 @@ class Catalogue extends BaseController{
 			'table' => $this->data['module'],
 			'where' => ['id' => $id,'deleted_at' => 0]
 		]);
-		// pre($this->data[$this->data['module']]);
 		$session = session();
 		if(!isset($this->data[$this->data['module']]) || is_array($this->data[$this->data['module']]) == false || count($this->data[$this->data['module']]) == 0){
 			$session->setFlashdata('message-danger', 'Nhóm Thành viên không tồn tại');

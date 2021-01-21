@@ -52,6 +52,18 @@
 								</div>
 							</div>
 						</div>
+						<div class="row mb15">
+							<div class="col-lg-12">
+								<div class="form-row form-description">
+									<div class="uk-flex uk-flex-middle uk-flex-space-between">
+										<label class="control-label text-left">
+											<span>Link nhúng video</span>
+										</label>
+									</div>
+									<?php echo form_textarea('video', htmlspecialchars_decode(html_entity_decode(set_value('video', (isset($tour['video'])) ? $tour['video'] : ''))), 'class="form-control" id="video" placeholder="" autocomplete="off"');?>
+								</div>
+							</div>
+						</div>
 						<div class="row">
 							<div class="col-lg-12	">
 								<div class="form-row mb15">
@@ -178,7 +190,7 @@
 				</div>
 				<div class="ibox">
 					<div class="row" id="sortable-view">
-					    <div class="col-lg-12 ui-sortable attr-more">
+					    <div class="col-lg-12 ui-sortable album-more">
 					    	<?php if(isset($sub_album) && is_array($sub_album) && count($sub_album)){
 					    		foreach ($sub_album as $key => $value) {
 					    	 ?>
@@ -250,7 +262,9 @@
 				<?php echo view('backend/tour/tour/common/general_info') ?>
 
 				<!-- Thông tin giá bán buôn của sản phẩm -->
-				<?php echo view('backend/tour/tour/common/schedule') ?>
+				<?php 
+				// echo view('backend/tour/tour/common/schedule') 
+				?>
 				<!-- Thông tin phần thuộc tính của Chuyến du lịch -->
 				<?php echo view('backend/tour/tour/common/attribute_tour') ?>
 				<div class="ibox ibox-seo mb20">

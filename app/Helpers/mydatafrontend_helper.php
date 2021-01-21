@@ -188,7 +188,7 @@ if (! function_exists('get_panel')){
                 if(isset($module_explode[1]) && $module_explode[1] != ''){
                     $value['catalogue'] = json_decode($value['catalogue']);
                     $data = $model->_get_where([
-                        'select' => 'tb1.catalogueid, tb3.id, '.$select_cat.', tb2.title, tb2.content, tb2.canonical, tb3.album, tb3.image',
+                        'select' => 'tb1.catalogueid, tb3.id, '.$select_cat.', tb2.title,tb2.description, tb2.content, tb2.canonical, tb3.album, tb3.image',
                         'table' => 'object_relationship as tb1',
                         'join' =>[
                             [
@@ -223,9 +223,13 @@ if (! function_exists('get_panel')){
                 }else if($value['module'] == '0'){
                     $object[$key]['data'] = [];
                 }else{
+                    $iframe = '';
+                    if($module_explode[0] == 'media'){
+                        $iframe = 'tb2.iframe,';
+                    }
                     $value['catalogue'] = json_decode($value['catalogue']);
                     $data = $model->_get_where([
-                        'select' => 'tb1.id, tb1.image, tb1.catalogueid, tb1.album,'.$select.'  tb2.title, tb2.meta_description, tb2.canonical',
+                        'select' => 'tb1.id, tb1.image, tb1.catalogueid,tb2.description, tb1.album,'.$select.$iframe.'  tb2.title, tb2.meta_description, tb2.canonical',
                         'table' => $module_explode[0].' as tb1',
                         'join' => [
                             [
@@ -238,6 +242,7 @@ if (! function_exists('get_panel')){
                     ],TRuE);
                     if(isset($data) &&  is_array($data)  && count($data)){
                         foreach ($data as $keyData => $valData) {
+                            $data[$keyData]['description'] = base64_decode($valData['description']);
                             $data[$keyData]['canonical'] = fix_canonical(slug($valData['canonical']));
                             $data[$keyData]['album'] = json_decode($valData['album']);
                              if($select != ''){
@@ -364,6 +369,17 @@ if (! function_exists('menu_recursive')){
     }
 }
 
+if (! function_exists('render_img')){
+    function render_img($src = '', $alt='', $attr = ''){
+        return '<img src="'.$src.'" alt="'.(($alt =='') ? $src : $alt).' '.$attr.'">';
+    }
+}
+
+if (! function_exists('render_a')){
+    function render_a($url = '', $title='', $attr = '', $child = ''){
+        return '<a href="'.$url.'" title="'.(($title =='') ? $url : $title).'" '.$attr.'>'.$child.'</a>';
+    }
+}
 
 ?>
 

@@ -76,8 +76,14 @@ class Catalogue extends BaseController{
 	}
 
 	public function create(){
-
 		$session = session();
+		$flag = $this->authentication->check_permission([
+			'routes' => 'backend/product/brand/catalogue/create'
+		]);
+		if($flag == false){
+ 			$this->session->setFlashdata('message-danger', 'Bạn không có quyền truy cập vào chức năng này!');
+ 			return redirect()->to(BASE_URL.'backend/dashboard/dashboard/index');
+		}
 		if($this->request->getMethod() == 'post'){
 			$validate = $this->validation();
 			if ($this->validate($validate['validate'], $validate['errorValidate'])){
@@ -115,6 +121,14 @@ class Catalogue extends BaseController{
 
 	public function update($id = 0){
 		$id = (int)$id;
+		$session = session();
+		$flag = $this->authentication->check_permission([
+			'routes' => 'backend/product/brand/catalogue/update'
+		]);
+		if($flag == false){
+ 			$this->session->setFlashdata('message-danger', 'Bạn không có quyền truy cập vào chức năng này!');
+ 			return redirect()->to(BASE_URL.'backend/dashboard/dashboard/index');
+		}
 		$this->data[$this->data['module']] = $this->AutoloadModel->_get_where([
 			'select' => 'tb1.id, tb2.title, tb2.canonical, tb2.description, tb2.content, tb2.meta_title, tb2.meta_description, tb1.parentid, tb1.image, tb1.album, tb1.publish',
 
@@ -173,7 +187,14 @@ class Catalogue extends BaseController{
 	}
 
 	public function delete($id = 0){
-
+		$session = session();
+		$flag = $this->authentication->check_permission([
+			'routes' => 'backend/product/brand/catalogue/delete'
+		]);
+		if($flag == false){
+ 			$this->session->setFlashdata('message-danger', 'Bạn không có quyền truy cập vào chức năng này!');
+ 			return redirect()->to(BASE_URL.'backend/dashboard/dashboard/index');
+		}
 		$id = (int)$id;
 		$this->data[$this->data['module']] = $this->AutoloadModel->_get_where([
 			'select' => 'tb1.id, tb2.title, tb1.lft, tb1.rgt',

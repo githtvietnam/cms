@@ -4,23 +4,19 @@
 		<title>Quản lý - [Menu]</title>
 		<item>
 			<param>backend/menu/menu/index</param>
-			<description>Xem</description>
+			<description>Xem chi tiết menu</description>
 		</item>
 		<item>
-			<param>backend/menu/menu/menuchild</param>
-			<description>Xem bản dịch</description>
+			<param>backend/menu/menu/listmenu</param>
+			<description>Xem danh sách menu</description>
 		</item>
 		<item>
-			<param>backend/menu/general/translator/jp</param>
-			<description>Xem bản dịch</description>
+			<param>backend/menu/menu/createmenu</param>
+			<description>Tạo mới menu</description>
 		</item>
 		<item>
-			<param>backend/menu/general/translator/vi</param>
-			<description>Xem bản dịch</description>
-		</item>
-		<item>
-			<param>backend/menu/general/translator/en</param>
-			<description>Xem bản dịch</description>
+			<param>backend/menu/menu/create</param>
+			<description>Chỉnh sửa menu</description>
 		</item>
 	</permissions>
 	<permissions>

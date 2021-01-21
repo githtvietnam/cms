@@ -6,7 +6,144 @@ class Filter extends BaseController{
     public function __construct(){
         
     }
+    public function listtour($page = 1){
+        helper(['mypagination']);
+        $param['cat'] = $this->request->getPost('cat');
+        $param['cat_tour'] = $this->request->getPost('cat_tour');
+        $param['start'] = $this->request->getPost('start');
+        $param['end'] = $this->request->getPost('end');
+        $param['module'] = $this->request->getPost('module');
+        $param['page'] = $this->request->getPost('page');
+        $param['url'] = $this->request->getPost('url');
+        $explode = explode('_', $param['module']);
+        $importSQL = $this->listtour_create_query($param);
+        $where = [
+            'tb1.deleted_at' => 0,
+            'tb1.publish' => 1,
+        ];
+        if(isset($param['cat_tour']) && $param['cat_tour'] != 0){
+            $abc = [
+                'tb1.catalogueid' => $param['cat_tour']
+            ];
+            $where = $where+$abc;
+        }
+        $flag  = $this->AutoloadModel->_get_where([
+            'select' => 'tb1.id, tb1.viewed,tb1.tourid, tb1.image,tb1.price, tb1.price_promotion,tb2.number_days, tb2.title, tb2.canonical, tb2.meta_title, tb2.meta_description, tb2.description, tb2.content, tb2.day_start',
+            'table' => $explode[0].' as tb1',
+            'join' => $importSQL['join'],
+            'where' => $where,
+            'query' => $importSQL['query'],
+            'group_by' => 'tb1.id',
+            'order_by' => 'tb1.catalogueid asc'
+        ],TRUE);
+
+        $html = '';
+        $page = (int)$param['page'];
+        $config['base_url'] = $param['url'];
+        $config['base_url'] = str_replace('.html', '', $config['base_url']);
+        $config['per_page'] = 10;
+        $config['total_rows'] = count($flag);
+        if(count($flag) > 0){
+            $config = pagination_frontend(['url' => $config['base_url'],'perpage' => $config['per_page']], $config, $page);
+            $this->pagination->initialize($config);
+            $pagination = $this->pagination->create_links();
+            $totalPage = ceil($config['total_rows']/$config['per_page']);
+            $page = ($page <= 0)?1:$page;
+            $page = ($page > $totalPage)?$totalPage:$page;
+            if($page >= 2){
+                $canonical = $config['base_url'].'/trang-'.$page.HTSUFFIX;
+            }
+            $page = $page - 1;
+            $flag  = $this->AutoloadModel->_get_where([
+                'select' => 'tb1.id, tb1.viewed,tb1.tourid, tb1.image, tb1.album ,tb1.price, tb1.price_promotion,tb2.number_days, tb2.title, tb2.canonical, tb2.meta_title, tb2.meta_description, tb2.description, tb2.content, tb2.day_start',
+                'table' => $explode[0].' as tb1',
+                'join' => $importSQL['join'],
+                'where' => $where,
+                'query' => $importSQL['query'],
+                'limit' => $config['per_page'],
+                'start' => $page * $config['per_page'],
+                'group_by' => 'tb1.id',
+                'order_by' => 'tb1.catalogueid asc'
+            ],TRUE);
+            if(isset($flag) && is_array($flag) && count($flag)){
+                foreach ($flag as $key => $value) {
+                    $flag[$key]['description'] = base64_decode($value['description']);
+                    $flag[$key]['content'] = base64_decode($value['content']);
+                }
+            }
+            $count = 1;
+           if(isset($flag) && is_array($flag) && count($flag)){
+                foreach ($flag as $key => $value) {
+                    $html =$html.'<tr>';
+                        $html =$html.'<td>';
+                            $html =$html.'<div class="text-center">'.$count.'</div>';
+                        $html =$html.'</td>';
+                        $html =$html.'<td><strong class="fs14"><a href="'.BASE_URL.$value['canonical'].HTSUFFIX.'" target="_blank" title="'.$value['title'].'">'.$value['title'].'</a></strong><span class="i-hot"><img src="https://luhanhvietnam.com.vn/tour-du-lich/modules/tour/images/hot-icon.gif" alt="Hot" class="i-hot"></span></td>';
+                        $html =$html.'<td nowrap="">'.$value['number_days'].'</td>';
+                        $html =$html.'<td nowrap="">'.number_format(check_isset($value['price']),0,',','.').'  đ</td>';
+                        $html =$html.'<td>'.$value['day_start'].'</td>';
+                    $html =$html.'</tr>';
+                    $count++;
+                }
+            }else{
+                $html = $html.'<tr>';
+                    $html = $html.'<td colspan="100%"><span class="text-danger">Không có dữ liệu phù hợp...</span></td>';
+                $html = $html.'</tr>';
+            }
+            $html = $html.'<div id="pagination_ajax" class="va-num-page pagination_ajax">';
+            $html = $html.'</div>';
+            return json_encode([
+                'html' => base64_encode($html),
+                'pagination' => (isset($pagination) ? $pagination : '')
+            ]);die();
+        }
+       
+    }
     
+    private function listtour_create_query($param = []){
+        $find = [];
+        $explode = explode('_', $param['module']);
+        $querySQL = $this->listtour_find_by_location($param);
+        $join = $this->listtour_query_join($querySQL, $explode[0]);
+
+        return [
+            'query' => $querySQL,
+            'join' => $join
+        ];
+    }
+    private function listtour_find_by_location($param = []){
+        $explode = explode('_', $param['module']);
+        $query_1 = '';
+        $query_2 = '';
+        $query_3 = '';
+        if($param['cat'] != 0){
+            $query_1 = '(location_relationship.catalogueid = \''.$param['cat'].'\' AND location_relationship.attribute = "end" AND location_relationship.module ="location_catalogue")';
+        }
+        if($param['start'] != 0){
+            $query_2 = '(tb2.start_at = \''.$param['start'].'\' )';
+        }
+        if($param['end'] != 0){
+            $query_3 = '(tb2.end_at = \''.$param['end'].'\')';
+        }
+        $query = $query_1.(($query_1 != '') ? (($query_2 == '' && $query_3 == '') ? '' : 'AND') : '').$query_2.(($query_3 != '') ? (($query_2 == '' && $query_1 == '') ? '' : 'AND') : '').$query_3;
+        return $query;
+    }
+    private function listtour_query_join($query = '', $module = ''){
+        $join = [
+            [
+                $module.'_translate as tb2','tb1.id = tb2.objectid AND tb2.module = \''.$module.'\' AND tb2.language = \''.$this->currentLanguage().'\' ','inner'
+            ]
+        ];
+        $param_join = [];
+        if(isset($query) && $query != ''){
+            $param_join = [
+                'location_relationship', 'tb1.id = location_relationship.objectid ', 'inner'
+            ];
+            array_push($join,$param_join );
+        }
+        return $join;
+    }
+
     public function render_tour($page = 1){
         helper(['mypagination']);
         $param['cat'] = $this->request->getPost('cat');
@@ -122,6 +259,7 @@ class Filter extends BaseController{
             ]);die();
         }
     }
+
     private function create_query($param = []){
         $find = [];
         $querySQL = '';

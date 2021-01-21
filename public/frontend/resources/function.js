@@ -1,4 +1,15 @@
 $(document).ready(function(){
+	$(document).ready(function(){
+		$('.countdown').each(function(){
+			let _this = $(this);
+			let val = _this.find('.days').html()
+			if(val == 0){
+				_this.find('.status-deal').html('Hết hạn')
+			}
+		})
+	})
+
+
 	function sweet_error_alert(title, message){
 		swal({
 			title: title,
@@ -26,6 +37,118 @@ $(document).ready(function(){
       	});
     });
 
+
+
+	$(document).on('click','.language_widget', function(){
+		let _this = $(this)
+		let keyword = _this.attr('data-keyword')
+		let form_URL = 'ajax/frontend/dashboard/language';
+		$.post(form_URL, {
+			keyword : keyword
+		},
+		function(data){
+			location.reload();
+		});	
+	})
+	$(document).on('click','.create-help', function(){
+		return false;
+	})
+	$(document).on('click','.create-help', function(){
+		return false;
+	})
+	$(document).on('click','.btn-send button', function(){
+		let _this = $(this)
+		let name = $('.input_name').val();
+		let phone = $('.input_phone').val();
+		contact(name,phone);
+		return false;
+	})
+	$(document).on('click','.btn-send-modal button', function(){
+		let _this = $(this)
+		let name = $('.input_name_modal').val();
+		let phone = $('.input_phone_modal').val();
+		contact(name,phone);
+		return false;
+	})
+	function contact(name = '',contact= ''){
+		let form_URL = 'ajax/frontend/dashboard/contact_tour';
+		if(name == ''){
+			swal("Có lỗi xảy ra!", "Bạn chưa nhập họ và tên", "warning");
+		}else if(contact == ''){
+			swal("Có lỗi xảy ra!", "Bạn chưa nhập Email hoặc số điện thoại", "warning");
+		}else{
+			$.post(form_URL, {
+				name : name,contact:contact
+			},
+			function(data){
+				if(data == 0){
+					sweet_error_alert('Có vấn đề xảy ra','Vui lòng thử lại!')
+				}else{
+					$('.input_name_modal').val('');
+					$('.input_phone_modal').val('');
+					$('.input_name').val('');
+					$('.input_phone').val('');
+					swal("Thành công!", "Chúng tôi sẽ liên lạc với bạn trong thời gian sớm nhất, cám ơn bạn đã sử dụng dịch vụ này!", "success");
+				}
+			});	
+		}
+	}
+
+	$(document).on('submit','.form-contact', function(){
+		let _this = $(this)
+		let data = $(".form-contact").serializeArray();
+		let count = data.length;
+		let check = 0;
+		for (var i = 0; i < count; i++) {
+			if(data[i].value == ''){
+				check = 1;
+			}
+		}
+		if(check != 0){
+			swal("Có lỗi xảy ra!", "Xin vui lòng điền đầy đủ các ô!", "warning");
+		}else{
+			let form_URL = 'ajax/frontend/dashboard/contact';
+			$.post(form_URL, {
+				data : data
+			},
+			function(data){
+				console.log(data);
+				if(data == 0){
+					sweet_error_alert('Có vấn đề xảy ra','Vui lòng thử lại!')
+				}else{
+					$('.form-contact')[0].reset();
+					swal("Thành công!", "Chúng tôi sẽ liên lạc với bạn trong thời gian sớm nhất, cám ơn bạn đã sử dụng dịch vụ này!", "success");
+				}
+			});	
+		}
+		return false;
+	})
+
+	$(document).on('change','.check-aside input', function(){
+		let _this = $(this)
+		$('.tour_list_panel').hide();
+		$('.tour_search_panel').html("");
+		filter();
+	})
+
+	$(document).on('click','#pagination_ajax li a', function(){
+		let _this = $(this)
+		$('.tour_list_panel').hide();
+		$('.tour_search_panel').html("");
+		let page = _this.attr('data-ci-pagination-page');
+		filter(page);
+		return false;
+	})
+
+	$(document).on('click','#pagination_ajax_tour li a', function(){
+		let _this = $(this)
+		$('.render_tour_normal').hide();
+		$('.render_tour_ajax').html("");
+		let page = _this.attr('data-ci-pagination-page');
+		filterListTour(page);
+		return false;
+	})
+
 	$(document).on('change','.va-choose-tour input[type="radio"]', function(){
 		let _this = $(this)
 		let val = _this.val()
@@ -39,50 +162,34 @@ $(document).ready(function(){
 		});	
 	})
 
-	$(document).on('click','.language_widget', function(){
-		let _this = $(this)
-		let keyword = _this.attr('data-keyword')
-		let form_URL = 'ajax/frontend/dashboard/language';
-		$.post(form_URL, {
-			keyword : keyword
-		},
-		function(data){
-			location.reload();
-		});	
-	})
-	$(document).on('submit','.form-contact', function(){
-		let _this = $(this)
-		let data = $(".form-contact").serializeArray();
-		let form_URL = 'ajax/frontend/dashboard/contact';
-		$.post(form_URL, {
-			data : data
-		},
-		function(data){
-			console.log(data);
-			if(data == 0){
-				sweet_error_alert('Có vấn đề xảy ra','Vui lòng thử lại!')
-			}else{
-				$('.form-contact')[0].reset();
-				swal("Thành công!", "Chúng tôi sẽ liên lạc với bạn trong thời gian sớm nhất, cám ơn bạn đã sử dụng dịch vụ này!", "success");
-			}
-		});	
+	$(document).on('click','.va-btn-tour', function(){
+		$('.render_tour_normal').hide();
+		$('.render_tour_ajax').html("");
+		filterListTour();
 		return false;
 	})
-
-	$(document).on('change','.check-aside input', function(){
-		let _this = $(this)
-		$('.tour_list_panel').hide();
-		$('.tour_search_panel').html("");
-		filter();
-	})
-	$(document).on('click','#pagination_ajax li a', function(){
-		let _this = $(this)
-		$('.tour_list_panel').hide();
-		$('.tour_search_panel').html("");
-		let page = _this.attr('data-ci-pagination-page');
-		filter(page);
-		return false;
-	})
+	function filterListTour(page = 1){
+		let start = $('#start').val();
+		let end = $('#end').val();
+		let cat_tour = $('#cat').val();
+		let cat = $('.va-choose-tour input[type="radio"]:checked').val();
+		let module = $('.tourlist_data').attr('data-module');
+		let canonical = $('.tourlist_data').attr('data-canonical');
+		console.log(cat)
+		if(start == 0 && end == 0 && cat_tour == 0 && cat == undefined ){
+			$('.render_tour_normal').show();
+    	}else{
+			$.post('ajax/frontend/filter/listtour', {
+				cat : cat, start: start, end: end, cat_tour: cat_tour, module:module, url: canonical,page : page
+			},
+			function(data){
+				let json = JSON.parse(data);
+				let decode = b64DecodeUnicode(json.html);
+				$('.render_tour_ajax').html(decode);
+				$('#pagination_ajax_tour').html(json.pagination);
+			});	
+		}
+	}
 
 	function filter(page = 1){
 		let idArea = [];

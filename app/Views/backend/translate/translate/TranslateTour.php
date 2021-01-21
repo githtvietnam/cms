@@ -34,7 +34,7 @@
 								<label class="control-label text-left">
 									<span>Tiêu đề danh mục <b class="text-danger">(*)</b></span>
 								</label>
-								<?php echo form_input('title', validate_input(set_value('title', (isset($object['title'])) ? $object['title'] : '')), 'class="form-control title" placeholder="" autocomplete="off"'); ?>
+								<?php echo form_input('title', validate_input(set_value('title', (isset($object['title'])) ? $object['title'] : '')), 'class="form-control " placeholder="" autocomplete="off"'); ?>
 							</div>
 						</div>
 					</div>

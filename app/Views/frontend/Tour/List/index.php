@@ -8,7 +8,7 @@
                 <div class="va-the-content mb30">
                     <div>Click tên tour để xem chương trình, giá tour chi tiết, để tìm tour nhanh hơn, bạn có thể chọn “Điểm khởi hành” - “Điểm đến” hoặc “Loại tour” và tìm kiếm</div>
                 </div>
-                <div class="va-tour-search">
+                <div class="va-tour-search tourlist_data" data-module="<?php echo check_isset($module); ?>" data-canonical="<?php echo check_isset($canonical); ?>">
                     <form name="search_tour">
                         <div class="va-choose-tour mb10">
                             <ul class=" uk-flex uk-flex-middle uk-flex-space-between uk-flex-wrap">
@@ -39,7 +39,7 @@
                                 </div>
                                 <div class="va-grid-wrap">
                                     <div class="va-tour-body">
-                                        <?php echo form_dropdown('start_at', [], set_value('start_at', (isset($tour['start_at'])) ? $tour['start_at'] : 0), 'class="form-control select2 m-b start_at"  id="start_at"');?>
+                                        <?php echo form_dropdown('cat', $cat, set_value('cat', (isset($tour['cat'])) ? $tour['cat'] : 0), 'class="form-control select2 m-b cat"  id="cat"');?>
                                     </div>
                                 </div>
                                 <div class="va-grid-wrap">
@@ -62,7 +62,7 @@
                                 <td width="30%">Ngày đi</td>
                             </tr>
                         </thead>
-                        <tbody>
+                        <tbody  class="render_tour_normal">
                             <?php 
                                 if (isset($object) && is_array($object) && count($object)) {
                                     $count = 1;
@@ -74,7 +74,7 @@
                                     </td>
                                     <td><strong class="fs14"><a href="<?php echo BASE_URL.check_isset($value['canonical']).HTSUFFIX ?>" target="_blank"><?php echo check_isset($value['tour_title']) ?></a></strong><div class="ribbon"><div class="rib" style="background-color: #d82727;  border-color: #d82727">TOUR TẾT ÂM LỊCH</div></div> <span class="i-hot"><img src="https://luhanhvietnam.com.vn/tour-du-lich/modules/tour/images/hot-icon.gif" alt="Hot" class="i-hot"></span></td>
                                     <td nowrap=""><?php echo check_isset($value['number_days']) ?> Ngày</td>
-                                    <td nowrap=""><?php echo check_isset($value['price']) ?>  đ</td>
+                                    <td nowrap=""><?php echo number_format(check_isset(check_isset($value['price'])),0,',','.') ?>  đ</td>
                                     <td><?php echo check_isset($value['day_start']) ?></td>
                                 </tr>
                             <?php $count++;}}else{ ?>
@@ -83,9 +83,14 @@
                                 </tr>
                             <?php } ?>
                         </tbody>
+                        <tbody class="render_tour_ajax">
+                            
+                        </tbody>
                     </table>
                     <div id="pagination" class="va-num-page">
                         <?php echo (isset($pagination)) ? $pagination : ''; ?>
+                    </div>
+                    <div id="pagination_ajax_tour" class="va-num-page">
                     </div>
                 </div>
             </div>

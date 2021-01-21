@@ -18,13 +18,13 @@ class Location extends BaseController{
 
 	public function index($page = 1){
 		$session = session();
-		// $flag = $this->authentication->check_permission([
-		// 	'routes' => 'backend/location/location/index'
-		// ]);
-		// if($flag == false){
- 	// 		$session->setFlashdata('message-danger', 'Bạn không có quyền truy cập vào chức năng này!');
- 	// 		return redirect()->to(BASE_URL.'backend/dashboard/dashboard/index');
-		// }
+		$flag = $this->authentication->check_permission([
+			'routes' => 'backend/location/location/index'
+		]);
+		if($flag == false){
+ 			$session->setFlashdata('message-danger', 'Bạn không có quyền truy cập vào chức năng này!');
+ 			return redirect()->to(BASE_URL.'backend/dashboard/dashboard/index');
+		}
 		$query = '(SELECT location_translate.title 
 		FROM location_translate 
 		INNER JOIN location_catalogue 
@@ -91,6 +91,13 @@ class Location extends BaseController{
 
 	public function create(){
 		$session = session();
+		$flag = $this->authentication->check_permission([
+			'routes' => 'backend/location/location/create'
+		]);
+		if($flag == false){
+ 			$session->setFlashdata('message-danger', 'Bạn không có quyền truy cập vào chức năng này!');
+ 			return redirect()->to(BASE_URL.'backend/dashboard/dashboard/index');
+		}
 		if($this->request->getMethod() == 'post'){
 			$validate = $this->validation();
 			if ($this->validate($validate['validate'], $validate['errorValidate'])){
@@ -131,6 +138,15 @@ class Location extends BaseController{
 
 	public function update($id = 0){
 		$id = (int)$id;
+		$session = session();
+		
+		$flag = $this->authentication->check_permission([
+			'routes' => 'backend/location/location/update'
+		]);
+		if($flag == false){
+ 			$session->setFlashdata('message-danger', 'Bạn không có quyền truy cập vào chức năng này!');
+ 			return redirect()->to(BASE_URL.'backend/dashboard/dashboard/index');
+		}
 		$this->data[$this->data['module']] = $this->AutoloadModel->_get_where([
 			'select' => 'tb1.id,  tb2.description,  tb1.catalogueid,  tb2.title, tb2.keyword, tb1.userid_updated, tb1.publish, tb1.created_at, tb1.updated_at',
 
@@ -185,7 +201,15 @@ class Location extends BaseController{
 	}
 
 	public function delete($id = 0){
+
 		$session = session();
+		$flag = $this->authentication->check_permission([
+			'routes' => 'backend/location/location/delete'
+		]);
+		if($flag == false){
+ 			$session->setFlashdata('message-danger', 'Bạn không có quyền truy cập vào chức năng này!');
+ 			return redirect()->to(BASE_URL.'backend/dashboard/dashboard/index');
+		}
 		$id = (int)$id;
 		$this->data[$this->data['module']] = $this->AutoloadModel->_get_where([
 			'select' => 'tb1.id, tb2.title',

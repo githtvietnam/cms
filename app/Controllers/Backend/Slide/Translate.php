@@ -11,6 +11,13 @@ class Translate extends BaseController
 
 		public function translate($catalogueid = 0, $module = '', $language = ''){
 		$session = session();
+		$flag = $this->authentication->check_permission([
+			'routes' => 'backend/slide/translate/translate'
+		]);
+		if($flag == false){
+ 			$session->setFlashdata('message-danger', 'Bạn không có quyền truy cập vào chức năng này!');
+ 			return redirect()->to(BASE_URL.'backend/dashboard/dashboard/index');
+		}
 		$catalogueid = (int)$catalogueid;
 		$moduleExtract = explode('_', $module);
 		$dataTrans=[];

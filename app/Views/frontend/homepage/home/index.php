@@ -9,7 +9,8 @@
 	</div>
 	<div class="uk-grid uk-grid-collapse uk-grid-width-small-1-1 uk-grid-width-medium-1-2 uk-grid-width-large-1-4 uk-clearfix">
 		<?php
-				foreach ($panel['hot-deals']['data'] as $key => $value) {
+			if(isset($panel['hot-deals']['data']) &&is_array($panel['hot-deals']['data']) &&count($panel['hot-deals']['data'])){
+					foreach ($panel['hot-deals']['data'] as $key => $value) {
 			?>
 			<div class="wrap-hot-deal">
 				<div class="hot-deal-body">
@@ -24,24 +25,28 @@
 							<span class="status-deal">Tour Hot</span>
 						</div>
 						<a href="<?php echo check_isset($value['canonical']) ?>" class="img-cover image img-zoomin">
-							<img src="<?php echo check_isset($value['avatar']) ?>" alt="<?php echo check_isset($value['title']) ?>">
+							<?php echo render_img(check_isset($value['avatar']), check_isset($value['title'])) ?>
 						</a>
 					</div>
 					<div class="hot-deal-content">
 						<a href="<?php echo check_isset($value['canonical']) ?>" class="hot-deal-title mb10">
-							<?php echo check_isset($value['title']) ?>
+							<h3>
+								<?php echo check_isset($value['title']) ?>
+							</h3>
 						</a>
-						<div class="hot-deal-price">
-							<?php echo check_isset($value['price']) ?> đ
+						<div class="hot-deal-price uk-flex uk-flex-middle">
+							<div class="old mr20 <?php echo (isset($value['price_promotion']) && $value['price_promotion'] != '') ? 'line-price' : '' ?>">
+								<?php echo check_isset($value['price']) ?> đ
+							</div>
+							<div class="new">
+								<?php echo check_isset($value['price_promotion']) ?> đ
+							</div>
 						</div>
 					</div>
 				</div>
 			</div>
-		<?php } ?>
+		<?php }} ?>
 	</div>
-	<button class="btn-view-all btn">
-		xem đầy đủ các tour deal
-	</button>
 </section>
 
 <section class="tour-category-panel">
@@ -62,7 +67,7 @@
 					<div class="tour-category-body">
 						<div class="tour-category-img">
 							<a href="<?php echo ((isset($panel['tour-trong-nuoc']['data'][$n]['canonical'])) ? $panel['tour-trong-nuoc']['data'][$n]['canonical'] : '') ?>" class="img-cover img-zoomin">
-								<img src="<?php echo ((isset($panel['tour-trong-nuoc']['data'][$n]['avatar'])) ? $panel['tour-trong-nuoc']['data'][$n]['avatar'] : '') ?>" alt="">
+								<?php echo render_img($panel['tour-trong-nuoc']['data'][$n]['avatar'],$panel['tour-trong-nuoc']['data'][$n]['title']) ?>
 							</a>
 						</div>
 						<div class="tour-category-content">
@@ -71,7 +76,12 @@
 							</a>
 							<div class="uk-flex uk-flex-middle uk-flex-space-between">
 								<div class="tour-category-price">
-									<?php echo ((isset($panel['tour-trong-nuoc']['data'][$n]['price'])) ? $panel['tour-trong-nuoc']['data'][$n]['price'] : '') ?>đ
+									<div class="old mr20 <?php echo (isset($value['price_promotion']) && $value['price_promotion'] != '') ? 'line-price' : '' ?>">
+										<?php echo check_isset($panel['tour-trong-nuoc']['data'][$n]['price']) ?> đ
+									</div>
+									<div class="new">
+										<?php echo check_isset($panel['tour-trong-nuoc']['data'][$n]['price_promotion']) ?> đ
+									</div>
 								</div>
 								<a class="btn btn-view" href="<?php echo ((isset($panel['tour-trong-nuoc']['data'][$n]['canonical'])) ? $panel['tour-trong-nuoc']['data'][$n]['canonical'] : '') ?>" title="Xem Ngay">
 									Xem ngay
@@ -82,9 +92,7 @@
 				</div>
 			<?php $n++; }}  ?>
 		</div>
-		<button class="btn-view-all btn">
-			xem đầy đủ các tour hot
-		</button>
+		<?php echo render_a(BASE_URL.$panel['tour-trong-nuoc']['keyword'].HTSUFFIX, $panel['tour-trong-nuoc']['title'],'class="btn-view-all btn"','xem đầy đủ các tour hot') ?>
 	</div>
 </section>
 
@@ -179,7 +187,7 @@
 							<div class="blog-slide-body">
 								<div class="blog-overlay"></div>
 								<a href="<?php echo ((isset($panel['tin-tuc']['data'][$m]['canonical'])) ? $panel['tin-tuc']['data'][$m]['canonical'] : '') ?>" class="blog-img img-cover">
-									<img src="<?php echo ((isset($panel['tin-tuc']['data'][$m]['avatar'])) ? $panel['tin-tuc']['data'][$m]['avatar'] : '') ?>" alt="">
+									<?php echo render_img($panel['tin-tuc']['data'][$m]['avatar'],$panel['tin-tuc']['data'][$m]['title']) ?>
 								</a>
 								<div class="blog-time">
 									2020
@@ -208,28 +216,32 @@
 </section>
 
 <section class="video-panel" style="background:url(public/frontend/resources/img/banner/banner-trafic-4.png)">
+	<?php if(isset($panel['video']['data']) &&is_array($panel['video']['data']) &&count($panel['video']['data'])){
+		foreach ($panel['video']['data'] as $key => $value) {
+	?>
 	<div class="uk-container uk-container-center">
 		<div class="uk-grid uk-grid-medium uk-grid-width-medium-1-1 uk-grid-width-large-1-2 uk-clearfix">
 			<div class="wrap-video-content">
 				<div class="video-content">
-					<h3 class="heading-2">KIM LIEN TRAVEL VINH DỰ ĐẠT GIẢI THƯỞNG  TOP TEN HÃNG LỮ HÀNH INBOUND TỐT NHẤT VIỆT NAM NĂM 2019</h3>
+					<h3 class="heading-2"><?php echo check_isset($value['title']) ?></h3>
 					<div class="description">
-						KIM LIEN TRAVEL VINH DỰ ĐẠT GIẢI THƯỞNG TOP TEN HÃNG LỮ HÀNH INBOUND TỐT NHẤT VIỆT NAM NĂM 2019
+						<?php echo check_isset($value['description']) ?>
 					</div>
 					<div class="readmore">
-						<a href="" title="">Xem thêm</a>
+						<a href="<?php echo check_isset($value['canonical']) ?>" title="<?php echo check_isset($value['title']) ?>">Xem thêm</a>
 					</div>
 				</div>
 			</div>
 			<div class="wrap-video">
 				<div class="video-popup">
 					<a class="btn-modal-general" href="#modal-video">
-						<img src="public/frontend/resources/img/banner/youtube-image.png" alt="">
+						<?php echo render_img(check_isset($value['avatar']), check_isset($value['title']), ''); ?>
 					</a>
 				</div>
 			</div>
 		</div>
 	</div>
+	<?php }} ?>
 </section>
 
 <?php
@@ -269,7 +281,7 @@
 					<div class="slide-company">
 						<div class="slide-company-body">
 							<a href="<?php echo $value['url'] ?>" class="img-scaledown image">
-								<img src="<?php echo $value['image'] ?>" alt="<?php echo $value['title'] ?>">
+								<?php echo render_img($value['image'],$value['title']) ?>
 							</a>
 						</div>
 					</div>
@@ -279,8 +291,12 @@
 	</div>
 </section>
 
-<div id="modal-video" class="modal">
-	<div class="modal-content-review ">
-		<iframe width="630" height="321" src="https://www.youtube.com/embed/n2G_J0r7RmQ" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+<?php if(isset($panel['video']['data']) &&is_array($panel['video']['data']) &&count($panel['video']['data'])){ 
+	foreach ($panel['video']['data'] as $key => $value) {
+?>
+	<div id="modal-video" class="modal">
+		<div class="modal-content-review ">
+			<?php echo check_isset($value['iframe']); ?>
+		</div>
 	</div>
-</div>
+<?php }} ?>

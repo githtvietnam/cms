@@ -13,6 +13,16 @@ if(!function_exists('translate')){
 	}
 }
 
+if(!function_exists('check_array')){
+	function check_array(array $param = []){
+		if(isset($param) && is_array($param) && count($param)){
+			return $param;
+		}
+
+		return '';
+	}
+}
+
 //trả về: chuỗi bị cắt từ 0 tới kí tự thứ n
 //đầu vào: $str chuỗi bị cắt, $n cắt bn kí tự
 if(!function_exists('cutnchar')){

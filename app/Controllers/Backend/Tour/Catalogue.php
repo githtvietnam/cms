@@ -77,6 +77,13 @@ class Catalogue extends BaseController{
 
 	public function create(){
 		$session = session();
+		$flag = $this->authentication->check_permission([
+			'routes' => 'backend/tour/catalogue/create'
+		]);
+		if($flag == false){
+ 			$session->setFlashdata('message-danger', 'Bạn không có quyền truy cập vào chức năng này!');
+ 			return redirect()->to(BASE_URL.'backend/dashboard/dashboard/index');
+		}
 		if($this->request->getMethod() == 'post'){
 			$validate = $this->validation();
 			if ($this->validate($validate['validate'], $validate['errorValidate'])){
@@ -112,6 +119,13 @@ class Catalogue extends BaseController{
 	public function update($id = 0){
 		$id = (int)$id;
 		$session = session();
+		$flag = $this->authentication->check_permission([
+			'routes' => 'backend/tour/catalogue/update'
+		]);
+		if($flag == false){
+ 			$session->setFlashdata('message-danger', 'Bạn không có quyền truy cập vào chức năng này!');
+ 			return redirect()->to(BASE_URL.'backend/dashboard/dashboard/index');
+		}
 		$this->data[$this->data['module']] = $this->get_data_module($id);
 		if($this->data[$this->data['module']] == false){
 			$session->setFlashdata('message-danger', 'Nhóm chuyến du lịch không tồn tại!');
@@ -161,6 +175,13 @@ class Catalogue extends BaseController{
 
 	public function delete($id = 0){
 		$session = session();
+		$flag = $this->authentication->check_permission([
+			'routes' => 'backend/tour/catalogue/delete'
+		]);
+		if($flag == false){
+ 			$session->setFlashdata('message-danger', 'Bạn không có quyền truy cập vào chức năng này!');
+ 			return redirect()->to(BASE_URL.'backend/dashboard/dashboard/index');
+		}
 		$id = (int)$id;
 		$this->data[$this->data['module']] = $this->get_data_module($id);
 		if($this->data[$this->data['module']] == false){

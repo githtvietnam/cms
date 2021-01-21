@@ -18,13 +18,13 @@ class Attribute extends BaseController{
 
 	public function index($page = 1){
 		$session = session();
-		// $flag = $this->authentication->check_permission([
-		// 	'routes' => 'backend/attribute/attribute/index'
-		// ]);
-		// if($flag == false){
- 	// 		$session->setFlashdata('message-danger', 'Bạn không có quyền truy cập vào chức năng này!');
- 	// 		return redirect()->to(BASE_URL.'backend/dashboard/dashboard/index');
-		// }
+		$flag = $this->authentication->check_permission([
+			'routes' => 'backend/attribute/attribute/index'
+		]);
+		if($flag == false){
+ 			$session->setFlashdata('message-danger', 'Bạn không có quyền truy cập vào chức năng này!');
+ 			return redirect()->to(BASE_URL.'backend/dashboard/dashboard/index');
+		}
 		$query = '(SELECT attribute_translate.title 
 		FROM attribute_translate 
 		INNER JOIN attribute_catalogue 
@@ -87,6 +87,13 @@ class Attribute extends BaseController{
 
 	public function create(){
 		$session = session();
+		$flag = $this->authentication->check_permission([
+			'routes' => 'backend/attribute/attribute/create'
+		]);
+		if($flag == false){
+ 			$session->setFlashdata('message-danger', 'Bạn không có quyền truy cập vào chức năng này!');
+ 			return redirect()->to(BASE_URL.'backend/dashboard/dashboard/index');
+		}
 		if($this->request->getMethod() == 'post'){
 			$validate = $this->validation();
 			if ($this->validate($validate['validate'], $validate['errorValidate'])){
@@ -127,6 +134,14 @@ class Attribute extends BaseController{
 
 	public function update($id = 0){
 		$id = (int)$id;
+		$session = session();
+		$flag = $this->authentication->check_permission([
+			'routes' => 'backend/attribute/attribute/update'
+		]);
+		if($flag == false){
+ 			$session->setFlashdata('message-danger', 'Bạn không có quyền truy cập vào chức năng này!');
+ 			return redirect()->to(BASE_URL.'backend/dashboard/dashboard/index');
+		}
 		$this->data[$this->data['module']] = $this->AutoloadModel->_get_where([
 			'select' => 'tb1.id, tb1.image,, tb1.album, tb2.description, tb1.catalogue as cat_id, tb1.catalogueid, tb1.catalogue, tb2.title, tb2.canonical, tb1.userid_updated, tb1.publish, tb1.created_at, tb1.updated_at',
 
@@ -181,7 +196,14 @@ class Attribute extends BaseController{
 	}
 
 	public function delete($id = 0){
-
+		$session = session();
+		$flag = $this->authentication->check_permission([
+			'routes' => 'backend/attribute/attribute/delete'
+		]);
+		if($flag == false){
+ 			$session->setFlashdata('message-danger', 'Bạn không có quyền truy cập vào chức năng này!');
+ 			return redirect()->to(BASE_URL.'backend/dashboard/dashboard/index');
+		}
 		$id = (int)$id;
 		$this->data[$this->data['module']] = $this->AutoloadModel->_get_where([
 			'select' => 'tb1.id, tb4.title ',

@@ -15,45 +15,17 @@ class General extends BaseController{
 
 	}
 
-	public function _remap($method = '',$languageCurrent = ''){
-		$session = session();
-		if($method != 'translator'){
-			$flag = $this->authentication->check_permission([
-				'routes' => 'backend/system/general/'.$method
-			]);
-			if($flag == false){
-	 			$session->setFlashdata('message-danger', 'Bạn không có quyền truy cập vào chức năng này!');
-	 			return redirect()->to(BASE_URL.'backend/dashboard/dashboard/index');
-			}else{
-				if(method_exists($this, $method)){
-					return $this->$method();
-				}
-				throw \CodeIgniter\Exceptions\PageNotFoundException::forPagenotFound();
-			}
-		}else{
-			$language = $this->currentLanguage();
-
-			$count = $this->authentication->check_permission([
-				'routes' => 'backend/system/general/'.$method.'/'.$language
-			]); 
-
-			if($count == false){
-	 			$session->setFlashdata('message-danger', 'Bạn không có quyền truy cập vào chức năng này!');
-	 			return redirect()->to(BASE_URL.'backend/dashboard/dashboard/index');
-			}else{
-				if(method_exists($this, $method)){
-					return $this->$method($languageCurrent);
-				}
-				throw \CodeIgniter\Exceptions\PageNotFoundException::forPagenotFound();
-			}
-		}
-		
-		
-	}
-
+	
 	public function index($page = 1){
 		// pre($this->configbie->system() );
 		$session = session();
+		$flag = $this->authentication->check_permission([
+			'routes' => 'backend/system/general/index'
+		]);
+		if($flag == false){
+ 			$session->setFlashdata('message-danger', 'Bạn không có quyền truy cập vào chức năng này!');
+ 			return redirect()->to(BASE_URL.'backend/dashboard/dashboard/index');
+		}
 		
 		$this->data['systemList'] = $this->configbie->system();
 		$this->data['system'] = $this->AutoloadModel->_get_where([
@@ -109,6 +81,13 @@ class General extends BaseController{
 
 	public function translator($languageCurrent = ''){
 		$session = session();
+		$flag = $this->authentication->check_permission([
+			'routes' => 'backend/system/general/translator'
+		]);
+		if($flag == false){
+ 			$session->setFlashdata('message-danger', 'Bạn không có quyền truy cập vào chức năng này!');
+ 			return redirect()->to(BASE_URL.'backend/dashboard/dashboard/index');
+		}
 		$this->data['systemList'] = $this->configbie->system();
 		$this->data['languageCurrent'] = $languageCurrent;
 

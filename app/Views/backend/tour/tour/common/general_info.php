@@ -33,6 +33,24 @@
 					<input type="checkbox" id="toogle_readonly" name="toogle_readonly">
 				</div>
 			</div>
+			<div class="col-lg-4 m-b">
+				<label class="control-label ">
+					<span>Phương tiện</span>
+				</label>
+				<?php echo form_input('info[vehicle]', set_value('info[vehicle]', (isset($tour['info']['vehicle'])) ? $tour['info']['vehicle'] : ''), 'class="form-control " placeholder="" autocomplete="off"'); ?>
+			</div>
+			<div class="col-lg-4 m-b">
+				<label class="control-label ">
+					<span>Số chỗ trống</span>
+				</label>
+				<?php echo form_input('info[number]', set_value('info[number]', (isset($tour['info']['number'])) ? $tour['info']['number'] : ''), 'class="form-control " placeholder="" autocomplete="off"'); ?>
+			</div>
+			<div class="col-lg-4 m-b">
+				<label class="control-label ">
+					<span>Lịch trình</span>
+				</label>
+				<?php echo form_input('info[schedule]', set_value('info[schedule]', (isset($tour['info']['schedule'])) ? $tour['info']['schedule'] : ''), 'class="form-control " placeholder="" autocomplete="off"'); ?>
+			</div>
 			<div class="col-lg-6  mb15">
 				<div class="form-row">
 					<label class="control-label text-left">

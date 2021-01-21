@@ -23,7 +23,7 @@
                         <p>Email : <?php  echo (isset($general['contact_email']) ? $general['contact_email'] : '') ?></p>
                         <p>Bản quyền KIM LIEN TRAVEL</p>
                     </div>
-                    <div id="bocongthuong"><a href="<?php  echo (isset($general['contact_bct']) ? $general['contact_bct'] : '') ?>" title="" class="image img-scaledown"><img src="public/frontend/resources/img/logo/bocongthuong.png" alt=""></a></div>
+                    <div id="bocongthuong"><a href="<?php  echo (isset($general['contact_bct']) ? $general['contact_bct'] : '') ?>" title="" class="image img-scaledown"><?php echo render_img('public/frontend/resources/img/logo/bocongthuong.png', 'bo cong thuong'); ?></a></div>
                 </div>
             </div>
             <div class="uk-width-medium-1-1 uk-width-large-3-5">

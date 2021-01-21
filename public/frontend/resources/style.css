@@ -948,7 +948,7 @@ table {
 .modal-content-review {
     position: relative;
     padding-bottom: 35%; /* 16:9 */
-    height: 0;
+    height: 80vh;
 }
 .modal-content-review iframe {
     position: absolute;
@@ -1517,9 +1517,7 @@ table {
     background-color: #fefefe;
     margin: auto;
     border: 1px solid #888;
-    width: 30%;
     position: relative;
-    padding-bottom: 30px;
     animation: 0.3s ease-out 0s normal forwards 1 running modal-inner-in;
 }
 
@@ -1609,6 +1607,21 @@ table {
 }
 
 .btn-send button {
+    width: 100%;
+    background-color: #0087ff;
+    text-transform: uppercase;
+    display: inline-block;
+    font-weight: 400;
+    text-align: center;
+    border: 1px solid transparent;
+    padding: .375rem .75rem;
+    font-size: 1rem;
+    line-height: 1.5;
+    border-radius: .25rem;
+    color: #FFF;
+}
+
+.btn-send-modal button {
     width: 100%;
     background-color: #0087ff;
     text-transform: uppercase;
@@ -1755,6 +1768,7 @@ table {
 
 .modal-close {
     position: absolute;
+    cursor: pointer;
     top: 10px;
     right: 10px;
     width: 30px;
@@ -2491,3 +2505,14 @@ table {
     border-radius: 3px;
 }
 
+.key-price .new, .key-price .old{
+    font-size: 24px;
+    font-weight: 700;
+    color: #ff0013;
+}
+
+.line-price{
+    font-size: 14px !important;
+    text-decoration: line-through;
+    color: #aaa !important;
+ }

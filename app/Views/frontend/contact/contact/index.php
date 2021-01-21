@@ -112,7 +112,7 @@
 					<div class="slide-company">
 						<div class="slide-company-body">
 							<a href="<?php echo $value['url'] ?>" class="img-scaledown image">
-								<img src="<?php echo $value['image'] ?>" alt="<?php echo $value['title'] ?>">
+								<?php echo render_img($value['image'],$value['title']); ?>
 							</a>
 						</div>
 					</div>

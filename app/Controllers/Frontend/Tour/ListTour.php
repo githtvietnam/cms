@@ -84,6 +84,25 @@ class ListTour extends FrontendController{
                 ],
                 'order_by' => 'tb2.id asc'
             ],TRUE);
+
+             $cat = $this->AutoloadModel->_get_where([
+                'select' => 'tb1.id, tb2.title',
+                'table' => 'tour_catalogue as tb1',
+                'join' => [
+                    [
+                        'tour_translate as tb2', 'tb1.id = tb2.objectid AND tb2.module = "tour_catalogue" AND tb2.language = \''.$this->currentLanguage().'\'', 'inner'
+                    ]
+                ],
+                'order_by' => 'tb1.id asc'
+            ],TRUE);
+             if(isset($cat) && is_array($cat) && count($cat)){
+                $this->data['cat'] = convert_array([
+                    'data' => $cat,
+                    'field' => 'id',
+                    'value' => 'title',
+                    'text' => 'Loại Tour',
+                ]);
+            }
             if(isset($end) && is_array($end) && count($end)){
                 $this->data['end'] = convert_array([
                     'data' => $end,
@@ -92,6 +111,9 @@ class ListTour extends FrontendController{
                     'text' => 'điểm đến',
                 ]);
             }
+            $this->data['meta_title'] = 'Tổng hợp tất cả các Tour của KIM LIEN TRAVEL';
+            $this->data['meta_description'] = 'Tổng hợp tất cả các Tour của KIM LIEN TRAVEL';
+            $this->data['og_type'] = 'website';
         }
         $this->data['general'] = $this->general;
         $this->data['template'] = 'frontend/tour/list/index';

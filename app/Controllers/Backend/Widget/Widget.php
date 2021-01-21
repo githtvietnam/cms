@@ -16,6 +16,13 @@ class Widget extends BaseController{
 	public function index(){
 		try{
 			$session = session();
+			$flag = $this->authentication->check_permission([
+				'routes' => 'backend/widget/widget/index'
+			]);
+			if($flag == false){
+	 			$session->setFlashdata('message-danger', 'Bạn không có quyền truy cập vào chức năng này!');
+	 			return redirect()->to(BASE_URL.'backend/dashboard/dashboard/index');
+			}
 			
 			$client = new \CodeIgniter\HTTP\CURLRequest(
 		        new \Config\App(),
@@ -103,6 +110,13 @@ class Widget extends BaseController{
 
 	public function create(){
 		$session = session();
+		$flag = $this->authentication->check_permission([
+			'routes' => 'backend/widget/widget/create'
+		]);
+		if($flag == false){
+ 			$session->setFlashdata('message-danger', 'Bạn không có quyền truy cập vào chức năng này!');
+ 			return redirect()->to(BASE_URL.'backend/dashboard/dashboard/index');
+		}
 		if($this->request->getMethod() == 'post'){
 			$validate = $this->validation();
 			if($this->validate($validate['validate'], $validate['errorValidate'])){
@@ -127,6 +141,13 @@ class Widget extends BaseController{
 
 	public function update($id = ''){
 		$session = session();
+		$flag = $this->authentication->check_permission([
+			'routes' => 'backend/widget/widget/update'
+		]);
+		if($flag == false){
+ 			$session->setFlashdata('message-danger', 'Bạn không có quyền truy cập vào chức năng này!');
+ 			return redirect()->to(BASE_URL.'backend/dashboard/dashboard/index');
+		}
 		$this->data['widget'] = $this->AutoloadModel->_get_where([
 			'select' => 'keyword, html,css,script,id,title,publish',
 			'table' => 'website_widget',
@@ -157,7 +178,14 @@ class Widget extends BaseController{
 	}
 
 	private function store($param = []){
-
+		$session = session();
+		$flag = $this->authentication->check_permission([
+			'routes' => 'backend/widget/widget/store'
+		]);
+		if($flag == false){
+ 			$session->setFlashdata('message-danger', 'Bạn không có quyền truy cập vào chức năng này!');
+ 			return redirect()->to(BASE_URL.'backend/dashboard/dashboard/index');
+		}
 		helper(['text']);
 		$store = [
 			'title' => validate_input($this->request->getPost('title')),

@@ -20,6 +20,14 @@ class Menu extends BaseController{
 
 	
 	public function index($id = 0, $language = ''){
+		$session = session();
+		$flag = $this->authentication->check_permission([
+			'routes' => 'backend/menu/menu/index'
+		]);
+		if($flag == false){
+ 			$session->setFlashdata('message-danger', 'Bạn không có quyền truy cập vào chức năng này!');
+ 			return redirect()->to(BASE_URL.'backend/dashboard/dashboard/index');
+		}
 		if($language == ''){
 			$language = $this->currentLanguage();
 		}
@@ -34,7 +42,14 @@ class Menu extends BaseController{
 	}
 
 	public function listmenu($page = 1){
-
+		$session = session();
+		$flag = $this->authentication->check_permission([
+			'routes' => 'backend/menu/menu/listmenu'
+		]);
+		if($flag == false){
+ 			$session->setFlashdata('message-danger', 'Bạn không có quyền truy cập vào chức năng này!');
+ 			return redirect()->to(BASE_URL.'backend/dashboard/dashboard/index');
+		}
 		$session = session();
 
 		helper(['mypagination']);
@@ -89,6 +104,14 @@ class Menu extends BaseController{
 	}
 
 	public function createmenu($language = ''){
+		$session = session();
+		$flag = $this->authentication->check_permission([
+			'routes' => 'backend/menu/menu/createmenu'
+		]);
+		if($flag == false){
+ 			$session->setFlashdata('message-danger', 'Bạn không có quyền truy cập vào chức năng này!');
+ 			return redirect()->to(BASE_URL.'backend/dashboard/dashboard/index');
+		}
 		$configbie = $this->configbie->menu();
 		$configbieList = [];
 		foreach ($configbie as $key => $value) {
@@ -207,6 +230,14 @@ class Menu extends BaseController{
 
 	
 	public function create($id = 0, $language = ''){
+		$session = session();
+		$flag = $this->authentication->check_permission([
+			'routes' => 'backend/menu/menu/create'
+		]);
+		if($flag == false){
+ 			$session->setFlashdata('message-danger', 'Bạn không có quyền truy cập vào chức năng này!');
+ 			return redirect()->to(BASE_URL.'backend/dashboard/dashboard/index');
+		}
 		$configbie = $this->configbie->menu();
 		$configbieList = [];
 		foreach ($configbie as $key => $value) {

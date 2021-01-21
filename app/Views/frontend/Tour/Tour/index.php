@@ -92,7 +92,7 @@
 												 ?>
 													<div class="wrap-img-tour-detail">
 														<a href="" class="img-cover">
-															<img src="<?php echo check_isset($value) ?>" alt="">
+															<?php echo render_img(check_isset($value)); ?>
 														</a>
 													</div>
 												<?php }} ?>
@@ -110,7 +110,7 @@
 												 ?>
 													<div class="wrap-img-tour-detail">
 														<a href="" class="img-cover">
-															<img src="<?php echo check_isset($valAlbum) ?>" alt="">
+															<?php echo render_img(check_isset($valAlbum)); ?>
 														</a>
 													</div>
 												<?php }} ?>
@@ -119,16 +119,13 @@
 									</li>
 									
 									<?php }} ?>
-									<li id="video_tour" class="tab-content">
-										<div class="owl-slide">
-											<div class="owl-carousel owl-theme" data-owl="<?php echo base64_encode(json_encode($owlInit)); ?>" data-disabled="0">
-												<div class="wrap-video-tour-detail">
-													<iframe width="590" height="449" src="https://www.youtube.com/embed/8JXnqMp44Bw" frameborder="0" allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
-												</div>
+									<?php if(isset($object['video']) && $object['video'] != ''){ ?>
+										<li id="video_tour" class="tab-content">
+											<div class="wrap-video-tour-detail">
+												<?php echo check_isset($object['video']) ?>
 											</div>
-										</div>
-									</li>
-									
+										</li>
+									<?php } ?>
 								</ul>
 							</div>
 						</div>
@@ -156,7 +153,7 @@
 									<i class="fa fa-clock-o" aria-hidden="true"></i>Thời gian:
 
 										<span>
-										<?php echo check_isset($object['number_days'])?> Ngày
+										<?php echo check_isset($object['number_days'])?>
 										</span>
 									</div>
 								</div>
@@ -178,7 +175,7 @@
 
 
 										<span>
-										Bay Vietjet Air
+										<?php echo check_isset($object['info']['vehicle'])?>
 										</span>
 									</div>
 								</div>
@@ -200,7 +197,7 @@
 									<div class="info-tour-text">
 									<i class="fa fa-user" aria-hidden="true"></i>Số chỗ trống:
 										<span>
-										20
+										<?php echo check_isset($object['info']['number'])?>
 										</span>
 									</div>
 								</div>
@@ -216,36 +213,13 @@
 									</div>
 								</div>
 							</div>
-							
-							<div class="wrap-info-tour">
-								<div class="uk-flex">
-									<div class="info-tour-text">
-									<i class="fa fa-clock-o" aria-hidden="true"></i>Thời gian:
-
-										<span>
-										<?php echo check_isset($object['number_days'])?>
-										</span>
-									</div>
-								</div>
-							</div>
-							<div class="wrap-info-tour">
-								<div class="uk-flex">
-									<div class="info-tour-text">
-									<i class="fa fa-clock-o" aria-hidden="true"></i>Thời gian:
-
-										<span>
-										<?php echo check_isset($object['end'])?>
-										</span>
-									</div>
-								</div>
-							</div>
 							<div class="wrap-info-tour">
 								
 								<div class="info-tour-text">
 									<i class="fa fa-briefcase" aria-hidden="true"></i>Lịch trình:
 
 									<span>
-									HÀ NỘI - QUẢNG BÌNH - QUẢNG TRỊ - ĐỘNG THIÊN ĐƯỜNG - SUỐI MỌOC - ĐỒNG HƠI - HÀ NỘI
+									<?php echo check_isset($object['info']['schedule'])?>
 									</span>
 								</div>
 								
@@ -286,9 +260,14 @@
 			<div class="uk-width-medium-1-1 uk-width-large-1-4">
 				<aside class="aside-tour-detail-right">
 					<div class="wrap-aside">
-						<p class="key-price">Giá chỉ
-							<span><?php echo check_isset($object['price']) ?>đ</span>
-						</p>
+						<div class="key-price ">Giá chỉ
+							<div class="old <?php echo (isset($object['price_promotion']) && $object['price_promotion'] != '') ? 'line-price' : '' ?>">
+								<?php echo check_isset($object['price']) ?> đ
+							</div>
+							<div class="new">
+								<?php echo check_isset($object['price_promotion']) ?> đ
+							</div>
+						</div>
 						<button class="btn-keep">
 							giữ chỗ
 						</button>
@@ -319,13 +298,13 @@
 							Họ và tên: 
 						</div>
 						<div class="input-general mb20">
-							<input type="text" placeholder="Nhập họ và tên bạn">
+							<input type="text" class="input_name" placeholder="Nhập họ và tên bạn">
 						</div>
 						<div class="name-input mb10	">
 							Email hoặc số điện thoại
 						</div>
 						<div class="input-general mb20">
-							<input type="text" placeholder="Nhập email hoặc số điện thoại">
+							<input type="text" class="input_phone" placeholder="Nhập email hoặc số điện thoại">
 						</div>
 						<div class="btn-send">
 							<button>
@@ -365,15 +344,15 @@
 										Họ và tên: 
 									</div>
 									<div class="input-general mb20">
-										<input type="text" placeholder="Nhập họ và tên bạn">
+										<input type="text" class="input_name_modal" placeholder="Nhập họ và tên bạn">
 									</div>
 									<div class="name-input mb10	">
 										Email hoặc số điện thoại
 									</div>
 									<div class="input-general mb20">
-										<input type="text" placeholder="Nhập email hoặc số điện thoại">
+										<input type="text" class="input_phone_modal" placeholder="Nhập email hoặc số điện thoại">
 									</div>
-									<div class="btn-send">
+									<div class="btn-send-modal">
 										<button>
 											GỬI
 										</button>
@@ -382,7 +361,7 @@
 								</div>
 							</div>
 							<div class="modal-close">
-								<img src="resources/img/icon/ios7-close-empty.png" alt="">
+								<?php echo render_img('public/frontend/resources/img/icon/close.png','close') ?>
 							</div>
 						</div>
 					</div>

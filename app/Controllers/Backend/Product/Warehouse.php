@@ -143,13 +143,20 @@ class Warehouse extends BaseController{
 
 	public function update($id = 0){
 		$id = (int)$id;
+		$session = session();
+		$flag = $this->authentication->check_permission([
+			'routes' => 'backend/product/warehouse/update'
+		]);
+		if($flag == false){
+ 			$session->setFlashdata('message-danger', 'Bạn không có quyền truy cập vào chức năng này!');
+ 			return redirect()->to(BASE_URL.'backend/dashboard/dashboard/index');
+		}
 		$this->data[$this->data['module']] = $this->AutoloadModel->_get_where([
 			'select' => 'id, title, warehouseid, email,  phone, description, districtid, wardid, cityid, address, image, publish',
 			'table' => $this->data['module'],
 			'where' => ['id' => $id,'deleted_at' => 0]
 		]);
 		// pre($this->data[$this->data['module']]);
-		$session = session();
 		if(!isset($this->data[$this->data['module']]) || is_array($this->data[$this->data['module']]) == false || count($this->data[$this->data['module']]) == 0){
 			$session->setFlashdata('message-danger', 'Kho hàng không tồn tại');
  			return redirect()->to(BASE_URL.'backend/product/warehouse/index');
@@ -182,7 +189,14 @@ class Warehouse extends BaseController{
 	}
 
 	public function delete($id = 0){
-
+		$session = session();
+		$flag = $this->authentication->check_permission([
+			'routes' => 'backend/product/warehouse/delete'
+		]);
+		if($flag == false){
+ 			$session->setFlashdata('message-danger', 'Bạn không có quyền truy cập vào chức năng này!');
+ 			return redirect()->to(BASE_URL.'backend/dashboard/dashboard/index');
+		}
 		$id = (int)$id;
 		$this->data[$this->data['module']] = $this->AutoloadModel->_get_where([
 			'select' => 'id, title ',

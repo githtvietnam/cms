@@ -9,78 +9,77 @@
 		</ol>
 	</div>
 </div>
-<form method="post" action="" class="form-horizontal box" >
-	<div class="wrapper wrapper-content animated fadeInRight">
-		<div class="row">
-			<div class="box-body">
-				<?php echo  (!empty($validate) && isset($validate)) ? '<div class="alert alert-danger">'.$validate.'</div>'  : '' ?>
-			</div><!-- /.box-body -->
-		</div>
-		<div class="row">
-			<div class="col-lg-6 clearfix">
-				<div class="ibox mb20">
-					<div class="ibox-title" style="padding: 9px 15px 0px;">
-						<div class="uk-flex uk-flex-middle uk-flex-space-between">
-							<h5>Thông tin cơ bản</h5>
-							
+<div class="wrapper wrapper-content animated fadeInRight">
+	<div class="row">
+		<div class="box-body">
+			<?php echo  (!empty($validate) && isset($validate)) ? '<div class="alert alert-danger">'.$validate.'</div>'  : '' ?>
+		</div><!-- /.box-body -->
+	</div>
+	<div class="row">
+		<div class="col-lg-6 clearfix">
+			<div class="ibox mb20">
+				<div class="ibox-title" style="padding: 9px 15px 0px;">
+					<div class="uk-flex uk-flex-middle uk-flex-space-between">
+						<h5>Thông tin cơ bản</h5>
+						
+					</div>
+				</div>
+				<div class="ibox-content">
+					<div class="row mb15">
+						<div class="col-lg-12">
+							<div class="form-row">
+								<label class="control-label text-left">
+									<span>Tiêu đề danh mục <b class="text-danger">(*)</b></span>
+								</label>
+								<?php echo form_input('title', validate_input(set_value('title', (isset($object['title'])) ? $object['title'] : '')), 'class="form-control " placeholder="" readonly autocomplete="off"'); ?>
+							</div>
 						</div>
 					</div>
-					<div class="ibox-content">
+					<?php if(isset($object['slogan'])){ ?>
 						<div class="row mb15">
 							<div class="col-lg-12">
 								<div class="form-row">
 									<label class="control-label text-left">
-										<span>Tiêu đề danh mục <b class="text-danger">(*)</b></span>
+										<span>Slogan</span>
 									</label>
-									<?php echo form_input('title', validate_input(set_value('title', (isset($object['title'])) ? $object['title'] : '')), 'class="form-control title" placeholder="" id="title" autocomplete="off"'); ?>
+									<?php echo form_input('slogan', validate_input(set_value('slogan', (isset($object['slogan'])) ? $object['slogan'] : '')), 'class="form-control slogan" disabled placeholder="" id="slogan" autocomplete="off"'); ?>
 								</div>
 							</div>
 						</div>
-						<?php if(isset($object['slogan'])){ ?>
-							<div class="row mb15">
-								<div class="col-lg-12">
-									<div class="form-row">
-										<label class="control-label text-left">
-											<span>Slogan</span>
-										</label>
-										<?php echo form_input('slogan', validate_input(set_value('slogan', (isset($object['slogan'])) ? $object['slogan'] : '')), 'class="form-control slogan" placeholder="" id="slogan" autocomplete="off"'); ?>
-									</div>
+					<?php } ?>
+					<div class="row mb15">
+						<div class="col-lg-12">
+							<div class="form-row form-description">
+								<div class="uk-flex uk-flex-middle uk-flex-space-between">
+									<label class="control-label text-left">
+										<span>Mô tả ngắn</span>
+									</label>
 								</div>
-							</div>
-						<?php } ?>
-						<div class="row mb15">
-							<div class="col-lg-12">
-								<div class="form-row form-description">
-									<div class="uk-flex uk-flex-middle uk-flex-space-between">
-										<label class="control-label text-left">
-											<span>Mô tả ngắn</span>
-										</label>
-									</div>
-									<?php echo form_textarea('description', htmlspecialchars_decode(html_entity_decode(set_value('description', (isset($object['description'])) ? base64_decode($object['description']) : ''))), 'class="form-control ck-editor" id="description" placeholder="" autocomplete="off"');?>
+								<?php echo form_textarea('description', htmlspecialchars_decode(html_entity_decode(set_value('description', (isset($object['description'])) ? base64_decode($object['description']) : ''))), 'class="form-control ck-editor" id="description" disabled placeholder="" autocomplete="off"');?>
 
-								</div>
 							</div>
 						</div>
+					</div>
 
 
-						<div class="row mb15">
-							<div class="col-lg-12">
-								<div class="form-row">
-									<div class="uk-flex uk-flex-middle uk-flex-space-between">
-										<label class="control-label text-left">
-											<span>Nội dung</span>
-										</label>
-									</div>
-									<?php echo form_textarea('content', htmlspecialchars_decode(html_entity_decode(set_value('content', (isset($object['content'])) ? base64_decode($object['content']) : ''))), 'class="form-control ck-editor" id="content" placeholder="" autocomplete="off"');?>
-
-
+					<div class="row mb15">
+						<div class="col-lg-12">
+							<div class="form-row">
+								<div class="uk-flex uk-flex-middle uk-flex-space-between">
+									<label class="control-label text-left">
+										<span>Nội dung</span>
+									</label>
 								</div>
+								<?php echo form_textarea('content', htmlspecialchars_decode(html_entity_decode(set_value('content', (isset($object['content'])) ? base64_decode($object['content']) : ''))), 'disabled class="form-control ck-editor" id="content" placeholder="" autocomplete="off"');?>
+
+
 							</div>
 						</div>
 					</div>
 				</div>
 			</div>
-
+		</div>
+		<form method="post" action="" class="form-horizontal box" >
 			<div class="col-lg-6 clearfix">
 				<div class="ibox mb20">
 					<div class="ibox-title" style="padding: 9px 15px 0px;">
@@ -232,8 +231,7 @@
 				</div>
 				<button type="submit" name="create" value="create" class="btn btn-primary block m-b pull-right">Lưu</button>
 			</div>
-			
-		</div>
+		</form>
 	</div>
-</form>
+</div>
 

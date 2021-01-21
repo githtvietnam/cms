@@ -50,8 +50,9 @@ class Panel extends BaseController{
 	}
 
 	public function create($language = ''){
+		$session = session();
 		$flag = $this->authentication->check_permission([
-			'routes' => 'backend/panel/panel/index'
+			'routes' => 'backend/panel/panel/create'
 		]);
 		if($flag == false){
  			$session->setFlashdata('message-danger', 'Bạn không có quyền truy cập vào chức năng này!');
@@ -61,7 +62,6 @@ class Panel extends BaseController{
 			$language = $this->currentLanguage();
 		}
 		$this->data['languageSelect'] = $language;
-		$session = session();
 		$select = $this->configbie->panel();
 		$this->data['locate'] = $select['locate'];
 		$this->data['dropdown'] = $select['dropdown'];
@@ -88,14 +88,14 @@ class Panel extends BaseController{
 	}
 
 	public function update($id = 0, $language = ''){
+		$session = session();
 		$flag = $this->authentication->check_permission([
-			'routes' => 'backend/panel/panel/index'
+			'routes' => 'backend/panel/panel/update'
 		]);
 		if($flag == false){
  			$session->setFlashdata('message-danger', 'Bạn không có quyền truy cập vào chức năng này!');
  			return redirect()->to(BASE_URL.'backend/dashboard/dashboard/index');
 		}
-		$session = session();
 		$select = $this->configbie->panel();
 		$this->data['locate'] = $select['locate'];
 		$this->data['dropdown'] = $select['dropdown'];
@@ -137,9 +137,9 @@ class Panel extends BaseController{
 		return view('backend/dashboard/layout/home', $this->data);
 	}
 
-	public function delete($id = 0){
+	public function delete($id = 0, $language = ''){
 		$flag = $this->authentication->check_permission([
-			'routes' => 'backend/panel/panel/index'
+			'routes' => 'backend/panel/panel/delete'
 		]);
 		if($flag == false){
  			$session->setFlashdata('message-danger', 'Bạn không có quyền truy cập vào chức năng này!');

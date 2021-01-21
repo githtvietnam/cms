@@ -58,7 +58,7 @@
                                                     </a>
                                                 </div>
                                                 <div class="content-dashboard">
-                                                    <a href="<?php echo site_url('backend/article/article/update/'.$value['id']); ?>" class="title_tour_dashboard">
+                                                    <a href="<?php echo site_url('backend/tour/tour/update/'.$value['id']); ?>" class="title_tour_dashboard">
                                                         <h3><?php echo check_isset($value['title']) ?></h3>
                                                     </a>
                                                     <div class="price_tour_dashboard uk-flex">

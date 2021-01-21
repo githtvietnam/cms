@@ -6,12 +6,12 @@
 ?>
 <div class="row wrapper border-bottom white-bg page-heading">
    <div class="col-lg-8">
-      <h2>Quản Lý Nhóm Vị trí</h2>
+      <h2>Quản Lý Media</h2>
       <ol class="breadcrumb" style="margin-bottom:10px;">
          <li>
             <a href="<?php echo base_url('backend/dashboard/dashboard/index') ?>">Home</a>
          </li>
-         <li class="active"><strong>Quản lý Nhóm Vị trí</strong></li>
+         <li class="active"><strong>Quản lý Media</strong></li>
       </ol>
    </div>
 </div>
@@ -20,11 +20,22 @@
         <div class="col-lg-12">
             <div class="ibox float-e-margins">
                 <div class="ibox-title">
-                    <h5>Quản lý Nhóm Vị trí </h5>
+                    <h5>Quản lý Media </h5>
                     <div class="ibox-tools">
                         <a class="collapse-link">
                             <i class="fa fa-chevron-up"></i>
                         </a>
+                         <a class="dropdown-toggle" data-toggle="dropdown" href="#">
+                            <i class="fa fa-wrench"></i>
+                        </a>
+                        <ul class="dropdown-menu dropdown-user">
+                            <li><a href="#" class="delete-all" data-module="<?php echo $module; ?>">Xóa tất cả</a>
+                            </li>
+                            <li><a href="#" class="status" data-value="0" data-field="publish" data-module="<?php echo $module; ?>" title="Cập nhật trạng thái Media">Deactive Media</a>
+                            </li> 
+                            <li><a href="#" class="status" data-value="1" data-field="publish" data-module="<?php echo $module; ?>" data-title="Cập nhật trạng thái Media">Active Media</a>
+                            </li>
+                        </ul>
                         <a class="close-link">
                             <i class="fa fa-times"></i>
                         </a>
@@ -46,16 +57,16 @@
                                         <option value="90">90 bản ghi</option>
                                         <option value="100">100 bản ghi</option>
                                     </select>
-                                    
-                                   
-                                    
                                 </div>
                             </div>
                             <div class="toolbox">
                                 <div class="uk-flex uk-flex-middle uk-flex-space-between">
-                                    <div class="uk-search uk-flex uk-flex-middle mr10">
+                                    <div class="form-row cat-wrap">
+                                        <?php echo form_dropdown('catalogueid', $dropdown, set_value('catalogueid', (isset($_GET['catalogueid'])) ? $_GET['catalogueid'] : ''), 'class="form-control m-b select2 mr10" style="width:220px;"');?>
+                                    </div>
+                                    <div class="uk-search uk-flex uk-flex-middle mr10 ml10">
                                         <div class="input-group">
-                                            <input type="text" name="keyword" value="<?php echo (isset($_GET['keyword'])) ? $_GET['keyword'] : ''; ?>" placeholder="Nhập Từ khóa bạn muốn tìm kiếm..." class="form-control va-search"> 
+                                            <input type="text" name="keyword" value="<?php echo (isset($_GET['keyword'])) ? $_GET['keyword'] : ''; ?>" placeholder="Nhập Từ khóa bạn muốn tìm kiếm..." class="form-control"> 
                                             <span class="input-group-btn"> 
                                                 <button type="submit" name="search" value="search" class="btn btn-primary mb0 btn-sm">Tìm Kiếm
                                             </button> 
@@ -63,12 +74,13 @@
                                         </div>
                                     </div>
                                     <div class="uk-button">
-                                        <a href="<?php echo base_url('backend/location/catalogue/create') ?>" class="btn btn-danger btn-sm"><i class="fa fa-plus"></i> Thêm Nhóm Vị trí</a>
+                                        <a href="<?php echo base_url('backend/media/media/create') ?>" class="btn btn-danger btn-sm"><i class="fa fa-plus"></i> Thêm Media Mới</a>
                                     </div>
                                 </div>
                             </div>
                         </div>
                     </form>
+
                     <table class="table table-striped table-bordered table-hover dataTables-example">
                         <thead>
                         <tr>
@@ -76,54 +88,81 @@
                                 <input type="checkbox" id="checkbox-all">
                                 <label for="check-all" class="labelCheckAll"></label>
                             </th>
-                            <th >Tiêu đề nhóm</th>
-                            <th class="text-center" >Từ khóa</th>
-                            <?php if(isset($languageList) && is_array($languageList) && count($languageList)){ ?>
+                            <th >Tiêu đề</th>
+                             <?php if(isset($languageList) && is_array($languageList) && count($languageList)){ ?>
                             <?php foreach($languageList as $key => $val){ ?>
                             <th class="text-center" style="width: 100px;">
                                 <span class="icon-flag img-cover"><img src="<?php echo getthumb($val['image']); ?>" alt=""></span>
                             </th>
                             <?php }} ?>
-
+                            <th class="text-center" style="width: 67px;">Vị trí</th>
+                            <th style="width:150px;">Người tạo</th>
                             <th style="width:150px;" class="text-center">Ngày tạo</th>
                             <th class="text-center" style="width:88px;">Tình trạng</th>
                             <th class="text-center" style="width:103px;">Thao tác</th>
                         </tr>
                         </thead>
                         <tbody>
-                            <?php if(isset($locationCatalogueList) && is_array($locationCatalogueList) && count($locationCatalogueList)){ ?>
-                            <?php foreach($locationCatalogueList as $key => $val){ ?>
+
+                            <?php if(isset($mediaList) && is_array($mediaList) && count($mediaList)){ ?>
+                            <?php foreach($mediaList as $key => $val){ ?>
+
+                            <?php  
+                                $image = getthumb($val['image'], true);
+                                $catalogue = json_decode($val['catalogue'], TRUE);
+                                $cat_list = [];
+                                if(isset($catalogue) && is_array($catalogue) && count($catalogue)){
+                                    $cat_list = get_catalogue_object([
+                                        'module' => $module,
+                                        'catalogue' => $catalogue,
+                                    ]);
+                                }
+                                
+                            ?>
                             <?php  
                                 $status = ($val['publish'] == 1) ? '<span class="text-success">Active</span>'  : '<span class="text-danger">Deactive</span>';
-
                             ?>
+
                             <tr id="post-<?php echo $val['id']; ?>" data-id="<?php echo $val['id']; ?>">
                                 <td>
                                     <input type="checkbox" name="checkbox[]" value="<?php echo $val['id']; ?>" class="checkbox-item">
                                     <div for="" class="label-checkboxitem"></div>
                                 </td>
-                                <td class="text-success text-bold">
-                                    <a href="<?php echo base_url('backend/location/location/index/?catalogueid='.$val['id'].'') ?>">
-                                        <?php echo $val['title']; ?>
-                                    </a>
+                                <td> 
+                                    <div class="uk-flex uk-flex-middle">
+                                        <div class="image mr5">
+                                            <span class="image-post img-cover"><img src="<?php echo $image; ?>" alt="<?php echo $val['media_title']; ?>" /></span>
+                                        </div>
+                                        <div class="main-info">
+                                            <div class="title"><a class="maintitle" href="<?php echo site_url('backend/media/media/update/'.$val['id']); ?>" title=""><?php echo $val['media_title']; ?> (<?php echo $val['viewed']; ?>)</a></div>
+                                            <div class="catalogue" style="font-size:10px">
+                                                <span style="color:#f00000;">Nhóm hiển thị: </span>
+                                                <a class="" style="color:#333;" href="<?php echo site_url('backend/media/media/index?catalogueid='.$val['cat_id']); ?>" title=""><?php echo $val['cat_title'] ?></a> 
+                                                <?php if(isset($cat_list) && is_array($cat_list) && count($cat_list)){ foreach($cat_list as $keyCat => $valCat){ ?>
+                                                    <a class="" style="color:#333;" href="<?php echo site_url('backend/media/media/index?catalogueid='.$valCat['id']); ?>" title=""><?php echo $valCat['title'] ?></a><?php echo ($keyCat + 1 < count($cat_list)) ? ',' : '' ?> 
+                                                <?php }} ?>
+                                            </div>
+                                        </div>
+                                    </div>
                                 </td>
-                                <td class="text-center text-primary"><?php echo $val['keyword'] ?></td>
-
 
                                 <?php if(isset($languageList) && is_array($languageList) && count($languageList)){ ?>
-                                <?php foreach($languageList as $keyLanguage => $valLanguage){ 
-                                     ?>
-                                <td class="text-center "><a class="text-small translate_ajax <?php echo ($val[$valLanguage['canonical'].'_detect'] > 0 ) ? 'text-success' : 'text-danger' ?> " data-id="<?php echo $val['id']; ?>" data-module="<?php echo $module ?>" data-lang="<?php echo $valLanguage['canonical'] ?>" href="<?php echo base_url('backend/translate/translate/translatelocationCatalogue/'.$val['id'].'/'.$module.'/'.$valLanguage['canonical'].'') ?>">
+                                <?php foreach($languageList as $keyLanguage => $valLanguage){ ?>
+                                <td class="text-center "><a class="text-small <?php echo ($val[$valLanguage['canonical'].'_detect'] > 0 ) ? 'text-success' : 'text-danger' ?> " href="<?php echo base_url('backend/translate/translate/translateObject/'.$val['id'].'/'.$module.'/'.$valLanguage['canonical'].'') ?>">
                                     <?php echo ($val[$valLanguage['canonical'].'_detect'] > 0 ) ? 'Đã Dịch' : 'Chưa Dịch' ?>
+
                                 </a></td>
                                 <?php }} ?>
+                                <td class="text-center text-primary">
+                                    <?php echo form_input('order['.$val['id'].']', $val['order'], 'data-module="'.$module.'" data-id="'.$val['id'].'"  class="form-control sort-order" placeholder="Vị trí" style="width:50px;text-align:right;"');?>
 
-                               
+                                </td>
+                                <td class="text-primary"><?php echo $val['creator']; ?></td>
                                 <td class="text-center text-primary"><?php echo gettime($val['created_at'],'Y-d-m') ?></td>
                                 <td class="text-center td-status" data-field="publish" data-module="<?php echo $module; ?>" data-where="id"><?php echo $status; ?></td>
                                 <td class="text-center">
-                                    <a type="button" href="<?php echo base_url('backend/location/catalogue/update/'.$val['id']) ?>" class="btn btn-primary"><i class="fa fa-edit"></i></a>
-                                    <a type="button" id="<?php echo $val['id'] ?>;" href="<?php echo base_url('backend/location/catalogue/delete/'.$val['id']) ?>" class="btn btn-danger deleteCatalogue"><i class="fa fa-trash"></i></a>
+                                    <a type="button" href="<?php echo base_url('backend/media/media/update/'.$val['id']) ?>" class="btn btn-primary"><i class="fa fa-edit"></i></a>
+                                    <a type="button" href="<?php echo base_url('backend/media/media/delete/'.$val['id']) ?>" class="btn btn-danger"><i class="fa fa-trash"></i></a>
                                 </td>
                             </tr>
                             <?php }}else{ ?>
@@ -132,6 +171,7 @@
                                 </tr>
                             <?php } ?>
                         </tbody>
+
                     </table>
                     <div id="pagination">
                         <?php echo (isset($pagination)) ? $pagination : ''; ?>

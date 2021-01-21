@@ -140,7 +140,7 @@ class Tour extends BaseController{
 
 		$param['data'] = [
 			'id' => $id,
-			'val' => $val,
+			'val' => number_format($val,0,',','.'),
 			'field' => $field
 		];
 		echo json_encode($param['data']);die();

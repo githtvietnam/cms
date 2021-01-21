@@ -75,6 +75,7 @@ $(document).on('click','.add-attr',function(){
 })
 
 $(document).on('click','.add-album',function(){
+	console.log(1)
 	let _this = $(this);
 	render_album();
 })
@@ -760,6 +761,19 @@ function WinMove() {
     var element = ".attr-more";
     var handle = ".ibox-title";
     var connect = ".attr-more";
+    $(element).sortable({
+        handle: handle,
+        connectWith: connect,
+        tolerance: 'pointer',
+        forcePlaceholderSize: true,
+        opacity: 0.8
+    })
+    .disableSelection();
+}
+function WinMove() {
+    var element = ".album-more";
+    var handle = ".ibox-title";
+    var connect = ".album-more";
     $(element).sortable({
         handle: handle,
         connectWith: connect,

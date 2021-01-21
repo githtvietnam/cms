@@ -122,6 +122,14 @@ class Slide extends BaseController{
 	}
 	public function update($id = 0){
 		$id = (int)$id;
+		$session = session();
+		$flag = $this->authentication->check_permission([
+			'routes' => 'backend/slide/slide/update'
+		]);
+		if($flag == false){
+ 			$session->setFlashdata('message-danger', 'Bạn không có quyền truy cập vào chức năng này!');
+ 			return redirect()->to(BASE_URL.'backend/dashboard/dashboard/index');
+		}
 		$this->data[$this->data['module'].'_catalogue'] = $this->AutoloadModel->_get_where([
 			'select' => 'id, title, keyword, data',
 			'table'  => $this->data['module'].'_catalogue',
@@ -219,7 +227,6 @@ class Slide extends BaseController{
 				'routes'=>'backend/slide/slide/delete',
 			]);
 		if ($flag == false){
-			$session = session();
 			$session->setFlashdata('message-danger', 'Bạn không có quyền truy cập chức năng này!');
 			return redirect()->to(BASE_URL.'Backend/dashboard/dashboard/index');
 		}

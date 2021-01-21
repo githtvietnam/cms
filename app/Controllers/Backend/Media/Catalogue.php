@@ -1,20 +1,24 @@
 <?php 
-namespace App\Controllers\Backend\Location;
+namespace App\Controllers\Backend\Media;
 use App\Controllers\BaseController;
+use App\Libraries\Nestedsetbie;
 
 class Catalogue extends BaseController{
 	protected $data;
+	public $nestedsetbie;
 	
 	
 	public function __construct(){
 		$this->data = [];
-		$this->data['module'] = 'location_catalogue';
+		$this->data['module'] = 'media_catalogue';
+		$this->nestedsetbie = new Nestedsetbie(['table' => $this->data['module'],'language' => $this->currentLanguage()]);
+
 	}
 
 	public function index($page = 1){
 		$session = session();
 		$flag = $this->authentication->check_permission([
-			'routes' => 'backend/location/catalogue/index'
+			'routes' => 'backend/media/catalogue/index'
 		]);
 		if($flag == false){
  			$session->setFlashdata('message-danger', 'Bạn không có quyền truy cập vào chức năng này!');
@@ -34,7 +38,7 @@ class Catalogue extends BaseController{
 			'count' => TRUE
 		]);
 		if($config['total_rows'] > 0){
-			$config = pagination_config_bt(['url' => 'backend/location/catalogue/index','perpage' => $perpage], $config);
+			$config = pagination_config_bt(['url' => 'backend/media/catalogue/index','perpage' => $perpage], $config);
 
 			$this->pagination->initialize($config);
 			$this->data['pagination'] = $this->pagination->create_links();
@@ -45,14 +49,13 @@ class Catalogue extends BaseController{
 
 
 			$languageDetact = $this->detect_language();
-			$this->data['locationCatalogueList'] = $this->AutoloadModel->_get_where([
-				'select' => 'tb1.id, tb2.title, tb2.keyword,   tb1.userid_updated, tb1.publish, tb1.order, tb1.created_at, tb1.updated_at,'.((isset($languageDetact['select'])) ? $languageDetact['select'] : ''),
+			$this->data['mediaCatalogueList'] = $this->AutoloadModel->_get_where([
+				'select' => 'tb1.id, tb2.title, tb1.lft, tb1.rgt, tb1.level, tb2.canonical, (SELECT fullname FROM user WHERE user.id = tb1.userid_created) as creator, tb1.userid_updated, tb1.publish, tb1.order, tb1.created_at, tb1.updated_at,'.((isset($languageDetact['select'])) ? $languageDetact['select'] : ''),
 				'table' => $this->data['module'].' as tb1',
 				'join' =>  [
 					[
-						'location_translate as tb2','tb1.id = tb2.objectid AND tb2.module = \''.$this->data['module'].'\'   AND tb2.language = \''.$this->currentLanguage().'\' ','inner'
+						'media_translate as tb2','tb1.id = tb2.objectid AND tb2.module = \''.$this->data['module'].'\'   AND tb2.language = \''.$this->currentLanguage().'\' ','inner'
 					],
-					
 				],
 				'where' => $where,
 				'keyword' => $keyword,
@@ -60,17 +63,16 @@ class Catalogue extends BaseController{
 				'start' => $page * $config['per_page'],
 				'order_by'=> 'lft asc'
 			], TRUE);
-			// pre($this->data['locationCatalogueList']);
+
 		}
 
-		$this->data['template'] = 'backend/location/catalogue/index';
+		$this->data['template'] = 'backend/media/catalogue/index';
 		return view('backend/dashboard/layout/home', $this->data);
 	}
 
 	public function create(){
-
 		$flag = $this->authentication->check_permission([
-			'routes' => 'backend/location/catalogue/create'
+			'routes' => 'backend/media/catalogue/create'
 		]);
 		if($flag == false){
  			$session->setFlashdata('message-danger', 'Bạn không có quyền truy cập vào chức năng này!');
@@ -78,6 +80,7 @@ class Catalogue extends BaseController{
 		}
 		if($this->request->getMethod() == 'post'){
 			$validate = $this->validation();
+			
 			if ($this->validate($validate['validate'], $validate['errorValidate'])){
 		 		$insert = $this->store(['method' => 'create']);
 		 		$resultid = $this->AutoloadModel->_insert([
@@ -88,28 +91,34 @@ class Catalogue extends BaseController{
 		 		if($resultid > 0){
 		 			$storeLanguage = $this->storeLanguage($resultid);
 		 			$insertid = $this->AutoloadModel->_insert([
-			 			'table' => 'location_translate',
+			 			'table' => 'media_translate',
 			 			'data' => $storeLanguage,
 			 		]);
+			 		$this->insert_router(['method' => 'create','id' => $resultid]);
 
-		 			$session->setFlashdata('message-success', 'Tạo Nhóm Vị trí Thành Công! Hãy tạo danh mục tiếp theo.');
- 					return redirect()->to(BASE_URL.'backend/location/catalogue/index');
+		 			$this->nestedsetbie->Get('level ASC, order ASC');
+					$this->nestedsetbie->Recursive(0, $this->nestedsetbie->Set());
+					$this->nestedsetbie->Action();
+
+		 			$session->setFlashdata('message-success', 'Tạo Nhóm Media Thành Công! Hãy tạo danh mục tiếp theo.');
+ 					return redirect()->to(BASE_URL.'backend/media/catalogue/create');
 		 		}
 
 	        }else{
 	        	$this->data['validate'] = $this->validator->listErrors();
 	        }
 		}
-		
+		$this->data['dropdown'] = $this->nestedsetbie->dropdown();
 		$this->data['fixWrapper'] = 'fix-wrapper';
 		$this->data['method'] = 'create';
-		$this->data['template'] = 'backend/location/catalogue/create';
+		$this->data['template'] = 'backend/media/catalogue/create';
 		return view('backend/dashboard/layout/home', $this->data);
 	}
 
 	public function update($id = 0){
+		$session = session();
 		$flag = $this->authentication->check_permission([
-			'routes' => 'backend/location/catalogue/update'
+			'routes' => 'backend/media/catalogue/update'
 		]);
 		if($flag == false){
  			$session->setFlashdata('message-danger', 'Bạn không có quyền truy cập vào chức năng này!');
@@ -117,21 +126,23 @@ class Catalogue extends BaseController{
 		}
 		$id = (int)$id;
 		$this->data[$this->data['module']] = $this->AutoloadModel->_get_where([
-			'select' => 'tb1.id, tb2.title, tb2.keyword, tb2.description, tb1.parentid, tb1.publish, tb2.attribute',
+			'select' => 'tb1.id, tb2.title, tb2.canonical, tb2.description, tb2.content, tb2.meta_title, tb2.meta_description, tb1.parentid, tb1.image, tb1.album, tb1.publish',
+
 			'table' => $this->data['module'].' as tb1',
 			'join' =>  [
 					[
-						'location_translate as tb2','tb1.id = tb2.objectid AND tb2.module = \''.$this->data['module'].'\'   AND tb2.language = \''.$this->currentLanguage().'\' ','inner'
-					],
+						'media_translate as tb2','tb1.id = tb2.objectid AND tb2.module = \''.$this->data['module'].'\'   AND tb2.language = \''.$this->currentLanguage().'\'  ','inner'
+					]
 				],
 			'where' => ['tb1.id' => $id,'tb1.deleted_at' => 0]
 		]);
 
-		
+		$this->data[$this->data['module']]['description'] = base64_decode($this->data[$this->data['module']]['description']);
+		$this->data[$this->data['module']]['content'] = base64_decode($this->data[$this->data['module']]['content']);
 		$session = session();
 		if(!isset($this->data[$this->data['module']]) || is_array($this->data[$this->data['module']]) == false || count($this->data[$this->data['module']]) == 0){
-			$session->setFlashdata('message-danger', 'Nhóm thuộc tính không tồn tại');
- 			return redirect()->to(BASE_URL.'backend/location/catalogue/index');
+			$session->setFlashdata('message-danger', 'Nhóm Media không tồn tại');
+ 			return redirect()->to(BASE_URL.'backend/media/catalogue/index');
 		}
 
 		if($this->request->getMethod() == 'post'){
@@ -147,28 +158,37 @@ class Catalogue extends BaseController{
 
 		 		if($flag > 0){
 		 			$flag = $this->AutoloadModel->_update([
-			 			'table' => 'location_translate',
-			 			'where' => ['objectid' => $id,'module' => $this->data['module'],'language' => $this->currentLanguage()],
+			 			'table' => 'media_translate',
+			 			'where' => ['objectid' => $id,'module' => 'media_catalogue', 'language' => $this->currentLanguage()],
 			 			'data' => $updateLanguage
 			 		]);
 
-		 			$session->setFlashdata('message-success', 'Cập Nhật Nhóm Vị trí Thành Công!');
- 					return redirect()->to(BASE_URL.'backend/location/catalogue/index');
+			 		if($updateLanguage['canonical'] != $this->data[$this->data['module']]['canonical']){
+			 			$this->insert_router(['method' => 'update','id' => $id]);
+			 		}
+
+		 			$this->nestedsetbie->Get('level ASC, order ASC');
+					$this->nestedsetbie->Recursive(0, $this->nestedsetbie->Set());
+					$this->nestedsetbie->Action();
+
+		 			$session->setFlashdata('message-success', 'Cập Nhật Nhóm Media Thành Công!');
+ 					return redirect()->to(BASE_URL.'backend/media/catalogue/index');
 		 		}
 
 	        }else{
 	        	$this->data['validate'] = $this->validator->listErrors();
 	        }
 		}
+		$this->data['dropdown'] = $this->nestedsetbie->dropdown();
 		$this->data['fixWrapper'] = 'fix-wrapper';
 		$this->data['method'] = 'update';
-		$this->data['template'] = 'backend/location/catalogue/update';
+		$this->data['template'] = 'backend/media/catalogue/update';
 		return view('backend/dashboard/layout/home', $this->data);
 	}
 
 	public function delete($id = 0){
 		$flag = $this->authentication->check_permission([
-			'routes' => 'backend/location/catalogue/delete'
+			'routes' => 'backend/media/catalogue/delete'
 		]);
 		if($flag == false){
  			$session->setFlashdata('message-danger', 'Bạn không có quyền truy cập vào chức năng này!');
@@ -176,45 +196,46 @@ class Catalogue extends BaseController{
 		}
 		$id = (int)$id;
 		$this->data[$this->data['module']] = $this->AutoloadModel->_get_where([
-			'select' => 'tb1.id, tb2.title',
-			'table' => 'location_catalogue as tb1',
+			'select' => 'tb1.id, tb2.title, tb1.lft, tb1.rgt',
+			'table' => $this->data['module'].' as tb1',
 			'join' =>  [
-				[
-					'location_translate as tb2','tb1.id = tb2.objectid AND tb2.module = \''.$this->data['module'].'\'   AND tb2.language = \''.$this->currentLanguage().'\' ','inner'
+					[
+						'media_translate as tb2','tb1.id = tb2.objectid AND tb2.module = \''.$this->data['module'].'\'   AND tb2.language = \''.$this->currentLanguage().'\'  ','inner'
+					]
 				],
-			],
-			'where' => [
-				'tb1.publish' => 1,
-				'tb1.deleted_at' => 0,
-				'tb1.id' => $id
-			]
+			'where' => ['tb1.id' => $id,'tb1.deleted_at' => 0]
 		]);
-		if($this->data[$this->data['module']] == false){
-			$session->setFlashdata('message-danger', 'Nhóm vị trí không tồn tại!');
- 			return redirect()->to(BASE_URL.'backend/location/catalogue/index');
+		$session = session();
+		if(!isset($this->data[$this->data['module']]) || is_array($this->data[$this->data['module']]) == false || count($this->data[$this->data['module']]) == 0){
+			$session->setFlashdata('message-danger', 'Nhóm Media không tồn tại');
+ 			return redirect()->to(BASE_URL.'backend/media/catalogue/index');
 		}
-		
 
 		if($this->request->getPost('delete')){
+			$_id = $this->request->getPost('id');
 		
-			$flag = $this->AutoloadModel->_update([
-				'table' => $this->data['module'],
-				'data' => ['deleted_at' => 1],
-				'where' => [
-					'id' => $id
-				]
-			]);
+			// $flag = $this->AutoloadModel->_update([
+			// 	'table' => $this->data['module'],
+			// 	'data' => ['deleted_at' => 1],
+			// 	'where' => [
+			// 		'lft >=' => $this->data[$this->data['module']]['lft'],
+			// 		'rgt <=' => $this->data[$this->data['module']]['rgt'],
+			// 	]
+			// ]);
 
-			$session = session();
-			if($flag > 0){
-	 			$session->setFlashdata('message-success', 'Xóa bản ghi thành công!');
-			}else{
-				$session->setFlashdata('message-danger', 'Có vấn đề xảy ra, vui lòng thử lại!');
-			}
-			return redirect()->to(BASE_URL.'backend/location/catalogue/index');
+			// $session = session();
+			// if($flag > 0){
+			// 	$this->nestedsetbie->Get('level ASC, order ASC');
+			// 	$this->nestedsetbie->Recursive(0, $this->nestedsetbie->Set());
+			// 	$this->nestedsetbie->Action();
+	 	// 		$session->setFlashdata('message-success', 'Xóa bản ghi thành công!');
+			// }else{
+			// 	$session->setFlashdata('message-danger', 'Có vấn đề xảy ra, vui lòng thử lại!');
+			// }
+			// return redirect()->to(BASE_URL.'backend/media/catalogue/index');
 		}
 
-		$this->data['template'] = 'backend/location/catalogue/delete';
+		$this->data['template'] = 'backend/media/catalogue/delete';
 		return view('backend/dashboard/layout/home', $this->data);
 	}
 
@@ -249,9 +270,11 @@ class Catalogue extends BaseController{
 		$store = [
 			'objectid' => $objectid,
 			'title' => validate_input($this->request->getPost('title')),
-			'keyword' => slug($this->request->getPost('keyword')),
-			'description' => $this->request->getPost('description'),
-			'attribute' => $this->request->getPost('attribute'),
+			'canonical' => $this->request->getPost('canonical'),
+			'description' => base64_encode($this->request->getPost('description')),
+			'content' => base64_encode($this->request->getPost('content')),
+			'meta_title' => validate_input($this->request->getPost('meta_title')),
+			'meta_description' => validate_input($this->request->getPost('meta_description')),
 			'language' => $this->currentLanguage(),
 			'module' => $this->data['module'],
 		];
@@ -261,8 +284,10 @@ class Catalogue extends BaseController{
 	private function store($param = []){
 		helper(['text']);
 		$store = [
+ 			'parentid' => (int)$this->request->getPost('parentid'),
+ 			'image' => $this->request->getPost('image'),
+ 			'album' => json_encode($this->request->getPost('album')),
  			'publish' => $this->request->getPost('publish'),
- 			
  		];
  		if($param['method'] == 'create' && isset($param['method'])){	
  			$store['created_at'] = $this->currentTime;
@@ -276,6 +301,33 @@ class Catalogue extends BaseController{
 	}
 	
 
+	private function insert_router($param = []){
+		helper(['text']);
+		$view = view_cells($this->data['module']);
+		$data = [
+			'canonical' => $this->request->getPost('canonical'),  
+			'module' => $this->data['module'],
+			'objectid' => $param['id'],  
+			'language' => $this->currentLanguage(),  
+			'view' => $view
+		];
+ 		if($param['method'] == 'create' && isset($param['method'])){	
+ 			$insertRouter = $this->AutoloadModel->_insert([
+	 			'table' => 'router',
+	 			'data' => $data,
+	 		]);
+ 		}else{
+ 			$this->AutoloadModel->_update([
+	 			'table' => 'router',
+	 			'where' => ['objectid' => $param['id'], 'module' => $this->data['module'], 'language' => $this->currentLanguage()],
+	 			'data' => [
+	 				'canonical' => $data['canonical']
+	 			]
+	 		]);
+ 		}
+ 		return true;
+	}
+
 	private function detect_language(){
 		$languageList = $this->AutoloadModel->_get_where([
 			'select' => 'id, canonical',
@@ -288,7 +340,7 @@ class Catalogue extends BaseController{
 		$i = 3;
 		if(isset($languageList) && is_array($languageList) && count($languageList)){
 			foreach($languageList as $key => $val){
-				$select = $select.'(SELECT COUNT(objectid) FROM location_translate WHERE location_translate.objectid = tb1.id AND location_translate.language = "'.$val['canonical'].'") as '.$val['canonical'].'_detect, ';
+				$select = $select.'(SELECT COUNT(objectid) FROM media_translate WHERE media_translate.objectid = tb1.id AND media_translate.language = "'.$val['canonical'].'") as '.$val['canonical'].'_detect, ';
 				$i++;
 			}	
 		}
@@ -303,18 +355,15 @@ class Catalogue extends BaseController{
 	private function validation(){
 		$validate = [
 			'title' => 'required',
-			'keyword' => 'required',
-			'attribute' => 'is_no_0',
+			'canonical' => 'required|check_canonical['.$this->data['module'].']',
 		];
 		$errorValidate = [
 			'title' => [
 				'required' => 'Bạn phải nhập vào trường tiêu đề'
 			],
-			'keyword' => [
-				'required' => 'Bạn phải nhập vào trường từ khóa danh mục',
-			],
-			'attribute' => [
-				'is_no_0' => 'Bạn phải chọn vị trí thuộc tính!',
+			'canonical' => [
+				'required' => 'Bạn phải nhập giá trị cho trường đường dẫn',
+				'check_canonical' => 'Đường dẫn đã tồn tại, vui lòng chọn đường dẫn khác',
 			],
 		];
 		return [

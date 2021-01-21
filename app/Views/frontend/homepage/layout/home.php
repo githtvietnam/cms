@@ -13,7 +13,7 @@
 		<meta name="author" content="<?php echo (isset($general['homepage_company'])) ? $general['homepage_company'] : ''; ?>" />
 		<meta name="copyright" content="<?php echo (isset($general['homepage_company'])) ? $general['homepage_company'] : ''; ?>" />
 		<meta http-equiv="refresh" content="1800" />
-
+		<link rel="icon" href="<?php echo $general['homepage_favicon'] ?>" type="image/png" sizes="30x30">
 		<!-- GOOGLE -->
 		<title><?php echo isset($meta_title)?htmlspecialchars($meta_title):'';?></title>
 		<meta name="description" charset="UTF-8" content="<?php echo isset($meta_description)?htmlspecialchars($meta_description):'';?>" />
@@ -48,8 +48,12 @@
 		<script src="public/frontend/resources/library/js/jquery.js"></script>
 		<script src="public/frontend/resources/uikit/js/uikit.min.js"></script>
 		<script> var BASE_URL = '<?php echo base_url(); ?>'; </script>
+		<?php echo $general['analytic_google_analytic'] ?>
+		<?php echo $general['facebook_facebook_pixel'] ?>
 	</head>
 	<body>
+
+		<?php echo view('frontend/homepage/common/schema') ?>
 		<?php echo view('frontend/homepage/common/header') ?>
 		<?php echo view((isset($template)) ? $template : '') ?>
 		<?php echo view('frontend/homepage/common/footer') ?>

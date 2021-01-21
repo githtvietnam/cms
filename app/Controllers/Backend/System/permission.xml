@@ -4,18 +4,10 @@
 		<title>Cấu hình chung</title>
 		<item>
 			<param>backend/system/general/index</param>
-			<description>Xem</description>
+			<description>Xem toàn bộ</description>
 		</item>
 		<item>
-			<param>backend/system/general/translator/en</param>
-			<description>Xem bản dịch</description>
-		</item>
-		<item>
-			<param>backend/system/general/translator/jp</param>
-			<description>Xem bản dịch</description>
-		</item>
-		<item>
-			<param>backend/system/general/translator/vi</param>
+			<param>backend/system/general/translator</param>
 			<description>Xem bản dịch</description>
 		</item>
 	</permissions>
@@ -30,30 +22,8 @@
 			<description>Thêm mới Widget</description>
 		</item>
 		<item>
-			<param>backend/widget/widget/update</param>
+			<param>backend/widget/widget/store</param>
 			<description>Sửa Widget</description>
-		</item>
-	</permissions>
-	<permissions>
-		<title>General System</title>
-		<item>
-			<param>backend/system/general/index</param>
-			<description>Xem Toàn Bộ</description>
-		</item>
-		<item>
-			<param>backend/system/general/index</param>
-			<description>Xem</description>
-		</item>
-	</permissions>
-	<permissions>
-		<title>Slide</title>
-		<item>
-			<param>backend/slide/slide/index</param>
-			<description>Xem Toàn Bộ</description>
-		</item>
-		<item>
-			<param>backend/system/general/index</param>
-			<description>Xem</description>
 		</item>
 	</permissions>
 </module>

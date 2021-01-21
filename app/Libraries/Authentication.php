@@ -14,13 +14,14 @@ class Authentication{
 
 	public function check_auth(){
  		return json_decode($this->auth, TRUE);
-
 	}
 
 	public function check_permission(array $param = []){
-
+		$session = session();
 		$this->auth = json_decode($this->auth, TRUE);
-
+		if($this->auth == ''){
+ 			return false;
+		}
 		$user = $this->AutoloadModel->_get_where([
 			'select' => 'tb2.permission',
 			'table' => 'user as tb1',

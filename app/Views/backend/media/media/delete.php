@@ -1,14 +1,14 @@
 <script type="text/javascript">
-	var id = '<?php echo $brand['id'] ?>';
+	var id = '<?php echo $media['id'] ?>';
 </script>
 <div class="row wrapper border-bottom white-bg page-heading">
 	<div class="col-lg-10">
-		<h2>Xóa Thương hiệu: <?php echo $brand['title'] ?></h2>
+		<h2>Xóa Nhóm Media: <?php echo $media['title'] ?></h2>
 		<ol class="breadcrumb">
 			<li>
 				<a href="<?php echo site_url('admin'); ?>">Home</a>
 			</li>
-			<li class="active"><strong>Xóa Thương hiệu</strong></li>
+			<li class="active"><strong>Xóa Nhóm Media</strong></li>
 		</ol>
 	</div>
 </div>
@@ -20,7 +20,7 @@
 					<h2 class="panel-title">Thông tin chung</h2>
 					<div class="panel-description">
 						Một số thông tin cơ bản của người sử dụng.
-						<div><span class="text-danger">Khi xóa Thương hiệu, thì Thương hiệu này sẽ không thể truy cập và mất toàn bộ thông tin. Hãy chắc chắn bạn muốn thực hiện chức năng này!</span></div>
+						<div><span class="text-danger">Khi xóa Nhóm Media, thì Nhóm Media này sẽ không thể truy cập và mất toàn bộ thông tin. Hãy chắc chắn bạn muốn thực hiện chức năng này!</span></div>
 					</div>
 				</div>
 			</div>
@@ -31,10 +31,10 @@
 							<div class="col-lg-12">
 								<div class="form-row">
 									<label class="control-label text-left">
-										<span>Thương hiệu <b class="text-danger">(*)</b></span>
+										<span>Nhóm Media <b class="text-danger">(*)</b></span>
 									</label>
-									<?php echo form_input('title', set_value('title', $brand['title']), 'class="form-control" disabled placeholder="" autocomplete="off"');?>
-									<?php echo form_hidden('id', set_value('id', $brand['id']), 'class="form-control" disabled placeholder="" autocomplete="off"');?>
+									<?php echo form_input('title', set_value('title', $media['title']), 'class="form-control" disabled placeholder="" autocomplete="off"');?>
+									<?php echo form_hidden('id', set_value('id', $media['id']), 'class="form-control" disabled placeholder="" autocomplete="off"');?>
 								</div>
 							</div>
 						</div>

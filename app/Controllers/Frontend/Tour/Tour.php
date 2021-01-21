@@ -18,7 +18,7 @@ class Tour extends FrontendController{
         $module_extract = explode("_", $this->data['module']);
         $keyword = $this->condition_keyword();
         $this->data['object'] = $this->AutoloadModel->_get_where([
-            'select' => 'tb1.id,tb1.price,tb1.sub_album, tb1.price_promotion,tb1.catalogueid, tb1.viewed, tb1.album, tb1.image, tb2.title, tb2.canonical,tb2.sub_album_title, tb2.meta_title, tb2.sub_title, tb2.sub_content, tb1.tourid, tb2.meta_description, tb2.day_start,tb2.number_days, tb2.description, tb2.content, tb3.title as start, tb4.title as end',
+            'select' => 'tb1.id,tb1.price,tb1.sub_album, tb1.price_promotion,tb1.catalogueid, tb1.viewed, tb1.album, tb1.image, tb2.title, tb2.canonical,tb2.sub_album_title, tb2.meta_title, tb2.sub_title,tb2.video, tb2.sub_content, tb1.tourid, tb2.meta_description, tb2.day_start,tb2.number_days,tb2.info, tb2.description, tb2.content, tb3.title as start, tb4.title as end',
             'table' => $module_extract[0].' as tb1',
             'where' => [
                 'tb1.deleted_at' => 0,
@@ -42,13 +42,8 @@ class Tour extends FrontendController{
         //     return redirect()->to(BASE_URL);
         // }
         $this->data['sub_album'] = $this->rewrite_album($this->data['object']);
-        $this->data['object']['album'] = json_decode($this->data['object']['album']);
-        $this->data['object']['description'] = validate_input(base64_decode($this->data['object']['description']));
-        $this->data['object']['content'] = validate_input(base64_decode($this->data['object']['content']));
-        $this->data['object']['sub_content'] = json_decode(base64_decode($this->data['object']['sub_content']));
-        $this->data['object']['sub_title'] = json_decode(base64_decode($this->data['object']['sub_title']));
-        $this->data['object']['price'] = number_format($this->data['object']['price'],0,',','.');
-        $this->data['object']['price_promotion'] = number_format($this->data['object']['price_promotion'],0,',','.');
+        $this->data['object'] = $this->convert_data($this->data['object']);
+        pre($this->data['object']);
 
         $this->data['detailCatalogue'] = $this->AutoloadModel->_get_where([
             'select' => ' tb1.id,tb1.lft, tb1.rgt, tb1.level, tb1.parentid, tb1.image,  tb2.title, tb2.canonical,  tb2.content, tb2.description, tb2.meta_title, tb2.meta_description',
@@ -88,7 +83,7 @@ class Tour extends FrontendController{
 
         $cookie = $this->set_cookie($id, $this->data['object']);
 
-        $this->data['meta_title'] = (!empty( $this->data['object']['meta_title'])? $this->data['object']['meta_title']: $this->data['object']['title']);
+        $this->data['meta_title'] = (!empty( $this->data['object']['meta_title']) ? $this->data['object']['meta_title']: $this->data['object']['title']);
         $this->data['meta_description'] = (!empty( $this->data['object']['meta_description'])? $this->data['object']['meta_description']:cutnchar(strip_tags( $this->data['object']['description']), 300));
         $this->data['meta_image'] = !empty( $this->data['object']['image'])?base_url( $this->data['object']['image']):((isset($this->data['object']['album'][0])) ? $this->data['object']['album'][0] : '');
 
@@ -171,6 +166,41 @@ class Tour extends FrontendController{
             
         }
         return $album;
+    }
+
+    private function convert_data($param = []){
+        if(isset($param['album']) && $param['album'] != ''){
+            $param['album'] = json_decode($param['album']);
+        }
+        if(isset($param['info']) && $param['info'] != ''){
+            $param['info'] = json_decode($param['info'], TRUE);
+        }
+        if(isset($param['description']) && $param['description'] != ''){
+            $param['description'] = validate_input(base64_decode($param['description']));
+        }
+        if(isset($param['content']) && $param['content'] != ''){
+            $param['content'] = validate_input(base64_decode($param['content']));
+        }
+        if(isset($param['sub_content']) && $param['sub_content'] != ''){
+            $param['sub_content'] = json_decode(base64_decode($param['sub_content']));
+        }
+        if(isset($param['sub_title']) && $param['sub_title'] != ''){
+            $param['sub_title'] = json_decode(base64_decode($param['sub_title']));
+        }
+         if(isset($param['sub_title']) && $param['sub_title'] != ''){
+            $param['sub_title'] = json_decode(base64_decode($param['sub_title']));
+        }
+         if(isset($param['sub_title']) && $param['sub_title'] != ''){
+            $param['sub_title'] = json_decode(base64_decode($param['sub_title']));
+        }
+        if(isset($param['price']) && $param['price'] != ''){
+            $param['price'] = number_format($param['price'],0,',','.');
+        }
+        if(isset($param['price_promotion']) && $param['price_promotion'] != ''){
+            $param['price_promotion'] = number_format($param['price_promotion'],0,',','.');
+        }
+        
+        return $param;
     }
 
     public function condition_catalogue($catalogueid = 0){

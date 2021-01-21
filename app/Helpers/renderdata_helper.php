@@ -33,7 +33,7 @@ if (! function_exists('render_slideshow_uikit')){
             $html = $html.'<div class="uk-slidenav-position">';
                 $html = $html.'<ul class="uk-slideshow" data-uk-slideshow="{autoplay:true}" >';
                     foreach ($param as $key => $value) {
-                        $html = $html.'<li><a href="'.$value['url'].'" title="'.$value['title'].'" class="img-cover"><img src="'.$value['image'].'" alt="'.$value['title'].'"></a></li>';
+                        $html = $html.'<li><a href="'.$value['url'].'" title="'.$value['title'].'" class="img-cover"><img src="'.$value['image'].'" alt="'.(($value['title'] != '') ? $value['title'] : $value['image']).'"></a></li>';
                     }
                 $html = $html.'</ul>';
                 $html = $html.'<a href="" class="uk-slidenav uk-slidenav-contrast uk-slidenav-previous" data-uk-slideshow-item="previous"></a>';

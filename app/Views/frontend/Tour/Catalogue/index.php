@@ -40,7 +40,9 @@
 									<li class="mb15">
 										<article class="uk-flex tour">
 											<div class="thumb img-zoomin mr20">
-												<a class="image img-cover" href="<?php echo check_isset($value['canonical']).HTSUFFIX ?>" title="<?php echo check_isset($value['title']) ?>"><img src="<?php echo check_isset(json_decode($value['album'])[0]) ?>" alt="<?php echo check_isset($value['title']) ?>"></a>
+												<a class="image img-cover" href="<?php echo check_isset($value['canonical']).HTSUFFIX ?>" title="<?php echo check_isset($value['title']) ?>">
+													<?php echo render_img(check_isset(json_decode($value['album'])[0]),check_isset($value['title'])) ?>
+													</a>
 											</div>
 											<div class="infor uk-flex">
 												<div class="wrap-content-tour mr50">

@@ -58,6 +58,37 @@
 		</item>
 	</permissions>
 	<permissions>
+		<title>Quản lý - [Bản dịch]</title>
+		<item>
+			<param>backend/slide/translate/translate</param>
+			<description>Bản dịch slide</description>
+		</item>
+		<item>
+			<param>backend/translate/translate/translateobject</param>
+			<description>Bản dịch bài viết</description>
+		</item>
+		<item>
+			<param>backend/translate/translate/translateproduct</param>
+			<description>Bản dịch sản phẩm</description>
+		</item>
+		<item>
+			<param>backend/translate/translate/translatetour</param>
+			<description>Bản dịch tour</description>
+		</item>
+		<item>
+			<param>backend/translate/translate/translatecontact</param>
+			<description>Bản dịch liên hệ</description>
+		</item>
+		<item>
+			<param>backend/translate/translate/translateattributecatalogue</param>
+			<description>Bản dịch nhóm thuộc tính</description>
+		</item>
+		<item>
+			<param>backend/translate/translate/translateattribute</param>
+			<description>Bản dịch thuộc tính</description>
+		</item>
+	</permissions>
+	<permissions>
 		<title>Upload</title>
 		<item>
 			<param>All</param>

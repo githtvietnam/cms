@@ -171,6 +171,13 @@ class Tour extends BaseController{
 
 	public function update($id = 0){
 		$session = session();
+		$flag = $this->authentication->check_permission([
+			'routes' => 'backend/tour/tour/update'
+		]);
+		if($flag == false){
+ 			$session->setFlashdata('message-danger', 'Bạn không có quyền truy cập vào chức năng này!');
+ 			return redirect()->to(BASE_URL.'backend/dashboard/dashboard/index');
+		}
 		$id = (int)$id;
 		$this->data['export_brand'] = $this->export_brand();
 		$this->data['attribute_catalogue'] = get_attribute_catalogue($this->currentLanguage(), $this->data['module']);
@@ -239,6 +246,13 @@ class Tour extends BaseController{
 
 	public function delete($id = 0){
 		$session = session();
+		$flag = $this->authentication->check_permission([
+			'routes' => 'backend/tour/tour/delete'
+		]);
+		if($flag == false){
+ 			$session->setFlashdata('message-danger', 'Bạn không có quyền truy cập vào chức năng này!');
+ 			return redirect()->to(BASE_URL.'backend/dashboard/dashboard/index');
+		}
 		$id = (int)$id;
 		$this->data[$this->data['module']] = $this->get_data_module($id);
 		if($this->data[$this->data['module']] == false){
@@ -336,15 +350,16 @@ class Tour extends BaseController{
 
 	private function storeLanguage($objectid = 0){
 		helper(['text']);
-			$sub_album['title'] = $this->request->getPost('sub_album_title');
-
+		$sub_album['title'] = $this->request->getPost('sub_album_title');
 		$store = [
 			'objectid' => $objectid,
 			'title' => validate_input($this->request->getPost('title')),
 			'start_at' => $this->request->getPost('start_at'),
 			'end_at' => $this->request->getPost('end_at'),
 			'sub_album_title' => json_encode($this->request->getPost('sub_album_title'),TRUE),
+			'info' => json_encode($this->request->getPost('info'),TRUE),
 			'number_days' => $this->request->getPost('number_days'),
+			'video' => $this->request->getPost('video'),
 			'day_start' => $this->request->getPost('day_start'),
 			'canonical' => slug($this->request->getPost('canonical')),
 			'content' => base64_encode($this->request->getPost('content')),
@@ -649,7 +664,7 @@ class Tour extends BaseController{
 
 	private function get_data_module($id = 0){
 		$flag = $this->AutoloadModel->_get_where([
-			'select' => 'tb1.id,tb1.time_end,tb1.sub_album, tb1.catalogue,tb1.catalogueid,  tb1.price_promotion, tb1.price, tb1.tourid, tb1.id, tb2.title, tb2.objectid, tb2.sub_title, tb2.sub_content, tb2.description, tb2.canonical,  tb2.content,tb2.sub_album_title, tb2.meta_title, tb2.meta_description,tb2.day_start, tb2.number_days, tb1.album, tb1.publish, tb2.start_at, tb2.end_at',
+			'select' => 'tb1.id,tb1.time_end,tb1.sub_album, tb1.catalogue,tb1.catalogueid,  tb1.price_promotion, tb1.price, tb1.tourid, tb1.id, tb2.title, tb2.objectid,tb2.info, tb2.video, tb2.sub_title, tb2.sub_content, tb2.description, tb2.canonical,  tb2.content,tb2.sub_album_title, tb2.meta_title, tb2.meta_description,tb2.day_start, tb2.number_days, tb1.album, tb1.publish, tb2.start_at, tb2.end_at',
 			'table' => $this->data['module'].' as tb1',
 			'join' =>  [
 					[
@@ -665,6 +680,7 @@ class Tour extends BaseController{
 			$flag['description'] = base64_decode($flag['description']);
 			$flag['sub_title'] = json_decode(base64_decode($flag['sub_title']));
 			$flag['sub_content'] = json_decode(base64_decode($flag['sub_content']));
+			$flag['info'] = json_decode($flag['info'],TRUE);
 		}
 
 		return $flag;

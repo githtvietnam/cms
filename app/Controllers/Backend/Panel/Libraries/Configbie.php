@@ -25,6 +25,7 @@ class ConfigBie{
             'article_catalogue' => 'Danh mục Bài viết',
             'tour' => 'Chuyến du lịch',
             'tour_catalogue' => 'Danh mục Chuyến du lịch',
+            'media' => 'Media',
 		);
 
 		return $data;

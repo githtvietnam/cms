@@ -146,6 +146,14 @@ class Store extends BaseController{
 
 	public function update($id = 0){
 		$id = (int)$id;
+		$session = session();
+		$flag = $this->authentication->check_permission([
+			'routes' => 'backend/product/store/update'
+		]);
+		if($flag == false){
+ 			$session->setFlashdata('message-danger', 'Bạn không có quyền truy cập vào chức năng này!');
+ 			return redirect()->to(BASE_URL.'backend/dashboard/dashboard/index');
+		}
 		$this->data[$this->data['module']] = $this->AutoloadModel->_get_where([
 			'select' => 'id, title, storeid, email,  phone, description, districtid, wardid, cityid, address, image, publish',
 			'table' => $this->data['module'],
@@ -185,7 +193,14 @@ class Store extends BaseController{
 	}
 
 	public function delete($id = 0){
-
+		$session = session();
+		$flag = $this->authentication->check_permission([
+			'routes' => 'backend/product/store/delete'
+		]);
+		if($flag == false){
+ 			$session->setFlashdata('message-danger', 'Bạn không có quyền truy cập vào chức năng này!');
+ 			return redirect()->to(BASE_URL.'backend/dashboard/dashboard/index');
+		}
 		$id = (int)$id;
 		$this->data[$this->data['module']] = $this->AutoloadModel->_get_where([
 			'select' => 'id, title ',

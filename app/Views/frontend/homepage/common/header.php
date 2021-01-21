@@ -38,11 +38,11 @@
 	<div class="hd-middle">
 		<div class="uk-container uk-container-center">
 			<div class="uk-flex uk-flex-middle uk-flex-space-between">
-				<div class="hd-logo">
+				<<?php echo ((isset($home)) ? 'h1' : 'div') ?> class="hd-logo">
 					<a href="" title="logo">
-						<img src="public/frontend/resources/img/logo/kim-lien-travel-logo.png" alt="">
+						<?php echo render_img($general['homepage_logo'],$general['homepage_brand']) ?>
 					</a>
-				</div>
+				</<?php echo ((isset($home)) ? 'h1' : 'div') ?>>
 				<div class="hd-menu ">
 					<nav id="main-nav">
 						<ul class="uk-navbar-nav uk-clearfix main-menu">
@@ -72,7 +72,7 @@
 		<a class="moblie-menu-btn skin-1" href="#offcanvas" class="offcanvas" data-uk-offcanvas="{target:'#offcanvas'}">
 			<span>Menu</span>
 		</a>
-		<div class="logo"><a href="" title="Logo"><img src="public/frontend/resources/img/logo-hd.png" alt=""></a></div>
+		<div class="logo"><a href="" title="Logo"><?php echo render_img($general['homepage_logo'],$general['homepage_brand']) ?></a></div>
 	</section>
 	<!-- .upper -->
 	<section class="lower">
